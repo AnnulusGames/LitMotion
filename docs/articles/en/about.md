@@ -8,7 +8,7 @@ Following my creation of [Magic Tween](https://github.com/AnnulusGames/MagicTwee
 
 LitMotion not only boasts high performance but also offers a rich set of features viable for practical use as a tweening library.
 
-* Animates any value
+* Animate anything in one line of code.
 * Achieves zero allocations with a struct-based design
 * Extremely high-performance implementation optimized using DOTS (Data-Oriented Technology Stack)
 * Works in both runtime and editor
