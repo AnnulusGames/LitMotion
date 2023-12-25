@@ -10,9 +10,13 @@
           "src": "../src"
         }
       ],
+      "properties": {
+        "AllowUnsafeBlocks": true
+      },
       "dest": "api",
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+      "allowCompilationErrors": true
     }
   ],
   "build": {
@@ -55,7 +59,8 @@
       "_appFaviconPath": "images/favicon.svg",
       "_gitContribute": {
         "repo": "https://github.com/AnnulusGames/LitMotion"
-      }
+      },
+      "_gitUrlPattern": "github"
     },
     "xref": [
       "https://normanderwan.github.io/UnityXrefMaps/xrefmap.yml",
