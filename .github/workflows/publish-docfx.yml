@@ -17,14 +17,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - uses: Kirbyrawr/docfx-action@master
-        name: Docfx metadata
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Setup Dotnet
+        uses: actions/setup-dotnet@v3
         with:
-          args: metadata docs/docfx.json
-      - uses: Kirbyrawr/docfx-action@master
-        name: Docfx build
-        with:
-          args: build docs/docfx.json
+          dotnet-version: 7.0.x
+
+      - name: Setup DocFx
+        run: dotnet tool update -g docfx
+      
+      - name: Dotnet Restore
+        run: dotnet tool restore
+
+      - name: Build
+        run: docfx docs/docfx.json
       
       - name: Upload artifacts
         uses: actions/upload-pages-artifact@v2
