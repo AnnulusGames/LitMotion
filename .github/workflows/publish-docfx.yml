@@ -1,4 +1,4 @@
-name: DocFX
+name: Publish DocFX
 
 on:
   push:
@@ -16,7 +16,6 @@ jobs:
       - name: DocFX
         shell: cmd
         run: |
-          choco install docfx -y
           docfx docs/docfx.json
 
       - uses: actions/upload-artifact@v3
