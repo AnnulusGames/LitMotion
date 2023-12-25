@@ -1,0 +1,4 @@
+*.DS_Store
+
+# Project for Asset Store
+src/LitMotion.AssetStore/*

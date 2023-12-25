@@ -1,0 +1,37 @@
+{
+    "name": "LitMotion.Tests.Runtime",
+    "rootNamespace": "LitMotion.Tests.Runtime",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.Burst",
+        "LitMotion",
+        "LitMotion.Extensions",
+        "UniTask",
+        "UniRx"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "",
+            "define": "LITMOTION_TEST_UNITASK"
+        },
+        {
+            "name": "com.neuecc.unirx",
+            "expression": "",
+            "define": "LITMOTION_TEST_UNIRX"
+        }
+    ],
+    "noEngineReferences": false
+}
