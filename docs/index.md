@@ -1,8 +1,10 @@
 # LitMotion
 
-![header](../../images/header.png)
+![header](images/header.png)
 
-Lightning-fast and allocation-free tween library for Unity.
+Lightning-fast and Zero Allocation Tween Library for Unity.
+
+https://github.com/AnnulusGames/LitMotion
 
 ### License
 
