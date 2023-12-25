@@ -16,7 +16,7 @@ LitMotionはMagic Tweenに続いて私が作成した2つ目のトゥイーン�
 
 ## ドキュメント
 
-LitMotionの完全なドキュメントは[こちら](https://annulusgames.github.io/LitMotion/)から確認できます。
+ドキュメントのフルバージョンは[こちら](https://annulusgames.github.io/LitMotion/)から確認できます。
 
 ## 特徴
 

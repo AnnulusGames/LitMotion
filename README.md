@@ -16,7 +16,7 @@ Following my creation of [Magic Tween](https://github.com/AnnulusGames/MagicTwee
 
 ## Documentation
 
-The complete documentation for LitMotion can be accessed [here](https://annulusgames.github.io/LitMotion/).
+The full version of documentation can be found [here](https://annulusgames.github.io/LitMotion/).
 
 ## Features
 
