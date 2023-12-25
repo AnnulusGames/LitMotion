@@ -1,17 +1,18 @@
 {
   "metadata": [
     {
-      "src": [
+       "src": [
         {
           "files": [
-            "LitMotion/LitMotion.csproj",
-            "LitMotion/LitMotion.Editor.csproj",
-            "LitMotion/LitMotion.Extensions.csproj"
+            "LitMotion/Assets/LitMotion/Runtime/**/*.cs",
+            "LitMotion/Assets/LitMotion/Editor/**/*.cs"
           ],
           "src": "../src"
         }
       ],
-      "dest": "api"
+      "dest": "api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
     }
   ],
   "build": {
@@ -64,6 +65,9 @@
     ],
     "xrefService": [
       "https://xref.docs.microsoft.com/query?uid={uid}"
-    ]
+    ],
+    "sitemap": {
+      "baseUrl": "https://AnnulusGames.github.io/LitMotion"
+    }
   }
 }
