@@ -77,3 +77,9 @@ crashlytics-build.properties
 
 # DS_Store
 *.DS_Store
+
+# Include csproj for docfx
+!LitMotion.csproj
+!LitMotion.csproj
+!LitMotion.Editor.csproj
+!LitMotion.Extensions.csproj
