@@ -43,7 +43,7 @@ namespace LitMotion
                 int completedLoops;
                 int clampedCompletedLoops;
 
-                if (Hint.Unlikely(ptr->Duration == 0f))
+                if (Hint.Unlikely(ptr->Duration <= 0f))
                 {
                     isCompleted = time > 0f;
                     if (isCompleted)
