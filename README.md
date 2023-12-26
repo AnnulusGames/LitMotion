@@ -46,7 +46,7 @@ The full version of documentation can be found [here](https://annulusgames.githu
 3. Enter the following URL:
 
 ```
-https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion
+https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```
 
 Alternatively, open Packages/manifest.json and add the following to the dependencies block:
@@ -54,7 +54,7 @@ Alternatively, open Packages/manifest.json and add the following to the dependen
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion"
+        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
     }
 }
 ```
@@ -86,6 +86,10 @@ Here are the benchmark results. The benchmark source code can be found in [this 
 ### GC Allocation (per position tween creation)
 
 <img src="https://github.com/AnnulusGames/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
+
+## Support
+
+Untiy forum: https://forum.unity.com/threads/litmotion-lightning-fast-and-zero-allocation-tween-library.1530427/
 
 ## License
 
