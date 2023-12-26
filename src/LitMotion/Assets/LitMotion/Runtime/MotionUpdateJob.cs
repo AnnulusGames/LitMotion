@@ -26,6 +26,8 @@ namespace LitMotion
         [WriteOnly] public NativeList<int>.ParallelWriter CompletedIndexList;
         [WriteOnly] public NativeArray<TValue> Output;
 
+        [ReadOnly] readonly TAdapter Adapter;
+
         public void Execute([AssumeRange(0, int.MaxValue)] int index)
         {
             Hint.Assume(DeltaTime >= 0f);
@@ -37,7 +39,61 @@ namespace LitMotion
             {
                 ptr->Time += ptr->IgnoreTimeScale ? UnscaledDeltaTime : DeltaTime;
                 var time = math.max(0f, ptr->Time - ptr->Delay);
-                if (ptr->Loops >= 0 && time >= ptr->Duration * ptr->Loops)
+
+                float t;
+                bool isCompleted;
+                int completedLoops;
+                int clampedCompletedLoops;
+
+                if (Hint.Unlikely(ptr->Duration == 0f))
+                {
+                    isCompleted = time > 0f;
+                    if (isCompleted)
+                    {
+                        t = 1f;
+                        completedLoops = ptr->Loops;
+                    }
+                    else
+                    {
+                        t = 0f;
+                        completedLoops = time < 0f ? -1 : 0;
+                    }
+                    clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                }
+                else
+                {
+                    completedLoops = (int)math.floor(time / ptr->Duration);
+                    clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                    isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
+
+                    if (isCompleted)
+                    {
+                        t = 1f;
+                    }
+                    else
+                    {
+                        var currentLoopTime = time - ptr->Duration * clampedCompletedLoops;
+                        t = math.clamp(currentLoopTime / ptr->Duration, 0f, 1f);
+                    }
+                }
+
+                float progress;
+                switch (ptr->LoopType)
+                {
+                    default:
+                    case LoopType.Restart:
+                        progress = EaseUtility.Evaluate(t, ptr->Ease);
+                        break;
+                    case LoopType.Yoyo:
+                        progress = EaseUtility.Evaluate(t, ptr->Ease);
+                        if ((clampedCompletedLoops + (int)t) % 2 == 1) progress = 1f - progress;
+                        break;
+                    case LoopType.Incremental:
+                        progress = EaseUtility.Evaluate(1f, ptr->Ease) * clampedCompletedLoops + EaseUtility.Evaluate(math.fmod(t, 1f), ptr->Ease);
+                        break;
+                }
+
+                if (ptr->Loops > 0 && time >= ptr->Duration * ptr->Loops)
                 {
                     ptr->Status = MotionStatus.Completed;
                 }
@@ -50,59 +106,12 @@ namespace LitMotion
                     ptr->Status = MotionStatus.Playing;
                 }
 
-                float t;
-                bool isCompleted;
-                int clampedCompletedLoops;
-
-                if (Hint.Unlikely(ptr->Duration <= 0f))
-                {
-                    isCompleted = time > 0f;
-                    if (isCompleted)
-                    {
-                        t = 1f;
-                        clampedCompletedLoops = math.max(0, ptr->Loops);
-                    }
-                    else
-                    {
-                        t = 0f;
-                        clampedCompletedLoops = 0;
-                    }
-                }
-                else
-                {
-                    var completedLoops = (int)math.floor(time / ptr->Duration);
-                    clampedCompletedLoops = ptr->Loops < 0 ? completedLoops : math.min(completedLoops, ptr->Loops);
-                    isCompleted = ptr->Loops >= 0 && clampedCompletedLoops >= ptr->Loops;
-
-                    if (isCompleted)
-                    {
-                        t = 1f;
-                    }
-                    else
-                    {
-                        var currentLoopTime = time - ptr->Duration * clampedCompletedLoops;
-                        t = math.clamp(currentLoopTime / ptr->Duration, 0f, 1f);
-                    }
-                }
-                
-                float progress = EaseUtility.Evaluate(t, ptr->Ease);
-                switch (ptr->LoopType)
-                {
-                    case LoopType.Yoyo:
-                        // ReSharper disable once CompareOfFloatsByEqualityOperator
-                        if (((clampedCompletedLoops & 1) == 1) ^ (t == 1f)) progress = 1f - progress;
-                        break;
-                    case LoopType.Incremental:
-                        progress = t == 1f ? clampedCompletedLoops : clampedCompletedLoops + progress;
-                        break;
-                }
-
                 var context = new MotionEvaluationContext()
                 {
                     Progress = progress
                 };
 
-                Output[index] = default(TAdapter).Evaluate(ptr->StartValue, ptr->EndValue, ptr->Options, context);
+                Output[index] = Adapter.Evaluate(ptr->StartValue, ptr->EndValue, ptr->Options, context);
             }
             else if (ptr->Status is MotionStatus.Completed or MotionStatus.Canceled)
             {
