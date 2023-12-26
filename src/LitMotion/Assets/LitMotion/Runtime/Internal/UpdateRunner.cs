@@ -1,5 +1,6 @@
 using System;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using UnityEngine;
 
@@ -43,22 +44,41 @@ namespace LitMotion
                 job.Schedule(count, 16).Complete();
 
                 // invoke delegates
-                for (int i = 0; i < storage.callbacksArray.Length; i++)
+                var span = storage.callbacksArray.AsSpan();
+                var outputPtr = (TValue*)output.GetUnsafePtr();
+                var outputLength = output.Length;
+                for (int i = 0; i < span.Length; i++)
                 {
                     var status = (dataPtr + i)->Status;
-                    if (status is MotionStatus.Playing or MotionStatus.Completed)
+                    if (status == MotionStatus.Playing)
                     {
-                        var callbacks = storage.callbacksArray[i];
-                        try
+                        if (i < outputLength)
                         {
-                            if (output.Length > i) callbacks.InvokeUnsafe(output[i]);
+                            ref var callbacks = ref span[i];
+                            try
+                            {
+                                callbacks.InvokeUnsafe(outputPtr[i]);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.LogException(ex);
+                            }
                         }
-                        catch (Exception ex)
+                    }
+                    else if (status == MotionStatus.Completed)
+                    {
+                        ref var callbacks = ref span[i];
+                        if (i < outputLength)
                         {
-                            Debug.LogException(ex);
+                            try
+                            {
+                                callbacks.InvokeUnsafe(outputPtr[i]);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.LogException(ex);
+                            }
                         }
-
-                        if (status is MotionStatus.Completed)
                         {
                             try
                             {
