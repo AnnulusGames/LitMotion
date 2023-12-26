@@ -87,6 +87,10 @@ https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Asse
 
 <img src="https://github.com/AnnulusGames/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
 
+## サポート
+
+Untiy forum: https://forum.unity.com/threads/litmotion-lightning-fast-and-zero-allocation-tween-library.1530427/
+
 ## ライセンス
 
 [MIT License](LICENSE)
