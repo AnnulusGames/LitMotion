@@ -46,7 +46,7 @@ LitMotionはMagic Tweenに続いて私が作成した2つ目のトゥイーン�
 3. 以下のURLを入力する
 
 ```
-https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion
+https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```
 
 あるいはPackages/manifest.jsonを開き、dependenciesブロックに以下を追記
@@ -54,7 +54,7 @@ https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Asse
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion"
+        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
     }
 }
 ```
