@@ -18,7 +18,7 @@ You can install LitMotion using the Package Manager.
 3. Enter the following URL:
 
 ```text
-https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion
+https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```
 
 ![img1](../../images/img-setup-1.png)
@@ -28,7 +28,7 @@ Alternatively, you can open the `Packages/manifest.json` file and add the follow
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=/LitMotion/src/LitMotion/Assets/LitMotion"
+        "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
     }
 }
 ```
