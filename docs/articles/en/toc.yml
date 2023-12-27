@@ -21,6 +21,8 @@
   href: motion-configuration.md
 - name: Waiting for Motion in Coroutine
   href: waiting-for-motion-in-coroutine.md
+- name: Updating Motion Manually
+  href: updating-motion-manually.md
 - name: Reusing MotionBuilder
   href: reusing-builder.md
 - name: Avoiding Dynamic Memory Allocation

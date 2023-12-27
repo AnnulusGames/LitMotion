@@ -21,6 +21,8 @@
   href: motion-configuration.md
 - name: コルーチンでモーションを待機する
   href: waiting-for-motion-in-coroutine.md
+- name: モーションを手動で更新する
+  href: updating-motion-manually.md
 - name: MotionBuilderを再利用する
   href: reusing-builder.md
 - name: 動的なメモリ確保を回避する

@@ -52,6 +52,7 @@ Specifies the Scheduler used for motion playback.
 | MotionScheduler.Update | Updates at the Update timing. |
 | MotionScheduler.LateUpdate | Updates at the LateUpdate timing. |
 | MotionScheduler.FixedUpdate | Updates at the FixedUpdate timing. |
+| MotionScheduler.Manual | Updates manually. For details, see [Updating Motion Manually](updating-motion-manually.md).  |
 | EditorMotionScheduler.Update (LitMotion.Editor) | Updates at the EditorApplication.update timing. This Scheduler is limited to the editor. |
 
 #### WithRoundingMode (int)

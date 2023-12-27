@@ -53,6 +53,7 @@ LMotion.Create(0f, 10f, 2f)
 | MotionScheduler.Update | Updateのタイミングで更新を行います。 |
 | MotionScheduler.LateUpdate | LateUpdateのタイミングで更新を行います。 |
 | MotionScheduler.FixedUpdate | FixedUpdateのタイミングで更新を行います。 |
+| MotionScheduler.Manual | 更新を手動で行います。詳細は[モーションを手動で更新する](updating-motion-manually.md)を参照してください。 |
 | EditorMotionScheduler.Update (LitMotion.Editor) | EditorApplication.updateのタイミングで更新を行います。このSchedulerはエディタ限定で使用できます。 |
 
 #### WithRoundingMode (int)
