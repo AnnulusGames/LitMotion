@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.TestTools.Utils;
 
 namespace LitMotion.Tests.Runtime
 {
@@ -36,6 +37,21 @@ namespace LitMotion.Tests.Runtime
             await foreach (var i in reactiveProperty.WithoutCurrent())
             {
                 Debug.Log(i);
+            }
+        });
+
+        [UnityTest]
+        public IEnumerator Test_AwaitManyTimes() => UniTask.ToCoroutine(async () =>
+        {
+            var value = 0f;
+            var startValue = 0f;
+            var endValue = 10f;
+
+            for (int i = 0; i < 50; i++)
+            {
+                await LMotion.Create(startValue, endValue, 0.1f)
+                    .Bind(x => value = x);
+                Assert.That(value, Is.EqualTo(10f).Using(FloatEqualityComparer.Instance));
             }
         });
     }
