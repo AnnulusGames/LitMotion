@@ -68,6 +68,7 @@
     <Compile Include="Assets/LitMotion/Runtime/Ease.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStorage.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilder.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/ManualMotionDispatcher.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/UpdateRunner.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionData.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionHandle.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Assets/LitMotion/Runtime/IMotionAdapter.cs" />
     <Compile Include="Assets/LitMotion/Runtime/CompositeMotionHandle.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionHandleLinker.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Schedulers/ManualMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IMotionOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/UpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/External/UniRx/LitMotionUniRxExtensions.cs" />
