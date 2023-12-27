@@ -52,32 +52,26 @@ namespace LitMotion
                     var status = (dataPtr + i)->Status;
                     if (status == MotionStatus.Playing)
                     {
-                        if (i < outputLength)
+                        ref var callbacks = ref span[i];
+                        try
                         {
-                            ref var callbacks = ref span[i];
-                            try
-                            {
-                                callbacks.InvokeUnsafe(outputPtr[i]);
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.LogException(ex);
-                            }
+                            callbacks.InvokeUnsafe(outputPtr[i]);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogException(ex);
                         }
                     }
                     else if (status == MotionStatus.Completed)
                     {
                         ref var callbacks = ref span[i];
-                        if (i < outputLength)
+                        try
                         {
-                            try
-                            {
-                                callbacks.InvokeUnsafe(outputPtr[i]);
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.LogException(ex);
-                            }
+                            callbacks.InvokeUnsafe(outputPtr[i]);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogException(ex);
                         }
                         
                         try
