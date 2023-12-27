@@ -26,8 +26,6 @@ namespace LitMotion
         [WriteOnly] public NativeList<int>.ParallelWriter CompletedIndexList;
         [WriteOnly] public NativeArray<TValue> Output;
 
-        [ReadOnly] readonly TAdapter Adapter;
-
         public void Execute([AssumeRange(0, int.MaxValue)] int index)
         {
             Hint.Assume(DeltaTime >= 0f);
@@ -45,7 +43,7 @@ namespace LitMotion
                 int completedLoops;
                 int clampedCompletedLoops;
 
-                if (Hint.Unlikely(ptr->Duration == 0f))
+                if (Hint.Unlikely(ptr->Duration <= 0f))
                 {
                     isCompleted = time > 0f;
                     if (isCompleted)
@@ -111,7 +109,7 @@ namespace LitMotion
                     Progress = progress
                 };
 
-                Output[index] = Adapter.Evaluate(ptr->StartValue, ptr->EndValue, ptr->Options, context);
+                Output[index] = default(TAdapter).Evaluate(ptr->StartValue, ptr->EndValue, ptr->Options, context);
             }
             else if (ptr->Status is MotionStatus.Completed or MotionStatus.Canceled)
             {
