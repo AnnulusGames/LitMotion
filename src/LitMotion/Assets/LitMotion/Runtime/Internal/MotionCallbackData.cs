@@ -11,6 +11,7 @@ namespace LitMotion
     public struct MotionCallbackData
     {
         public bool HasState;
+        public bool IsCallbackRunning;
         public object State;
         public object UpdateAction;
         public Action OnCompleteAction;
