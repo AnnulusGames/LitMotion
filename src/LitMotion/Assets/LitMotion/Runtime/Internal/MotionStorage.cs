@@ -124,11 +124,14 @@ namespace LitMotion
         // Data
         public int?[] toEntryIndex = new int?[InitialCapacity];
         public MotionData<TValue, TOptions>[] dataArray = new MotionData<TValue, TOptions>[InitialCapacity];
-        public Span<MotionData<TValue, TOptions>> DataSpan => dataArray.AsSpan(0, tail);
-        
         public MotionCallbackData[] callbacksArray = new MotionCallbackData[InitialCapacity];
-        public Span<MotionCallbackData> CallbacksSpan => callbacksArray.AsSpan(0, tail);
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<MotionData<TValue, TOptions>> GetDataSpan() => dataArray.AsSpan(0, tail);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<MotionCallbackData> GetCallbacksSpan() => callbacksArray.AsSpan(0, tail);
+
         int tail;
 
         const int InitialCapacity = 8;
@@ -199,7 +202,7 @@ namespace LitMotion
         public void RemoveAll(NativeList<int> indexes)
         {
             var entryIndexes = new NativeArray<int>(indexes.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-            var lastCallbacksSpan=CallbacksSpan;
+            var lastCallbacksSpan = GetCallbacksSpan();
             for (int i = 0; i < entryIndexes.Length; i++)
             {
                 entryIndexes[i] = (int)toEntryIndex[indexes[i]];
@@ -209,6 +212,7 @@ namespace LitMotion
             {
                 RemoveAt(entries[entryIndexes[i]].DenseIndex);
             }
+
             //Avoid Memory leak
             lastCallbacksSpan[tail..].Clear();
             entryIndexes.Dispose();
@@ -331,7 +335,7 @@ namespace LitMotion
         public void Reset()
         {
             entries.Reset();
-            
+
             toEntryIndex.AsSpan().Clear();
             dataArray.AsSpan().Clear();
             callbacksArray.AsSpan().Clear();
