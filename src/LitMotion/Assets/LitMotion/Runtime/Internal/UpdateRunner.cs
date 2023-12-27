@@ -79,15 +79,14 @@ namespace LitMotion
                                 Debug.LogException(ex);
                             }
                         }
+                        
+                        try
                         {
-                            try
-                            {
-                                callbacks.OnCompleteAction?.Invoke();
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.LogException(ex);
-                            }
+                            callbacks.OnCompleteAction?.Invoke();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogException(ex);
                         }
                     }
                 }
