@@ -24,6 +24,7 @@ namespace LitMotion
 
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
+            buffer.Version++;
             buffer.Duration = default;
             buffer.Ease = default;
             buffer.IgnoreTimeScale = default;
@@ -36,8 +37,14 @@ namespace LitMotion
             buffer.Scheduler = default;
             buffer.OnComplete = default;
             buffer.IsPreserved = default;
-            pool.Push(buffer);
+
+            if (buffer.Version != ushort.MaxValue)
+            {
+                pool.Push(buffer);
+            }
         }
+
+        public ushort Version;
 
         public float Duration;
         public Ease Ease;
@@ -70,8 +77,10 @@ namespace LitMotion
         internal MotionBuilder(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             this.buffer = buffer;
+            this.version = buffer.Version;
         }
 
+        internal ushort version;
         internal MotionBuilderBuffer<TValue, TOptions> buffer;
 
         /// <summary>
@@ -272,7 +281,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         readonly void CheckBuffer()
         {
-            if (buffer == null) throw new InvalidOperationException("MotionBuilder is either not initialized or has already run a Build (or Bind). If you want to build or bind multiple times, call Preseve() for MotionBuilder.");
+            if (buffer == null || buffer.Version != version) throw new InvalidOperationException("MotionBuilder is either not initialized or has already run a Build (or Bind). If you want to build or bind multiple times, call Preseve() for MotionBuilder.");
         }
     }
 }
