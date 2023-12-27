@@ -124,7 +124,11 @@ namespace LitMotion
         // Data
         public int?[] toEntryIndex = new int?[InitialCapacity];
         public MotionData<TValue, TOptions>[] dataArray = new MotionData<TValue, TOptions>[InitialCapacity];
+        public Span<MotionData<TValue, TOptions>> DataSpan => dataArray.AsSpan(0, tail);
+        
         public MotionCallbackData[] callbacksArray = new MotionCallbackData[InitialCapacity];
+        public Span<MotionCallbackData> CallbacksSpan => callbacksArray.AsSpan(0, tail);
+        
         int tail;
 
         const int InitialCapacity = 8;
@@ -195,6 +199,7 @@ namespace LitMotion
         public void RemoveAll(NativeList<int> indexes)
         {
             var entryIndexes = new NativeArray<int>(indexes.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+            var lastCallbacksSpan=CallbacksSpan;
             for (int i = 0; i < entryIndexes.Length; i++)
             {
                 entryIndexes[i] = (int)toEntryIndex[indexes[i]];
@@ -204,7 +209,8 @@ namespace LitMotion
             {
                 RemoveAt(entries[entryIndexes[i]].DenseIndex);
             }
-
+            //Avoid Memory leak
+            lastCallbacksSpan[tail..].Clear();
             entryIndexes.Dispose();
         }
 
@@ -243,7 +249,7 @@ namespace LitMotion
         {
             var entry = entries[handle.Index];
             var denseIndex = entry.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= dataArray.Length)
+            if (denseIndex < 0 || denseIndex >= tail)
             {
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
@@ -325,9 +331,10 @@ namespace LitMotion
         public void Reset()
         {
             entries.Reset();
-            for (int i = 0; i < toEntryIndex.Length; i++) toEntryIndex[i] = default;
-            for (int i = 0; i < dataArray.Length; i++) dataArray[i] = default;
-            for (int i = 0; i < callbacksArray.Length; i++) callbacksArray[i] = default;
+            
+            toEntryIndex.AsSpan().Clear();
+            dataArray.AsSpan().Clear();
+            callbacksArray.AsSpan().Clear();
             tail = 0;
         }
     }

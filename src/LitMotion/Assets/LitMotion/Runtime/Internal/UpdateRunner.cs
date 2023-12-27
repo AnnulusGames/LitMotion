@@ -30,7 +30,7 @@ namespace LitMotion
             using var output = new NativeArray<TValue>(count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
             using var completedIndexList = new NativeList<int>(count, Allocator.TempJob);
 
-            fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
+            fixed (MotionData<TValue, TOptions>* dataPtr = storage.DataSpan)
             {
                 // update data
                 var job = new MotionUpdateJob<TValue, TOptions, TAdapter>()
@@ -44,15 +44,14 @@ namespace LitMotion
                 job.Schedule(count, 16).Complete();
 
                 // invoke delegates
-                var span = storage.callbacksArray.AsSpan(0, storage.Count);
+                var callbackSpan = storage.CallbacksSpan;
                 var outputPtr = (TValue*)output.GetUnsafePtr();
-                var outputLength = output.Length;
-                for (int i = 0; i < span.Length; i++)
+                for (int i = 0; i < callbackSpan.Length; i++)
                 {
                     var status = (dataPtr + i)->Status;
                     if (status == MotionStatus.Playing)
                     {
-                        ref var callbacks = ref span[i];
+                        ref var callbacks = ref callbackSpan[i];
                         try
                         {
                             callbacks.InvokeUnsafe(outputPtr[i]);
@@ -64,7 +63,7 @@ namespace LitMotion
                     }
                     else if (status == MotionStatus.Completed)
                     {
-                        ref var callbacks = ref span[i];
+                        ref var callbacks = ref callbackSpan[i];
                         try
                         {
                             callbacks.InvokeUnsafe(outputPtr[i]);
