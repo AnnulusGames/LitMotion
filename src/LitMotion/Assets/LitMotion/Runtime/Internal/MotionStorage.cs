@@ -271,7 +271,8 @@ namespace LitMotion
                 return;
             }
 
-            motion.Status = MotionStatus.Completed;
+            // To avoid duplication of Complete processing, it is treated as canceled internally.
+            motion.Status = MotionStatus.Canceled;
             dataArray[denseIndex] = motion;
 
             float endProgress = motion.LoopType switch
