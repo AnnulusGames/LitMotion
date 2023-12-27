@@ -44,7 +44,7 @@ namespace LitMotion
                 job.Schedule(count, 16).Complete();
 
                 // invoke delegates
-                var span = storage.callbacksArray.AsSpan();
+                var span = storage.callbacksArray.AsSpan(0, storage.Count);
                 var outputPtr = (TValue*)output.GetUnsafePtr();
                 var outputLength = output.Length;
                 for (int i = 0; i < span.Length; i++)
@@ -79,15 +79,14 @@ namespace LitMotion
                                 Debug.LogException(ex);
                             }
                         }
+                        
+                        try
                         {
-                            try
-                            {
-                                callbacks.OnCompleteAction?.Invoke();
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.LogException(ex);
-                            }
+                            callbacks.OnCompleteAction?.Invoke();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogException(ex);
                         }
                     }
                 }
