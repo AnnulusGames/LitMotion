@@ -2,6 +2,8 @@ using System;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 
+// TODO: Constantize the exception message
+
 namespace LitMotion
 {
     internal struct StorageEntry : IEquatable<StorageEntry>
@@ -271,7 +273,15 @@ namespace LitMotion
                 return;
             }
 
-            motion.Status = MotionStatus.Completed;
+            ref var callbackData = ref GetCallbacksSpan()[denseIndex];
+            if (callbackData.IsCallbackRunning)
+            {
+                throw new InvalidOperationException("Recursion of Complete call was detected.");
+            }
+            callbackData.IsCallbackRunning = true;
+
+            // To avoid duplication of Complete processing, it is treated as canceled internally.
+            motion.Status = MotionStatus.Canceled;
             dataArray[denseIndex] = motion;
 
             float endProgress = motion.LoopType switch
@@ -287,8 +297,26 @@ namespace LitMotion
                 motion.Options,
                 new() { Progress = EaseUtility.Evaluate(endProgress, motion.Ease) }
             );
-            callbacksArray[denseIndex].InvokeUnsafe(endValue);
-            callbacksArray[denseIndex].OnCompleteAction?.Invoke();
+
+            try
+            {
+                callbackData.InvokeUnsafe(endValue);
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogException(ex);
+            }
+
+            try
+            {
+                callbackData.OnCompleteAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogException(ex);
+            }
+
+            callbackData.IsCallbackRunning = false;
         }
 
         public bool IsActive(MotionHandle handle)
