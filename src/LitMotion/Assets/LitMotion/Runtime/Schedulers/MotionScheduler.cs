@@ -19,5 +19,10 @@ namespace LitMotion
         /// Scheduler that updates motion at FixedUpdate.
         /// </summary>
         public static readonly IMotionScheduler FixedUpdate = new FixedUpdateMotionScheduler();
+
+        /// <summary>
+        /// Scheduler that updates motion with `ManualMotionDispatcher.Update()`
+        /// </summary>
+        public static readonly IMotionScheduler Manual = new ManualMotionScheduler();
     }
 }
