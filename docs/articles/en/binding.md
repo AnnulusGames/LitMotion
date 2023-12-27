@@ -1,6 +1,6 @@
 # Binding
 
-In LitMotion, when creating motions, it's necessary to bind values to the target fields or properties. Motion values are updated by PlayerLoop inserted before ScriptRunBehaviourUpdate, reflecting the latest values into the bound fields/properties.
+LitMotion requires that a value be bound to the target field/property when the motion is created. The motion values are updated in the Update(LateUpdate, FixedUpdate) function of the MotionDispatcher to reflect the latest values in the bound fields/properties.
 
 ```cs
 var value = 0f;

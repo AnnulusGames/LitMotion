@@ -1,6 +1,6 @@
 # 値のバインディング
 
-LitMotionでは、モーションの作成時に値を対象のフィールドやプロパティに紐付ける必要があります。モーションの値はScriptRunBehaviourUpdateの前に挿入されるPlayerLoopによって更新され、バインドしたフィールド/プロパティに最新の値が反映されます。
+LitMotionでは、モーションの作成時に値を対象のフィールドやプロパティに紐付ける必要があります。モーションの値はMotionDispatcherのUpdate(LateUpdate, FixedUpdate)関数内で更新され、バインドしたフィールド/プロパティに最新の値が反映されます。
 
 ```cs
 var value = 0f;
