@@ -39,5 +39,25 @@ namespace LitMotion.Tests.Runtime
             Assert.IsTrue(completed);
         }
 
+        [UnityTest]
+        public IEnumerator Test_CompleteOnCallback_Self()
+        {
+            MotionHandle handle = default;
+            handle = LMotion.Create(0f, 10f, 1f)
+                .WithOnComplete(() => handle.Complete())
+                .RunWithoutBinding();
+            yield return handle.ToYieldInteraction();
+        }
+
+        [UnityTest]
+        public IEnumerator Test_CompleteOnCallback_Other()
+        {
+            MotionHandle otherHandle = LMotion.Create(0f, 10f, 5f).RunWithoutBinding();
+            LMotion.Create(0f, 10f, 0.5f)
+                .WithOnComplete(() => otherHandle.Complete())
+                .RunWithoutBinding();
+            
+            yield return otherHandle.ToYieldInteraction();
+        }
     }
 }
