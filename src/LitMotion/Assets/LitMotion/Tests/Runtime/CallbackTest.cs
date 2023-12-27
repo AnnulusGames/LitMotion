@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
@@ -39,14 +40,33 @@ namespace LitMotion.Tests.Runtime
             Assert.IsTrue(completed);
         }
 
-        [UnityTest]
-        public IEnumerator Test_CompleteOnCallback_Self()
+        [Test]
+        public void Test_CompleteOnCallback_Self()
         {
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+
             MotionHandle handle = default;
             handle = LMotion.Create(0f, 10f, 1f)
                 .WithOnComplete(() => handle.Complete())
                 .RunWithoutBinding();
-            yield return handle.ToYieldInteraction();
+            handle.Complete();
+        }
+
+        [Test]
+        public void Test_CompleteOnCallback_CircularReference()
+        {
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+
+            MotionHandle handle1 = default;
+            MotionHandle handle2 = default;
+            handle1 = LMotion.Create(0f, 10f, 1f)
+                .WithOnComplete(() => handle2.Complete())
+                .RunWithoutBinding();
+            handle2 = LMotion.Create(0f, 10f, 1f)
+                .WithOnComplete(() => handle1.Complete())
+                .RunWithoutBinding();
+
+            handle1.Complete();
         }
 
         [UnityTest]
@@ -56,8 +76,27 @@ namespace LitMotion.Tests.Runtime
             LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => otherHandle.Complete())
                 .RunWithoutBinding();
-            
             yield return otherHandle.ToYieldInteraction();
+        }
+
+        [UnityTest]
+        public IEnumerator Test_ThrowExceptionInsideCallback()
+        {
+            LogAssert.Expect(LogType.Exception, "Exception: Test");
+            yield return LMotion.Create(0f, 10f, 0.5f)
+                .WithOnComplete(() => throw new Exception("Test"))
+                .RunWithoutBinding()
+                .ToYieldInteraction();
+        }
+
+        [Test]
+        public void Test_ThrowExceptionInsideCallback_ThenCompleteManually()
+        {
+            LogAssert.Expect(LogType.Exception, "Exception: Test");
+            var handle = LMotion.Create(0f, 10f, 0.5f)
+                .WithOnComplete(() => throw new Exception("Test"))
+                .RunWithoutBinding();
+            handle.Complete();
         }
     }
 }
