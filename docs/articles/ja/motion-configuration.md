@@ -67,3 +67,20 @@ LMotion.Create(0f, 10f, 2f)
 | RoundingMode.ToZero | 0に近づく方向に値を丸めます。 |
 | RoundingMode.ToPositiveInfinity | 正の無限大に近づく方向に値を丸めます。 |
 | RoundingMode.ToNegativeInfinity | 負の無限大に近づく方向に値を丸めます。 |
+
+#### WithScrambleMode (FixedString-)
+
+まだ表示されていない文字の部分をランダムな文字で埋めることができます。このオプションは文字列のモーションにのみ適用可能です。
+
+| ScrambleMode | 動作 |
+| - | - |
+| ScrambleMode.None | デフォルトの設定。まだ表示されていない部分には何も表示されません。 |
+| ScrambleMode.Uppercase | ランダムな大文字のアルファベットで空白を埋めます。 |
+| ScrambleMode.Lowercase | ランダムな小文字のアルファベットで空白を埋めます。 |
+| ScrambleMode.Numerals | ランダムな数字で空白を埋めます。 |
+| ScrambleMode.All | ランダムな大文字/小文字のアルファベット、または数字で空白を埋めます。 |
+| (ScrambleMode.Custom) | 指定された文字列の中のランダムな数字で空白を埋めます。このオプションは明示的に指定できず、WithScrambleModeの引数にstringを渡した際に設定されます。|
+
+#### WithRichText (FixedString-)
+
+RichTextのサポートを有効化し、RichTextタグが含まれるテキストの文字送りが可能になります。このオプションは文字列のモーションにのみ適用可能です。

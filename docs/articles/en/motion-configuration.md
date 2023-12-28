@@ -66,3 +66,20 @@ Sets the rounding mode for decimal values. This option is only applicable to int
 | RoundingMode.ToZero | Rounds the value towards zero. |
 | RoundingMode.ToPositiveInfinity | Rounds the value towards positive infinity. |
 | RoundingMode.ToNegativeInfinity | Rounds the value towards negative infinity. |
+
+#### WithScrambleMode (FixedString-)
+
+You can fill the yet-to-be-displayed characters with random characters. This option is applicable only to string motions.
+
+| ScrambleMode | Description |
+| - | - |
+| ScrambleMode.None | Default setting. Nothing is displayed in the yet-to-be-displayed parts. |
+| ScrambleMode.Uppercase | Fills spaces with random uppercase alphabet characters. |
+| ScrambleMode.Lowercase | Fills spaces with random lowercase alphabet characters. |
+| ScrambleMode.Numerals | Fills spaces with random numeral characters. |
+| ScrambleMode.All | Fills spaces with random uppercase/lowercase alphabet or numeral characters. |
+| (ScrambleMode.Custom) | Fills spaces with random numeral characters from the specified string. This option cannot be explicitly specified and is set when passing a string argument to WithScrambleMode. |
+
+#### WithRichText (FixedString-)
+
+Enables RichText support, allowing character advancement in text containing RichText tags. This option is applicable only to string motions. 
