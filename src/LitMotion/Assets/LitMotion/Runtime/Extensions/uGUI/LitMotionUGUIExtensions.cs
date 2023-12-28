@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using Unity.Collections;
 using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
@@ -85,5 +86,54 @@ namespace LitMotion.Extensions
             });
         }
 
+        public static MotionHandle BindToText(this MotionBuilder<FixedString32Bytes, StringOptions, FixedString32BytesMotionAdapter> builder, Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = x.ConvertToString();
+            });
+        }
+
+        public static MotionHandle BindToText(this MotionBuilder<FixedString64Bytes, StringOptions, FixedString64BytesMotionAdapter> builder, Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = x.ConvertToString();
+            });
+        }
+
+        public static MotionHandle BindToText(this MotionBuilder<FixedString128Bytes, StringOptions, FixedString128BytesMotionAdapter> builder, Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = x.ConvertToString();
+            });
+        }
+
+        public static MotionHandle BindToText(this MotionBuilder<FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter> builder, Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = x.ConvertToString();
+            });
+        }
+
+        public static MotionHandle BindToText(this MotionBuilder<FixedString4096Bytes, StringOptions, FixedString4096BytesMotionAdapter> builder, Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = x.ConvertToString();
+            });
+        }
     }
 }

@@ -1,0 +1,89 @@
+<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+    var sizes = new int[]
+    {
+        32, 64, 128, 512, 4096
+    };
+#>
+using Unity.Burst;
+using Unity.Collections;
+
+namespace LitMotion
+{
+    [BurstCompile]
+    internal static class RichTextParser
+    {
+<# foreach(var size in sizes) { #>
+        [BurstCompile]
+        public static void GetSymbols(ref FixedString<#=size#>Bytes source, Allocator allocator, out NativeList<RichTextSymbol<#=size#>Bytes> symbols, out int charCount)
+        {
+            symbols = new NativeList<RichTextSymbol<#=size#>Bytes>(allocator);
+            charCount = 0;
+
+            var buffer = new NativeText(<#=size#>, Allocator.Temp);
+            var enumerator = source.GetEnumerator();
+
+            var currentSymbolType = RichTextSymbolType.Text;
+            var prevRune = default(Unicode.Rune);
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                {
+                    if (buffer.Length > 0)
+                    {
+                        var text = new FixedString<#=size#>Bytes();
+                        text.CopyFrom(buffer);
+                        symbols.Add(new RichTextSymbol<#=size#>Bytes(currentSymbolType, text));
+                        if (currentSymbolType == RichTextSymbolType.Text) charCount += FixedStringHelper.GetUtf8CharCount(ref text);
+                        buffer.Clear();
+                    }
+                    buffer.Append(current);
+                    currentSymbolType = RichTextSymbolType.TagStart;
+                }
+                else if (current == '/' && prevRune == '<')
+                {
+                    buffer.Append(current);
+                    currentSymbolType = RichTextSymbolType.TagEnd;
+                }
+                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                {
+                    buffer.Append(current);
+                    if (buffer.Length > 0)
+                    {
+                        var text = new FixedString<#=size#>Bytes();
+                        text.CopyFrom(buffer);
+                        symbols.Add(new RichTextSymbol<#=size#>Bytes(currentSymbolType, text));
+                        if (currentSymbolType == RichTextSymbolType.Text) charCount += FixedStringHelper.GetUtf8CharCount(ref text);
+                        buffer.Clear();
+                    }
+                    currentSymbolType = RichTextSymbolType.Text;
+                }
+                else
+                {
+                    buffer.Append(current);
+                }
+
+                prevRune = current;
+            }
+
+            if (buffer.Length > 0)
+            {
+                var text = new FixedString<#=size#>Bytes();
+                text.CopyFrom(buffer);
+                symbols.Add(new RichTextSymbol<#=size#>Bytes(currentSymbolType, text));
+                charCount += FixedStringHelper.GetUtf8CharCount(ref text);
+            }
+
+            buffer.Dispose();
+        }
+<# } #>
+    }
+}

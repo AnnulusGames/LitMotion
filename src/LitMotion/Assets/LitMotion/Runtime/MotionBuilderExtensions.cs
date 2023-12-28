@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 
 namespace LitMotion
@@ -71,6 +72,56 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, IntegerOptions>
         {
             builder.buffer.Options.RoundingMode = roundingMode;
+            return builder;
+        }
+
+        /// <summary>
+        /// Enable support for Rich Text tags.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="richTextEnabled">Whether to support Rich Text tags</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, StringOptions, TAdapter> WithRichText<TValue, TAdapter>(this MotionBuilder<TValue, StringOptions, TAdapter> builder, bool richTextEnabled = true)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
+        {
+            builder.buffer.Options.RichTextEnabled = richTextEnabled;
+            return builder;
+        }
+
+        /// <summary>
+        /// Fill in the parts that are not yet displayed with random strings.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="scrambleMode">Type of characters used for blank padding</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, StringOptions, TAdapter> WithScrambleChars<TValue, TAdapter>(this MotionBuilder<TValue, StringOptions, TAdapter> builder, ScrambleMode scrambleMode)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
+        {
+            if (scrambleMode == ScrambleMode.Custom) throw new ArgumentException("ScrambleMode.Custom cannot be specified explicitly. Use WithScrambleMode(FixedString64Bytes) instead.");
+            builder.buffer.Options.ScrambleMode = scrambleMode;
+            return builder;
+        }
+
+        /// <summary>
+        /// Fill in the parts that are not yet displayed with random strings.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="customScrambleChars">Characters used for blank padding</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, StringOptions, TAdapter> WithScrambleChars<TValue, TAdapter>(this MotionBuilder<TValue, StringOptions, TAdapter> builder, FixedString64Bytes customScrambleChars)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
+        {
+            builder.buffer.Options.ScrambleMode = ScrambleMode.Custom;
+            builder.buffer.Options.CustomScrambleChars = customScrambleChars;
             return builder;
         }
     }
