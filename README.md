@@ -26,6 +26,7 @@ The full version of documentation can be found [here](https://annulusgames.githu
 - Works in both runtime and editor.
 - Apply complex settings like easing and looping.
 - Wait for completion via callbacks/coroutines.
+- Zero allocation string animation with FixedString and TextMeshPro
 - Convert to Observables using UniRx.
 - Supports async/await via UniTask.
 - Extend types using `IMotionOptions` and `IMotionAdapter`.
