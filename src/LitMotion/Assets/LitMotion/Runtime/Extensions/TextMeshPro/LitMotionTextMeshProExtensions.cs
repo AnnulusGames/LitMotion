@@ -1,6 +1,8 @@
 #if LITMOTION_SUPPORT_TMP
+using System.Buffers;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Unity.Collections;
 using TMPro;
 using LitMotion.Adapters;
 
@@ -103,6 +105,96 @@ namespace LitMotion.Extensions
                 var c = target.color;
                 c.a = x;
                 target.color = c;
+            });
+        }
+
+        public unsafe static MotionHandle BindToText(this MotionBuilder<FixedString32Bytes, StringOptions, FixedString32BytesMotionAdapter> builder, TMP_Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                var enumerator = x.GetEnumerator();
+                var length = 0;
+                var buffer = ArrayPool<char>.Shared.Rent(64);
+                fixed (char* c = buffer)
+                {
+                    Unicode.Utf8ToUtf16(x.GetUnsafePtr(), x.Length, c, out length, x.Length * 2);
+                }
+                target.SetText(buffer, 0, length);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        public unsafe static MotionHandle BindToText(this MotionBuilder<FixedString64Bytes, StringOptions, FixedString64BytesMotionAdapter> builder, TMP_Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                var enumerator = x.GetEnumerator();
+                var length = 0;
+                var buffer = ArrayPool<char>.Shared.Rent(128);
+                fixed (char* c = buffer)
+                {
+                    Unicode.Utf8ToUtf16(x.GetUnsafePtr(), x.Length, c, out length, x.Length * 2);
+                }
+                target.SetText(buffer, 0, length);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        public unsafe static MotionHandle BindToText(this MotionBuilder<FixedString128Bytes, StringOptions, FixedString128BytesMotionAdapter> builder, TMP_Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                var enumerator = x.GetEnumerator();
+                var length = 0;
+                var buffer = ArrayPool<char>.Shared.Rent(256);
+                fixed (char* c = buffer)
+                {
+                    Unicode.Utf8ToUtf16(x.GetUnsafePtr(), x.Length, c, out length, x.Length * 2);
+                }
+                target.SetText(buffer, 0, length);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        public unsafe static MotionHandle BindToText(this MotionBuilder<FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter> builder, TMP_Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                var enumerator = x.GetEnumerator();
+                var length = 0;
+                var buffer = ArrayPool<char>.Shared.Rent(1024);
+                fixed (char* c = buffer)
+                {
+                    Unicode.Utf8ToUtf16(x.GetUnsafePtr(), x.Length, c, out length, x.Length * 2);
+                }
+                target.SetText(buffer, 0, length);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        public unsafe static MotionHandle BindToText(this MotionBuilder<FixedString4096Bytes, StringOptions, FixedString4096BytesMotionAdapter> builder, TMP_Text text)
+        {
+            Assert.IsNotNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                var enumerator = x.GetEnumerator();
+                var length = 0;
+                var buffer = ArrayPool<char>.Shared.Rent(8192);
+                fixed (char* c = buffer)
+                {
+                    Unicode.Utf8ToUtf16(x.GetUnsafePtr(), x.Length, c, out length, x.Length * 2);
+                }
+                target.SetText(buffer, 0, length);
+                ArrayPool<char>.Shared.Return(buffer);
             });
         }
     }
