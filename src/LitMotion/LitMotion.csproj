@@ -85,6 +85,7 @@
     <Compile Include="Assets/LitMotion/Runtime/LoopType.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionCallbackData.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStorageManager.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/LMotion.CreateString.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/MotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Adapters/PrimitiveMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IntegerOptions.cs" />
