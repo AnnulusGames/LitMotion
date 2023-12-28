@@ -64,11 +64,14 @@
     <Analyzer Include="/Applications/Unity/2022.3.7f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/LitMotion/Runtime/Adapters/FixedStringAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/NoOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Ease.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStorage.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilder.cs" />
     <Compile Include="Assets/LitMotion/Runtime/ManualMotionDispatcher.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/StringOptions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/FixedStringHelper.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/UpdateRunner.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionData.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionHandle.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStatus.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/FixedUpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionUpdateJob.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextSymbol.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionDispatcher.cs" />
     <Compile Include="Assets/LitMotion/Runtime/LoopType.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionCallbackData.cs" />
@@ -84,6 +88,7 @@
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/MotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Adapters/PrimitiveMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IntegerOptions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/FixedStringHelper.Interpolate.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilderExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MinimumList.cs" />
     <Compile Include="Assets/LitMotion/Runtime/AssemblyInfo.cs" />
@@ -100,6 +105,7 @@
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/UpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/External/UniRx/LitMotionUniRxExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/EaseUtility.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/LitMotion/Runtime/LitMotion.asmdef" />
