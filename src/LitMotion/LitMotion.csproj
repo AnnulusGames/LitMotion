@@ -66,8 +66,10 @@
   <ItemGroup>
     <Compile Include="Assets/LitMotion/Runtime/Adapters/FixedStringAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/NoOptions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/PunchOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Ease.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStorage.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/VibrationHelper.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilder.cs" />
     <Compile Include="Assets/LitMotion/Runtime/ManualMotionDispatcher.cs" />
     <Compile Include="Assets/LitMotion/Runtime/StringOptions.cs" />
@@ -81,11 +83,13 @@
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/FixedUpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionUpdateJob.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextSymbol.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/LMotion.Punch.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionDispatcher.cs" />
     <Compile Include="Assets/LitMotion/Runtime/LoopType.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionCallbackData.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStorageManager.cs" />
     <Compile Include="Assets/LitMotion/Runtime/LMotion.CreateString.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Adapters/PunchMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/MotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Adapters/PrimitiveMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IntegerOptions.cs" />
