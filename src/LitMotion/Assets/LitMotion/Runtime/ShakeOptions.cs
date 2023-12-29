@@ -6,7 +6,6 @@ namespace LitMotion
     {
         public int Frequency;
         public float DampingRatio;
-        // Reserved for future use.
         public Unity.Mathematics.Random RandomState;
 
         public static ShakeOptions Default
