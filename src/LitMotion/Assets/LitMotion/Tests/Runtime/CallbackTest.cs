@@ -98,5 +98,19 @@ namespace LitMotion.Tests.Runtime
                 .RunWithoutBinding();
             handle.Complete();
         }
+
+        [UnityTest]
+        public IEnumerator Test_WithCancelOnError()
+        {
+            LogAssert.ignoreFailingMessages = true;
+            var completed = false;
+            LMotion.Create(0f, 10f, 0.5f)
+                .WithCancelOnError()
+                .WithOnComplete(() => completed = true)
+                .Bind(x => throw new Exception("Test"));
+            yield return new WaitForSeconds(0.7f);
+            Assert.IsFalse(completed);
+            LogAssert.ignoreFailingMessages = false;
+        }
     }
 }
