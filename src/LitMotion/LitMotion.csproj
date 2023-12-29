@@ -80,7 +80,9 @@
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/LateUpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionHandleExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MotionStatus.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/SharedRandom.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/FixedUpdateMotionScheduler.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/ShakeOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionUpdateJob.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextSymbol.cs" />
     <Compile Include="Assets/LitMotion/Runtime/LMotion.Punch.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Assets/LitMotion/Runtime/IntegerOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/FixedStringHelper.Interpolate.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilderExtensions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/LMotion.Shake.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MinimumList.cs" />
     <Compile Include="Assets/LitMotion/Runtime/AssemblyInfo.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IMotionScheduler.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Assets/LitMotion/Runtime/IMotionOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/UpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/External/UniRx/LitMotionUniRxExtensions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Adapters/ShakeMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/EaseUtility.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextParser.cs" />
   </ItemGroup>
