@@ -215,7 +215,7 @@ namespace LitMotion
                 RemoveAt(entries[entryIndexes[i]].DenseIndex);
             }
 
-            //Avoid Memory leak
+            // Avoid Memory leak
             lastCallbacksSpan[tail..].Clear();
             entryIndexes.Dispose();
         }
@@ -240,7 +240,7 @@ namespace LitMotion
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
 
-            var motion = dataArray[denseIndex];
+            ref var motion = ref GetDataSpan()[denseIndex];
             var version = entry.Version;
             if (version <= 0 || version != handle.Version || motion.Status == MotionStatus.None)
             {
@@ -248,7 +248,6 @@ namespace LitMotion
             }
 
             motion.Status = MotionStatus.Canceled;
-            dataArray[denseIndex] = motion;
 
 #if LITMOTION_SUPPORT_UNITASK
             callbacksArray[denseIndex].UniTaskConfiguredSource?.OnMotionCanceled();
@@ -264,7 +263,7 @@ namespace LitMotion
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
 
-            var motion = dataArray[denseIndex];
+            ref var motion = ref GetDataSpan()[denseIndex];
             var version = entry.Version;
             if (version <= 0 || version != handle.Version || motion.Status == MotionStatus.None)
             {
@@ -286,7 +285,6 @@ namespace LitMotion
 
             // To avoid duplication of Complete processing, it is treated as canceled internally.
             motion.Status = MotionStatus.Canceled;
-            dataArray[denseIndex] = motion;
 
             float endProgress = motion.LoopType switch
             {
@@ -296,9 +294,9 @@ namespace LitMotion
                 _ => 1f
             };
             var endValue = default(TAdapter).Evaluate(
-                motion.StartValue,
-                motion.EndValue,
-                motion.Options,
+                ref motion.StartValue,
+                ref motion.EndValue,
+                ref motion.Options,
                 new() { Progress = EaseUtility.Evaluate(endProgress, motion.Ease) }
             );
 

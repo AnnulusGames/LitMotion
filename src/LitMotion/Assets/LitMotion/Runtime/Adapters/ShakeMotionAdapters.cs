@@ -13,7 +13,7 @@ namespace LitMotion.Adapters
 
     public readonly struct FloatShakeMotionAdapter : IMotionAdapter<float, ShakeOptions>
     {
-        public float Evaluate(in float startValue, in float endValue, in ShakeOptions options, in MotionEvaluationContext context)
+        public float Evaluate(ref float startValue, ref float endValue, ref ShakeOptions options, in MotionEvaluationContext context)
         {
             VibrationHelper.EvaluateStrength(endValue, options.Frequency, options.DampingRatio, context.Progress, out var s);
             float multipliar;
@@ -23,7 +23,6 @@ namespace LitMotion.Adapters
             }
             else
             {
-                // Currently RandomState is defensively copied and the state is not changed. This requires changing the Adapter's option argument to ref.
                 multipliar = options.RandomState.NextFloat(-1f, 1f);
             }
             return startValue + s * multipliar;
@@ -32,7 +31,7 @@ namespace LitMotion.Adapters
 
     public readonly struct Vector2ShakeMotionAdapter : IMotionAdapter<Vector2, ShakeOptions>
     {
-        public Vector2 Evaluate(in Vector2 startValue, in Vector2 endValue, in ShakeOptions options, in MotionEvaluationContext context)
+        public Vector2 Evaluate(ref Vector2 startValue, ref Vector2 endValue, ref ShakeOptions options, in MotionEvaluationContext context)
         {
             VibrationHelper.EvaluateStrength(endValue, options.Frequency, options.DampingRatio, context.Progress, out var s);
             Vector2 multipliar;
@@ -50,7 +49,7 @@ namespace LitMotion.Adapters
 
     public readonly struct Vector3ShakeMotionAdapter : IMotionAdapter<Vector3, ShakeOptions>
     {
-        public Vector3 Evaluate(in Vector3 startValue, in Vector3 endValue, in ShakeOptions options, in MotionEvaluationContext context)
+        public Vector3 Evaluate(ref Vector3 startValue, ref Vector3 endValue, ref ShakeOptions options, in MotionEvaluationContext context)
         {
             VibrationHelper.EvaluateStrength(endValue, options.Frequency, options.DampingRatio, context.Progress, out var s);
             Vector3 multipliar;

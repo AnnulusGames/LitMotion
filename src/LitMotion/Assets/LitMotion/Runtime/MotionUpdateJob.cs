@@ -109,7 +109,7 @@ namespace LitMotion
                     Progress = progress
                 };
 
-                Output[index] = default(TAdapter).Evaluate(ptr->StartValue, ptr->EndValue, ptr->Options, context);
+                Output[index] = default(TAdapter).Evaluate(ref ptr->StartValue, ref ptr->EndValue, ref ptr->Options, context);
             }
             else if (ptr->Status is MotionStatus.Completed or MotionStatus.Canceled)
             {

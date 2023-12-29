@@ -15,7 +15,7 @@ namespace LitMotion.Adapters
 {
     public readonly struct Vector2MotionAdapter : IMotionAdapter<Vector2, NoOptions>
     {
-        public Vector2 Evaluate(in Vector2 startValue, in Vector2 endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Vector2 Evaluate(ref Vector2 startValue, ref Vector2 endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return Vector2.LerpUnclamped(startValue, endValue, context.Progress);
         }
@@ -23,7 +23,7 @@ namespace LitMotion.Adapters
 
     public readonly struct Vector3MotionAdapter : IMotionAdapter<Vector3, NoOptions>
     {
-        public Vector3 Evaluate(in Vector3 startValue, in Vector3 endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Vector3 Evaluate(ref Vector3 startValue, ref Vector3 endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return Vector3.LerpUnclamped(startValue, endValue, context.Progress);
         }
@@ -31,7 +31,7 @@ namespace LitMotion.Adapters
 
     public readonly struct Vector4MotionAdapter : IMotionAdapter<Vector4, NoOptions>
     {
-        public Vector4 Evaluate(in Vector4 startValue, in Vector4 endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Vector4 Evaluate(ref Vector4 startValue, ref Vector4 endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return Vector4.LerpUnclamped(startValue, endValue, context.Progress);
         }
@@ -39,7 +39,7 @@ namespace LitMotion.Adapters
 
     public readonly struct QuaternionMotionAdapter : IMotionAdapter<Quaternion, NoOptions>
     {
-        public Quaternion Evaluate(in Quaternion startValue, in Quaternion endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Quaternion Evaluate(ref Quaternion startValue, ref Quaternion endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return Quaternion.LerpUnclamped(startValue, endValue, context.Progress);
         }
@@ -47,7 +47,7 @@ namespace LitMotion.Adapters
 
     public readonly struct ColorMotionAdapter : IMotionAdapter<Color, NoOptions>
     {
-        public Color Evaluate(in Color startValue, in Color endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Color Evaluate(ref Color startValue, ref Color endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return Color.LerpUnclamped(startValue, endValue, context.Progress);
         }
@@ -55,7 +55,7 @@ namespace LitMotion.Adapters
 
     public readonly struct RectMotionAdapter : IMotionAdapter<Rect, NoOptions>
     {
-        public Rect Evaluate(in Rect startValue, in Rect endValue, in NoOptions options, in MotionEvaluationContext context)
+        public Rect Evaluate(ref Rect startValue, ref Rect endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             var x = math.lerp(startValue.x, endValue.x, context.Progress);
             var y = math.lerp(startValue.y, endValue.y, context.Progress);

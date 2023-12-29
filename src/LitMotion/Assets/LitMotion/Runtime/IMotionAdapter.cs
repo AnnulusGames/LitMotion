@@ -17,6 +17,6 @@ namespace LitMotion
         /// <param name="options">Option value to specify</param>
         /// <param name="context">Animation context</param>
         /// <returns>Current value</returns>
-        TValue Evaluate(in TValue startValue, in TValue endValue, in TOptions options, in MotionEvaluationContext context);
+        TValue Evaluate(ref TValue startValue, ref TValue endValue, ref TOptions options, in MotionEvaluationContext context);
     }
 }
