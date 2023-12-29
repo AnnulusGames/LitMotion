@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionSpriteRendererExtensions
     {
-        public static MotionHandle BindToColor(this MotionBuilder<Color, NoOptions, ColorMotionAdapter> builder, SpriteRenderer spriteRenderer)
+        public static MotionHandle BindToColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, SpriteRenderer spriteRenderer)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Assert.IsNotNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
@@ -16,7 +17,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorR(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, SpriteRenderer spriteRenderer)
+        public static MotionHandle BindToColorR<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, SpriteRenderer spriteRenderer)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
@@ -28,7 +31,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorG(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, SpriteRenderer spriteRenderer)
+        public static MotionHandle BindToColorG<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, SpriteRenderer spriteRenderer)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
@@ -40,7 +45,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorB(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, SpriteRenderer spriteRenderer)
+        public static MotionHandle BindToColorB<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, SpriteRenderer spriteRenderer)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
@@ -52,7 +59,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorA(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, SpriteRenderer spriteRenderer)
+        public static MotionHandle BindToColorA<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, SpriteRenderer spriteRenderer)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>

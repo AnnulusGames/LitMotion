@@ -2,13 +2,14 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 using Unity.Collections;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionUGUIExtensions
     {
-        public static MotionHandle BindToColor(this MotionBuilder<Color, NoOptions, ColorMotionAdapter> builder, Graphic graphic)
+        public static MotionHandle BindToColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, Graphic graphic)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Assert.IsNotNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
@@ -18,7 +19,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorR(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Graphic graphic)
+        public static MotionHandle BindToColorR<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
@@ -30,7 +33,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorG(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Graphic graphic)
+        public static MotionHandle BindToColorG<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
@@ -42,7 +47,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorB(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Graphic graphic)
+        public static MotionHandle BindToColorB<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
@@ -54,7 +61,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToColorA(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Graphic graphic)
+        public static MotionHandle BindToColorA<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
@@ -66,7 +75,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToFillAmount(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Image image)
+        public static MotionHandle BindToFillAmount<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Image image)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(image);
             return builder.BindWithState(image, (x, target) =>
@@ -76,7 +87,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToFontSize(this MotionBuilder<int, IntegerOptions, IntMotionAdapter> builder, Text text)
+        public static MotionHandle BindToFontSize<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
@@ -86,7 +99,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToText(this MotionBuilder<FixedString32Bytes, StringOptions, FixedString32BytesMotionAdapter> builder, Text text)
+        public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString32Bytes, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
@@ -96,7 +111,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToText(this MotionBuilder<FixedString64Bytes, StringOptions, FixedString64BytesMotionAdapter> builder, Text text)
+        public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString64Bytes, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
@@ -106,7 +123,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToText(this MotionBuilder<FixedString128Bytes, StringOptions, FixedString128BytesMotionAdapter> builder, Text text)
+        public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString128Bytes, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
@@ -116,7 +135,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToText(this MotionBuilder<FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter> builder, Text text)
+        public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString512Bytes, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
@@ -126,7 +147,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToText(this MotionBuilder<FixedString4096Bytes, StringOptions, FixedString4096BytesMotionAdapter> builder, Text text)
+        public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString4096Bytes, TOptions, TAdapter> builder, Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>
         {
             Assert.IsNotNull(text);
             return builder.BindWithState(text, (x, target) =>
