@@ -108,6 +108,38 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Specify the frequency of vibration.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="frequency">Frequency</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, ShakeOptions, TAdapter> WithFrequency<TValue, TAdapter>(this MotionBuilder<TValue, ShakeOptions, TAdapter> builder, int frequency)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
+        {
+            builder.buffer.Options.Frequency = frequency;
+            return builder;
+        }
+
+        /// <summary>
+        /// Specify the vibration damping ratio.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="dampingRatio">Damping ratio</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, ShakeOptions, TAdapter> WithDampingRatio<TValue, TAdapter>(this MotionBuilder<TValue, ShakeOptions, TAdapter> builder, float dampingRatio)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
+        {
+            builder.buffer.Options.DampingRatio = dampingRatio;
+            return builder;
+        }
+
+        /// <summary>
         /// Enable support for Rich Text tags.
         /// </summary>
         /// <typeparam name="TValue">The type of value to animate</typeparam>
