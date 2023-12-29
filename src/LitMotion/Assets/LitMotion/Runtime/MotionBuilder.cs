@@ -36,6 +36,7 @@ namespace LitMotion
             buffer.Options = default;
             buffer.Scheduler = default;
             buffer.OnComplete = default;
+            buffer.CancelOnError = default;
             buffer.IsPreserved = default;
 
             if (buffer.Version != ushort.MaxValue)
@@ -60,6 +61,7 @@ namespace LitMotion
         public IMotionScheduler Scheduler;
 
         public Action OnComplete;
+        public bool CancelOnError;
         public bool IsPreserved;
     }
 
@@ -164,6 +166,19 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Cancel Motion when an exception occurs during Bind processing.
+        /// </summary>
+        /// <param name="cancelOnError">Whether to cancel on error</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithCancelOnError(bool cancelOnError = true)
+        {
+            CheckBuffer();
+            buffer.CancelOnError = cancelOnError;
+            return this;
+        }
+
+        /// <summary>
         /// Specifies the scheduler that schedule the motion.
         /// </summary>
         /// <param name="scheduler">Scheduler</param>
@@ -183,8 +198,7 @@ namespace LitMotion
         public MotionHandle RunWithoutBinding()
         {
             CheckBuffer();
-            var callbacks = default(MotionCallbackData);
-            callbacks.OnCompleteAction = buffer.OnComplete;
+            var callbacks = BuildCallbackData();
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
             return Schedule(scheduler, data, callbacks);
@@ -198,7 +212,7 @@ namespace LitMotion
         public MotionHandle Bind(Action<TValue> action)
         {
             CheckBuffer();
-            var callbacks = MotionCallbackData.Create(action);
+            var callbacks = BuildCallbackData(action);
             callbacks.OnCompleteAction = buffer.OnComplete;
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
@@ -215,8 +229,7 @@ namespace LitMotion
         public MotionHandle BindWithState<TState>(TState state, Action<TValue, TState> action) where TState : class
         {
             CheckBuffer();
-            var callbacks = MotionCallbackData.Create(state, action);
-            callbacks.OnCompleteAction = buffer.OnComplete;
+            var callbacks = BuildCallbackData(state, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
             return Schedule(scheduler, data, callbacks);
@@ -276,6 +289,46 @@ namespace LitMotion
             };
             if (!buffer.IsPreserved) Dispose();
             return data;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal MotionCallbackData BuildCallbackData()
+        {
+            var callbacks = new MotionCallbackData
+            {
+                OnCompleteAction = buffer.OnComplete,
+                CancelOnError = buffer.CancelOnError
+            };
+            return callbacks;
+        }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal MotionCallbackData BuildCallbackData(Action<TValue> action)
+        {
+            var callbacks = new MotionCallbackData
+            {
+                UpdateAction = action,
+                OnCompleteAction = buffer.OnComplete,
+                CancelOnError = buffer.CancelOnError
+            };
+            return callbacks;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal MotionCallbackData BuildCallbackData<TState>(TState state, Action<TValue, TState> action)
+            where TState : class
+        {
+            var callbacks = new MotionCallbackData
+            {
+                HasState = true,
+                State = state,
+                UpdateAction = action,
+                OnCompleteAction = buffer.OnComplete,
+                CancelOnError = buffer.CancelOnError
+            };
+
+            return callbacks;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
