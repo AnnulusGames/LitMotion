@@ -78,6 +78,7 @@ namespace LitMotion
             var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
             result.originalCompleteAction = callbacks.OnCompleteAction;
             callbacks.OnCompleteAction = result.onCompleteCallbackDelegate;
+            callbacks.UniTaskConfiguredSource = result;
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
 
             if (result.originalCompleteAction == result.onCompleteCallbackDelegate)
@@ -101,7 +102,7 @@ namespace LitMotion
             return result;
         }
 
-        void OnCompleteCallbackDelegate()
+        public void OnCompleteCallbackDelegate()
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -114,6 +115,23 @@ namespace LitMotion
             else
             {
                 originalCompleteAction?.Invoke();
+                core.TrySetResult(AsyncUnit.Default);
+            }
+        }
+
+        // for MotionHandle.Cancel()
+        public void OnMotionCanceled()
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                canceled = true;
+            }
+            if (canceled)
+            {
+                core.TrySetCanceled(cancellationToken);
+            }
+            else
+            {
                 core.TrySetResult(AsyncUnit.Default);
             }
         }

@@ -249,6 +249,10 @@ namespace LitMotion
 
             motion.Status = MotionStatus.Canceled;
             dataArray[denseIndex] = motion;
+
+#if LITMOTION_SUPPORT_UNITASK
+            callbacksArray[denseIndex].UniTaskConfiguredSource.OnMotionCanceled();
+#endif
         }
 
         public void Complete(MotionHandle handle)

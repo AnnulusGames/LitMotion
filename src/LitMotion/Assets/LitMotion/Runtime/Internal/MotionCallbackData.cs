@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 
@@ -16,7 +15,10 @@ namespace LitMotion
         public object State;
         public object UpdateAction;
         public Action OnCompleteAction;
-        public CancellationToken CancellationToken;
+
+#if LITMOTION_SUPPORT_UNITASK
+        internal MotionConfiguredSource UniTaskConfiguredSource;
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void InvokeUnsafe<TValue>(in TValue value) where TValue : unmanaged
