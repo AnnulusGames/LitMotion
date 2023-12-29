@@ -64,6 +64,20 @@ namespace LitMotion.Tests.Runtime
             await handle;
         });
 
+        [UnityTest]
+        public IEnumerator Test_CancelWhileAwait_WithCancelOnError() => UniTask.ToCoroutine(async () =>
+        {
+            LogAssert.ignoreFailingMessages = true;
+
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithCancelOnError()
+                .Bind(x => 
+                {
+                    if (x > 5f) throw new Exception("Test");
+                });
+            await handle;
+        });
+
         async UniTaskVoid DelayedCall(float delay, Action action)
         {
             await UniTask.WaitForSeconds(delay);
