@@ -14,6 +14,8 @@ LitMotion not only boasts high performance but also offers a rich set of feature
 * Works in both runtime and editor
 * Supports complex settings like easing and looping
 * Waits for completion using callbacks/coroutines
+* Zero allocation text animation
+* Special motions such as Punch, Shake, etc.
 * Converts to Observable using UniRx
 * Supports async/await using UniTask
 * Type extensions using `IMotionOptions` and `IMotionAdapter`

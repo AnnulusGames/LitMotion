@@ -14,6 +14,8 @@ LitMotionは高いパフォーマンスだけでなく、トゥイーンライ�
 * ランタイムとエディタの両方で動作
 * イージングや繰り返しなど複雑な設定を適用可能
 * コールバック/コルーチンによる完了の待機
+* ゼロアロケーションなテキストアニメーション
+* Punch、Shakeなどの特殊なモーション
 * UniRxを利用したObservableへの変換
 * UniTaskを利用したasync/await対応
 * `IMotionOptions`と`IMotionAdapter`を用いた型の拡張

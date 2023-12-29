@@ -83,3 +83,15 @@ You can fill the yet-to-be-displayed characters with random characters. This opt
 #### WithRichText (FixedString-)
 
 Enables RichText support, allowing character advancement in text containing RichText tags. This option is applicable only to string motions. 
+
+#### WithFrequency (Punch, Shake)
+
+Sets the frequency (number of oscillations until the end) for Punch and Shake vibrations. The default value is set to 10.
+
+#### WithDampingRatio (Punch, Shake)
+
+Sets the damping ratio for Punch and Shake vibrations. When this value is 1, it fully dampens, and when it's 0, there is no damping at all. The default value is set to 1.
+
+#### WithRandomSeed (FixedString-, Shake)
+
+Allows you to specify a random seed used during motion playback. This controls the random behavior of ScrambleChars or vibrations. 

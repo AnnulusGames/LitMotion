@@ -56,7 +56,7 @@ LMotion.Create(0f, 10f, 2f)
 | MotionScheduler.Manual | 更新を手動で行います。詳細は[モーションを手動で更新する](updating-motion-manually.md)を参照してください。 |
 | EditorMotionScheduler.Update (LitMotion.Editor) | EditorApplication.updateのタイミングで更新を行います。このSchedulerはエディタ限定で使用できます。 |
 
-#### WithRoundingMode (int)
+#### WithRoundingMode (int, long)
 
 小数点以下の値の丸め方を設定します。このオプションはint型のモーションにのみ適用可能です。
 
@@ -84,3 +84,15 @@ LMotion.Create(0f, 10f, 2f)
 #### WithRichText (FixedString-)
 
 RichTextのサポートを有効化し、RichTextタグが含まれるテキストの文字送りが可能になります。このオプションは文字列のモーションにのみ適用可能です。
+
+#### WithFrequency (Punch, Shake)
+
+Punch, Shakeの振動の周波数(終了時までの振動回数)を設定します。初期値は10に設定されています。
+
+#### WithDampingRatio (Punch, Shake)
+
+Punch, Shakeの振動の減衰比を設定します。この値が1の場合は完全に減衰し、0の場合は一切減衰しません。初期値は1に設定されています。
+
+#### WithRandomSeed (FixedString-, Shake)
+
+モーションの再生の際に使用する乱数のシードを指定できます。これによりScrambleCharsや振動のランダムな動作を制御することができます。
