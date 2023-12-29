@@ -122,18 +122,7 @@ namespace LitMotion
         // for MotionHandle.Cancel()
         public void OnMotionCanceled()
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                canceled = true;
-            }
-            if (canceled)
-            {
-                core.TrySetCanceled(cancellationToken);
-            }
-            else
-            {
-                core.TrySetResult(AsyncUnit.Default);
-            }
+            core.TrySetCanceled(cancellationToken);
         }
 
         public void GetResult(short token)

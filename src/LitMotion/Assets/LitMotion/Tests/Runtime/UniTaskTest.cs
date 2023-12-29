@@ -61,7 +61,15 @@ namespace LitMotion.Tests.Runtime
         {
             var handle = LMotion.Create(0f, 10f, 1f).BindToUnityLogger();
             DelayedCall(0.2f, () => handle.Cancel()).Forget();
-            await handle;
+            try
+            {
+                await handle;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            Assert.Fail();
         });
 
         [UnityTest]
@@ -75,7 +83,16 @@ namespace LitMotion.Tests.Runtime
                 {
                     if (x > 5f) throw new Exception("Test");
                 });
-            await handle;
+
+            try
+            {
+                await handle;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            Assert.Fail();
         });
 
         async UniTaskVoid DelayedCall(float delay, Action action)
