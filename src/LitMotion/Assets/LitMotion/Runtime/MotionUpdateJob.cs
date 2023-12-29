@@ -36,7 +36,7 @@ namespace LitMotion
             if (Hint.Likely(ptr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing))
             {
                 ptr->Time += ptr->IgnoreTimeScale ? UnscaledDeltaTime : DeltaTime;
-                var time = math.max(0f, ptr->Time - ptr->Delay);
+                var time = ptr->Time - ptr->Delay;
 
                 float t;
                 bool isCompleted;
