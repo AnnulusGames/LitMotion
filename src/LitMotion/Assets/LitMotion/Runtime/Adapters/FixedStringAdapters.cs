@@ -1,7 +1,5 @@
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
 using LitMotion;
 using LitMotion.Adapters;
 
@@ -12,12 +10,6 @@ using LitMotion.Adapters;
 
 namespace LitMotion.Adapters
 {
-    static class SharedRandom
-    {
-        readonly struct Key { }
-        public static readonly SharedStatic<Random> Random = SharedStatic<Random>.GetOrCreate<Key>();
-    }
-
     public readonly struct FixedString32BytesMotionAdapter : IMotionAdapter<FixedString32Bytes, StringOptions>
     {
         public FixedString32Bytes Evaluate(in FixedString32Bytes startValue, in FixedString32Bytes endValue, in StringOptions options, in MotionEvaluationContext context)
