@@ -12,7 +12,7 @@ namespace LitMotion.Adapters
 {
     public readonly struct FloatMotionAdapter : IMotionAdapter<float, NoOptions>
     {
-        public float Evaluate(in float startValue, in float endValue, in NoOptions options, in MotionEvaluationContext context)
+        public float Evaluate(ref float startValue, ref float endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return math.lerp(startValue, endValue, context.Progress);
         }
@@ -20,7 +20,7 @@ namespace LitMotion.Adapters
 
     public readonly struct DoubleMotionAdapter : IMotionAdapter<double, NoOptions>
     {
-        public double Evaluate(in double startValue, in double endValue, in NoOptions options, in MotionEvaluationContext context)
+        public double Evaluate(ref double startValue, ref double endValue, ref NoOptions options, in MotionEvaluationContext context)
         {
             return math.lerp(startValue, endValue, context.Progress);
         }
@@ -28,7 +28,7 @@ namespace LitMotion.Adapters
 
     public readonly struct IntMotionAdapter : IMotionAdapter<int, IntegerOptions>
     {
-        public int Evaluate(in int startValue, in int endValue, in IntegerOptions options, in MotionEvaluationContext context)
+        public int Evaluate(ref int startValue, ref int endValue, ref IntegerOptions options, in MotionEvaluationContext context)
         {
             var value = math.lerp(startValue, endValue, context.Progress);
 
@@ -44,7 +44,7 @@ namespace LitMotion.Adapters
     }
     public readonly struct LongMotionAdapter : IMotionAdapter<long, IntegerOptions>
     {
-        public long Evaluate(in long startValue, in long endValue, in IntegerOptions options, in MotionEvaluationContext context)
+        public long Evaluate(ref long startValue, ref long endValue, ref IntegerOptions options, in MotionEvaluationContext context)
         {
             var value = math.lerp((double)startValue, endValue, context.Progress);
 
