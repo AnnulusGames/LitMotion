@@ -12,6 +12,7 @@ namespace LitMotion
     {
         public bool HasState;
         public bool IsCallbackRunning;
+        public bool CancelOnError;
         public object State;
         public object UpdateAction;
         public Action OnCompleteAction;
@@ -28,27 +29,6 @@ namespace LitMotion
             {
                 UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
             }
-        }
-
-        public static MotionCallbackData Create<T>(Action<T> action)
-        {
-            var callbacks = new MotionCallbackData
-            {
-                UpdateAction = action
-            };
-            return callbacks;
-        }
-
-        public static MotionCallbackData Create<TValue, TState>(TState state, Action<TValue, TState> action) where TState : class
-        {
-            var callbacks = new MotionCallbackData
-            {
-                HasState = true,
-                State = state,
-                UpdateAction = action
-            };
-
-            return callbacks;
         }
     }
 }

@@ -59,6 +59,10 @@ namespace LitMotion
                         catch (Exception ex)
                         {
                             Debug.LogException(ex);
+                            if (callbacks.CancelOnError)
+                            {
+                                (dataPtr + i)->Status = MotionStatus.Canceled;
+                            }
                         }
                     }
                     else if (status == MotionStatus.Completed)
@@ -71,6 +75,11 @@ namespace LitMotion
                         catch (Exception ex)
                         {
                             Debug.LogException(ex);
+                            if (callbacks.CancelOnError)
+                            {
+                                (dataPtr + i)->Status = MotionStatus.Canceled;
+                                continue;
+                            }
                         }
 
                         try

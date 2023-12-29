@@ -13,7 +13,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var subject = new Subject<TValue>();
-            var callbacks = MotionCallbackData.Create<TValue, Subject<TValue>>(subject, (x, subject) => subject.OnNext(x));
+            var callbacks = builder.BuildCallbackData(subject, (x, subject) => subject.OnNext(x));
             callbacks.OnCompleteAction = builder.buffer.OnComplete;
             callbacks.OnCompleteAction += () => subject.OnCompleted();
             var scheduler = builder.buffer.Scheduler;
