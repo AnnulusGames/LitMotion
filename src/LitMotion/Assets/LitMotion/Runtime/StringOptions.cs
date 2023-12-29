@@ -42,12 +42,14 @@ namespace LitMotion
         public ScrambleMode ScrambleMode;
         public bool RichTextEnabled;
         public FixedString64Bytes CustomScrambleChars;
+        public Unity.Mathematics.Random RandomState;
 
         public readonly bool Equals(StringOptions other)
         {
             return other.ScrambleMode == ScrambleMode &&
                 other.RichTextEnabled == RichTextEnabled &&
-                other.CustomScrambleChars == CustomScrambleChars;
+                other.CustomScrambleChars == CustomScrambleChars &&
+                other.RandomState.state == RandomState.state;
         }
 
         public override readonly bool Equals(object obj)
@@ -58,7 +60,7 @@ namespace LitMotion
 
         public override readonly int GetHashCode()
         {
-            return HashCode.Combine(ScrambleMode, RichTextEnabled, CustomScrambleChars);
+            return HashCode.Combine(ScrambleMode, RichTextEnabled, CustomScrambleChars, RandomState);
         }
     }
 }

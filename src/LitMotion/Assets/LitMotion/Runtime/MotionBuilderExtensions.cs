@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace LitMotion
 {
-
     /// <summary>
     /// Provides additional Bind methods for MotionBuilder.
     /// </summary>
@@ -140,6 +139,22 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Specify the random number seed that determines the shake motion value.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="seed">Random number seed</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, ShakeOptions, TAdapter> WithRandomSeed<TValue, TAdapter>(this MotionBuilder<TValue, ShakeOptions, TAdapter> builder, uint seed)
+            where TValue : unmanaged
+            where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
+        {
+            builder.buffer.Options.RandomState = new Unity.Mathematics.Random(seed);
+            return builder;
+        }
+
+        /// <summary>
         /// Enable support for Rich Text tags.
         /// </summary>
         /// <typeparam name="TValue">The type of value to animate</typeparam>
@@ -152,6 +167,22 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
             builder.buffer.Options.RichTextEnabled = richTextEnabled;
+            return builder;
+        }
+
+        /// <summary>
+        /// Specify the random number seed used to display scramble characters.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="seed">Rrandom number seed</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        public static MotionBuilder<TValue, StringOptions, TAdapter> WithRandomSeed<TValue, TAdapter>(this MotionBuilder<TValue, StringOptions, TAdapter> builder, uint seed)
+           where TValue : unmanaged
+           where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
+        {
+            builder.buffer.Options.RandomState = new Unity.Mathematics.Random(seed);
             return builder;
         }
 

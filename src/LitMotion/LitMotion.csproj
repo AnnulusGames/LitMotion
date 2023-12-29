@@ -64,7 +64,6 @@
     <Analyzer Include="/Applications/Unity/2022.3.7f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/LitMotion/Runtime/Adapters/FixedStringAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/NoOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/PunchOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Ease.cs" />
@@ -112,6 +111,7 @@
     <Compile Include="Assets/LitMotion/Runtime/IMotionOptions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Schedulers/UpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Runtime/External/UniRx/LitMotionUniRxExtensions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Adapters/FixedStringMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Adapters/ShakeMotionAdapters.cs" />
     <Compile Include="Assets/LitMotion/Runtime/EaseUtility.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/RichTextParser.cs" />

@@ -17,7 +17,9 @@ namespace LitMotion.Adapters
             var start = startValue;
             var end = endValue;
             var customScrambleChars = options.CustomScrambleChars;
-            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref SharedRandom.Random.Data, ref customScrambleChars, out var result);
+            ref var randomState = ref options.RandomState;
+            if (randomState.state == 0) randomState = ref SharedRandom.Random.Data;
+            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref randomState, ref customScrambleChars, out var result);
             return result;
         }
     }
@@ -29,7 +31,9 @@ namespace LitMotion.Adapters
             var start = startValue;
             var end = endValue;
             var customScrambleChars = options.CustomScrambleChars;
-            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref SharedRandom.Random.Data, ref customScrambleChars, out var result);
+            ref var randomState = ref options.RandomState;
+            if (randomState.state == 0) randomState = ref SharedRandom.Random.Data;
+            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref randomState, ref customScrambleChars, out var result);
             return result;
         }
     }
@@ -41,7 +45,9 @@ namespace LitMotion.Adapters
             var start = startValue;
             var end = endValue;
             var customScrambleChars = options.CustomScrambleChars;
-            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref SharedRandom.Random.Data, ref customScrambleChars, out var result);
+            ref var randomState = ref options.RandomState;
+            if (randomState.state == 0) randomState = ref SharedRandom.Random.Data;
+            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref randomState, ref customScrambleChars, out var result);
             return result;
         }
     }
@@ -53,7 +59,9 @@ namespace LitMotion.Adapters
             var start = startValue;
             var end = endValue;
             var customScrambleChars = options.CustomScrambleChars;
-            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref SharedRandom.Random.Data, ref customScrambleChars, out var result);
+            ref var randomState = ref options.RandomState;
+            if (randomState.state == 0) randomState = ref SharedRandom.Random.Data;
+            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref randomState, ref customScrambleChars, out var result);
             return result;
         }
     }
@@ -65,7 +73,9 @@ namespace LitMotion.Adapters
             var start = startValue;
             var end = endValue;
             var customScrambleChars = options.CustomScrambleChars;
-            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref SharedRandom.Random.Data, ref customScrambleChars, out var result);
+            ref var randomState = ref options.RandomState;
+            if (randomState.state == 0) randomState = ref SharedRandom.Random.Data;
+            FixedStringHelper.Interpolate(ref start, ref end, context.Progress, options.ScrambleMode, options.RichTextEnabled, ref randomState, ref customScrambleChars, out var result);
             return result;
         }
     }
