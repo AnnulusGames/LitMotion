@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionTransformExtensions
     {
-        public static MotionHandle BindToPosition(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToPosition<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -16,7 +17,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPositionX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToPositionX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -28,7 +31,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPositionY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToPositionY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -40,7 +45,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPositionZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToPositionZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -52,7 +59,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalPosition(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalPosition<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -62,7 +71,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalPositionX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalPositionX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -74,7 +85,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalPositionY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalPositionY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -86,7 +99,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalPositionZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalPositionZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -98,7 +113,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToRotation(this MotionBuilder<Quaternion, NoOptions, QuaternionMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToRotation<TOptions, TAdapter>(this MotionBuilder<Quaternion, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -108,7 +125,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalRotation(this MotionBuilder<Quaternion, NoOptions, QuaternionMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalRotation<TOptions, TAdapter>(this MotionBuilder<Quaternion, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -118,7 +137,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToEulerAngles(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToEulerAngles<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -128,7 +149,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToEulerAnglesX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToEulerAnglesX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -140,7 +163,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToEulerAnglesY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToEulerAnglesY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -152,7 +177,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToEulerAnglesZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToEulerAnglesZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -164,7 +191,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalEulerAngles(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalEulerAngles<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -174,7 +203,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalEulerAnglesX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalEulerAnglesX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -186,7 +217,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalEulerAnglesY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalEulerAnglesY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -198,7 +231,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalEulerAnglesZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalEulerAnglesZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -210,7 +245,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalScale(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalScale<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -220,7 +257,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalScaleX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalScaleX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -232,7 +271,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalScaleY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalScaleY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>
@@ -244,7 +285,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToLocalScaleZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Transform transform)
+        public static MotionHandle BindToLocalScaleZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(transform);
             return builder.BindWithState(transform, (x, t) =>

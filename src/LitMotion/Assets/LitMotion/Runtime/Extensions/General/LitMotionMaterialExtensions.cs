@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionMaterialExtensions
     {
-        public static MotionHandle BindToMaterialFloat(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Material material, string name)
+        public static MotionHandle BindToMaterialFloat<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Material material, string name)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>
@@ -16,7 +17,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToMaterialFloat(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, Material material, int nameID)
+        public static MotionHandle BindToMaterialFloat<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Material material, int nameID)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>
@@ -26,7 +29,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToMaterialInt(this MotionBuilder<int, IntegerOptions, IntMotionAdapter> builder, Material material, string name)
+        public static MotionHandle BindToMaterialInt<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, Material material, string name)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>
@@ -36,7 +41,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToMaterialInt(this MotionBuilder<int, IntegerOptions, IntMotionAdapter> builder, Material material, int nameID)
+        public static MotionHandle BindToMaterialInt<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, Material material, int nameID)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>
@@ -46,7 +53,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToMaterialColor(this MotionBuilder<Color, NoOptions, ColorMotionAdapter> builder, Material material, string name)
+        public static MotionHandle BindToMaterialColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, Material material, string name)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>
@@ -56,7 +65,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToMaterialColor(this MotionBuilder<Color, NoOptions, ColorMotionAdapter> builder, Material material, int nameID)
+        public static MotionHandle BindToMaterialColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, Material material, int nameID)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Assert.IsNotNull(material);
             return builder.BindWithState(material, (x, m) =>

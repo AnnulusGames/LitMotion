@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Assertions;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionAudioExtensions
     {
-        public static MotionHandle BindToVolume(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, AudioSource audioSource)
+        public static MotionHandle BindToVolume<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, AudioSource audioSource)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
@@ -17,7 +18,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPitch(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, AudioSource audioSource)
+        public static MotionHandle BindToPitch<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, AudioSource audioSource)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
@@ -27,7 +30,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAudioMixerFloat(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, AudioMixer audioMixer, string name)
+        public static MotionHandle BindToAudioMixerFloat<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, AudioMixer audioMixer, string name)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(audioMixer);
             return builder.BindWithState(audioMixer, (x, target) =>

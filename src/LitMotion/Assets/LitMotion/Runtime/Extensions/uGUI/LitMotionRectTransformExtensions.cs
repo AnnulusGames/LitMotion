@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using LitMotion.Adapters;
 
 namespace LitMotion.Extensions
 {
     public static class LitMotionRectTransformExtensions
     {
-        public static MotionHandle BindToAnchoredPosition(this MotionBuilder<Vector2, NoOptions, Vector2MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPosition<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -16,7 +17,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPositionX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPositionX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -28,7 +31,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPositionY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPositionY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -40,7 +45,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPosition3D(this MotionBuilder<Vector3, NoOptions, Vector3MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPosition3D<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -50,7 +57,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPosition3DX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPosition3DX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -62,7 +71,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPosition3DY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPosition3DY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -74,7 +85,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchoredPosition3DZ(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchoredPosition3DZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -86,7 +99,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchorMin(this MotionBuilder<Vector2, NoOptions, Vector2MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchorMin<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -96,7 +111,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToAnchorMax(this MotionBuilder<Vector2, NoOptions, Vector2MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToAnchorMax<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -107,7 +124,9 @@ namespace LitMotion.Extensions
         }
 
 
-        public static MotionHandle BindToSizeDelta(this MotionBuilder<Vector2, NoOptions, Vector2MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToSizeDelta<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -117,7 +136,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToSizeDeltaX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToSizeDeltaX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -129,7 +150,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToSizeDeltaY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToSizeDeltaY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -141,7 +164,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPivot(this MotionBuilder<Vector2, NoOptions, Vector2MotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToPivot<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -151,7 +176,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPivotX(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToPivotX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
@@ -163,7 +190,9 @@ namespace LitMotion.Extensions
             });
         }
 
-        public static MotionHandle BindToPivotY(this MotionBuilder<float, NoOptions, FloatMotionAdapter> builder, RectTransform rectTransform)
+        public static MotionHandle BindToPivotY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, RectTransform rectTransform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Assert.IsNotNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
