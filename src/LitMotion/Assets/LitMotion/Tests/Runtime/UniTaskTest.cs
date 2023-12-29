@@ -1,4 +1,5 @@
 #if LITMOTION_TEST_UNITASK
+using System;
 using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -54,6 +55,20 @@ namespace LitMotion.Tests.Runtime
                 Assert.That(value, Is.EqualTo(10f).Using(FloatEqualityComparer.Instance));
             }
         });
+
+        [UnityTest]
+        public IEnumerator Test_CancelWhileAwait() => UniTask.ToCoroutine(async () =>
+        {
+            var handle = LMotion.Create(0f, 10f, 1f).BindToUnityLogger();
+            DelayedCall(0.2f, () => handle.Cancel()).Forget();
+            await handle;
+        });
+
+        async UniTaskVoid DelayedCall(float delay, Action action)
+        {
+            await UniTask.WaitForSeconds(delay);
+            action.Invoke();
+        }
     }
 }
 #endif
