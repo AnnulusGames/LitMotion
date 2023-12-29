@@ -251,7 +251,7 @@ namespace LitMotion
             dataArray[denseIndex] = motion;
 
 #if LITMOTION_SUPPORT_UNITASK
-            callbacksArray[denseIndex].UniTaskConfiguredSource.OnMotionCanceled();
+            callbacksArray[denseIndex].UniTaskConfiguredSource?.OnMotionCanceled();
 #endif
         }
 
