@@ -21,7 +21,7 @@ using LitMotion;
 public readonly struct Vector3MotionAdapter : IMotionAdapter<Vector3, NoOptions>
 {
     // Evaluate内に値を補間する処理を実装する
-    public Vector3 Evaluate(in Vector3 startValue, in Vector3 endValue, in NoOptions options, in MotionEvaluationContext context)
+    public Vector3 Evaluate(ref Vector3 startValue, ref Vector3 endValue, ref NoOptions options, in MotionEvaluationContext context)
     {
         return Vector3.LerpUnclamped(startValue, endValue, context.Progress);
     }

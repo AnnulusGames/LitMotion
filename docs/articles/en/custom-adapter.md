@@ -20,7 +20,7 @@ using LitMotion;
 public readonly struct Vector3MotionAdapter : IMotionAdapter<Vector3, NoOptions>
 {
     // Implement the interpolation logic within the Evaluate method
-    public Vector3 Evaluate(in Vector3 startValue, in Vector3 endValue, in NoOptions options, in MotionEvaluationContext context)
+    public Vector3 Evaluate(ref Vector3 startValue, ref Vector3 endValue, ref NoOptions options, in MotionEvaluationContext context)
     {
         return Vector3.LerpUnclamped(startValue, endValue, context.Progress);
     }
