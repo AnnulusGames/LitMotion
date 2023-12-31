@@ -6,6 +6,7 @@ using LitMotion.Adapters;
 [assembly: RegisterGenericJobType(typeof(MotionUpdateJob<FixedString32Bytes, StringOptions, FixedString32BytesMotionAdapter>))]
 [assembly: RegisterGenericJobType(typeof(MotionUpdateJob<FixedString64Bytes, StringOptions, FixedString64BytesMotionAdapter>))]
 [assembly: RegisterGenericJobType(typeof(MotionUpdateJob<FixedString128Bytes, StringOptions, FixedString128BytesMotionAdapter>))]
+[assembly: RegisterGenericJobType(typeof(MotionUpdateJob<FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter>))]
 [assembly: RegisterGenericJobType(typeof(MotionUpdateJob<FixedString4096Bytes, StringOptions, FixedString4096BytesMotionAdapter>))]
 
 namespace LitMotion.Adapters
