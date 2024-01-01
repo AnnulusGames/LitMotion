@@ -103,8 +103,8 @@ namespace LitMotion
         }
 
         unsafe static void FillRichText(
-            ref NativeList<RichTextSymbol<#=size#>Bytes> startSymbols,
-            ref NativeList<RichTextSymbol<#=size#>Bytes> endSymbols,
+            ref UnsafeList<RichTextSymbol<#=size#>Bytes> startSymbols,
+            ref UnsafeList<RichTextSymbol<#=size#>Bytes> endSymbols,
             int startTextUtf8Length,
             int endTextUtf8Length,
             float t,
@@ -153,17 +153,17 @@ namespace LitMotion
             }
         }
 
-        unsafe static FixedString<#=size#>Bytes SliceSymbols(ref NativeList<RichTextSymbol<#=size#>Bytes> symbols, int from, int to, out int resultRichTextLength)
+        unsafe static FixedString<#=size#>Bytes SliceSymbols(ref UnsafeList<RichTextSymbol<#=size#>Bytes> symbols, int from, int to, out int resultRichTextLength)
         {
             var text = new FixedString<#=size#>Bytes();
-            var symbolsPtr = symbols.GetUnsafePtr();
+            RichTextSymbol<#=size#>Bytes* symbolsPtr = symbols.Ptr;
             var offset = 0;
             var tagIndent = 0;
             resultRichTextLength = 0;
 
             for (int i = 0; i < symbols.Length; i++)
             {
-                var symbol = symbolsPtr + i;
+                RichTextSymbol<#=size#>Bytes* symbol = symbolsPtr + i;
                 switch (symbol->Type)
                 {
                     case RichTextSymbolType.Text:

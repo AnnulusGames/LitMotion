@@ -1,5 +1,6 @@
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace LitMotion
 {
@@ -7,9 +8,9 @@ namespace LitMotion
     internal static class RichTextParser
     {
         [BurstCompile]
-        public static void GetSymbols(ref FixedString32Bytes source, Allocator allocator, out NativeList<RichTextSymbol32Bytes> symbols, out int charCount)
+        public static void GetSymbols(ref FixedString32Bytes source, Allocator allocator, out UnsafeList<RichTextSymbol32Bytes> symbols, out int charCount)
         {
-            symbols = new NativeList<RichTextSymbol32Bytes>(allocator);
+            symbols = new UnsafeList<RichTextSymbol32Bytes>(32, allocator);
             charCount = 0;
 
             var buffer = new NativeText(32, Allocator.Temp);
@@ -22,7 +23,7 @@ namespace LitMotion
             {
                 var current = enumerator.Current;
 
-                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                if (current.value == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
                 {
                     if (buffer.Length > 0)
                     {
@@ -35,12 +36,12 @@ namespace LitMotion
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagStart;
                 }
-                else if (current == '/' && prevRune == '<')
+                else if (current.value == '/' && prevRune.value == '<')
                 {
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagEnd;
                 }
-                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                else if (current.value == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
                 {
                     buffer.Append(current);
                     if (buffer.Length > 0)
@@ -72,9 +73,9 @@ namespace LitMotion
             buffer.Dispose();
         }
         [BurstCompile]
-        public static void GetSymbols(ref FixedString64Bytes source, Allocator allocator, out NativeList<RichTextSymbol64Bytes> symbols, out int charCount)
+        public static void GetSymbols(ref FixedString64Bytes source, Allocator allocator, out UnsafeList<RichTextSymbol64Bytes> symbols, out int charCount)
         {
-            symbols = new NativeList<RichTextSymbol64Bytes>(allocator);
+            symbols = new UnsafeList<RichTextSymbol64Bytes>(32, allocator);
             charCount = 0;
 
             var buffer = new NativeText(64, Allocator.Temp);
@@ -87,7 +88,7 @@ namespace LitMotion
             {
                 var current = enumerator.Current;
 
-                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                if (current.value == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
                 {
                     if (buffer.Length > 0)
                     {
@@ -100,12 +101,12 @@ namespace LitMotion
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagStart;
                 }
-                else if (current == '/' && prevRune == '<')
+                else if (current.value == '/' && prevRune.value == '<')
                 {
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagEnd;
                 }
-                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                else if (current.value == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
                 {
                     buffer.Append(current);
                     if (buffer.Length > 0)
@@ -137,9 +138,9 @@ namespace LitMotion
             buffer.Dispose();
         }
         [BurstCompile]
-        public static void GetSymbols(ref FixedString128Bytes source, Allocator allocator, out NativeList<RichTextSymbol128Bytes> symbols, out int charCount)
+        public static void GetSymbols(ref FixedString128Bytes source, Allocator allocator, out UnsafeList<RichTextSymbol128Bytes> symbols, out int charCount)
         {
-            symbols = new NativeList<RichTextSymbol128Bytes>(allocator);
+            symbols = new UnsafeList<RichTextSymbol128Bytes>(32, allocator);
             charCount = 0;
 
             var buffer = new NativeText(128, Allocator.Temp);
@@ -152,7 +153,7 @@ namespace LitMotion
             {
                 var current = enumerator.Current;
 
-                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                if (current.value == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
                 {
                     if (buffer.Length > 0)
                     {
@@ -165,12 +166,12 @@ namespace LitMotion
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagStart;
                 }
-                else if (current == '/' && prevRune == '<')
+                else if (current.value == '/' && prevRune.value == '<')
                 {
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagEnd;
                 }
-                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                else if (current.value == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
                 {
                     buffer.Append(current);
                     if (buffer.Length > 0)
@@ -202,9 +203,9 @@ namespace LitMotion
             buffer.Dispose();
         }
         [BurstCompile]
-        public static void GetSymbols(ref FixedString512Bytes source, Allocator allocator, out NativeList<RichTextSymbol512Bytes> symbols, out int charCount)
+        public static void GetSymbols(ref FixedString512Bytes source, Allocator allocator, out UnsafeList<RichTextSymbol512Bytes> symbols, out int charCount)
         {
-            symbols = new NativeList<RichTextSymbol512Bytes>(allocator);
+            symbols = new UnsafeList<RichTextSymbol512Bytes>(32, allocator);
             charCount = 0;
 
             var buffer = new NativeText(512, Allocator.Temp);
@@ -217,7 +218,7 @@ namespace LitMotion
             {
                 var current = enumerator.Current;
 
-                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                if (current.value == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
                 {
                     if (buffer.Length > 0)
                     {
@@ -230,12 +231,12 @@ namespace LitMotion
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagStart;
                 }
-                else if (current == '/' && prevRune == '<')
+                else if (current.value == '/' && prevRune.value == '<')
                 {
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagEnd;
                 }
-                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                else if (current.value == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
                 {
                     buffer.Append(current);
                     if (buffer.Length > 0)
@@ -267,9 +268,9 @@ namespace LitMotion
             buffer.Dispose();
         }
         [BurstCompile]
-        public static void GetSymbols(ref FixedString4096Bytes source, Allocator allocator, out NativeList<RichTextSymbol4096Bytes> symbols, out int charCount)
+        public static void GetSymbols(ref FixedString4096Bytes source, Allocator allocator, out UnsafeList<RichTextSymbol4096Bytes> symbols, out int charCount)
         {
-            symbols = new NativeList<RichTextSymbol4096Bytes>(allocator);
+            symbols = new UnsafeList<RichTextSymbol4096Bytes>(32, allocator);
             charCount = 0;
 
             var buffer = new NativeText(4096, Allocator.Temp);
@@ -282,7 +283,7 @@ namespace LitMotion
             {
                 var current = enumerator.Current;
 
-                if (current == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
+                if (current.value == '<' && currentSymbolType is not (RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd))
                 {
                     if (buffer.Length > 0)
                     {
@@ -295,12 +296,12 @@ namespace LitMotion
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagStart;
                 }
-                else if (current == '/' && prevRune == '<')
+                else if (current.value == '/' && prevRune.value == '<')
                 {
                     buffer.Append(current);
                     currentSymbolType = RichTextSymbolType.TagEnd;
                 }
-                else if (current == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
+                else if (current.value == '>' && currentSymbolType is RichTextSymbolType.TagStart or RichTextSymbolType.TagEnd)
                 {
                     buffer.Append(current);
                     if (buffer.Length > 0)
