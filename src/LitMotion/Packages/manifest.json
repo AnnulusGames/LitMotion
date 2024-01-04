@@ -10,6 +10,7 @@
     "com.unity.timeline": "1.7.5",
     "com.unity.toolchain.macos-arm64-linux-x86_64": "2.0.0",
     "com.unity.ugui": "1.0.0",
+    "com.unity.visualeffectgraph": "14.0.8",
     "com.unity.visualscripting": "1.8.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
