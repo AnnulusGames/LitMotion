@@ -60,6 +60,112 @@ https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotio
 }
 ```
 
+## スタートガイド
+
+LitMotionを用いることでTransformやMaterialなどの値を簡単にアニメーションさせることができます。モーションを作成するには`LMotion.Create()`を使用します。
+
+以下にコードのサンプルを示します。詳細についてはドキュメントを確認してください。
+
+```cs
+using System;
+using System.Threading;
+using UnityEngine;
+using UniRx; // UniRx
+using Cysharp.Threading.Tasks; // UniTask
+using LitMotion;
+using LitMotion.Extensions;
+#if UNITY_EDITOR
+using LitMotion.Editor;
+#endif
+
+public class Example : MonoBehaviour
+{
+    [SerializeField] Transform target1;
+    [SerializeField] Transform target2;
+    [SerializeField] TMP_Text tmpText;
+
+    void Start()
+    {
+        LMotion.Create(Vector3.zero, Vector3.one, 2f) // (0f, 0f, 0f)から(1f, 1f, 1f)まで2秒間で値をアニメーション
+            .BindToPosition(target1); // target1.positionにバインドする
+
+        LMotion.Create(0f, 10f, 2f) // 0fから10fまで2秒間でアニメーション
+            .WithEase(Ease.OutQuad) // イージング関数を指定
+            .WithLoops(2, LoopType.Yoyo) // ループ回数やループの形式を指定
+            .WithDelay(0.2f) // 遅延を設定
+            .BindToUnityLogger(); // Debug.unityLoggerにバインドし、更新時に値をConsoleに表示する
+
+        var value = 0f;
+        LMotion.Create(0f, 10f, 2f) // 0fから10fまで2秒間でアニメーション
+            .WithScheduler(MotionScheduler.FixedUpdate) // 実行タイミングをSchedulerで指定
+            .WithOnComplete(() => Debug.Log("Complete!")) // コールバックを設定
+            .WithCancelOnError() // Bind内で例外が発生したらモーションをキャンセルする
+            .Bind(x => value = x); // 任意の変数やフィールド、プロパティにバインド可能
+            .AddTo(gameObject) // GameObjectが破棄された際にモーションをキャンセルする
+        
+        LMotion.String.Create128Bytes("", "<color=red>Zero</color> Allocation <i>Text</i> Tween! <b>Foooooo!!</b>", 5f)
+            .WithRichText() // RichTextタグを有効化
+            .WithScrambleChars(ScrambleMode.All) // 表示されていない部分をランダムな文字で埋める
+            .BindToText(tmpText); // TMP_Textにバインド (stringを生成せずにゼロアロケーションでテキストを更新する)
+
+        LMotion.Punch.Create(0f, 5f, 2f) // Punchモーション(規則的な減衰振動)を作成
+            .WithFrequency(20) // 振動の回数を指定
+            .WithDampingRatio(0f) // 減衰比を指定
+            .BindToPositionX(target2); // transform.position.xにバインド
+
+        // 作成したモーションの制御は`MotionHandle`構造体を介して行う
+        var handle = LMotion.Create(0f, 1f, 2f).RunWithoutBinding();
+
+        if (handle.IsActive()) // モーションが再生中の場合はtrueを返す
+        {
+            handle.Cancel(); // モーションをキャンセルする
+            handle.Complete(); // モーションを完了する
+        }
+    }
+
+    // コルーチンに対応
+    IEnumerator CoroutineExample()
+    {
+        var handle = LMotion.Create(0f, 1f, 2f).BindToUnityLogger();
+        yield return handle.ToYieldInteraction(); // コルーチンで完了を待機
+    }
+
+    // UniTaskを利用したasync/awaitに対応
+    async UniTask AsyncAwaitExample(CancellationToken cancellationToken)
+    {
+        var handle = LMotion.Create(0f, 1f, 2f).BindToUnityLogger();
+        await handle; // MotionHandleを直接await
+        await handle.ToUniTask(cancellationToken); // ToUniTaskでCancellationTokenを渡してawait
+    }
+
+    // UniRxを利用したIObservable<T>への変換に対応
+    void RxExample()
+    {
+        LMotion.Create(0f, 1f, 2f)
+            .ToObservable() // モーションをIObservable<T>として作成
+            .Where(x => x > 0.5f) // UniRxのオペレータを利用可能
+            .Select(x => x.ToString())
+            .Subscribe(x =>
+            {
+                tmpText.text = x;
+            })
+            .AddTo(this);
+    }
+
+#if UNITY_EDITOR
+
+    // エディタ上での再生が可能
+    void PlayOnEditor()
+    {
+        LMotion.Create(0f, 1f, 2f)
+            .WithScheduler(EditorMotionScheduler.Update) // SchedulerにEditorMotionScheduler.Updateを指定
+            .BindToUnityLogger();
+    }
+    
+#endif
+}
+```
+
 ## パフォーマンス
 
 ベンチマークの結果を以下に示します。ベンチマークのソースコードは[こちらのリポジトリ](https://github.com/AnnulusGames/TweenPerformance)から確認可能です。
