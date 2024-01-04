@@ -2,6 +2,9 @@ using System;
 
 namespace LitMotion
 {
+    /// <summary>
+    /// Options for punch motion.
+    /// </summary>
     public struct PunchOptions : IEquatable<PunchOptions>, IMotionOptions
     {
         public int Frequency;

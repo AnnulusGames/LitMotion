@@ -5,6 +5,9 @@ namespace LitMotion
 {
     public static partial class LMotion
     {
+        /// <summary>
+        /// API for creating string motions.
+        /// </summary>
         public static class String
         {
             /// <summary>

@@ -4,8 +4,19 @@ using Unity.Collections;
 
 namespace LitMotion.Extensions
 {
+    /// <summary>
+    /// Provides binding extension methods for Unity UI (uGUI) components.
+    /// </summary>
     public static class LitMotionUGUIExtensions
     {
+        /// <summary>
+        /// Create a motion data and bind it to Graphic.color
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, Graphic graphic)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
@@ -18,6 +29,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Graphic.color.r
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorR<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -32,6 +51,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Graphic.color.g
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorG<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -46,6 +73,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Graphic.color.b
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorB<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -60,6 +95,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Graphic.color.a
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorA<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Graphic graphic)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -74,6 +117,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Image.FillAmount
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToFillAmount<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, Image image)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -86,6 +137,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.fontSize
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToFontSize<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
@@ -98,6 +157,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.text
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString32Bytes, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
@@ -110,6 +177,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.text
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString64Bytes, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
@@ -122,6 +197,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.text
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString128Bytes, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
@@ -134,6 +217,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.text
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString512Bytes, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
@@ -146,6 +237,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to Text.text
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString4096Bytes, TOptions, TAdapter> builder, Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>

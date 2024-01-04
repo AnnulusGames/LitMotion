@@ -6,8 +6,19 @@ using TMPro;
 
 namespace LitMotion.Extensions
 {
+    /// <summary>
+    /// Provides binding extension methods for TMP_Text
+    /// </summary>
     public static class LitMotionTextMeshProExtensions
     {
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.fontSize
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToFontSize<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -20,6 +31,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.maxVisibleCharacters
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToMaxVisibleCharacters<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
@@ -32,6 +51,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.maxVisibleLines
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToMaxVisibleLines<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
@@ -44,6 +71,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.maxVisibleWords
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToMaxVisibleWords<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
@@ -56,6 +91,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.color
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
@@ -68,6 +111,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.color.r
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorR<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -82,6 +133,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.color.g
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorG<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -96,6 +155,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.color.b
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorB<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -110,6 +177,14 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.color.a
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public static MotionHandle BindToColorA<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
@@ -124,6 +199,17 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString32Bytes, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
@@ -144,6 +230,17 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString64Bytes, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
@@ -164,6 +261,17 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString128Bytes, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
@@ -184,6 +292,17 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString512Bytes, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
@@ -204,6 +323,17 @@ namespace LitMotion.Extensions
             });
         }
 
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
         public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<FixedString4096Bytes, TOptions, TAdapter> builder, TMP_Text text)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>
