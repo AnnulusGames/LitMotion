@@ -24,7 +24,7 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            Assert.IsNotNull(reactiveProperty);
+            Error.IsNull(reactiveProperty);
             return builder.BindWithState(reactiveProperty, (x, target) =>
             {
                 target.Value = x;

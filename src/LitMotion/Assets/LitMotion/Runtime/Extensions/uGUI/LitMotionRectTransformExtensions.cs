@@ -9,7 +9,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -21,7 +21,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -35,7 +35,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -49,7 +49,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -61,7 +61,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -75,7 +75,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -89,7 +89,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -103,7 +103,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -115,7 +115,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -128,7 +128,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -140,7 +140,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -154,7 +154,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -168,7 +168,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
@@ -180,13 +180,13 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;
                 var s = target.pivot;
                 s.x = x;
-                target.pivot= s;
+                target.pivot = s;
             });
         }
 
@@ -194,7 +194,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(rectTransform);
+            Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
                 if (target == null) return;

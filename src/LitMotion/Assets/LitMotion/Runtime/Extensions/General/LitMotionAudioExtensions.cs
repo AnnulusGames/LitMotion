@@ -10,7 +10,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(audioSource);
+            Error.IsNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
             {
                 if (target == null) return;
@@ -22,7 +22,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(audioSource);
+            Error.IsNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
             {
                 if (target == null) return;
@@ -34,7 +34,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(audioMixer);
+            Error.IsNull(audioMixer);
             return builder.BindWithState(audioMixer, (x, target) =>
             {
                 if (target == null) return;

@@ -9,7 +9,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
@@ -21,7 +21,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
@@ -33,7 +33,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
@@ -45,7 +45,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
@@ -57,7 +57,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
@@ -69,7 +69,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
-            Assert.IsNotNull(material);
+            Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
                 if (m == null) return;
