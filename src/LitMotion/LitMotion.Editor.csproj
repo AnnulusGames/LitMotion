@@ -65,8 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/LitMotion/Editor/EditorMotionScheduler.cs" />
-    <Compile Include="Assets/LitMotion/Editor/EditorUpdateMotionScheduler.cs" />
     <Compile Include="Assets/LitMotion/Editor/EditorMotionDispatcher.cs" />
+    <Compile Include="Assets/LitMotion/Editor/EditorUpdateMotionScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/LitMotion/Editor/LitMotion.Editor.asmdef" />

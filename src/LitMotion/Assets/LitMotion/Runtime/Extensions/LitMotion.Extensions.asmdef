@@ -18,6 +18,11 @@
             "name": "com.unity.textmeshpro",
             "expression": "",
             "define": "LITMOTION_SUPPORT_TMP"
+        },
+        {
+            "name": "com.unity.visualeffectgraph",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_VFX_GRAPH"
         }
     ],
     "noEngineReferences": false
