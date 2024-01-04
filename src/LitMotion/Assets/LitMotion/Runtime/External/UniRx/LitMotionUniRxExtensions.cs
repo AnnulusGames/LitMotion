@@ -1,7 +1,6 @@
 #if LITMOTION_SUPPORT_UNIRX
 using System;
 using UniRx;
-using UnityEngine.Assertions;
 
 namespace LitMotion
 {

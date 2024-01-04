@@ -2,7 +2,6 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Assertions;
 
 namespace LitMotion
 {

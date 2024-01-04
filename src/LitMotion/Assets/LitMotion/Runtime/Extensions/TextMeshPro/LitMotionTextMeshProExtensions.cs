@@ -1,7 +1,6 @@
 #if LITMOTION_SUPPORT_TMP
 using System.Buffers;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Unity.Collections;
 using TMPro;
 
