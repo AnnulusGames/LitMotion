@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets/LitMotion/Runtime/Extensions/General/LitMotionSpriteRendererExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Extensions/TextMeshPro/LitMotionTextMeshProExtensions.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Extensions/UIToolkit/LitMotionUIToolkitExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Extensions/uGUI/LitMotionRectTransformExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Extensions/General/LitMotionMaterialExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Extensions/uGUI/LitMotionUGUIExtensions.cs" />
