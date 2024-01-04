@@ -9,7 +9,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
-            Assert.IsNotNull(spriteRenderer);
+            Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
                 if (m == null) return;
@@ -21,7 +21,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(spriteRenderer);
+            Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
                 if (m == null) return;
@@ -35,7 +35,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(spriteRenderer);
+            Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
                 if (m == null) return;
@@ -49,7 +49,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(spriteRenderer);
+            Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
                 if (m == null) return;
@@ -63,7 +63,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(spriteRenderer);
+            Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
                 if (m == null) return;

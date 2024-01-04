@@ -97,6 +97,7 @@
     <Compile Include="Assets/LitMotion/Runtime/Internal/FixedStringHelper.Interpolate.cs" />
     <Compile Include="Assets/LitMotion/Runtime/MotionBuilderExtensions.cs" />
     <Compile Include="Assets/LitMotion/Runtime/LMotion.Shake.cs" />
+    <Compile Include="Assets/LitMotion/Runtime/Internal/Error.cs" />
     <Compile Include="Assets/LitMotion/Runtime/Internal/MinimumList.cs" />
     <Compile Include="Assets/LitMotion/Runtime/AssemblyInfo.cs" />
     <Compile Include="Assets/LitMotion/Runtime/IMotionScheduler.cs" />

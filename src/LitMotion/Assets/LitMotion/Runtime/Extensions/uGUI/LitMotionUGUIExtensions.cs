@@ -11,7 +11,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
-            Assert.IsNotNull(graphic);
+            Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
                 if (target == null) return;
@@ -23,7 +23,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(graphic);
+            Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
                 if (target == null) return;
@@ -37,7 +37,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(graphic);
+            Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
                 if (target == null) return;
@@ -51,7 +51,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(graphic);
+            Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
                 if (target == null) return;
@@ -65,7 +65,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(graphic);
+            Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
                 if (target == null) return;
@@ -79,7 +79,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
-            Assert.IsNotNull(image);
+            Error.IsNull(image);
             return builder.BindWithState(image, (x, target) =>
             {
                 if (target == null) return;
@@ -91,7 +91,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
@@ -103,7 +103,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
@@ -115,7 +115,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
@@ -127,7 +127,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
@@ -139,7 +139,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
@@ -151,7 +151,7 @@ namespace LitMotion.Extensions
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>
         {
-            Assert.IsNotNull(text);
+            Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
                 if (target == null) return;
