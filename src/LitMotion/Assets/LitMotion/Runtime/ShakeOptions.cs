@@ -2,6 +2,9 @@ using System;
 
 namespace LitMotion
 {
+    /// <summary>
+    /// Options for shake motion.
+    /// </summary>
     public struct ShakeOptions : IEquatable<ShakeOptions>, IMotionOptions
     {
         public int Frequency;
