@@ -9,6 +9,18 @@ namespace LitMotion.Tests.Runtime
     public class CallbackTest
     {
         [UnityTest]
+        public IEnumerator Test_OnCancel()
+        {
+            var canceled = false;
+            var handle = LMotion.Create(0f, 10f, 2f)
+                .WithOnCancel(() => canceled = true)
+                .RunWithoutBinding();
+            yield return new WaitForSeconds(0.5f);
+            handle.Cancel();
+            Assert.IsTrue(canceled);
+        }
+
+        [UnityTest]
         public IEnumerator Test_OnComplete()
         {
             var completed = false;

@@ -13,13 +13,11 @@ namespace LitMotion
         public bool IsCallbackRunning;
         public bool CancelOnError;
         public object State;
+        
         public object UpdateAction;
         public Action OnCompleteAction;
-
-#if LITMOTION_SUPPORT_UNITASK
-        internal MotionConfiguredSource UniTaskConfiguredSource;
-#endif
-
+        public Action OnCancelAction;
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void InvokeUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
