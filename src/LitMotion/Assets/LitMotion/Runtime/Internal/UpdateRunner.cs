@@ -62,9 +62,7 @@ namespace LitMotion
                             if (callbacks.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
-#if LITMOTION_SUPPORT_UNITASK
-                                callbacks.UniTaskConfiguredSource?.OnMotionCanceled();
-#endif
+                                callbacks.OnCancelAction?.Invoke();
                             }
                         }
                     }
@@ -81,9 +79,7 @@ namespace LitMotion
                             if (callbacks.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
-#if LITMOTION_SUPPORT_UNITASK
-                                callbacks.UniTaskConfiguredSource?.OnMotionCanceled();
-#endif
+                                callbacks.OnCancelAction?.Invoke();
                                 continue;
                             }
                         }

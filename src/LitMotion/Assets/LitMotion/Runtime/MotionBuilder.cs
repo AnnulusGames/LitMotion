@@ -36,6 +36,7 @@ namespace LitMotion
             buffer.Options = default;
             buffer.Scheduler = default;
             buffer.OnComplete = default;
+            buffer.OnCancel = default;
             buffer.CancelOnError = default;
             buffer.IsPreserved = default;
 
@@ -61,6 +62,7 @@ namespace LitMotion
         public IMotionScheduler Scheduler;
 
         public Action OnComplete;
+        public Action OnCancel;
         public bool CancelOnError;
         public bool IsPreserved;
     }
@@ -149,6 +151,19 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.Options = options;
+            return this;
+        }
+
+        /// <summary>
+        /// Specify the callback when canceled.
+        /// </summary>
+        /// <param name="callback">Callback when canceled</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOnCancel(Action callback)
+        {
+            CheckBuffer();
+            buffer.OnCancel += callback;
             return this;
         }
 
@@ -296,6 +311,7 @@ namespace LitMotion
         {
             var callbacks = new MotionCallbackData
             {
+                OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
                 CancelOnError = buffer.CancelOnError
             };
@@ -309,6 +325,7 @@ namespace LitMotion
             var callbacks = new MotionCallbackData
             {
                 UpdateAction = action,
+                OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
                 CancelOnError = buffer.CancelOnError
             };
@@ -324,6 +341,7 @@ namespace LitMotion
                 HasState = true,
                 State = state,
                 UpdateAction = action,
+                OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
                 CancelOnError = buffer.CancelOnError
             };

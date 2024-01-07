@@ -60,6 +60,7 @@ namespace LitMotion
             TaskPool.RegisterSizeGetter(typeof(MotionConfiguredSource), () => pool.Size);
         }
 
+        readonly Action onCancelCallbackDelegate;
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
@@ -68,10 +69,12 @@ namespace LitMotion
         bool canceled;
 
         Action originalCompleteAction;
+        Action originalCancelAction;
         UniTaskCompletionSourceCore<AsyncUnit> core;
 
         MotionConfiguredSource()
         {
+            onCancelCallbackDelegate = new(OnCancelCallbackDelegate);
             onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
         }
 
@@ -93,11 +96,16 @@ namespace LitMotion
             result.canceled = false;
 
             var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
+            result.originalCancelAction = callbacks.OnCancelAction;
             result.originalCompleteAction = callbacks.OnCompleteAction;
+            callbacks.OnCancelAction = result.onCancelCallbackDelegate;
             callbacks.OnCompleteAction = result.onCompleteCallbackDelegate;
-            callbacks.UniTaskConfiguredSource = result;
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
 
+            if (result.originalCancelAction == result.onCancelCallbackDelegate)
+            {
+                result.originalCancelAction = null;
+            }
             if (result.originalCompleteAction == result.onCompleteCallbackDelegate)
             {
                 result.originalCompleteAction = null;
@@ -119,7 +127,7 @@ namespace LitMotion
             return result;
         }
 
-        public void OnCompleteCallbackDelegate()
+        void OnCompleteCallbackDelegate()
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -136,9 +144,9 @@ namespace LitMotion
             }
         }
 
-        // for MotionHandle.Cancel()
-        public void OnMotionCanceled()
+        void OnCancelCallbackDelegate()
         {
+            originalCancelAction?.Invoke();
             core.TrySetCanceled(cancellationToken);
         }
 
@@ -180,6 +188,7 @@ namespace LitMotion
             motionHandle = default;
             cancellationToken = default;
             originalCompleteAction = default;
+            originalCancelAction = default;
             return pool.TryPush(this);
         }
 
@@ -187,6 +196,7 @@ namespace LitMotion
         {
             if (!motionHandle.IsActive()) return;
             var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
+            callbacks.OnCancelAction = originalCancelAction;
             callbacks.OnCompleteAction = originalCompleteAction;
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
         }
