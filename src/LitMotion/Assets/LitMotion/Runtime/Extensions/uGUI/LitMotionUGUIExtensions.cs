@@ -291,7 +291,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+            return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
                 target.text = string.Format(format, x);
@@ -332,7 +332,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+            return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
                 target.text = string.Format(format, x);
@@ -373,7 +373,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+            return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
                 target.text = string.Format(format, x);
