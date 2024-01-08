@@ -251,6 +251,47 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
+        /// </summary>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <typeparam name="TState2">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public MotionHandle BindWithState<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
+            where TState1 : class
+            where TState2 : class
+        {
+            CheckBuffer();
+            var callbacks = BuildCallbackData(state1, state2, action);
+            var scheduler = buffer.Scheduler;
+            var data = BuildMotionData();
+            return Schedule(scheduler, data, callbacks);
+        }
+
+
+        /// <summary>
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
+        /// </summary>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <typeparam name="TState2">Type of state</typeparam>
+        /// <typeparam name="TState3">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public MotionHandle BindWithState<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
+            where TState1 : class
+            where TState2 : class
+            where TState3 : class
+        {
+            CheckBuffer();
+            var callbacks = BuildCallbackData(state1, state2, state3, action);
+            var scheduler = buffer.Scheduler;
+            var data = BuildMotionData();
+            return Schedule(scheduler, data, callbacks);
+        }
+
+        /// <summary>
         /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
         /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
         /// </summary>
@@ -338,8 +379,48 @@ namespace LitMotion
         {
             var callbacks = new MotionCallbackData
             {
-                HasState = true,
-                State = state,
+                StateCount = 1,
+                State1 = state,
+                UpdateAction = action,
+                OnCancelAction = buffer.OnCancel,
+                OnCompleteAction = buffer.OnComplete,
+                CancelOnError = buffer.CancelOnError
+            };
+
+            return callbacks;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal MotionCallbackData BuildCallbackData<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
+            where TState1 : class
+            where TState2 : class
+        {
+            var callbacks = new MotionCallbackData
+            {
+                StateCount = 2,
+                State1 = state1,
+                State2 = state2,
+                UpdateAction = action,
+                OnCancelAction = buffer.OnCancel,
+                OnCompleteAction = buffer.OnComplete,
+                CancelOnError = buffer.CancelOnError
+            };
+
+            return callbacks;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal MotionCallbackData BuildCallbackData<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
+            where TState1 : class
+            where TState2 : class
+            where TState3 : class
+        {
+            var callbacks = new MotionCallbackData
+            {
+                StateCount = 3,
+                State1 = state1,
+                State2 = state2,
+                State3 = state3,
                 UpdateAction = action,
                 OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
