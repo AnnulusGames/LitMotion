@@ -353,6 +353,146 @@ namespace LitMotion.Extensions
                 ArrayPool<char>.Shared.Return(buffer);
             });
         }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+
+                var buffer = ArrayPool<char>.Shared.Rent(128);
+                var bufferOffset = 0;
+                Utf16StringHelper.WriteInt32(ref buffer, ref bufferOffset, x);
+                target.SetText(buffer, 0, bufferOffset);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="format">Format string</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<int, TOptions, TAdapter> builder, TMP_Text text, string format)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = string.Format(format, x);
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<long, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+
+                var buffer = ArrayPool<char>.Shared.Rent(128);
+                var bufferOffset = 0;
+                Utf16StringHelper.WriteInt64(ref buffer, ref bufferOffset, x);
+                target.SetText(buffer, 0, bufferOffset);
+                ArrayPool<char>.Shared.Return(buffer);
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="format">Format string</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<long, TOptions, TAdapter> builder, TMP_Text text, string format)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = string.Format(format, x);
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <remarks>
+        /// Note: This extension method uses TMP_Text.SetText() to achieve zero allocation, so it is recommended to use this method when binding to text.
+        /// </remarks>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            const string format = "{0}";
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.SetText(format, x);
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.text.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="format">Format string</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe static MotionHandle BindToText<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, string format)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                if (target == null) return;
+                target.text = string.Format(format, x);
+            });
+        }
     }
 }
 #endif
