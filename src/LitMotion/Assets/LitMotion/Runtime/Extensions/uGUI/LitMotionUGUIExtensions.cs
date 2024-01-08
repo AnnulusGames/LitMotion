@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Collections;
+#if LITMOTION_SUPPORT_ZSTRING
+using Cysharp.Text;
+#endif
 
 namespace LitMotion.Extensions
 {
@@ -294,7 +297,11 @@ namespace LitMotion.Extensions
             return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
+#if LITMOTION_SUPPORT_ZSTRING
+                target.text = ZString.Format(format, x);
+#else
                 target.text = string.Format(format, x);
+#endif
             });
         }
 
@@ -335,7 +342,11 @@ namespace LitMotion.Extensions
             return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
+#if LITMOTION_SUPPORT_ZSTRING
+                target.text = ZString.Format(format, x);
+#else
                 target.text = string.Format(format, x);
+#endif
             });
         }
 
@@ -376,7 +387,11 @@ namespace LitMotion.Extensions
             return builder.BindWithState(text, format, (x, target, format) =>
             {
                 if (target == null) return;
+#if LITMOTION_SUPPORT_ZSTRING
+                target.text = ZString.Format(format, x);
+#else
                 target.text = string.Format(format, x);
+#endif
             });
         }
     }

@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
     },
+    "com.cysharp.zstring": {
+      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f312727a8f9f2b68314d38b2ddfe38b4cd50a29e"
+    },
     "com.neuecc.unirx": {
       "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
       "depth": 0,
