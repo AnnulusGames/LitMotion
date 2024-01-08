@@ -10,10 +10,26 @@ LMotion.String.Create128Bytes("", "<color=red>Zero</color> Allocation <i>Text</i
     .BindToText(text);
 ```
 
-![gif-img](../../images/rich-text-animation.gif)
+![gif-img1](../../images/rich-text-animation.gif)
 
-LitMotion uses the `FixedString-` type within the `Unity.Collection` namespace for string motion. Therefore, when creating string motions, you need to select a function corresponding to the length of the string you wish to animate.
+### Binding Numeric Motion to Text
 
-When animating strings, it's recommended to use `BindToText()` to bind to TextMeshPro text. This method uses `SetText()` from `TMP_Text`, enabling animation of strings with complete zero allocation!
+It's also possible to bind numeric motion to text. When using `TMP_Text` as the target, you can perform binding with zero allocation using `BindToText()`.
 
-For specific settings dedicated to string motion, refer to [Motion Configuration](motion-configuration.md).
+```cs
+TMP_Text text;
+LMotion.Create(0, 999, 2f)
+    .BindToText(text);
+```
+
+Moreover, it's possible to set formatting by passing a format string. Below is a sample motion for displaying a float number with comma separation up to two decimal places.
+
+```cs
+TMP_Text text;
+LMotion.Create(0f, 100000f, 2f)
+    .BindToText(text, "{0:N2}");
+```
+
+![gif-img2](../../images/bind-number-to-text.gif)
+
+However, motions including this formatting use `string.Format()` internally, leading to GC allocations. To avoid this, you'll need to introduce ZString into your project. For more details, refer to the section on [ZString](integration-zstring.md).

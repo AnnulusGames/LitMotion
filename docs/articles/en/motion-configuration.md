@@ -41,7 +41,11 @@ Specifies whether the motion ignores the influence of `Time.timeScale`.
 
 #### WithOnComplete
 
-Specifies the callback at the end of the playback.
+Specifies a callback at the end of the playback.
+
+#### WithOnCancel
+
+Specifies a callback for when the motion is canceled.
 
 #### WithScheduler
 

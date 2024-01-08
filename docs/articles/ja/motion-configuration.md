@@ -44,6 +44,10 @@ LMotion.Create(0f, 10f, 2f)
 
 再生終了時のコールバックを指定します。
 
+#### WithOnCancel
+
+キャンセル時のコールバックを指定します。
+
 #### WithScheduler
 
 モーションの再生に使用するSchedulerを指定します。
