@@ -10,9 +10,9 @@ Lightning-fast and Zero Allocation Tween Library for Unity.
 
 ## Overview
 
-LitMotion is a high-performance tweening library for Unity. It encompasses a rich set of features to animate components like Transform, along with custom fields and properties, allowing for easy creation of animations.
+LitMotion is a high-performance tween library for Unity. LitMotion includes a rich set of features for animating components such as Transform, Material, TextMeshPro, and any field/property, making it easy to create animations.
 
-Following my creation of [Magic Tween](https://github.com/AnnulusGames/MagicTween), LitMotion stands as my second tweening library. Leveraging the experience gained from implementing Magic Tween, LitMotion has been designed prioritizing essential features while ensuring it operates at the highest speed possible. It outperforms other tweening libraries by a staggering 2 to 20 times in various situations such as tween creation and execution. Naturally, there are no allocations during tween creation.
+LitMotion is my second tween library I created after [Magic Tween](https://github.com/AnnulusGames/MagicTween). LitMotion was designed based on experience implementing Magic Tween to achieve rich functionality and extremely high performance. In all situations such as creating and updating tweens, it exhibits overwhelming performance that is 2 to 20 times faster than other tween libraries. Of course, there is no allocation at all when creating a tween.
 
 ## Documentation
 
