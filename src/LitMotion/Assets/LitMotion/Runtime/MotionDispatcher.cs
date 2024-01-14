@@ -176,7 +176,6 @@ namespace LitMotion
         {
             Instance = new GameObject(nameof(MotionDispatcher)).AddComponent<MotionDispatcher>();
             DontDestroyOnLoad(Instance);
-            Instance.hideFlags = HideFlags.HideInHierarchy;
         }
 
         void Update()
