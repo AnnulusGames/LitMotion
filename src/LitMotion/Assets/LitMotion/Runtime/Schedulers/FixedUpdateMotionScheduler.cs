@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace LitMotion
 {
     internal sealed class FixedUpdateMotionScheduler : IMotionScheduler
@@ -7,6 +9,12 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.EditorApplicationUpdate);
+            }
+#endif
             return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.FixedUpdate);
         }
     }
