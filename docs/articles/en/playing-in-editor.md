@@ -1,6 +1,26 @@
-# Playing in UnityEditor
+# Playing in Unity Editor
 
-You can make motions operate within editor by specifying `EditorMotionScheduler.Update` as the Scheduler.
+LitMotion supports playback in the Unity Editor. When creating motions in Edit Mode, they are automatically scheduled in the Editor. In this case, the motions are driven on `EditorApplication.update`.
+
+```cs
+using UnityEngine;
+using LitMotion;
+
+if (Application.isPlaying)
+{
+    // In Play Mode (Runtime), it operates as usual on Update
+    LMotion.Create(0f, 10f, 2f)
+        .Bind(x => Debug.Log(x));
+}
+else
+{
+    // In Edit Mode, it operates on EditorApplication.update
+    LMotion.Create(0f, 10f, 2f)
+        .Bind(x => Debug.Log(x));
+}
+```
+
+You can explicitly specify `EditorMotionScheduler.Update` to the scheduler as well.
 
 ```cs
 using LitMotion;
@@ -10,5 +30,3 @@ LMotion.Create(0f, 10f, 2f)
     .WithScheduler(EditorMotionScheduler.Update)
     .Bind(x => Debug.Log(x));
 ```
-
-When using this Scheduler, motions will be driven on `EditorApplication.update`.
