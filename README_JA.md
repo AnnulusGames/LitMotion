@@ -74,9 +74,6 @@ using UniRx; // UniRx
 using Cysharp.Threading.Tasks; // UniTask
 using LitMotion;
 using LitMotion.Extensions;
-#if UNITY_EDITOR
-using LitMotion.Editor;
-#endif
 
 public class Example : MonoBehaviour
 {
@@ -151,18 +148,6 @@ public class Example : MonoBehaviour
             })
             .AddTo(this);
     }
-
-#if UNITY_EDITOR
-
-    // エディタ上での再生が可能
-    void PlayOnEditor()
-    {
-        LMotion.Create(0f, 1f, 2f)
-            .WithScheduler(EditorMotionScheduler.Update) // SchedulerにEditorMotionScheduler.Updateを指定
-            .BindToUnityLogger();
-    }
-    
-#endif
 }
 ```
 
