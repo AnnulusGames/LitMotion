@@ -1,0 +1,109 @@
+using System;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.LowLevel;
+using PlayerLoopType = UnityEngine.PlayerLoop;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+namespace LitMotion
+{
+    public static class LitMotionLoopRunners
+    {
+        public struct LitMotionInitialization { };
+        public struct LitMotionEarlyUpdate { };
+        public struct LitMotionFixedUpdate { };
+        public struct LitMotionPreUpdate { };
+        public struct LitMotionUpdate { };
+        public struct LitMotionPreLateUpdate { };
+        public struct LitMotionPostLateUpdate { };
+        public struct LitMotionTimeUpdate { };
+    }
+
+    internal enum PlayerLoopTiming
+    {
+        Initialization = 0,
+        EarlyUpdate = 1,
+        FixedUpdate = 2,
+        PreUpdate = 3,
+        Update = 4,
+        PreLateUpdate = 5,
+        PostLateUpdate = 6,
+        TimeUpdate = 7,
+    }
+
+    internal static class PlayerLoopHelper
+    {
+        static bool initialized;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void Init()
+        {
+#if UNITY_EDITOR
+            var domainReloadDisabled = EditorSettings.enterPlayModeOptionsEnabled && EditorSettings.enterPlayModeOptions.HasFlag(UnityEditor.EnterPlayModeOptions.DisableDomainReload);
+            if (!domainReloadDisabled && initialized) return;
+#else
+            if (initialized) return;
+#endif
+
+            var playerLoop = PlayerLoop.GetCurrentPlayerLoop();
+            Initialize(ref playerLoop);
+        }
+
+        public static void Initialize(ref PlayerLoopSystem playerLoop)
+        {
+            var newLoop = playerLoop.subSystemList.ToArray();
+            
+            InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), () => MotionDispatcher.Update(PlayerLoopTiming.Initialization));
+            InsertLoop(newLoop, typeof(PlayerLoopType.EarlyUpdate), typeof(LitMotionLoopRunners.LitMotionEarlyUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.FixedUpdate), typeof(LitMotionLoopRunners.LitMotionFixedUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreUpdate), typeof(LitMotionLoopRunners.LitMotionPreUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.Update), typeof(LitMotionLoopRunners.LitMotionUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.Update));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreLateUpdate), typeof(LitMotionLoopRunners.LitMotionPreLateUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PostLateUpdate), typeof(LitMotionLoopRunners.LitMotionPostLateUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.TimeUpdate), typeof(LitMotionLoopRunners.LitMotionTimeUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate));
+
+            playerLoop.subSystemList = newLoop;
+            PlayerLoop.SetPlayerLoop(playerLoop);
+
+            initialized = true;
+        }
+
+        static void InsertLoop(PlayerLoopSystem[] loopSystems, Type loopType, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateFunction)
+        {
+            var i = FindLoopSystemIndex(loopSystems, loopType);
+            ref var loop = ref loopSystems[i];
+            loop.subSystemList = InsertRunner(loop.subSystemList, loopRunnerType, updateFunction);
+        }
+
+        static int FindLoopSystemIndex(PlayerLoopSystem[] playerLoopList, Type systemType)
+        {
+            for (int i = 0; i < playerLoopList.Length; i++)
+            {
+                if (playerLoopList[i].type == systemType)
+                {
+                    return i;
+                }
+            }
+
+            throw new Exception("Target PlayerLoopSystem does not found. Type:" + systemType.FullName);
+        }
+
+        static PlayerLoopSystem[] InsertRunner(PlayerLoopSystem[] subSystemList, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateFunction)
+        {
+            var source = subSystemList.Where(x => x.type != loopRunnerType).ToArray();
+            var dest = new PlayerLoopSystem[source.Length + 1];
+
+            Array.Copy(source, 0, dest, 1, source.Length);
+
+            dest[0] = new PlayerLoopSystem
+            {
+                type = loopRunnerType,
+                updateDelegate = updateFunction
+            };
+
+            return dest;
+        }
+    }
+}

@@ -8,12 +8,12 @@ namespace LitMotion
 {
     internal sealed class PlayerLoopMotionScheduler : IMotionScheduler
     {
-        readonly UpdateMode updateMode;
+        readonly PlayerLoopTiming playerLoopTiming;
         readonly MotionTimeKind timeKind;
 
-        internal PlayerLoopMotionScheduler(UpdateMode updateMode, MotionTimeKind timeKind)
+        internal PlayerLoopMotionScheduler(PlayerLoopTiming playerLoopTiming, MotionTimeKind timeKind)
         {
-            this.updateMode = updateMode;
+            this.playerLoopTiming = playerLoopTiming;
             this.timeKind = timeKind;
         }
 
@@ -21,7 +21,7 @@ namespace LitMotion
         {
             get
             {
-                if (updateMode == UpdateMode.FixedUpdate)
+                if (playerLoopTiming == PlayerLoopTiming.FixedUpdate)
                 {
                     return timeKind switch
                     {
@@ -49,16 +49,16 @@ namespace LitMotion
         {
             data.TimeKind = timeKind;
 #if UNITY_EDITOR
-            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            if (EditorApplication.isPlaying)
             {
-                return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, updateMode);
+                return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, playerLoopTiming);
             }
             else
             {
                 return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
             }
 #else
-            return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, updateMode);
+            return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, playerLoopTiming);
 #endif
         }
     }

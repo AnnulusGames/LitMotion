@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -5,62 +7,50 @@ using UnityEditor;
 
 namespace LitMotion
 {
-    internal enum UpdateMode
-    {
-        Update = 0,
-        LateUpdate = 1,
-        FixedUpdate = 2
-    }
-
     /// <summary>
     /// Motion dispatcher.
     /// </summary>
-    [DisallowMultipleComponent]
-    [AddComponentMenu("")]
-    [DefaultExecutionOrder(-1000)]
-    public sealed class MotionDispatcher : MonoBehaviour
+    public static class MotionDispatcher
     {
-        internal static MotionDispatcher Instance { get; private set; }
-
         static class StorageCache<TValue, TOptions, TAdapter>
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            public static MotionStorage<TValue, TOptions, TAdapter> update;
-            public static MotionStorage<TValue, TOptions, TAdapter> lateUpdate;
+            public static MotionStorage<TValue, TOptions, TAdapter> initialization;
+            public static MotionStorage<TValue, TOptions, TAdapter> earlyUpdate;
             public static MotionStorage<TValue, TOptions, TAdapter> fixedUpdate;
+            public static MotionStorage<TValue, TOptions, TAdapter> preUpdate;
+            public static MotionStorage<TValue, TOptions, TAdapter> update;
+            public static MotionStorage<TValue, TOptions, TAdapter> preLateUpdate;
+            public static MotionStorage<TValue, TOptions, TAdapter> postLateUpdate;
+            public static MotionStorage<TValue, TOptions, TAdapter> timeUpdate;
 
-            public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreate(UpdateMode updateMode)
+            public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreate(PlayerLoopTiming playerLoopTiming)
             {
-                switch (updateMode)
+                return playerLoopTiming switch
                 {
-                    default: return null;
-                    case UpdateMode.Update:
-                        if (update == null)
-                        {
-                            var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                            MotionStorageManager.AddStorage(storage);
-                            update = storage;
-                        }
-                        return update;
-                    case UpdateMode.LateUpdate:
-                        if (lateUpdate == null)
-                        {
-                            var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                            MotionStorageManager.AddStorage(storage);
-                            lateUpdate = storage;
-                        }
-                        return lateUpdate;
-                    case UpdateMode.FixedUpdate:
-                        if (fixedUpdate == null)
-                        {
-                            var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                            MotionStorageManager.AddStorage(storage);
-                            fixedUpdate = storage;
-                        }
-                        return fixedUpdate;
+                    PlayerLoopTiming.Initialization => initialization = CreateIfNull(initialization),
+                    PlayerLoopTiming.EarlyUpdate => earlyUpdate = CreateIfNull(earlyUpdate),
+                    PlayerLoopTiming.FixedUpdate => fixedUpdate = CreateIfNull(fixedUpdate),
+                    PlayerLoopTiming.PreUpdate => preUpdate = CreateIfNull(preUpdate),
+                    PlayerLoopTiming.Update => update = CreateIfNull(update),
+                    PlayerLoopTiming.PreLateUpdate => preLateUpdate = CreateIfNull(preLateUpdate),
+                    PlayerLoopTiming.PostLateUpdate => postLateUpdate = CreateIfNull(postLateUpdate),
+                    PlayerLoopTiming.TimeUpdate => timeUpdate = CreateIfNull(timeUpdate),
+                    _ => null,
+                };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static MotionStorage<TValue, TOptions, TAdapter> CreateIfNull(MotionStorage<TValue, TOptions, TAdapter> storage)
+            {
+                if (storage == null)
+                {
+                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
+                    MotionStorageManager.AddStorage(storage);
                 }
+                return storage;
             }
         }
 
@@ -69,15 +59,85 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            public static UpdateRunner<TValue, TOptions, TAdapter> update;
-            public static UpdateRunner<TValue, TOptions, TAdapter> lateUpdate;
+            public static UpdateRunner<TValue, TOptions, TAdapter> initialization;
+            public static UpdateRunner<TValue, TOptions, TAdapter> earlyUpdate;
             public static UpdateRunner<TValue, TOptions, TAdapter> fixedUpdate;
+            public static UpdateRunner<TValue, TOptions, TAdapter> preUpdate;
+            public static UpdateRunner<TValue, TOptions, TAdapter> update;
+            public static UpdateRunner<TValue, TOptions, TAdapter> preLateUpdate;
+            public static UpdateRunner<TValue, TOptions, TAdapter> postLateUpdate;
+            public static UpdateRunner<TValue, TOptions, TAdapter> timeUpdate;
+
+            public static (UpdateRunner<TValue, TOptions, TAdapter> runner, bool isCreated) GetOrCreate(PlayerLoopTiming playerLoopTiming, MotionStorage<TValue, TOptions, TAdapter> storage)
+            {
+                return playerLoopTiming switch
+                {
+                    PlayerLoopTiming.Initialization => CreateIfNull(ref initialization, storage),
+                    PlayerLoopTiming.EarlyUpdate => CreateIfNull(ref earlyUpdate, storage),
+                    PlayerLoopTiming.FixedUpdate => CreateIfNull(ref fixedUpdate, storage),
+                    PlayerLoopTiming.PreUpdate => CreateIfNull(ref preUpdate, storage),
+                    PlayerLoopTiming.Update => CreateIfNull(ref update, storage),
+                    PlayerLoopTiming.PreLateUpdate => CreateIfNull(ref preLateUpdate, storage),
+                    PlayerLoopTiming.PostLateUpdate => CreateIfNull(ref postLateUpdate, storage),
+                    PlayerLoopTiming.TimeUpdate => CreateIfNull(ref timeUpdate, storage),
+                    _ => default,
+                };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static (UpdateRunner<TValue, TOptions, TAdapter>, bool) CreateIfNull(ref UpdateRunner<TValue, TOptions, TAdapter> runner, MotionStorage<TValue, TOptions, TAdapter> storage)
+            {
+                if (runner == null)
+                {
+                    runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                    updateRunners.Add(runner);
+                    return (runner, true);
+                }
+                return (runner, false);
+            }
         }
 
-        static readonly MinimumList<IUpdateRunner> updateRunners = new();
-        static readonly MinimumList<IUpdateRunner> lateUpdateRunners = new();
+        static readonly MinimumList<IUpdateRunner> initializationRunners = new();
+        static readonly MinimumList<IUpdateRunner> earlyUpdateRunners = new();
         static readonly MinimumList<IUpdateRunner> fixedUpdateRunners = new();
-        
+        static readonly MinimumList<IUpdateRunner> preUpdateRunners = new();
+        static readonly MinimumList<IUpdateRunner> updateRunners = new();
+        static readonly MinimumList<IUpdateRunner> preLateUpdateRunners = new();
+        static readonly MinimumList<IUpdateRunner> postLateUpdateRunners = new();
+        static readonly MinimumList<IUpdateRunner> timeUpdateRunners = new();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static MinimumList<IUpdateRunner> GetRunnerList(PlayerLoopTiming playerLoopTiming)
+        {
+            return playerLoopTiming switch
+            {
+                PlayerLoopTiming.Initialization => initializationRunners,
+                PlayerLoopTiming.EarlyUpdate => earlyUpdateRunners,
+                PlayerLoopTiming.FixedUpdate => fixedUpdateRunners,
+                PlayerLoopTiming.PreUpdate => preUpdateRunners,
+                PlayerLoopTiming.Update => updateRunners,
+                PlayerLoopTiming.PreLateUpdate => preLateUpdateRunners,
+                PlayerLoopTiming.PostLateUpdate => postLateUpdateRunners,
+                PlayerLoopTiming.TimeUpdate => timeUpdateRunners,
+                _ => null
+            };
+        }
+
+        static readonly PlayerLoopTiming[] playerLoopTimings = (PlayerLoopTiming[])Enum.GetValues(typeof(PlayerLoopTiming));
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Init()
+        {
+            foreach (var playerLoopTiming in playerLoopTimings)
+            {
+                var span = GetRunnerList(playerLoopTiming).AsSpan();
+                for (int i = 0; i < span.Length; i++)
+                {
+                    span[i].Reset();
+                }
+            }
+        }
+
         /// <summary>
         /// Ensures the storage capacity until it reaches at least `capacity`.
         /// </summary>
@@ -87,48 +147,23 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.Update).EnsureCapacity(capacity);
-            StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.LateUpdate).EnsureCapacity(capacity);
-            StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.FixedUpdate).EnsureCapacity(capacity);
+            foreach (var playerLoopTiming in playerLoopTimings)
+            {
+                StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming).EnsureCapacity(capacity);
+            }
 #if UNITY_EDITOR
             EditorMotionDispatcher.EnsureStorageCapacity<TValue, TOptions, TAdapter>(capacity);
 #endif
         }
 
-        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData, UpdateMode updateMode)
+        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData, PlayerLoopTiming playerLoopTiming)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(updateMode);
-            switch (updateMode)
-            {
-                default:
-                case UpdateMode.Update:
-                    if (RunnerCache<TValue, TOptions, TAdapter>.update == null)
-                    {
-                        var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                        updateRunners.Add(runner);
-                        RunnerCache<TValue, TOptions, TAdapter>.update = runner;
-                    }
-                    break;
-                case UpdateMode.LateUpdate:
-                    if (RunnerCache<TValue, TOptions, TAdapter>.lateUpdate == null)
-                    {
-                        var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                        lateUpdateRunners.Add(runner);
-                        RunnerCache<TValue, TOptions, TAdapter>.lateUpdate = runner;
-                    }
-                    break;
-                case UpdateMode.FixedUpdate:
-                    if (RunnerCache<TValue, TOptions, TAdapter>.fixedUpdate == null)
-                    {
-                        var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                        fixedUpdateRunners.Add(runner);
-                        RunnerCache<TValue, TOptions, TAdapter>.fixedUpdate = runner;
-                    }
-                    break;
-            }
+            var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming);
+            var (runner, isCreated) = RunnerCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming, storage);
+            if (isCreated) GetRunnerList(playerLoopTiming).Add(runner);
 
             var (EntryIndex, Version) = storage.Append(data, callbackData);
             return new MotionHandle()
@@ -139,44 +174,16 @@ namespace LitMotion
             };
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void Init()
+        internal static void Update(PlayerLoopTiming playerLoopTiming)
         {
-            Instance = new GameObject(nameof(MotionDispatcher)).AddComponent<MotionDispatcher>();
-            DontDestroyOnLoad(Instance);
-        }
-
-        void Update()
-        {
-            var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
-        }
-
-        void LateUpdate()
-        {
-            var span = lateUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
-        }
-
-        void FixedUpdate()
-        {
-            var span = fixedUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTimeAsDouble, Time.fixedUnscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
-        }
-
-        void OnDestroy()
-        {
-            ResetAll(updateRunners);
-            ResetAll(lateUpdateRunners);
-            ResetAll(fixedUpdateRunners);
-        }
-
-        void ResetAll(MinimumList<IUpdateRunner> list)
-        {
-            var span = list.AsSpan();
-            for (int i = 0; i < span.Length; i++)
+            var span = GetRunnerList(playerLoopTiming).AsSpan();
+            if (playerLoopTiming == PlayerLoopTiming.FixedUpdate)
             {
-                span[i].Reset();
+                for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTimeAsDouble, Time.fixedUnscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
+            }
+            else
+            {
+                for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
             }
         }
     }
