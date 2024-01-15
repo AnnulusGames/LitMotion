@@ -27,7 +27,6 @@ namespace LitMotion
             buffer.Version++;
             buffer.Duration = default;
             buffer.Ease = default;
-            buffer.IgnoreTimeScale = default;
             buffer.Delay = default;
             buffer.Loops = 1;
             buffer.LoopType = default;
@@ -50,7 +49,6 @@ namespace LitMotion
 
         public float Duration;
         public Ease Ease;
-        public bool IgnoreTimeScale;
         public float Delay;
         public int Loops = 1;
         public LoopType LoopType;
@@ -97,19 +95,6 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.Ease = ease;
-            return this;
-        }
-
-        /// <summary>
-        /// Specify whether motion ignores time scale.
-        /// </summary>
-        /// <param name="ignoreTimeScale">If true, time scale will be ignored</param>
-        /// <returns>This builder to allow chaining multiple method calls.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithIgnoreTimeScale(bool ignoreTimeScale = true)
-        {
-            CheckBuffer();
-            buffer.IgnoreTimeScale = ignoreTimeScale;
             return this;
         }
 
@@ -216,7 +201,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData();
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -231,7 +216,7 @@ namespace LitMotion
             callbacks.OnCompleteAction = buffer.OnComplete;
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -247,7 +232,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -266,7 +251,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state1, state2, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
 
@@ -288,7 +273,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state1, state2, state3, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -305,7 +290,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly MotionHandle Schedule(IMotionScheduler scheduler, in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+        internal readonly MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
         {
             if (scheduler == null)
             {
@@ -319,7 +304,7 @@ namespace LitMotion
             }
             else
             {
-                return scheduler.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
+                return scheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
             }
         }
 
@@ -341,9 +326,9 @@ namespace LitMotion
                 StartValue = buffer.StartValue,
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
+                StartTime = buffer.Scheduler == null ? MotionScheduler.Update.Time : buffer.Scheduler.Time,
                 Duration = buffer.Duration,
                 Ease = buffer.Ease,
-                IgnoreTimeScale = buffer.IgnoreTimeScale,
                 Delay = buffer.Delay,
                 Loops = buffer.Loops,
                 LoopType = buffer.LoopType,

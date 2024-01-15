@@ -14,9 +14,24 @@ namespace LitMotion
         /// <param name="data">Motion data</param>
         /// <param name="callbackData">Motion callback data</param>
         /// <returns>Motion handle</returns>
-        MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+        MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>;
+
+        /// <summary>
+        /// Returns the current time.
+        /// </summary>
+        double Time { get; }
+    }
+
+    /// <summary>
+    /// Type of time used to play the motion
+    /// </summary>
+    public enum MotionTimeKind : byte
+    {
+        Time = 0,
+        UnscaledTime = 1,
+        Realtime = 2
     }
 }

@@ -14,11 +14,11 @@ namespace LitMotion
     {
         public MotionStatus Status;
 
-        public float Time;
+        public double StartTime;
         public float Duration;
 
         public Ease Ease;
-        public bool IgnoreTimeScale;
+        public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;
         public LoopType LoopType;

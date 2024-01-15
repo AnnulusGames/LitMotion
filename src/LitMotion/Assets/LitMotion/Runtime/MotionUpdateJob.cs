@@ -20,25 +20,31 @@ namespace LitMotion
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
         [NativeDisableUnsafePtrRestriction] public MotionData<TValue, TOptions>* DataPtr;
-        [ReadOnly] public float DeltaTime;
-        [ReadOnly] public float UnscaledDeltaTime;
+        [ReadOnly] public double Time;
+        [ReadOnly] public double UnscaledTime;
+        [ReadOnly] public double Realtime;
 
         [WriteOnly] public NativeList<int>.ParallelWriter CompletedIndexList;
         [WriteOnly] public NativeArray<TValue> Output;
 
         public void Execute([AssumeRange(0, int.MaxValue)] int index)
         {
-            Hint.Assume(DeltaTime >= 0f);
-            Hint.Assume(UnscaledDeltaTime >= 0f);
-
             var ptr = DataPtr + index;
 
             if (Hint.Likely(ptr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing))
             {
-                ptr->Time += ptr->IgnoreTimeScale ? UnscaledDeltaTime : DeltaTime;
-                var time = ptr->Time - ptr->Delay;
+                var currentTime = ptr->TimeKind switch
+                {
+                    MotionTimeKind.Time => Time,
+                    MotionTimeKind.UnscaledTime => UnscaledTime,
+                    MotionTimeKind.Realtime => Realtime,
+                    _ => default
+                };
 
-                float t;
+                var motionTime = currentTime - ptr->StartTime;
+                var time = motionTime - ptr->Delay;
+
+                double t;
                 bool isCompleted;
                 int completedLoops;
                 int clampedCompletedLoops;
@@ -80,14 +86,14 @@ namespace LitMotion
                 {
                     default:
                     case LoopType.Restart:
-                        progress = EaseUtility.Evaluate(t, ptr->Ease);
+                        progress = EaseUtility.Evaluate((float)t, ptr->Ease);
                         break;
                     case LoopType.Yoyo:
-                        progress = EaseUtility.Evaluate(t, ptr->Ease);
+                        progress = EaseUtility.Evaluate((float)t, ptr->Ease);
                         if ((clampedCompletedLoops + (int)t) % 2 == 1) progress = 1f - progress;
                         break;
                     case LoopType.Incremental:
-                        progress = EaseUtility.Evaluate(1f, ptr->Ease) * clampedCompletedLoops + EaseUtility.Evaluate(math.fmod(t, 1f), ptr->Ease);
+                        progress = EaseUtility.Evaluate(1f, ptr->Ease) * clampedCompletedLoops + EaseUtility.Evaluate((float)math.fmod(t, 1f), ptr->Ease);
                         break;
                 }
 
@@ -95,7 +101,7 @@ namespace LitMotion
                 {
                     ptr->Status = MotionStatus.Completed;
                 }
-                else if (ptr->Time < ptr->Delay)
+                else if (motionTime < ptr->Delay)
                 {
                     ptr->Status = MotionStatus.Delayed;
                 }

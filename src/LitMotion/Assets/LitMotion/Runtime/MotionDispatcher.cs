@@ -9,14 +9,11 @@ namespace LitMotion
     {
         Update = 0,
         LateUpdate = 1,
-        FixedUpdate = 2,
-#if UNITY_EDITOR
-        EditorApplicationUpdate = 10
-#endif
+        FixedUpdate = 2
     }
 
     /// <summary>
-    /// Motion dispatcher for Runtime.
+    /// Motion dispatcher.
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("")]
@@ -33,9 +30,6 @@ namespace LitMotion
             public static MotionStorage<TValue, TOptions, TAdapter> update;
             public static MotionStorage<TValue, TOptions, TAdapter> lateUpdate;
             public static MotionStorage<TValue, TOptions, TAdapter> fixedUpdate;
-#if UNITY_EDITOR
-            public static MotionStorage<TValue, TOptions, TAdapter> editorApplicationUpdate;
-#endif
 
             public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreate(UpdateMode updateMode)
             {
@@ -66,16 +60,6 @@ namespace LitMotion
                             fixedUpdate = storage;
                         }
                         return fixedUpdate;
-#if UNITY_EDITOR
-                    case UpdateMode.EditorApplicationUpdate:
-                        if (editorApplicationUpdate == null)
-                        {
-                            var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                            MotionStorageManager.AddStorage(storage);
-                            editorApplicationUpdate = storage;
-                        }
-                        return editorApplicationUpdate;
-#endif
                 }
             }
         }
@@ -88,18 +72,12 @@ namespace LitMotion
             public static UpdateRunner<TValue, TOptions, TAdapter> update;
             public static UpdateRunner<TValue, TOptions, TAdapter> lateUpdate;
             public static UpdateRunner<TValue, TOptions, TAdapter> fixedUpdate;
-#if UNITY_EDITOR
-            public static UpdateRunner<TValue, TOptions, TAdapter> editorApplicationUpdate;
-#endif
         }
 
         static readonly MinimumList<IUpdateRunner> updateRunners = new();
         static readonly MinimumList<IUpdateRunner> lateUpdateRunners = new();
         static readonly MinimumList<IUpdateRunner> fixedUpdateRunners = new();
-#if UNITY_EDITOR
-        static readonly MinimumList<IUpdateRunner> editorApplicationUpdateRunners = new();
-#endif
-
+        
         /// <summary>
         /// Ensures the storage capacity until it reaches at least `capacity`.
         /// </summary>
@@ -113,7 +91,7 @@ namespace LitMotion
             StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.LateUpdate).EnsureCapacity(capacity);
             StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.FixedUpdate).EnsureCapacity(capacity);
 #if UNITY_EDITOR
-            StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.EditorApplicationUpdate).EnsureCapacity(capacity);
+            EditorMotionDispatcher.EnsureStorageCapacity<TValue, TOptions, TAdapter>(capacity);
 #endif
         }
 
@@ -122,7 +100,7 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            MotionStorage<TValue, TOptions, TAdapter> storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(updateMode);
+            var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(updateMode);
             switch (updateMode)
             {
                 default:
@@ -150,16 +128,6 @@ namespace LitMotion
                         RunnerCache<TValue, TOptions, TAdapter>.fixedUpdate = runner;
                     }
                     break;
-#if UNITY_EDITOR
-                case UpdateMode.EditorApplicationUpdate:
-                    if (RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate == null)
-                    {
-                        var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                        editorApplicationUpdateRunners.Add(runner);
-                        RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate = runner;
-                    }
-                    break;
-#endif
             }
 
             var (EntryIndex, Version) = storage.Append(data, callbackData);
@@ -181,19 +149,19 @@ namespace LitMotion
         void Update()
         {
             var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void LateUpdate()
         {
             var span = lateUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void FixedUpdate()
         {
             var span = fixedUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedDeltaTime, Time.fixedUnscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTimeAsDouble, Time.fixedUnscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void OnDestroy()
@@ -211,27 +179,80 @@ namespace LitMotion
                 span[i].Reset();
             }
         }
+    }
 
 #if UNITY_EDITOR
-        static double lastEditorTime;
+    internal static class EditorMotionDispatcher
+    {
+        static class Cache<TValue, TOptions, TAdapter>
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            static MotionStorage<TValue, TOptions, TAdapter> storage;
+            static UpdateRunner<TValue, TOptions, TAdapter> updateRunner;
+
+            public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreateStorage()
+            {
+                if (storage == null)
+                {
+                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
+                    MotionStorageManager.AddStorage(storage);
+                }
+                return storage;
+            }
+
+            public static void InitUpdateRunner()
+            {
+                if (updateRunner == null)
+                {
+                    updateRunner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                    updateRunners.Add(updateRunner);
+                }
+            }
+        }
+        
+        static readonly MinimumList<IUpdateRunner> updateRunners = new();
+
+        public static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            var storage = Cache<TValue, TOptions, TAdapter>.GetOrCreateStorage();
+            Cache<TValue, TOptions, TAdapter>.InitUpdateRunner();
+
+            var (EntryIndex, Version) = storage.Append(data, callbackData);
+            return new MotionHandle()
+            {
+                StorageId = storage.StorageId,
+                Index = EntryIndex,
+                Version = Version
+            };
+        }
+
+        public static void EnsureStorageCapacity<TValue, TOptions, TAdapter>(int capacity)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            Cache<TValue, TOptions, TAdapter>.GetOrCreateStorage().EnsureCapacity(capacity);
+        }
 
         [InitializeOnLoadMethod]
-        static void InitEditor()
+        static void Init()
         {
-            lastEditorTime = 0f;
-            EditorApplication.update += UpdateEditor;
+            EditorApplication.update += Update;
         }
 
-        static void UpdateEditor()
+        static void Update()
         {
-            var deltaTime = (float)(EditorApplication.timeSinceStartup - lastEditorTime);
-            var span = editorApplicationUpdateRunners.AsSpan();
+            var span = updateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
-                span[i]?.Update(deltaTime, deltaTime);
+                span[i].Update(EditorApplication.timeSinceStartup, EditorApplication.timeSinceStartup, Time.realtimeSinceStartupAsDouble);
             }
-            lastEditorTime = EditorApplication.timeSinceStartup;
         }
-#endif
     }
+#endif
 }
