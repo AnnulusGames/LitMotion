@@ -9,14 +9,11 @@ namespace LitMotion
     {
         Update = 0,
         LateUpdate = 1,
-        FixedUpdate = 2,
-#if UNITY_EDITOR
-        EditorApplicationUpdate = 10
-#endif
+        FixedUpdate = 2
     }
 
     /// <summary>
-    /// Motion dispatcher for Runtime.
+    /// Motion dispatcher.
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("")]
@@ -66,18 +63,21 @@ namespace LitMotion
                             fixedUpdate = storage;
                         }
                         return fixedUpdate;
-#if UNITY_EDITOR
-                    case UpdateMode.EditorApplicationUpdate:
-                        if (editorApplicationUpdate == null)
-                        {
-                            var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                            MotionStorageManager.AddStorage(storage);
-                            editorApplicationUpdate = storage;
-                        }
-                        return editorApplicationUpdate;
-#endif
                 }
             }
+
+#if UNITY_EDITOR
+            public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreateEditor()
+            {
+                if (editorApplicationUpdate == null)
+                {
+                    var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
+                    MotionStorageManager.AddStorage(storage);
+                    editorApplicationUpdate = storage;
+                }
+                return editorApplicationUpdate;
+            }
+#endif
         }
 
         static class RunnerCache<TValue, TOptions, TAdapter>
@@ -113,7 +113,7 @@ namespace LitMotion
             StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.LateUpdate).EnsureCapacity(capacity);
             StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.FixedUpdate).EnsureCapacity(capacity);
 #if UNITY_EDITOR
-            StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(UpdateMode.EditorApplicationUpdate).EnsureCapacity(capacity);
+            StorageCache<TValue, TOptions, TAdapter>.GetOrCreateEditor().EnsureCapacity(capacity);
 #endif
         }
 
@@ -122,7 +122,7 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            MotionStorage<TValue, TOptions, TAdapter> storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(updateMode);
+            var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(updateMode);
             switch (updateMode)
             {
                 default:
@@ -150,16 +150,6 @@ namespace LitMotion
                         RunnerCache<TValue, TOptions, TAdapter>.fixedUpdate = runner;
                     }
                     break;
-#if UNITY_EDITOR
-                case UpdateMode.EditorApplicationUpdate:
-                    if (RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate == null)
-                    {
-                        var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                        editorApplicationUpdateRunners.Add(runner);
-                        RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate = runner;
-                    }
-                    break;
-#endif
             }
 
             var (EntryIndex, Version) = storage.Append(data, callbackData);
@@ -181,19 +171,19 @@ namespace LitMotion
         void Update()
         {
             var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble);
         }
 
         void LateUpdate()
         {
             var span = lateUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble);
         }
 
         void FixedUpdate()
         {
             var span = fixedUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedDeltaTime, Time.fixedUnscaledDeltaTime);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTime, Time.fixedTimeAsDouble);
         }
 
         void OnDestroy()
@@ -214,6 +204,28 @@ namespace LitMotion
 
 #if UNITY_EDITOR
         static double lastEditorTime;
+
+        internal static MotionHandle ScheduleOnEditor<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreateEditor();
+            if (RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate == null)
+            {
+                var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                editorApplicationUpdateRunners.Add(runner);
+                RunnerCache<TValue, TOptions, TAdapter>.editorApplicationUpdate = runner;
+            }
+
+            var (EntryIndex, Version) = storage.Append(data, callbackData);
+            return new MotionHandle()
+            {
+                StorageId = storage.StorageId,
+                Index = EntryIndex,
+                Version = Version
+            };
+        }
 
         [InitializeOnLoadMethod]
         static void InitEditor()

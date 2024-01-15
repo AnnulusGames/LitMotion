@@ -335,6 +335,7 @@ namespace LitMotion
                 StartValue = buffer.StartValue,
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
+                StartTime = buffer.Scheduler == null ? MotionScheduler.Update.Time : buffer.Scheduler.Time,
                 Duration = buffer.Duration,
                 Ease = buffer.Ease,
                 IgnoreTimeScale = buffer.IgnoreTimeScale,

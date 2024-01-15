@@ -30,6 +30,11 @@ namespace LitMotion
         static readonly MinimumList<IUpdateRunner> updateRunners = new();
 
         /// <summary>
+        /// ManualMotionDispatcher time. It increases every time Update is called.
+        /// </summary>
+        public static double Time { get; set; }
+
+        /// <summary>
         /// Ensures the storage capacity until it reaches at least `capacity`.
         /// </summary>
         /// <param name="capacity">The minimum capacity to ensure.</param>
@@ -45,14 +50,22 @@ namespace LitMotion
         /// Update all scheduled motions with MotionScheduler.Manual
         /// </summary>
         /// <param name="deltaTime">Delta time</param>
-        public static void Update(float deltaTime)
+        public static void Update(double deltaTime)
         {
             if (deltaTime < 0f) throw new ArgumentException("deltaTime must be 0 or higher.");
-            
+            Time += deltaTime;
+            Update();
+        }
+
+        /// <summary>
+        /// Update all scheduled motions with MotionScheduler.Manual
+        /// </summary>
+        public static void Update()
+        {
             var span = updateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
-                span[i].Update(deltaTime, deltaTime);
+                span[i].Update(Time, Time);
             }
         }
 

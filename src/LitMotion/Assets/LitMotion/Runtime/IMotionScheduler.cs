@@ -18,5 +18,17 @@ namespace LitMotion
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>;
+
+        /// <summary>
+        /// Returns the current time.
+        /// </summary>
+        double Time { get; }
+    }
+
+    internal enum TimeKind
+    {
+        Time,
+        UnscaledTime,
+        Realtime
     }
 }
