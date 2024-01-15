@@ -161,7 +161,7 @@ namespace LitMotion
         void FixedUpdate()
         {
             var span = fixedUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTime, Time.fixedTimeAsDouble, Time.realtimeSinceStartupAsDouble);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTimeAsDouble, Time.fixedUnscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void OnDestroy()
