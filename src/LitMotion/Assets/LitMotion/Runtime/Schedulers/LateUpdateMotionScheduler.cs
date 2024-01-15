@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace LitMotion
 {
     internal sealed class LateUpdateMotionScheduler : IMotionScheduler
@@ -10,9 +8,9 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
 #if UNITY_EDITOR
-            if (!Application.isPlaying)
+            if (!UnityEditor.EditorApplication.isPlaying)
             {
-                MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.EditorApplicationUpdate);
+                return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.EditorApplicationUpdate);
             }
 #endif
             return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.LateUpdate);

@@ -225,7 +225,7 @@ namespace LitMotion
         static void UpdateEditor()
         {
             var deltaTime = (float)(EditorApplication.timeSinceStartup - lastEditorTime);
-            var span = updateRunners.AsSpan();
+            var span = editorApplicationUpdateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
                 span[i]?.Update(deltaTime, deltaTime);
