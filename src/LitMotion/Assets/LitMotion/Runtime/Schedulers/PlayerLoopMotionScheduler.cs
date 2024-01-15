@@ -54,7 +54,7 @@ namespace LitMotion
             }
             else
             {
-                return MotionDispatcher.ScheduleOnEditor<TValue, TOptions, TAdapter>(data, callbackData);
+                return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
             }
 #else
             return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, updateMode);
