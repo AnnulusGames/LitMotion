@@ -1,3 +1,4 @@
+#if LITMOTION_SUPPORT_UIELEMENTS
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -795,3 +796,4 @@ namespace LitMotion.Extensions
         #endregion
     }
 }
+#endif

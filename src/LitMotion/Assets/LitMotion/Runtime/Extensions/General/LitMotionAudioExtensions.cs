@@ -1,3 +1,4 @@
+#if LITMOTION_SUPPORT_UNITY_AUDIO
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -69,3 +70,4 @@ namespace LitMotion.Extensions
         }
     }
 }
+#endif

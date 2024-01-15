@@ -1,3 +1,4 @@
+#if LITMOTION_SUPPORT_UGUI
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Collections;
@@ -396,3 +397,4 @@ namespace LitMotion.Extensions
         }
     }
 }
+#endif
