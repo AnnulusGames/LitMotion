@@ -41,7 +41,7 @@ namespace LitMotion
         static void Init()
         {
 #if UNITY_EDITOR
-            var domainReloadDisabled = EditorSettings.enterPlayModeOptionsEnabled && EditorSettings.enterPlayModeOptions.HasFlag(UnityEditor.EnterPlayModeOptions.DisableDomainReload);
+            var domainReloadDisabled = EditorSettings.enterPlayModeOptionsEnabled && EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableDomainReload);
             if (!domainReloadDisabled && initialized) return;
 #else
             if (initialized) return;
@@ -53,6 +53,7 @@ namespace LitMotion
 
         public static void Initialize(ref PlayerLoopSystem playerLoop)
         {
+            initialized = true;
             var newLoop = playerLoop.subSystemList.ToArray();
             
             InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), () => MotionDispatcher.Update(PlayerLoopTiming.Initialization));
@@ -66,15 +67,13 @@ namespace LitMotion
 
             playerLoop.subSystemList = newLoop;
             PlayerLoop.SetPlayerLoop(playerLoop);
-
-            initialized = true;
         }
 
-        static void InsertLoop(PlayerLoopSystem[] loopSystems, Type loopType, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateFunction)
+        static void InsertLoop(PlayerLoopSystem[] loopSystems, Type loopType, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateDelegate)
         {
             var i = FindLoopSystemIndex(loopSystems, loopType);
             ref var loop = ref loopSystems[i];
-            loop.subSystemList = InsertRunner(loop.subSystemList, loopRunnerType, updateFunction);
+            loop.subSystemList = InsertRunner(loop.subSystemList, loopRunnerType, updateDelegate);
         }
 
         static int FindLoopSystemIndex(PlayerLoopSystem[] playerLoopList, Type systemType)
@@ -90,7 +89,7 @@ namespace LitMotion
             throw new Exception("Target PlayerLoopSystem does not found. Type:" + systemType.FullName);
         }
 
-        static PlayerLoopSystem[] InsertRunner(PlayerLoopSystem[] subSystemList, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateFunction)
+        static PlayerLoopSystem[] InsertRunner(PlayerLoopSystem[] subSystemList, Type loopRunnerType, PlayerLoopSystem.UpdateFunction updateDelegate)
         {
             var source = subSystemList.Where(x => x.type != loopRunnerType).ToArray();
             var dest = new PlayerLoopSystem[source.Length + 1];
@@ -100,7 +99,7 @@ namespace LitMotion
             dest[0] = new PlayerLoopSystem
             {
                 type = loopRunnerType,
-                updateDelegate = updateFunction
+                updateDelegate = updateDelegate
             };
 
             return dest;
