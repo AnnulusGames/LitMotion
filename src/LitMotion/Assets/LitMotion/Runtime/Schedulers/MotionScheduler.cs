@@ -18,7 +18,7 @@ namespace LitMotion
         /// <summary>
         /// Scheduler that updates motion at FixedUpdate.
         /// </summary>
-        public static readonly IMotionScheduler FixedUpdate = new PlayerLoopMotionScheduler(UpdateMode.LateUpdate, TimeKind.Time);
+        public static readonly IMotionScheduler FixedUpdate = new PlayerLoopMotionScheduler(UpdateMode.FixedUpdate, TimeKind.Time);
 
         /// <summary>
         /// Scheduler that updates motion with `ManualMotionDispatcher.Update()`
