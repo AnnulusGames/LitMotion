@@ -25,10 +25,13 @@ namespace LitMotion
         double Time { get; }
     }
 
-    internal enum TimeKind
+    /// <summary>
+    /// Type of time used to play the motion
+    /// </summary>
+    public enum MotionTimeKind : byte
     {
-        Time,
-        UnscaledTime,
-        Realtime
+        Time = 0,
+        UnscaledTime = 1,
+        Realtime = 2
     }
 }

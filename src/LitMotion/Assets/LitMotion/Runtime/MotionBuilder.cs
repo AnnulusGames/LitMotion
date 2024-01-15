@@ -27,7 +27,6 @@ namespace LitMotion
             buffer.Version++;
             buffer.Duration = default;
             buffer.Ease = default;
-            buffer.IgnoreTimeScale = default;
             buffer.Delay = default;
             buffer.Loops = 1;
             buffer.LoopType = default;
@@ -50,7 +49,6 @@ namespace LitMotion
 
         public float Duration;
         public Ease Ease;
-        public bool IgnoreTimeScale;
         public float Delay;
         public int Loops = 1;
         public LoopType LoopType;
@@ -97,19 +95,6 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.Ease = ease;
-            return this;
-        }
-
-        /// <summary>
-        /// Specify whether motion ignores time scale.
-        /// </summary>
-        /// <param name="ignoreTimeScale">If true, time scale will be ignored</param>
-        /// <returns>This builder to allow chaining multiple method calls.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithIgnoreTimeScale(bool ignoreTimeScale = true)
-        {
-            CheckBuffer();
-            buffer.IgnoreTimeScale = ignoreTimeScale;
             return this;
         }
 
@@ -338,7 +323,6 @@ namespace LitMotion
                 StartTime = buffer.Scheduler == null ? MotionScheduler.Update.Time : buffer.Scheduler.Time,
                 Duration = buffer.Duration,
                 Ease = buffer.Ease,
-                IgnoreTimeScale = buffer.IgnoreTimeScale,
                 Delay = buffer.Delay,
                 Loops = buffer.Loops,
                 LoopType = buffer.LoopType,

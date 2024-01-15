@@ -9,9 +9,9 @@ namespace LitMotion
     internal sealed class PlayerLoopMotionScheduler : IMotionScheduler
     {
         readonly UpdateMode updateMode;
-        readonly TimeKind timeKind;
+        readonly MotionTimeKind timeKind;
 
-        internal PlayerLoopMotionScheduler(UpdateMode updateMode, TimeKind timeKind)
+        internal PlayerLoopMotionScheduler(UpdateMode updateMode, MotionTimeKind timeKind)
         {
             this.updateMode = updateMode;
             this.timeKind = timeKind;
@@ -25,18 +25,18 @@ namespace LitMotion
                 {
                     return timeKind switch
                     {
-                        TimeKind.Time => UnityTime.fixedTimeAsDouble,
-                        TimeKind.UnscaledTime => UnityTime.fixedUnscaledTimeAsDouble,
-                        TimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
+                        MotionTimeKind.Time => UnityTime.fixedTimeAsDouble,
+                        MotionTimeKind.UnscaledTime => UnityTime.fixedUnscaledTimeAsDouble,
+                        MotionTimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
                         _ => throw new NotSupportedException("Invalid TimeKind")
                     };
                 }
 
                 return timeKind switch
                 {
-                    TimeKind.Time => UnityTime.timeAsDouble,
-                    TimeKind.UnscaledTime => UnityTime.unscaledTimeAsDouble,
-                    TimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
+                    MotionTimeKind.Time => UnityTime.timeAsDouble,
+                    MotionTimeKind.UnscaledTime => UnityTime.unscaledTimeAsDouble,
+                    MotionTimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
                     _ => throw new NotSupportedException("Invalid TimeKind")
                 };
             }
@@ -47,6 +47,7 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
+            data.TimeKind = timeKind;
 #if UNITY_EDITOR
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {

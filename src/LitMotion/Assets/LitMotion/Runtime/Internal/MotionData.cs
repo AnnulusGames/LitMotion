@@ -18,7 +18,7 @@ namespace LitMotion
         public float Duration;
 
         public Ease Ease;
-        public bool IgnoreTimeScale;
+        public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;
         public LoopType LoopType;

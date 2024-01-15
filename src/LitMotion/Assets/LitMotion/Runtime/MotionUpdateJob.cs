@@ -22,6 +22,7 @@ namespace LitMotion
         [NativeDisableUnsafePtrRestriction] public MotionData<TValue, TOptions>* DataPtr;
         [ReadOnly] public double Time;
         [ReadOnly] public double UnscaledTime;
+        [ReadOnly] public double Realtime;
 
         [WriteOnly] public NativeList<int>.ParallelWriter CompletedIndexList;
         [WriteOnly] public NativeArray<TValue> Output;
@@ -32,7 +33,15 @@ namespace LitMotion
 
             if (Hint.Likely(ptr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing))
             {
-                var motionTime = (ptr->IgnoreTimeScale ? UnscaledTime : Time) - ptr->StartTime;
+                var currentTime = ptr->TimeKind switch
+                {
+                    MotionTimeKind.Time => Time,
+                    MotionTimeKind.UnscaledTime => UnscaledTime,
+                    MotionTimeKind.Realtime => Realtime,
+                    _ => default
+                };
+
+                var motionTime = currentTime - ptr->StartTime;
                 var time = motionTime - ptr->Delay;
 
                 double t;
