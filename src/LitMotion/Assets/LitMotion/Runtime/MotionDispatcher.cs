@@ -149,19 +149,19 @@ namespace LitMotion
         void Update()
         {
             var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void LateUpdate()
         {
             var span = lateUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void FixedUpdate()
         {
             var span = fixedUpdateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTime, Time.fixedTimeAsDouble);
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedTime, Time.fixedTimeAsDouble, Time.realtimeSinceStartupAsDouble);
         }
 
         void OnDestroy()
@@ -250,7 +250,7 @@ namespace LitMotion
             var span = updateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
-                span[i].Update(EditorApplication.timeSinceStartup, EditorApplication.timeSinceStartup);
+                span[i].Update(EditorApplication.timeSinceStartup, EditorApplication.timeSinceStartup, Time.realtimeSinceStartupAsDouble);
             }
         }
     }

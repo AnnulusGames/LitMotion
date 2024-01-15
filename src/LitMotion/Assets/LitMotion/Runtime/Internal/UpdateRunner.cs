@@ -8,7 +8,7 @@ namespace LitMotion
 {
     internal interface IUpdateRunner
     {
-        public void Update(double time, double unscaledTime);
+        public void Update(double time, double unscaledTime, double realtime);
         public void Reset();
     }
 
@@ -24,7 +24,7 @@ namespace LitMotion
 
         readonly MotionStorage<TValue, TOptions, TAdapter> storage;
 
-        public unsafe void Update(double time, double unscaledTime)
+        public unsafe void Update(double time, double unscaledTime, double realtime)
         {
             var count = storage.Count;
             using var output = new NativeArray<TValue>(count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
@@ -38,6 +38,7 @@ namespace LitMotion
                     DataPtr = dataPtr,
                     Time = time,
                     UnscaledTime = unscaledTime,
+                    Realtime = realtime,
                     Output = output,
                     CompletedIndexList = completedIndexList.AsParallelWriter()
                 };

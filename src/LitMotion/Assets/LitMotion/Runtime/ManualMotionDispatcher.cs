@@ -65,7 +65,7 @@ namespace LitMotion
             var span = updateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
-                span[i].Update(Time, Time);
+                span[i].Update(Time, Time, Time);
             }
         }
 
