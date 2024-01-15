@@ -297,7 +297,7 @@ namespace LitMotion
 #if UNITY_EDITOR
                 if (!UnityEditor.EditorApplication.isPlaying)
                 {
-                    return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.EditorApplicationUpdate);
+                    return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
 #endif
                 return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, UpdateMode.Update);
