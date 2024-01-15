@@ -12,7 +12,6 @@ namespace LitMotion.Tests.Editor
         {
             bool completed = false;
             LMotion.Create(0f, 100f, 1f)
-                .WithScheduler(EditorMotionScheduler.Update)
                 .WithOnComplete(() => completed = true)
                 .Bind(x => Debug.Log(x));
 
