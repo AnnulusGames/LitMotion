@@ -35,10 +35,6 @@ Additionally, you can set the behavior during repetition by specifying `LoopType
 | LoopType.Yoyo | Animates the value back and forth between start and end values. |
 | LoopType.Increment | Value increases with each loop. |
 
-#### WithIgnoreTimeScale
-
-Specifies whether the motion ignores the influence of `Time.timeScale`.
-
 #### WithOnComplete
 
 Specifies a callback at the end of the playback.
@@ -54,7 +50,11 @@ Specifies the Scheduler used for motion playback.
 | Scheduler | Behavior |
 | - | - |
 | MotionScheduler.Update | Updates at the Update timing. |
+| MotionScheduler.UpdateIgnoreTimeScale | Updates at the Update timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.UpdateRealtime | Updates at the Update timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.LateUpdate | Updates at the LateUpdate timing. |
+| MotionScheduler.LateUpdateIgnoreTimeScale | Updates at the LateUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.LateUpdateRealtime | Updates at the LateUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.FixedUpdate | Updates at the FixedUpdate timing. |
 | MotionScheduler.Manual | Updates manually. For details, see [Updating Motion Manually](updating-motion-manually.md).  |
 | EditorMotionScheduler.Update (LitMotion.Editor) | Updates at the EditorApplication.update timing. This Scheduler is limited to the editor. |

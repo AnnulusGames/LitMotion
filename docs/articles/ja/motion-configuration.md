@@ -36,10 +36,6 @@ LMotion.Create(0f, 10f, 2f)
 | LoopType.Yoyo | 開始値と終了地を往復するように値をアニメーションさせます。| 
 | LoopType.Increment | ループごとに値が増加します。 | 
 
-#### WithIgnoreTimeScale
-
-モーションが`Time.timeScale`の影響を無視するかどうかを指定します。
-
 #### WithOnComplete
 
 再生終了時のコールバックを指定します。
@@ -55,7 +51,11 @@ LMotion.Create(0f, 10f, 2f)
 | Scheduler | 動作 |
 | - | - |
 | MotionScheduler.Update | Updateのタイミングで更新を行います。 |
+| MotionScheduler.UpdateIgnoreTimeScale | Updateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.UpdateRealtime | Updateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.LateUpdate | LateUpdateのタイミングで更新を行います。 |
+| MotionScheduler.LateUpdateIgnoreTimeScale | LateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.LateUpdateRealtime | LateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.FixedUpdate | FixedUpdateのタイミングで更新を行います。 |
 | MotionScheduler.Manual | 更新を手動で行います。詳細は[モーションを手動で更新する](updating-motion-manually.md)を参照してください。 |
 | EditorMotionScheduler.Update (LitMotion.Editor) | EditorApplication.updateのタイミングで更新を行います。このSchedulerはエディタ限定で使用できます。 |
