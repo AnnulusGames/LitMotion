@@ -128,6 +128,14 @@ namespace LitMotion
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {
+            Clear();
+        }
+
+        /// <summary>
+        /// Cancel all motions.
+        /// </summary>
+        public static void Clear()
+        {
             foreach (var playerLoopTiming in playerLoopTimings)
             {
                 var span = GetRunnerList(playerLoopTiming).AsSpan();
