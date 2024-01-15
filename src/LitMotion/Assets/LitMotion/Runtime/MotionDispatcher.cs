@@ -30,20 +30,20 @@ namespace LitMotion
             {
                 return playerLoopTiming switch
                 {
-                    PlayerLoopTiming.Initialization => initialization = CreateIfNull(initialization),
-                    PlayerLoopTiming.EarlyUpdate => earlyUpdate = CreateIfNull(earlyUpdate),
-                    PlayerLoopTiming.FixedUpdate => fixedUpdate = CreateIfNull(fixedUpdate),
-                    PlayerLoopTiming.PreUpdate => preUpdate = CreateIfNull(preUpdate),
-                    PlayerLoopTiming.Update => update = CreateIfNull(update),
-                    PlayerLoopTiming.PreLateUpdate => preLateUpdate = CreateIfNull(preLateUpdate),
-                    PlayerLoopTiming.PostLateUpdate => postLateUpdate = CreateIfNull(postLateUpdate),
-                    PlayerLoopTiming.TimeUpdate => timeUpdate = CreateIfNull(timeUpdate),
+                    PlayerLoopTiming.Initialization => CreateIfNull(ref initialization),
+                    PlayerLoopTiming.EarlyUpdate => CreateIfNull(ref earlyUpdate),
+                    PlayerLoopTiming.FixedUpdate => CreateIfNull(ref fixedUpdate),
+                    PlayerLoopTiming.PreUpdate => CreateIfNull(ref preUpdate),
+                    PlayerLoopTiming.Update => CreateIfNull(ref update),
+                    PlayerLoopTiming.PreLateUpdate => CreateIfNull(ref preLateUpdate),
+                    PlayerLoopTiming.PostLateUpdate => CreateIfNull(ref postLateUpdate),
+                    PlayerLoopTiming.TimeUpdate => CreateIfNull(ref timeUpdate),
                     _ => null,
                 };
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            static MotionStorage<TValue, TOptions, TAdapter> CreateIfNull(MotionStorage<TValue, TOptions, TAdapter> storage)
+            static MotionStorage<TValue, TOptions, TAdapter> CreateIfNull(ref MotionStorage<TValue, TOptions, TAdapter> storage)
             {
                 if (storage == null)
                 {
