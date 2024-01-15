@@ -38,6 +38,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clear()
         {
+            array.AsSpan().Clear();
             tailIndex = 0;
         }
 
