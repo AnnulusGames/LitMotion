@@ -29,6 +29,21 @@
             "name": "com.cysharp.zstring",
             "expression": "",
             "define": "LITMOTION_SUPPORT_ZSTRING"
+        },
+        {
+            "name": "com.unity.modules.uielements",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_UIELEMENTS"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_UGUI"
+        },
+        {
+            "name": "com.unity.modules.audio",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_UNITY_AUDIO"
         }
     ],
     "noEngineReferences": false
