@@ -216,7 +216,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData();
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace LitMotion
             callbacks.OnCompleteAction = buffer.OnComplete;
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state1, state2, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
 
@@ -288,7 +288,7 @@ namespace LitMotion
             var callbacks = BuildCallbackData(state1, state2, state3, action);
             var scheduler = buffer.Scheduler;
             var data = BuildMotionData();
-            return Schedule(scheduler, data, callbacks);
+            return Schedule(scheduler, ref data, ref callbacks);
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly MotionHandle Schedule(IMotionScheduler scheduler, in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+        internal readonly MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
         {
             if (scheduler == null)
             {
@@ -313,7 +313,7 @@ namespace LitMotion
             }
             else
             {
-                return scheduler.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
+                return scheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
             }
         }
 

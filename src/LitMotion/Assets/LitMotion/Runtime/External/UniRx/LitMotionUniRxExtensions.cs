@@ -29,7 +29,7 @@ namespace LitMotion
             var scheduler = builder.buffer.Scheduler;
             var entity = builder.BuildMotionData();
 
-            builder.Schedule(scheduler, entity, callbacks);
+            builder.Schedule(scheduler, ref entity, ref callbacks);
             return subject;
         }
 
