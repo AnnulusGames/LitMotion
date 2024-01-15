@@ -49,10 +49,10 @@ namespace LitMotion
         {
             if (deltaTime < 0f) throw new ArgumentException("deltaTime must be 0 or higher.");
             
-            var array = updateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++)
+            var span = updateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                array[i]?.Update(deltaTime, deltaTime);
+                span[i].Update(deltaTime, deltaTime);
             }
         }
 
@@ -61,10 +61,10 @@ namespace LitMotion
         /// </summary>
         public static void Reset()
         {
-            var array = updateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++)
+            var span = updateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                array[i]?.Reset();
+                span[i].Reset();
             }
         }
 
