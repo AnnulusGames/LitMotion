@@ -203,8 +203,6 @@ namespace LitMotion
         }
 
 #if UNITY_EDITOR
-        static double lastEditorTime;
-
         internal static MotionHandle ScheduleOnEditor<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
@@ -230,19 +228,16 @@ namespace LitMotion
         [InitializeOnLoadMethod]
         static void InitEditor()
         {
-            lastEditorTime = 0f;
             EditorApplication.update += UpdateEditor;
         }
 
         static void UpdateEditor()
         {
-            var deltaTime = (float)(EditorApplication.timeSinceStartup - lastEditorTime);
-            var span = updateRunners.AsSpan();
+            var span = editorApplicationUpdateRunners.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
-                span[i]?.Update(deltaTime, deltaTime);
+                span[i].Update(EditorApplication.timeSinceStartup, EditorApplication.timeSinceStartup);
             }
-            lastEditorTime = EditorApplication.timeSinceStartup;
         }
 #endif
     }
