@@ -162,8 +162,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming);
-            var (runner, isCreated) = RunnerCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming, storage);
-            if (isCreated) GetRunnerList(playerLoopTiming).Add(runner);
+            RunnerCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming, storage);
 
             var (EntryIndex, Version) = storage.Append(data, callbackData);
             return new MotionHandle()
