@@ -180,20 +180,20 @@ namespace LitMotion
 
         void Update()
         {
-            var array = updateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++) array[i]?.Update(Time.deltaTime, Time.unscaledDeltaTime);
+            var span = updateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
         }
 
         void LateUpdate()
         {
-            var array = lateUpdateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++) array[i]?.Update(Time.deltaTime, Time.unscaledDeltaTime);
+            var span = lateUpdateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.deltaTime, Time.unscaledDeltaTime);
         }
 
         void FixedUpdate()
         {
-            var array = fixedUpdateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++) array[i]?.Update(Time.fixedDeltaTime, Time.fixedUnscaledDeltaTime);
+            var span = fixedUpdateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++) span[i].Update(Time.fixedDeltaTime, Time.fixedUnscaledDeltaTime);
         }
 
         void OnDestroy()
@@ -205,10 +205,10 @@ namespace LitMotion
 
         void ResetAll(MinimumList<IUpdateRunner> list)
         {
-            var array = list.AsArray();
-            for (int i = 0; i < array.Length; i++)
+            var span = list.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                array[i]?.Reset();
+                span[i].Reset();
             }
         }
 
@@ -225,10 +225,10 @@ namespace LitMotion
         static void UpdateEditor()
         {
             var deltaTime = (float)(EditorApplication.timeSinceStartup - lastEditorTime);
-            var array = updateRunners.AsArray();
-            for (int i = 0; i < array.Length; i++)
+            var span = updateRunners.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                array[i]?.Update(deltaTime, deltaTime);
+                span[i]?.Update(deltaTime, deltaTime);
             }
             lastEditorTime = EditorApplication.timeSinceStartup;
         }

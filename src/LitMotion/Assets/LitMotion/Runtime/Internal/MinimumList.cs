@@ -64,7 +64,6 @@ namespace LitMotion
             get => tailIndex;
         }
 
-        public T[] AsArray() => array;
         public Span<T> AsSpan() => array.AsSpan(0, tailIndex);
 
         [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS")]
