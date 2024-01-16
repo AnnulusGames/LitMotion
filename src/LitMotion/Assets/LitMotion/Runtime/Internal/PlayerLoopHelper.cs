@@ -9,6 +9,9 @@ using UnityEditor;
 
 namespace LitMotion
 {
+    /// <summary>
+    /// Types of PlayerLoop inserted for motion updates
+    /// </summary>
     public static class LitMotionLoopRunners
     {
         public struct LitMotionInitialization { };
