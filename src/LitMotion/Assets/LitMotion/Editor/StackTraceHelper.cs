@@ -10,11 +10,13 @@ namespace LitMotion.Editor
 {
     internal static class StackTraceHelper
     {
+        static readonly StringBuilder sb = new();
+
         public static string AddHyperLink(this StackTrace stackTrace)
         {
             if (stackTrace == null) return "";
 
-            var sb = new StringBuilder();
+            sb.Clear();
             for (int i = 0; i < stackTrace.FrameCount; i++)
             {
                 var sf = stackTrace.GetFrame(i);

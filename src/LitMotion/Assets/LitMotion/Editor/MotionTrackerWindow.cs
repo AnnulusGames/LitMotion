@@ -137,8 +137,7 @@ namespace LitMotion.Editor
             if (selected.Count > 0)
             {
                 var first = selected[0];
-                var item = treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) as MotionTrackerViewItem;
-                if (item != null)
+                if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is MotionTrackerViewItem item)
                 {
                     message = item.Position;
                 }
