@@ -53,11 +53,13 @@ namespace LitMotion.Editor
             if (GUILayout.Toggle(MotionTracker.EnableTracking, EnableTrackingHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionTracker.EnableTracking)
             {
                 MotionTracker.EnableTracking = !MotionTracker.EnableTracking;
+                EditorPrefs.SetBool(EnableTrackingPrefsKey, MotionTracker.EnableTracking);
             }
 
             if (GUILayout.Toggle(MotionTracker.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionTracker.EnableStackTrace)
             {
                 MotionTracker.EnableStackTrace = !MotionTracker.EnableStackTrace;
+                EditorPrefs.SetBool(EnableStackTracePrefsKey, MotionTracker.EnableStackTrace);
             }
 
             GUILayout.FlexibleSpace();
