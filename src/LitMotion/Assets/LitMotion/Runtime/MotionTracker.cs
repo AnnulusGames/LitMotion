@@ -11,10 +11,11 @@ namespace LitMotion
         public static IReadOnlyList<TrackingState> Items => trackings;
         static readonly List<TrackingState> trackings = new(16);
 
-        internal static void AddTracking(MotionHandle motionHandle)
+        public static void AddTracking(MotionHandle motionHandle)
         {
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
+            state.CreationTime = DateTime.UtcNow;
 
             var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
             callbackData.OnCompleteAction += state.ReleaseDelegate;
@@ -22,6 +23,11 @@ namespace LitMotion
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
 
             trackings.Add(state);
+        }
+
+        public static void Reset()
+        {
+            trackings.Clear();
         }
 
         public sealed class TrackingState
@@ -45,6 +51,7 @@ namespace LitMotion
             public Type ValueType;
             public Type OptionsType;
             public Type AdapterType;
+            public DateTime CreationTime;
 
             public readonly Action ReleaseDelegate;
 
@@ -54,6 +61,7 @@ namespace LitMotion
                 ValueType = default;
                 OptionsType = default;
                 AdapterType = default;
+                CreationTime = default;
                 pool.Push(this);
             }
         }
