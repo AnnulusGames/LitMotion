@@ -46,17 +46,34 @@ LMotion.Create(0f, 10f, 2f)
 
 #### WithScheduler
 
-モーションの再生に使用するSchedulerを指定します。
+モーションの再生に使用するSchedulerを指定します。作成したモーションは指定したSchedulerに対応したPlayerLoopで更新が行われます。
 
 | Scheduler | 動作 |
 | - | - |
+| MotionScheduler.Initialization | Initializationのタイミングで更新を行います。 |
+| MotionScheduler.InitializationIgnoreTimeScale | Initializationのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.InitializationRealtime | Initializationのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
+| MotionScheduler.EarlyUpdate | EarlyUpdateのタイミングで更新を行います。 |
+| MotionScheduler.EarlyUpdateIgnoreTimeScale | EarlyUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.EarlyUpdateRealtime | EarlyUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
+| MotionScheduler.FixedUpdate | FixedUpdateのタイミングで更新を行います。 |
+| MotionScheduler.FixedUpdateIgnoreTimeScale | FixedUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.FixedUpdateRealtime | FixedUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
+| MotionScheduler.PreUpdate | PreUpdateのタイミングで更新を行います。 |
+| MotionScheduler.PreUpdateIgnoreTimeScale | PreUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.PreUpdateRealtime | PreUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.Update | Updateのタイミングで更新を行います。 |
 | MotionScheduler.UpdateIgnoreTimeScale | Updateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
 | MotionScheduler.UpdateRealtime | Updateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
-| MotionScheduler.LateUpdate | LateUpdateのタイミングで更新を行います。 |
-| MotionScheduler.LateUpdateIgnoreTimeScale | LateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
-| MotionScheduler.LateUpdateRealtime | LateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
-| MotionScheduler.FixedUpdate | FixedUpdateのタイミングで更新を行います。 |
+| MotionScheduler.PreLateUpdate | PreLateUpdateのタイミングで更新を行います。 |
+| MotionScheduler.PreLateUpdateIgnoreTimeScale | PreLateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.PreLateUpdateRealtime | PreLateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
+| MotionScheduler.PostLateUpdate | PostLateUpdateのタイミングで更新を行います。 |
+| MotionScheduler.PostLateUpdateIgnoreTimeScale | PostLateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.PostLateUpdateRealtime | PostLateUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
+| MotionScheduler.TimeUpdate | TimeUpdateのタイミングで更新を行います。 |
+| MotionScheduler.TimeUpdateIgnoreTimeScale | TimeUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
+| MotionScheduler.TimeUpdateRealtime | TimeUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.Manual | 更新を手動で行います。詳細は[モーションを手動で更新する](updating-motion-manually.md)を参照してください。 |
 | EditorMotionScheduler.Update (LitMotion.Editor) | EditorApplication.updateのタイミングで更新を行います。このSchedulerはエディタ限定で使用できます。 |
 

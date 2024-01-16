@@ -49,13 +49,30 @@ Specifies the Scheduler used for motion playback.
 
 | Scheduler | Behavior |
 | - | - |
+| MotionScheduler.Initialization | Updates at the Initialization timing. |
+| MotionScheduler.InitializationIgnoreTimeScale | Updates at the Initialization timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.InitializationRealtime | Updates at the Initialization timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
+| MotionScheduler.EarlyUpdate | Updates at the EarlyUpdate timing. |
+| MotionScheduler.EarlyUpdateIgnoreTimeScale | Updates at the EarlyUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.EarlyUpdateRealtime | Updates at the EarlyUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
+| MotionScheduler.FixedUpdate | Updates at the FixedUpdate timing. |
+| MotionScheduler.FixedUpdateIgnoreTimeScale | Updates at the FixedUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.FixedUpdateRealtime | Updates at the FixedUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
+| MotionScheduler.PreUpdate | Updates at the PreUpdate timing. |
+| MotionScheduler.PreUpdateIgnoreTimeScale | Updates at the PreUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.PreUpdateRealtime | Updates at the PreUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.Update | Updates at the Update timing. |
 | MotionScheduler.UpdateIgnoreTimeScale | Updates at the Update timing, ignores the influence of `Time.timeScale`. |
 | MotionScheduler.UpdateRealtime | Updates at the Update timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
-| MotionScheduler.LateUpdate | Updates at the LateUpdate timing. |
-| MotionScheduler.LateUpdateIgnoreTimeScale | Updates at the LateUpdate timing, ignores the influence of `Time.timeScale`. |
-| MotionScheduler.LateUpdateRealtime | Updates at the LateUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
-| MotionScheduler.FixedUpdate | Updates at the FixedUpdate timing. |
+| MotionScheduler.PreLateUpdate | Updates at the PreLateUpdate timing. |
+| MotionScheduler.PreLateUpdateIgnoreTimeScale | Updates at the PreLateUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.PreLateUpdateRealtime | Updates at the PreLateUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
+| MotionScheduler.PostLateUpdate | Updates at the PostLateUpdate timing. |
+| MotionScheduler.PostLateUpdateIgnoreTimeScale | Updates at the PostLateUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.PostLateUpdateRealtime | Updates at the PostLateUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
+| MotionScheduler.TimeUpdate | Updates at the TimeUpdate timing. |
+| MotionScheduler.TimeUpdateIgnoreTimeScale | Updates at the TimeUpdate timing, ignores the influence of `Time.timeScale`. |
+| MotionScheduler.TimeUpdateRealtime | Updates at the TimeUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.Manual | Updates manually. For details, see [Updating Motion Manually](updating-motion-manually.md).  |
 | EditorMotionScheduler.Update (LitMotion.Editor) | Updates at the EditorApplication.update timing. This Scheduler is limited to the editor. |
 
