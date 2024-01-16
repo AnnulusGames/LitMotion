@@ -12,13 +12,13 @@ namespace LitMotion
         public static IReadOnlyList<TrackingState> Items => trackings;
         static readonly List<TrackingState> trackings = new(16);
 
-        public static void AddTracking(MotionHandle motionHandle)
+        public static void AddTracking(MotionHandle motionHandle, int skipFrames = 3)
         {
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
             state.CreationTime = DateTime.UtcNow;
 
-            if (EnableStackTrace) state.StackTrace = new StackTrace(2, true);
+            if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
             var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
             callbackData.OnCompleteAction += state.ReleaseDelegate;
