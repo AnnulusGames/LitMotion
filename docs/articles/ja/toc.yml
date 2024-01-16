@@ -31,6 +31,8 @@
   href: reusing-builder.md
 - name: 動的なメモリ確保を回避する
   href: avoiding-dynamic-memory-allocation.md
+- name: 例外処理
+  href: exception-handling.md
 - name: Unity Editor上で再生する
   href: playing-in-editor.md
 - name: カスタムAdapter
