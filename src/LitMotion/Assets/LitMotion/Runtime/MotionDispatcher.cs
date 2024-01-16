@@ -205,6 +205,9 @@ namespace LitMotion
 
         internal static void Update(PlayerLoopTiming playerLoopTiming)
         {
+#if UNITY_EDITOR
+            if (!EditorApplication.isPlaying) return;
+#endif
             var span = GetRunnerList(playerLoopTiming).AsSpan();
             if (playerLoopTiming == PlayerLoopTiming.FixedUpdate)
             {
