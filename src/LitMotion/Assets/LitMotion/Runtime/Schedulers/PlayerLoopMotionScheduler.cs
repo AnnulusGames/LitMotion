@@ -48,6 +48,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             data.TimeKind = timeKind;
+            data.StartTime = Time;
 #if UNITY_EDITOR
             if (EditorApplication.isPlaying)
             {

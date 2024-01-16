@@ -301,7 +301,7 @@ namespace LitMotion
                     return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
 #endif
-                return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
+                return MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
             }
             else
             {
@@ -327,7 +327,6 @@ namespace LitMotion
                 StartValue = buffer.StartValue,
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
-                StartTime = buffer.Scheduler == null ? MotionScheduler.Update.Time : buffer.Scheduler.Time,
                 Duration = buffer.Duration,
                 Ease = buffer.Ease,
                 Delay = buffer.Delay,
