@@ -95,6 +95,18 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_Scheduler_Update_WithHalfTimeScale()
+        {
+            Time.timeScale = 0.5f;
+            var t = Time.unscaledTimeAsDouble;
+            yield return LMotion.Create(0f, 10f, Duration)
+                .WithScheduler(MotionScheduler.Update)
+                .RunWithoutBinding()
+                .ToYieldInteraction();
+            Assert.That(Time.unscaledTimeAsDouble - t, Is.GreaterThan(Duration * 2f));
+        }
+
+        [UnityTest]
         public IEnumerator Test_Scheduler_Update_IgnoreTimeScale()
         {
             Time.timeScale = 0;
