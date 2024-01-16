@@ -57,9 +57,9 @@ namespace LitMotion.Editor
         public MotionTrackerTreeView()
             : this(new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[]
             {
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("MotionType"), width = 40},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Scheduler"), width = 20},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Elapsed"), width = 20},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 55},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Scheduler"), width = 25},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Elapsed"), width = 15},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Position")},
             })))
         {

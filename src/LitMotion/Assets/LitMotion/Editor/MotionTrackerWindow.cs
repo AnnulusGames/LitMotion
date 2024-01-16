@@ -41,9 +41,9 @@ namespace LitMotion.Editor
             SplitterGUILayout.EndVerticalSplit();
         }
 
-        static readonly GUIContent ClearHeadContent = EditorGUIUtility.TrTextContent("Clear");
+        static readonly GUIContent ClearHeadContent = EditorGUIUtility.TrTextContent(" Clear ");
         static readonly GUIContent EnableTrackingHeadContent = EditorGUIUtility.TrTextContent("Enable Tracking");
-        static readonly GUIContent EnableStackTraceHeadContent = EditorGUIUtility.TrTextContent("Enable StackTrace");
+        static readonly GUIContent EnableStackTraceHeadContent = EditorGUIUtility.TrTextContent("Enable Stack Trace");
 
         void RenderHeadPanel()
         {
@@ -99,7 +99,6 @@ namespace LitMotion.Editor
                 GUILayout.ExpandHeight(true),
                 GUILayout.ExpandWidth(true)
             });
-
 
             treeView?.OnGUI(controlRect);
 
