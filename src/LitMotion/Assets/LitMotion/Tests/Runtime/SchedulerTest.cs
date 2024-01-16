@@ -78,27 +78,10 @@ namespace LitMotion.Tests.Runtime
         {
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.FixedUpdate)
-                .RunWithoutBinding()
-                .ToYieldInteraction();
-        }
-
-        [UnityTest]
-        public IEnumerator Test_Scheduler_FixedUpdate_IgnoreTimeScale()
-        {
-            Time.timeScale = 0;
-            yield return LMotion.Create(0f, 10f, Duration)
-                .WithScheduler(MotionScheduler.FixedUpdateIgnoreTimeScale)
-                .RunWithoutBinding()
-                .ToYieldInteraction();
-        }
-
-        [UnityTest]
-        public IEnumerator Test_Scheduler_FixedUpdate_Realtime()
-        {
-            Time.timeScale = 0;
-            yield return LMotion.Create(0f, 10f, Duration)
-                .WithScheduler(MotionScheduler.FixedUpdateRealtime)
-                .RunWithoutBinding()
+                .Bind(x =>
+                {
+                    Assert.IsTrue(Time.inFixedTimeStep);
+                })
                 .ToYieldInteraction();
         }
 

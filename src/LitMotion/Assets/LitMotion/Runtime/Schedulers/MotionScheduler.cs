@@ -37,14 +37,6 @@ namespace LitMotion
         /// Scheduler that updates motion at FixedUpdate.
         /// </summary>
         public static readonly IMotionScheduler FixedUpdate = new PlayerLoopMotionScheduler(PlayerLoopTiming.FixedUpdate, MotionTimeKind.Time);
-        /// <summary>
-        /// Scheduler that updates motion at FixedUpdate. (Ignore timescale)
-        /// </summary>
-        public static readonly IMotionScheduler FixedUpdateIgnoreTimeScale = new PlayerLoopMotionScheduler(PlayerLoopTiming.FixedUpdate, MotionTimeKind.UnscaledTime);
-        /// <summary>
-        /// Scheduler that updates motion at FixedUpdate. (Realtime)
-        /// </summary>
-        public static readonly IMotionScheduler FixedUpdateRealtime = new PlayerLoopMotionScheduler(PlayerLoopTiming.FixedUpdate, MotionTimeKind.Realtime);
 
         /// <summary>
         /// Scheduler that updates motion at PreUpdate.

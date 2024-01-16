@@ -72,25 +72,25 @@ namespace LitMotion
             {
                 return playerLoopTiming switch
                 {
-                    PlayerLoopTiming.Initialization => CreateIfNull(ref initialization, storage),
-                    PlayerLoopTiming.EarlyUpdate => CreateIfNull(ref earlyUpdate, storage),
-                    PlayerLoopTiming.FixedUpdate => CreateIfNull(ref fixedUpdate, storage),
-                    PlayerLoopTiming.PreUpdate => CreateIfNull(ref preUpdate, storage),
-                    PlayerLoopTiming.Update => CreateIfNull(ref update, storage),
-                    PlayerLoopTiming.PreLateUpdate => CreateIfNull(ref preLateUpdate, storage),
-                    PlayerLoopTiming.PostLateUpdate => CreateIfNull(ref postLateUpdate, storage),
-                    PlayerLoopTiming.TimeUpdate => CreateIfNull(ref timeUpdate, storage),
+                    PlayerLoopTiming.Initialization => CreateIfNull(playerLoopTiming, ref initialization, storage),
+                    PlayerLoopTiming.EarlyUpdate => CreateIfNull(playerLoopTiming, ref earlyUpdate, storage),
+                    PlayerLoopTiming.FixedUpdate => CreateIfNull(playerLoopTiming, ref fixedUpdate, storage),
+                    PlayerLoopTiming.PreUpdate => CreateIfNull(playerLoopTiming, ref preUpdate, storage),
+                    PlayerLoopTiming.Update => CreateIfNull(playerLoopTiming, ref update, storage),
+                    PlayerLoopTiming.PreLateUpdate => CreateIfNull(playerLoopTiming, ref preLateUpdate, storage),
+                    PlayerLoopTiming.PostLateUpdate => CreateIfNull(playerLoopTiming, ref postLateUpdate, storage),
+                    PlayerLoopTiming.TimeUpdate => CreateIfNull(playerLoopTiming, ref timeUpdate, storage),
                     _ => default,
                 };
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            static (UpdateRunner<TValue, TOptions, TAdapter>, bool) CreateIfNull(ref UpdateRunner<TValue, TOptions, TAdapter> runner, MotionStorage<TValue, TOptions, TAdapter> storage)
+            static (UpdateRunner<TValue, TOptions, TAdapter>, bool) CreateIfNull(PlayerLoopTiming playerLoopTiming, ref UpdateRunner<TValue, TOptions, TAdapter> runner, MotionStorage<TValue, TOptions, TAdapter> storage)
             {
                 if (runner == null)
                 {
                     runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
-                    updateRunners.Add(runner);
+                    GetRunnerList(playerLoopTiming).Add(runner);
                     return (runner, true);
                 }
                 return (runner, false);

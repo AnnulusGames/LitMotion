@@ -56,8 +56,6 @@ Specifies the Scheduler used for motion playback.
 | MotionScheduler.EarlyUpdateIgnoreTimeScale | Updates at the EarlyUpdate timing, ignores the influence of `Time.timeScale`. |
 | MotionScheduler.EarlyUpdateRealtime | Updates at the EarlyUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.FixedUpdate | Updates at the FixedUpdate timing. |
-| MotionScheduler.FixedUpdateIgnoreTimeScale | Updates at the FixedUpdate timing, ignores the influence of `Time.timeScale`. |
-| MotionScheduler.FixedUpdateRealtime | Updates at the FixedUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.PreUpdate | Updates at the PreUpdate timing. |
 | MotionScheduler.PreUpdateIgnoreTimeScale | Updates at the PreUpdate timing, ignores the influence of `Time.timeScale`. |
 | MotionScheduler.PreUpdateRealtime | Updates at the PreUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
