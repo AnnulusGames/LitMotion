@@ -48,6 +48,17 @@ namespace LitMotion
             storageList[handle.StorageId].SetMotionCallbacks(handle, callbacks);
         }
 
+        // For MotionTracker
+        public static (Type ValueType, Type OptionsType, Type AdapterType) GetMotionType(MotionHandle handle)
+        {
+            CheckStorageId(handle);
+            var storageType = storageList[handle.StorageId].GetType();
+            var valueType = storageType.GenericTypeArguments[0];
+            var optionsType = storageType.GenericTypeArguments[1];
+            var adapterType = storageType.GenericTypeArguments[2];
+            return (valueType, optionsType, adapterType);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static void CheckStorageId(in MotionHandle handle)
         {
