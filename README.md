@@ -97,7 +97,7 @@ public class Example : MonoBehaviour
             .WithScheduler(MotionScheduler.FixedUpdate) // Specify execution timing with Scheduler
             .WithOnComplete(() => Debug.Log("Complete!")) // Set a callback
             .WithCancelOnError() // Cancel motion if an exception occurs within Bind
-            .Bind(x => value = x); // Bind to any variable, field, or property
+            .Bind(x => value = x) // Bind to any variable, field, or property
             .AddTo(gameObject); // Cancel motion when the GameObject is destroyed
         
         LMotion.String.Create128Bytes("", "<color=red>Zero</color> Allocation <i>Text</i> Tween! <b>Foooooo!!</b>", 5f)
