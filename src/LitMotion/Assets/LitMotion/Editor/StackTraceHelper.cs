@@ -33,10 +33,9 @@ namespace LitMotion.Editor
                     {
                         sb.Append(' ');
                         sb.AppendFormat(CultureInfo.InvariantCulture, "(at {0})", AppendHyperLink(fileName, sf.GetFileLineNumber().ToString()));
+                        sb.AppendLine();
                     }
                 }
-
-                sb.AppendLine();
             }
             return sb.ToString();
         }
