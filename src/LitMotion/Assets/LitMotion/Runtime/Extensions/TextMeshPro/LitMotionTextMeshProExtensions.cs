@@ -29,7 +29,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.fontSize = x;
             });
         }
@@ -49,7 +48,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.maxVisibleCharacters = x;
             });
         }
@@ -69,7 +67,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.maxVisibleLines = x;
             });
         }
@@ -89,7 +86,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.maxVisibleWords = x;
             });
         }
@@ -109,7 +105,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.color = x;
             });
         }
@@ -129,7 +124,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.r = x;
                 target.color = c;
@@ -151,7 +145,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.g = x;
                 target.color = c;
@@ -173,7 +166,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.b = x;
                 target.color = c;
@@ -195,7 +187,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.a = x;
                 target.color = c;
@@ -220,7 +211,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var enumerator = x.GetEnumerator();
                 var length = 0;
                 var buffer = ArrayPool<char>.Shared.Rent(64);
@@ -251,7 +241,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var enumerator = x.GetEnumerator();
                 var length = 0;
                 var buffer = ArrayPool<char>.Shared.Rent(128);
@@ -282,7 +271,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var enumerator = x.GetEnumerator();
                 var length = 0;
                 var buffer = ArrayPool<char>.Shared.Rent(256);
@@ -313,7 +301,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var enumerator = x.GetEnumerator();
                 var length = 0;
                 var buffer = ArrayPool<char>.Shared.Rent(1024);
@@ -344,7 +331,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 var enumerator = x.GetEnumerator();
                 var length = 0;
                 var buffer = ArrayPool<char>.Shared.Rent(8192);
@@ -374,7 +360,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
 
                 var buffer = ArrayPool<char>.Shared.Rent(128);
                 var bufferOffset = 0;
@@ -400,7 +385,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.SetTextFormat(format, x);
 #else
@@ -426,7 +410,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
 
                 var buffer = ArrayPool<char>.Shared.Rent(128);
                 var bufferOffset = 0;
@@ -452,7 +435,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.SetTextFormat(format, x);
 #else
@@ -479,7 +461,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.SetTextFormat(format, x);
 #else
@@ -504,7 +485,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.SetTextFormat(format, x);
 #else

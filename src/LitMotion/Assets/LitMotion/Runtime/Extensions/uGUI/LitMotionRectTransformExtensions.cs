@@ -22,7 +22,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.anchoredPosition = x;
             });
         }
@@ -42,7 +41,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var p = target.anchoredPosition;
                 p.x = x;
                 target.anchoredPosition = p;
@@ -64,7 +62,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var p = target.anchoredPosition;
                 p.y = x;
                 target.anchoredPosition = p;
@@ -86,7 +83,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.anchoredPosition3D = x;
             });
         }
@@ -106,7 +102,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var p = target.anchoredPosition3D;
                 p.x = x;
                 target.anchoredPosition3D = p;
@@ -128,7 +123,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var p = target.anchoredPosition3D;
                 p.y = x;
                 target.anchoredPosition3D = p;
@@ -150,7 +144,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var p = target.anchoredPosition3D;
                 p.z = x;
                 target.anchoredPosition3D = p;
@@ -172,7 +165,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.anchorMin = x;
             });
         }
@@ -192,7 +184,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.anchorMax = x;
             });
         }
@@ -213,7 +204,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.sizeDelta = x;
             });
         }
@@ -233,7 +223,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var s = target.sizeDelta;
                 s.x = x;
                 target.sizeDelta = s;
@@ -255,7 +244,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var s = target.sizeDelta;
                 s.y = x;
                 target.sizeDelta = s;
@@ -277,7 +265,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 target.pivot = x;
             });
         }
@@ -297,7 +284,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var s = target.pivot;
                 s.x = x;
                 target.pivot = s;
@@ -319,7 +305,6 @@ namespace LitMotion.Extensions
             Error.IsNull(rectTransform);
             return builder.BindWithState(rectTransform, (x, target) =>
             {
-                if (target == null) return;
                 var s = target.pivot;
                 s.y = x;
                 target.pivot = s;

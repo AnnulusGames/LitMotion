@@ -22,7 +22,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetFloat(name, x);
             });
         }
@@ -42,7 +41,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetFloat(nameID, x);
             });
         }
@@ -62,7 +60,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetInteger(name, x);
             });
         }
@@ -82,7 +79,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetInteger(nameID, x);
             });
         }
@@ -102,7 +98,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetColor(name, x);
             });
         }
@@ -122,7 +117,6 @@ namespace LitMotion.Extensions
             Error.IsNull(material);
             return builder.BindWithState(material, (x, m) =>
             {
-                if (m == null) return;
                 m.SetColor(nameID, x);
             });
         }
