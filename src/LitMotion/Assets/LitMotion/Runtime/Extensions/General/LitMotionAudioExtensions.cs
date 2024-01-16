@@ -24,7 +24,6 @@ namespace LitMotion.Extensions
             Error.IsNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
             {
-                if (target == null) return;
                 target.volume = x;
             });
         }
@@ -44,7 +43,6 @@ namespace LitMotion.Extensions
             Error.IsNull(audioSource);
             return builder.BindWithState(audioSource, (x, target) =>
             {
-                if (target == null) return;
                 target.pitch = x;
             });
         }
@@ -64,7 +62,6 @@ namespace LitMotion.Extensions
             Error.IsNull(audioMixer);
             return builder.BindWithState(audioMixer, (x, target) =>
             {
-                if (target == null) return;
                 target.SetFloat(name, x);
             });
         }

@@ -22,7 +22,6 @@ namespace LitMotion.Extensions
             Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
-                if (m == null) return;
                 m.color = x;
             });
         }
@@ -42,7 +41,6 @@ namespace LitMotion.Extensions
             Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
-                if (m == null) return;
                 var c = m.color;
                 c.r = x;
                 m.color = c;
@@ -64,7 +62,6 @@ namespace LitMotion.Extensions
             Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
-                if (m == null) return;
                 var c = m.color;
                 c.g = x;
                 m.color = c;
@@ -86,7 +83,6 @@ namespace LitMotion.Extensions
             Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
-                if (m == null) return;
                 var c = m.color;
                 c.b = x;
                 m.color = c;
@@ -108,7 +104,6 @@ namespace LitMotion.Extensions
             Error.IsNull(spriteRenderer);
             return builder.BindWithState(spriteRenderer, (x, m) =>
             {
-                if (m == null) return;
                 var c = m.color;
                 c.a = x;
                 m.color = c;

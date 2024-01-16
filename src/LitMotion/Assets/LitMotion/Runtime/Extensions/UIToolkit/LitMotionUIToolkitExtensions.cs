@@ -30,7 +30,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.left = x;
             });
         }
@@ -50,7 +49,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.right = x;
             });
         }
@@ -70,7 +68,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.top = x;
             });
         }
@@ -90,7 +87,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.bottom = x;
             });
         }
@@ -110,7 +106,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.width = x;
             });
         }
@@ -130,7 +125,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.height = x;
             });
         }
@@ -150,7 +144,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.color = x;
             });
         }
@@ -170,7 +163,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.color.value;
                 c.r = x;
                 target.style.color = c;
@@ -192,7 +184,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.color.value;
                 c.g = x;
                 target.style.color = c;
@@ -214,7 +205,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.color.value;
                 c.b = x;
                 target.style.color = c;
@@ -236,7 +226,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.color.value;
                 c.a = x;
                 target.style.color = c;
@@ -258,7 +247,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.backgroundColor = x;
             });
         }
@@ -278,7 +266,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.backgroundColor.value;
                 c.r = x;
                 target.style.backgroundColor = c;
@@ -300,7 +287,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.backgroundColor.value;
                 c.g = x;
                 target.style.backgroundColor = c;
@@ -322,7 +308,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.backgroundColor.value;
                 c.b = x;
                 target.style.backgroundColor = c;
@@ -344,7 +329,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.style.backgroundColor.value;
                 c.a = x;
                 target.style.backgroundColor = c;
@@ -366,7 +350,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.opacity = x;
             });
         }
@@ -386,7 +369,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.fontSize = x;
             });
         }
@@ -406,7 +388,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.wordSpacing = x;
             });
         }
@@ -426,7 +407,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.translate = new Translate(x.x, x.y, x.z);
             });
         }
@@ -446,7 +426,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.translate = new Translate(x.x, x.y);
             });
         }
@@ -466,7 +445,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.rotate = new Rotate(new Angle(x, angleUnit));
             });
         }
@@ -486,7 +464,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.scale = new Scale(x);
             });
         }
@@ -506,7 +483,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.transformOrigin = new TransformOrigin(x.x, x.y, x.z);
             });
         }
@@ -526,7 +502,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualElement);
             return builder.BindWithState(visualElement, (x, target) =>
             {
-                if (target == null) return;
                 target.style.transformOrigin = new TransformOrigin(x.x, x.y);
             });
         }
@@ -550,7 +525,6 @@ namespace LitMotion.Extensions
             Error.IsNull(progressBar);
             return builder.BindWithState(progressBar, (x, target) =>
             {
-                if (target == null) return;
                 target.value = x;
             });
         }
@@ -574,7 +548,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -594,7 +567,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -614,7 +586,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -634,7 +605,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -654,7 +624,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -674,7 +643,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -695,7 +663,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, format, (x, target, foramt) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else
@@ -719,7 +686,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -740,7 +706,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else
@@ -764,7 +729,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -785,7 +749,6 @@ namespace LitMotion.Extensions
             Error.IsNull(textElement);
             return builder.BindWithState(textElement, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else

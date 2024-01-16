@@ -24,7 +24,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetFloat(name, x);
             });
         }
@@ -44,7 +43,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetFloat(nameID, x);
             });
         }
@@ -64,7 +62,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetInt(name, x);
             });
         }
@@ -84,7 +81,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetFloat(nameID, x);
             });
         }
@@ -104,7 +100,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector2(name, x);
             });
         }
@@ -124,7 +119,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector2(nameID, x);
             });
         }
@@ -144,7 +138,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector3(name, x);
             });
         }
@@ -164,7 +157,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector3(nameID, x);
             });
         }
@@ -184,7 +176,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector4(name, x);
             });
         }
@@ -204,7 +195,6 @@ namespace LitMotion.Extensions
             Error.IsNull(visualEffect);
             return builder.BindWithState(visualEffect, (x, target) =>
             {
-                if (target == null) return;
                 target.SetVector4(nameID, x);
             });
         }

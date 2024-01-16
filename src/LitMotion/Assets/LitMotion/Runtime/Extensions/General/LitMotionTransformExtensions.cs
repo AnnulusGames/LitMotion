@@ -22,7 +22,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.position = x;
             });
         }
@@ -42,7 +41,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.position;
                 p.x = x;
                 t.position = p;
@@ -64,7 +62,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.position;
                 p.y = x;
                 t.position = p;
@@ -86,7 +83,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.position;
                 p.z = x;
                 t.position = p;
@@ -108,7 +104,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.localPosition = x;
             });
         }
@@ -128,7 +123,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localPosition;
                 p.x = x;
                 t.localPosition = p;
@@ -151,7 +145,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localPosition;
                 p.y = x;
                 t.localPosition = p;
@@ -173,7 +166,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localPosition;
                 p.z = x;
                 t.localPosition = p;
@@ -195,7 +187,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.rotation = x;
             });
         }
@@ -215,7 +206,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.localRotation = x;
             });
         }
@@ -235,7 +225,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.eulerAngles = x;
             });
         }
@@ -255,7 +244,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.eulerAngles;
                 p.x = x;
                 t.eulerAngles = p;
@@ -277,7 +265,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.eulerAngles;
                 p.y = x;
                 t.eulerAngles = p;
@@ -299,7 +286,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.eulerAngles;
                 p.z = x;
                 t.eulerAngles = p;
@@ -321,7 +307,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.localEulerAngles = x;
             });
         }
@@ -341,7 +326,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localEulerAngles;
                 p.x = x;
                 t.localEulerAngles = p;
@@ -363,7 +347,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localEulerAngles;
                 p.y = x;
                 t.localEulerAngles = p;
@@ -385,7 +368,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localEulerAngles;
                 p.z = x;
                 t.localEulerAngles = p;
@@ -407,7 +389,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 t.localScale = x;
             });
         }
@@ -427,7 +408,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localScale;
                 p.x = x;
                 t.localScale = p;
@@ -449,7 +429,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localScale;
                 p.y = x;
                 t.localScale = p;
@@ -471,7 +450,6 @@ namespace LitMotion.Extensions
             Error.IsNull(transform);
             return builder.BindWithState(transform, (x, t) =>
             {
-                if (t == null) return;
                 var p = t.localScale;
                 p.z = x;
                 t.localScale = p;

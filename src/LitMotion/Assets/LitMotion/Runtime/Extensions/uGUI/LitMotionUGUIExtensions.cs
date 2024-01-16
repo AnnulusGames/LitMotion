@@ -28,7 +28,6 @@ namespace LitMotion.Extensions
             Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
-                if (target == null) return;
                 target.color = x;
             });
         }
@@ -48,7 +47,6 @@ namespace LitMotion.Extensions
             Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.r = x;
                 target.color = c;
@@ -70,7 +68,6 @@ namespace LitMotion.Extensions
             Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.g = x;
                 target.color = c;
@@ -92,7 +89,6 @@ namespace LitMotion.Extensions
             Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.b = x;
                 target.color = c;
@@ -114,7 +110,6 @@ namespace LitMotion.Extensions
             Error.IsNull(graphic);
             return builder.BindWithState(graphic, (x, target) =>
             {
-                if (target == null) return;
                 var c = target.color;
                 c.a = x;
                 target.color = c;
@@ -136,7 +131,6 @@ namespace LitMotion.Extensions
             Error.IsNull(image);
             return builder.BindWithState(image, (x, target) =>
             {
-                if (target == null) return;
                 target.fillAmount = x;
             });
         }
@@ -156,7 +150,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.fontSize = x;
             });
         }
@@ -176,7 +169,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -196,7 +188,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -216,7 +207,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -236,7 +226,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -256,7 +245,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ConvertToString();
             });
         }
@@ -276,7 +264,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -297,7 +284,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else
@@ -321,7 +307,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -342,7 +327,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else
@@ -366,7 +350,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, (x, target) =>
             {
-                if (target == null) return;
                 target.text = x.ToString();
             });
         }
@@ -387,7 +370,6 @@ namespace LitMotion.Extensions
             Error.IsNull(text);
             return builder.BindWithState(text, format, (x, target, format) =>
             {
-                if (target == null) return;
 #if LITMOTION_SUPPORT_ZSTRING
                 target.text = ZString.Format(format, x);
 #else
