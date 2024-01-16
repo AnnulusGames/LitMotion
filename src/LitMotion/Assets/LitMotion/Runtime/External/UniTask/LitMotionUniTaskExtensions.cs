@@ -116,7 +116,8 @@ namespace LitMotion
                 result.cancellationRegistration = cancellationToken.RegisterWithoutCaptureExecutionContext(x =>
                 {
                     var source = (MotionConfiguredSource)x;
-                    source.motionHandle.Cancel();
+                    var motionHandle = source.motionHandle;
+                    if (motionHandle.IsActive()) motionHandle.Cancel();
                     source.core.TrySetCanceled(source.cancellationToken);
                 }, result);
             }
