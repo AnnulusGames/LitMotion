@@ -20,12 +20,16 @@ namespace LitMotion.Editor
         MotionTrackerTreeView treeView;
         object splitterState;
 
+        const string EnableTrackingPrefsKey = "LitMotion-MotionTracker-EnableTracking";
+        const string EnableStackTracePrefsKey = "LitMotion-MotionTracker-EnableStackTrace";
+
         void OnEnable()
         {
             instance = this;
             splitterState = SplitterGUILayout.CreateSplitterState(new float[] { 75f, 25f }, new int[] { 32, 32 }, null);
             treeView = new MotionTrackerTreeView();
-            // MotionTracker.EnableTracking = EditorPrefs.GetBool(TaskTracker.EnableAutoReloadKey, false);
+            MotionTracker.EnableTracking = EditorPrefs.GetBool(EnableTrackingPrefsKey, false);
+            MotionTracker.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
         }
 
         void OnGUI()
@@ -51,10 +55,10 @@ namespace LitMotion.Editor
                 MotionTracker.EnableTracking = !MotionTracker.EnableTracking;
             }
 
-            // if (GUILayout.Toggle(MotionTracker.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != EnableStackTrace)
-            // {
-            //     MotionTracker.EnableStackTrace = !MotionTracker.EnableStackTrace;
-            // }
+            if (GUILayout.Toggle(MotionTracker.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionTracker.EnableStackTrace)
+            {
+                MotionTracker.EnableStackTrace = !MotionTracker.EnableStackTrace;
+            }
 
             GUILayout.FlexibleSpace();
 
@@ -83,7 +87,7 @@ namespace LitMotion.Editor
 
             EditorGUILayout.BeginVertical(tableListStyle, EmptyLayoutOption);
 
-            this.tableScroll = EditorGUILayout.BeginScrollView(this.tableScroll, new GUILayoutOption[]
+            tableScroll = EditorGUILayout.BeginScrollView(this.tableScroll, new GUILayoutOption[]
             {
                 GUILayout.ExpandWidth(true),
                 GUILayout.MaxWidth(2000f)

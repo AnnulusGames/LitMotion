@@ -116,7 +116,7 @@ namespace LitMotion.Editor
                 { 
                     MotionType = $"[{tracking.ValueType.Name}, {tracking.OptionsType.Name}, {tracking.AdapterType.Name}]",
                     Elapsed = (DateTime.UtcNow - tracking.CreationTime).TotalSeconds.ToString("00.00"),
-                    Position = ""
+                    Position = tracking.StackTrace?.ToString()
                 });
                 id++;
             }

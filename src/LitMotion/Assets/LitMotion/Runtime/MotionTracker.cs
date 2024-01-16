@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LitMotion
 {
     public static class MotionTracker
     {
         public static bool EnableTracking = false;
-        // public static bool EnableStackTrace = false;
+        public static bool EnableStackTrace = false;
 
         public static IReadOnlyList<TrackingState> Items => trackings;
         static readonly List<TrackingState> trackings = new(16);
@@ -16,6 +17,8 @@ namespace LitMotion
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
             state.CreationTime = DateTime.UtcNow;
+            
+            if (EnableStackTrace) state.StackTrace = new StackTrace(2, true);
 
             var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
             callbackData.OnCompleteAction += state.ReleaseDelegate;
@@ -52,6 +55,7 @@ namespace LitMotion
             public Type OptionsType;
             public Type AdapterType;
             public DateTime CreationTime;
+            public StackTrace StackTrace;
 
             public readonly Action ReleaseDelegate;
 
@@ -62,6 +66,7 @@ namespace LitMotion
                 OptionsType = default;
                 AdapterType = default;
                 CreationTime = default;
+                StackTrace = default;
                 pool.Push(this);
             }
         }
