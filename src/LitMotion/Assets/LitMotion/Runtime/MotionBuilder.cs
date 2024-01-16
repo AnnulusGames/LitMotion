@@ -307,7 +307,7 @@ namespace LitMotion
                     handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
                 }
 #else
-                handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
 #endif
             }
             else
@@ -317,7 +317,7 @@ namespace LitMotion
 
             if (MotionTracker.EnableTracking)
             {
-                MotionTracker.AddTracking(handle);
+                MotionTracker.AddTracking(handle, scheduler);
             }
 
             return handle;

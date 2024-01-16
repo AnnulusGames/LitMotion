@@ -8,8 +8,8 @@ namespace LitMotion
 {
     internal sealed class PlayerLoopMotionScheduler : IMotionScheduler
     {
-        readonly PlayerLoopTiming playerLoopTiming;
-        readonly MotionTimeKind timeKind;
+        public readonly PlayerLoopTiming playerLoopTiming;
+        public readonly MotionTimeKind timeKind;
 
         internal PlayerLoopMotionScheduler(PlayerLoopTiming playerLoopTiming, MotionTimeKind timeKind)
         {

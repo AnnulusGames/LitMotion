@@ -12,11 +12,15 @@ namespace LitMotion
         public static IReadOnlyList<TrackingState> Items => trackings;
         static readonly List<TrackingState> trackings = new(16);
 
-        public static void AddTracking(MotionHandle motionHandle, int skipFrames = 3)
+        public static void AddTracking(MotionHandle motionHandle, IMotionScheduler scheduler, int skipFrames = 3)
         {
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
+            state.Scheduler = scheduler;
             state.CreationTime = DateTime.UtcNow;
+#if UNITY_EDITOR
+            state.CreatedOnEditor = UnityEditor.EditorApplication.isPlaying;
+#endif
 
             if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
@@ -54,8 +58,10 @@ namespace LitMotion
             public Type ValueType;
             public Type OptionsType;
             public Type AdapterType;
+            public IMotionScheduler Scheduler;
             public DateTime CreationTime;
             public StackTrace StackTrace;
+            public bool CreatedOnEditor;
 
             public readonly Action ReleaseDelegate;
 
@@ -65,8 +71,10 @@ namespace LitMotion
                 ValueType = default;
                 OptionsType = default;
                 AdapterType = default;
+                Scheduler = default;
                 CreationTime = default;
                 StackTrace = default;
+                CreatedOnEditor = default;
                 pool.Push(this);
             }
         }
