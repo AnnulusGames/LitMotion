@@ -17,7 +17,7 @@ namespace LitMotion
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
             state.CreationTime = DateTime.UtcNow;
-            
+
             if (EnableStackTrace) state.StackTrace = new StackTrace(2, true);
 
             var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
@@ -28,7 +28,7 @@ namespace LitMotion
             trackings.Add(state);
         }
 
-        public static void Reset()
+        public static void Clear()
         {
             trackings.Clear();
         }

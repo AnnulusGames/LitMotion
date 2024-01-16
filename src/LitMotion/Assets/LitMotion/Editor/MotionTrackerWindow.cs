@@ -41,7 +41,7 @@ namespace LitMotion.Editor
             SplitterGUILayout.EndVerticalSplit();
         }
 
-        static readonly GUIContent ResetHeadContent = EditorGUIUtility.TrTextContent("Reset");
+        static readonly GUIContent ClearHeadContent = EditorGUIUtility.TrTextContent("Clear");
         static readonly GUIContent EnableTrackingHeadContent = EditorGUIUtility.TrTextContent("Enable Tracking");
         static readonly GUIContent EnableStackTraceHeadContent = EditorGUIUtility.TrTextContent("Enable StackTrace");
 
@@ -62,9 +62,9 @@ namespace LitMotion.Editor
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button(ResetHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption))
+            if (GUILayout.Button(ClearHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption))
             {
-                MotionTracker.Reset();
+                MotionTracker.Clear();
                 treeView.ReloadAndSort();
                 Repaint();
             }
