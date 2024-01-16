@@ -57,8 +57,6 @@ LMotion.Create(0f, 10f, 2f)
 | MotionScheduler.EarlyUpdateIgnoreTimeScale | EarlyUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
 | MotionScheduler.EarlyUpdateRealtime | EarlyUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.FixedUpdate | FixedUpdateのタイミングで更新を行います。 |
-| MotionScheduler.FixedUpdateIgnoreTimeScale | FixedUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
-| MotionScheduler.FixedUpdateRealtime | FixedUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
 | MotionScheduler.PreUpdate | PreUpdateのタイミングで更新を行います。 |
 | MotionScheduler.PreUpdateIgnoreTimeScale | PreUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
 | MotionScheduler.PreUpdateRealtime | PreUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
