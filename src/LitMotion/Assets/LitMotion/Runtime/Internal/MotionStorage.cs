@@ -303,7 +303,7 @@ namespace LitMotion
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
 
             try
@@ -312,7 +312,7 @@ namespace LitMotion
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
 
             callbackData.IsCallbackRunning = false;
