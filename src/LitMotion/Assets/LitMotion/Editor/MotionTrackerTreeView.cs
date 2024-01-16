@@ -26,7 +26,7 @@ namespace LitMotion.Editor
             set
             {
                 position = value;
-                PositionFirstLine = GetFirstLine(position);
+                PositionFirstLine = value == null ? string.Empty : GetFirstLine(position);
             }
         }
 
