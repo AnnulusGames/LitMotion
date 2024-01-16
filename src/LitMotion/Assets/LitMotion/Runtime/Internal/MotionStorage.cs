@@ -248,7 +248,16 @@ namespace LitMotion
             }
 
             motion.Status = MotionStatus.Canceled;
-            callbacksArray[denseIndex].OnCancelAction?.Invoke();
+
+            ref var callbackData = ref GetCallbacksSpan()[denseIndex];
+            try
+            {
+                callbackData.OnCancelAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+            }
         }
 
         public void Complete(MotionHandle handle)
