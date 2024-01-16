@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace LitMotion
@@ -7,8 +7,9 @@ namespace LitMotion
     [AddComponentMenu("")]
     internal sealed class MotionHandleLinker : MonoBehaviour
     {
-        readonly List<MotionHandle> handleList = new(8);
+        readonly MinimumList<MotionHandle> handleList = new(8);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Register(MotionHandle handle)
         {
             handleList.Add(handle);
@@ -16,9 +17,10 @@ namespace LitMotion
 
         void OnDestroy()
         {
-            for (int i = 0; i < handleList.Count; i++)
+            var span = handleList.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                var handle = handleList[i];
+                ref var handle = ref span[i];
                 if (handle.IsActive()) handle.Cancel();
             }
         }
