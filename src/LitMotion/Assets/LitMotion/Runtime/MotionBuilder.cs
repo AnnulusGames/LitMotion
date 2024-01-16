@@ -292,21 +292,35 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal readonly MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
         {
+            MotionHandle handle;
+
             if (scheduler == null)
             {
 #if UNITY_EDITOR
                 if (!UnityEditor.EditorApplication.isPlaying)
                 {
                     data.StartTime = UnityEditor.EditorApplication.timeSinceStartup;
-                    return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
+                    handle = EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
+                else
+                {
+                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                }
+#else
+                handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
 #endif
-                return MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
             }
             else
             {
-                return scheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                handle = scheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
             }
+
+            if (MotionTracker.EnableTracking)
+            {
+                MotionTracker.AddTracking(handle);
+            }
+
+            return handle;
         }
 
         /// <summary>
