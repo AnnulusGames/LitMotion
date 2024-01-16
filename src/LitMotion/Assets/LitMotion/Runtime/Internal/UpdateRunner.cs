@@ -59,7 +59,7 @@ namespace LitMotion
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogException(ex);
+                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (callbacks.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
@@ -76,7 +76,7 @@ namespace LitMotion
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogException(ex);
+                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (callbacks.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
@@ -91,7 +91,7 @@ namespace LitMotion
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogException(ex);
+                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                         }
                     }
                 }

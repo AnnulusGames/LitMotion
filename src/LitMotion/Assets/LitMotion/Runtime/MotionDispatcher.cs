@@ -123,12 +123,34 @@ namespace LitMotion
             };
         }
 
+        static Action<Exception> unhandledException = DefaultUnhandledExceptionHandler;
         static readonly PlayerLoopTiming[] playerLoopTimings = (PlayerLoopTiming[])Enum.GetValues(typeof(PlayerLoopTiming));
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {
             Clear();
+        }
+
+        /// <summary>
+        /// Set handling of unhandled exceptions.
+        /// </summary>
+        public static void RegisterUnhandledExceptionHandler(Action<Exception> unhandledExceptionHandler)
+        {
+            unhandledException = unhandledExceptionHandler;
+        }
+
+        /// <summary>
+        /// Get handling of unhandled exceptions.
+        /// </summary>
+        public static Action<Exception> GetUnhandledExceptionHandler()
+        {
+            return unhandledException;
+        }
+
+        static void DefaultUnhandledExceptionHandler(Exception exception)
+        {
+            Debug.LogException(exception);
         }
 
         /// <summary>

@@ -124,5 +124,18 @@ namespace LitMotion.Tests.Runtime
             Assert.IsFalse(completed);
             LogAssert.ignoreFailingMessages = false;
         }
+
+        [UnityTest]
+        public IEnumerator Test_RegisterUnhandledExceptionHandler()
+        {
+            var defaultHandler = MotionDispatcher.GetUnhandledExceptionHandler();
+            MotionDispatcher.RegisterUnhandledExceptionHandler(ex => Debug.LogWarning(ex));
+            LogAssert.NoUnexpectedReceived();
+            yield return LMotion.Create(0f, 10f, 0.5f)
+                .WithOnComplete(() => throw new Exception("Test"))
+                .RunWithoutBinding()
+                .ToYieldInteraction();
+            MotionDispatcher.RegisterUnhandledExceptionHandler(defaultHandler);
+        }
     }
 }
