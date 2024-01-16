@@ -26,6 +26,7 @@ namespace LitMotion
             var callbacks = builder.BuildCallbackData(subject, (x, subject) => subject.OnNext(x));
             callbacks.OnCompleteAction = builder.buffer.OnComplete;
             callbacks.OnCompleteAction += () => subject.OnCompleted();
+            callbacks.OnCancelAction += () => subject.OnCompleted();
             var scheduler = builder.buffer.Scheduler;
             var entity = builder.BuildMotionData();
 
