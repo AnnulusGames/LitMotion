@@ -9,7 +9,7 @@ using UnityEditor.IMGUI.Controls;
 
 namespace LitMotion.Editor
 {
-    public sealed class MotionTrackerViewItem : TreeViewItem
+    internal sealed class MotionTrackerViewItem : TreeViewItem
     {
         public MotionTrackerViewItem(int id) : base(id) { }
 
@@ -48,7 +48,7 @@ namespace LitMotion.Editor
         }
     }
 
-    public class MotionTrackerTreeView : TreeView
+    internal sealed class MotionTrackerTreeView : TreeView
     {
         const string sortedColumnIndexStateKey = "MotionTrackerTreeView_sortedColumnIndex";
 

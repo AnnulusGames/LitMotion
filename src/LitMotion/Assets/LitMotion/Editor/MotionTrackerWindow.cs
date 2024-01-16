@@ -4,6 +4,9 @@ using UnityEditor;
 
 namespace LitMotion.Editor
 {
+    /// <summary>
+    /// Editor window that displays a list of motions being tracked.
+    /// </summary>
     public class MotionTrackerWindow : EditorWindow
     {
         static MotionTrackerWindow instance;

@@ -4,6 +4,9 @@ using System.Diagnostics;
 
 namespace LitMotion
 {
+    /// <summary>
+    /// Provides functionality for tracking active motions.
+    /// </summary>
     public static class MotionTracker
     {
         public static bool EnableTracking = false;
