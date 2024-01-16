@@ -1,9 +1,8 @@
-using System;
 using System.Runtime.CompilerServices;
 
 namespace LitMotion
 {
-    public static class Utf16StringHelper
+    internal static class Utf16StringHelper
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteInt32(ref char[] buffer, ref int bufferOffset, int value)
