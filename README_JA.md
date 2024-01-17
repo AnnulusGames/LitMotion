@@ -24,9 +24,12 @@ LitMotionは[Magic Tween](https://github.com/AnnulusGames/MagicTween)に続い�
 - 構造体ベースの設計でゼロアロケーションを達成
 - DOTSを活用して最適化された極めてハイパフォーマンスな実装
 - ランタイムとエディタの両方で動作
+- 実行するPlayerLoopを指定する豊富なSchedulerを用意
 - イージングや繰り返しなど複雑な設定を適用可能
 - コールバック/コルーチンによる完了の待機
 - FixedStringとTextMeshProによるゼロアロケーションな文字列のアニメーション
+- TextMeshProのテキストを文字ごとにアニメーション可能
+- MotionTrackerウィンドウによる動作中のモーションの追跡
 - UniRxを利用したObservableへの変換
 - UniTaskを利用したasync/await対応
 - `IMotionOptions`と`IMotionAdapter`を用いた型の拡張
@@ -120,6 +123,24 @@ public class Example : MonoBehaviour
         }
     }
 
+    // TMP_Textの個別の文字をアニメーションさせる
+    void TMPCharMotionExample()
+    {
+        // TMP_Text.textInfo.characterCountから文字数を取得
+        for (int i = 0; i < text.textInfo.characterCount; i++)
+        {
+            LMotion.Create(Color.white, Color.red, 1f)
+                .WithDelay(i * 0.1f)
+                .WithEase(Ease.OutQuad)
+                .BindToTMPCharColor(text, i); // i番目の文字にバインド
+            
+            LMotion.Punch.Create(Vector3.zero, Vector3.up * 30f, 1f)
+                .WithDelay(i * 0.1f)
+                .WithEase(Ease.OutQuad)
+                .BindToTMPCharPosition(text, i);
+        }
+    }
+
     // コルーチンに対応
     IEnumerator CoroutineExample()
     {
@@ -150,6 +171,14 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+## Motion Tracker
+
+Motion Trackerウィンドウを使用して動作中の全てのモーションを追跡できます。
+
+<img src="https://annulusgames.github.io/LitMotion/images/motion-tracker-window.png" width="800">
+
+詳細は[Motion Tracker](https://annulusgames.github.io/LitMotion/articles/ja/motion-tracker.html)を参照してください。
 
 ## パフォーマンス
 

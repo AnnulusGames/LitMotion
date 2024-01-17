@@ -24,9 +24,12 @@ The full version of documentation can be found [here](https://annulusgames.githu
 - Achieves zero allocations due to its struct-based design.
 - Highly optimized using DOTS (Data-Oriented Technology Stack).
 - Works in both runtime and editor.
+- Provides a rich set of schedulers, allowing you to specify the PlayerLoop to execute.
 - Apply complex settings like easing and looping.
 - Wait for completion via callbacks/coroutines.
 - Zero allocation string animation with FixedString and TextMeshPro
+- Character animation for TextMeshPro text.
+- Motion Tracker Window for monitoring motions in progress.
 - Convert to Observables using UniRx.
 - Supports async/await via UniTask.
 - Extend types using `IMotionOptions` and `IMotionAdapter`.
@@ -119,6 +122,24 @@ public class Example : MonoBehaviour
             handle.Complete(); // Complete the motion
         }
     }
+    
+    // Animate TMP_Text characters
+    void TMPCharMotionExample()
+    {
+        // Get the number of characters from TMP_Text.textInfo.characterCount
+        for (int i = 0; i < text.textInfo.characterCount; i++)
+        {
+            LMotion.Create(Color.white, Color.red, 1f)
+                .WithDelay(i * 0.1f)
+                .WithEase(Ease.OutQuad)
+                .BindToTMPCharColor(text, i); // Bind to the i-th character
+
+            LMotion.Punch.Create(Vector3.zero, Vector3.up * 30f, 1f)
+                .WithDelay(i * 0.1f)
+                .WithEase(Ease.OutQuad)
+                .BindToTMPCharPosition(text, i);
+        }
+    }
 
     // Coroutine support
     IEnumerator CoroutineExample()
@@ -150,6 +171,14 @@ public class Example : MonoBehaviour
     }
 }
 ```
+
+## Motion Tracker
+
+You can track all active motions using the Motion Tracker Window.
+
+<img src="https://annulusgames.github.io/LitMotion/images/motion-tracker-window.png" width="800">
+
+For more details, please refer to [Motion Tracker](https://annulusgames.github.io/LitMotion/articles/en/motion-tracker.html).
 
 ## Performance
 
