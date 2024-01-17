@@ -124,14 +124,14 @@ namespace LitMotion.Editor
 #if UNITY_EDITOR
                 if (isCreatedOnEditor)
                 {
-                    scheduler = MotionScheduler.Default;
+                    scheduler = MotionScheduler.Update;
                 }
                 else
                 {
                     scheduler = EditorMotionScheduler.Update;
                 }
 #else
-                scheduler = MotionScheduler.Default;
+                scheduler = MotionScheduler.Update;
 #endif
             }
 

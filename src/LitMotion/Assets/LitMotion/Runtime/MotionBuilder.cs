@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace LitMotion
@@ -8,17 +7,21 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
-        static MotionBuilderBuffer()
-        {
-            pool = new(4);
-            for (int i = 0; i < 4; i++) pool.Push(new());
-        }
-
-        static readonly Stack<MotionBuilderBuffer<TValue, TOptions>> pool;
+        static MotionBuilderBuffer<TValue, TOptions> PoolRoot = new();
 
         public static MotionBuilderBuffer<TValue, TOptions> Rent()
         {
-            if (!pool.TryPop(out var result)) result = new();
+            MotionBuilderBuffer<TValue, TOptions> result;
+            if (PoolRoot == null)
+            {
+                result = new();
+            }
+            else
+            {
+                result = PoolRoot;
+                PoolRoot = PoolRoot.NextNode;
+                result.NextNode = null;
+            }
             return result;
         }
 
@@ -43,11 +46,13 @@ namespace LitMotion
 
             if (buffer.Version != ushort.MaxValue)
             {
-                pool.Push(buffer);
+                buffer.NextNode = PoolRoot;
+                PoolRoot = buffer;
             }
         }
 
         public ushort Version;
+        public MotionBuilderBuffer<TValue, TOptions> NextNode;
 
         public float Duration;
         public Ease Ease;
@@ -312,10 +317,15 @@ namespace LitMotion
                 }
                 else
                 {
-                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                    // Inlined PlayerLoopMotionScheduler
+                    data.TimeKind = MotionTimeKind.Time;
+                    data.StartTime = UnityEngine.Time.timeAsDouble;
+                    handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
                 }
 #else
-                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                data.TimeKind = MotionTimeKind.Time;
+                data.StartTime = UnityEngine.Time.timeAsDouble;
+                handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
 #endif
             }
             else

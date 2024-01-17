@@ -5,8 +5,6 @@ namespace LitMotion
     /// </summary>
     public static class MotionScheduler
     {
-        internal static PlayerLoopMotionScheduler Default = new(PlayerLoopTiming.Update, MotionTimeKind.Time);
-
         /// <summary>
         /// Scheduler that updates motion at Initialization.
         /// </summary>
