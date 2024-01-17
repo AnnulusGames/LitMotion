@@ -317,10 +317,15 @@ namespace LitMotion
                 }
                 else
                 {
-                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                    // Inlined PlayerLoopMotionScheduler
+                    data.TimeKind = MotionTimeKind.Time;
+                    data.StartTime = UnityEngine.Time.timeAsDouble;
+                    handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
                 }
 #else
-                    handle = MotionScheduler.Default.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                data.TimeKind = MotionTimeKind.Time;
+                data.StartTime = UnityEngine.Time.timeAsDouble;
+                handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
 #endif
             }
             else
