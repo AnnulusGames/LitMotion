@@ -492,6 +492,186 @@ namespace LitMotion.Extensions
 #endif
             });
         }
+
+        /// <summary>
+        /// Create motion data and bind it to the character color.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharColor<TOptions, TAdapter>(this MotionBuilder<Color, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharColor(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character color.r.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharColorR<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharColorR(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character color.g.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharColorG<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharColorG(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character color.b.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharColorB<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharColorB(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character color.a.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharColorA<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharColorA(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character position.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharPosition<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharPosition(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character rotation.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharRotation<TOptions, TAdapter>(this MotionBuilder<Quaternion, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharRotation(target, charIndex, x);
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character rotation (using euler angles).
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharEulerAngles<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharRotation(target, charIndex, Quaternion.Euler(x));
+            });
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character scale.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharScale<TOptions, TAdapter>(this MotionBuilder<Vector3, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.BindWithState(text, (x, target) =>
+            {
+                TextMeshProHelper.SetCharScale(target, charIndex, x);
+            });
+        }
     }
 }
 #endif
