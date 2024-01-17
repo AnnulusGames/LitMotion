@@ -10,8 +10,8 @@ namespace LitMotion.Extensions
         public static void SetCharColor(TMP_Text text, int charIndex, Color color)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
             for (var i = 0; i < 4; i++)
             {
@@ -23,10 +23,10 @@ namespace LitMotion.Extensions
         public static void SetCharColorR(TMP_Text text, int charIndex, float r)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
-            var colorSpan = meshInfo.colors32.AsSpan();
+            var colorSpan = meshInfo.colors32;
             var value = (byte)Mathf.Round(Mathf.Clamp01(r) * 255f);
             for (var i = 0; i < 4; i++)
             {
@@ -38,10 +38,10 @@ namespace LitMotion.Extensions
         public static void SetCharColorG(TMP_Text text, int charIndex, float g)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
-            var colorSpan = meshInfo.colors32.AsSpan();
+            var colorSpan = meshInfo.colors32;
             var value = (byte)Mathf.Round(Mathf.Clamp01(g) * 255f);
             for (var i = 0; i < 4; i++)
             {
@@ -53,10 +53,10 @@ namespace LitMotion.Extensions
         public static void SetCharColorB(TMP_Text text, int charIndex, float b)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
-            var colorSpan = meshInfo.colors32.AsSpan();
+            var colorSpan = meshInfo.colors32;
             var value = (byte)Mathf.Round(Mathf.Clamp01(b) * 255f);
             for (var i = 0; i < 4; i++)
             {
@@ -68,10 +68,10 @@ namespace LitMotion.Extensions
         public static void SetCharColorA(TMP_Text text, int charIndex, float a)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
-            var colorSpan = meshInfo.colors32.AsSpan();
+            var colorSpan = meshInfo.colors32;
             var value = (byte)Mathf.Round(Mathf.Clamp01(a) * 255f);
             for (var i = 0; i < 4; i++)
             {
@@ -83,11 +83,11 @@ namespace LitMotion.Extensions
         public static void SetCharPosition(TMP_Text text, int charIndex, Vector3 offset)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
 
             if (meshInfo.vertices == null) return;
-            var verticesSpan = meshInfo.vertices.AsSpan();
+            var verticesSpan = meshInfo.vertices;
 
             var initCharPosition = (charInfo.vertex_BL.position + charInfo.vertex_TR.position) * 0.5f;
             var currentCharPosition = (verticesSpan[charInfo.vertexIndex] + verticesSpan[charInfo.vertexIndex + 2]) * 0.5f;
@@ -102,11 +102,11 @@ namespace LitMotion.Extensions
         public static void SetCharRotation(TMP_Text text, int charIndex, Quaternion rotation)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
 
             if (meshInfo.vertices == null) return;
-            var verticesSpan = meshInfo.vertices.AsSpan();
+            var verticesSpan = meshInfo.vertices;
 
             var initCharPosition = (charInfo.vertex_BL.position + charInfo.vertex_TR.position) * 0.5f;
             var currentCharPosition = (verticesSpan[charInfo.vertexIndex] + verticesSpan[charInfo.vertexIndex + 2]) * 0.5f;
@@ -132,11 +132,11 @@ namespace LitMotion.Extensions
         public static void SetCharScale(TMP_Text text, int charIndex, Vector3 scale)
         {
             var textInfo = text.textInfo;
-            ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
-            ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
+            ref var charInfo = ref textInfo.characterInfo[charIndex];
+            ref var meshInfo = ref textInfo.meshInfo[charInfo.materialReferenceIndex];
 
             if (meshInfo.vertices == null) return;
-            var verticesSpan = meshInfo.vertices.AsSpan();
+            var verticesSpan = meshInfo.vertices;
 
             var initCharPosition = (charInfo.vertex_BL.position + charInfo.vertex_TR.position) * 0.5f;
             var currentCharPosition = (verticesSpan[charInfo.vertexIndex] + verticesSpan[charInfo.vertexIndex + 2]) * 0.5f;
