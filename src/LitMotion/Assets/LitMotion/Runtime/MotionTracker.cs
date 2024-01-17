@@ -28,8 +28,10 @@ namespace LitMotion
             if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
             var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
-            callbackData.OnCompleteAction += state.ReleaseDelegate;
-            callbackData.OnCancelAction += state.ReleaseDelegate;
+            state.OriginalOnCompleteCallback = callbackData.OnCompleteAction;
+            callbackData.OnCompleteAction = state.OnCompleteDelegate;
+            state.OriginalOnCancelCallback = callbackData.OnCancelAction;
+            callbackData.OnCancelAction = state.OnCancelDelegate;
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
 
             trackings.Add(state);
@@ -46,7 +48,8 @@ namespace LitMotion
 
             TrackingState()
             {
-                ReleaseDelegate = Release;
+                OnCompleteDelegate = OnComplete;
+                OnCancelDelegate = OnCancel;
             }
 
             public static TrackingState Create()
@@ -65,10 +68,39 @@ namespace LitMotion
             public DateTime CreationTime;
             public StackTrace StackTrace;
             public bool CreatedOnEditor;
+            public Action OriginalOnCompleteCallback;
+            public Action OriginalOnCancelCallback;
 
-            public readonly Action ReleaseDelegate;
+            public readonly Action OnCompleteDelegate;
+            public readonly Action OnCancelDelegate;
 
-            public void Release()
+            void OnComplete()
+            {
+                try
+                {
+                    OriginalOnCompleteCallback?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                }
+                Release();
+            }
+
+            void OnCancel()
+            {
+                try
+                {
+                    OriginalOnCancelCallback?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                }
+                Release();
+            }
+
+            void Release()
             {
                 trackings.Remove(this);
                 ValueType = default;
@@ -78,6 +110,8 @@ namespace LitMotion
                 CreationTime = default;
                 StackTrace = default;
                 CreatedOnEditor = default;
+                OriginalOnCompleteCallback = default;
+                OriginalOnCancelCallback = default;
                 pool.Push(this);
             }
         }
