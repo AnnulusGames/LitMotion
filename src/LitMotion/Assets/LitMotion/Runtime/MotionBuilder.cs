@@ -29,6 +29,7 @@ namespace LitMotion
             buffer.Ease = default;
             buffer.Delay = default;
             buffer.DelayType = default;
+            buffer.SkipValuesDuringDelay = true;
             buffer.Loops = 1;
             buffer.LoopType = default;
             buffer.StartValue = default;
@@ -52,6 +53,7 @@ namespace LitMotion
         public Ease Ease;
         public float Delay;
         public DelayType DelayType;
+        public bool SkipValuesDuringDelay = true;
         public int Loops = 1;
         public LoopType LoopType;
 
@@ -104,27 +106,16 @@ namespace LitMotion
         /// Specify the delay time when the motion starts.
         /// </summary>
         /// <param name="delay">Delay time (seconds)</param>
-        /// <returns>This builder to allow chaining multiple method calls.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay)
-        {
-            CheckBuffer();
-            buffer.Delay = delay;
-            return this;
-        }
-
-        /// <summary>
-        /// Specify the delay time when the motion starts.
-        /// </summary>
-        /// <param name="delay">Delay time (seconds)</param>
         /// <param name="delayType">Delay type</param>
+        /// <param name="skipValuesDuringDelay">Whether to skip updating values during the delay time</param>
         /// <returns>This builder to allow chaining multiple method calls.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay, DelayType delayType)
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay, DelayType delayType = DelayType.FirstLoop, bool skipValuesDuringDelay = true)
         {
             CheckBuffer();
             buffer.Delay = delay;
             buffer.DelayType = delayType;
+            buffer.SkipValuesDuringDelay = skipValuesDuringDelay;
             return this;
         }
 
@@ -391,7 +382,8 @@ namespace LitMotion
                 UpdateAction = action,
                 OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
             };
             return callbacks;
         }
@@ -407,7 +399,8 @@ namespace LitMotion
                 UpdateAction = action,
                 OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
             };
 
             return callbacks;
@@ -426,7 +419,8 @@ namespace LitMotion
                 UpdateAction = action,
                 OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
             };
 
             return callbacks;
@@ -447,7 +441,8 @@ namespace LitMotion
                 UpdateAction = action,
                 OnCancelAction = buffer.OnCancel,
                 OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
             };
 
             return callbacks;
