@@ -52,5 +52,25 @@ namespace LitMotion.Tests.Runtime
                 .ToYieldInteraction();
             Assert.That(Time.timeAsDouble - t, Is.GreaterThan(1.45).And.LessThan(1.6));
         }
+
+        [UnityTest]
+        public IEnumerator Test_Delay_SkipValuesDuringDelay()
+        {
+            var value = 0f;
+            var handle = LMotion.Create(1f, 2f, 0.5f)
+                .WithDelay(0.5f, skipValuesDuringDelay: false)
+                .Bind(x => value = x);
+            yield return new WaitForSeconds(0.1f);
+            Assert.That(value, Is.GreaterThan(0.9f));
+
+            handle.Cancel();
+            value = 0f;
+            handle = LMotion.Create(1f, 2f, 0.5f)
+                .WithDelay(0.5f, skipValuesDuringDelay: true)
+                .Bind(x => value = x);
+            yield return new WaitForSeconds(0.1f);
+            Assert.That(value, Is.LessThan(0.9f));
+            handle.Cancel();
+        }
     }
 }
