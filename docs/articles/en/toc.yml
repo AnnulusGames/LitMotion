@@ -37,6 +37,8 @@
   href: playing-in-editor.md
 - name: Custom Adapter
   href: custom-adapter.md
+- name: Motion Tracker
+  href: motion-tracker.md
 
 - name: Integrations
 - name: UniRx
