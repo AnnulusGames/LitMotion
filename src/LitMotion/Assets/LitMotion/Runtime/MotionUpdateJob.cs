@@ -103,7 +103,7 @@ namespace LitMotion
                         completedLoops = (int)math.floor(motionTime / (ptr->Duration + ptr->Delay));
                         clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
                         isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
-                        isDelayed = currentLoopTime < ptr->Delay;
+                        isDelayed = currentLoopTime < 0;
 
                         if (isCompleted)
                         {
