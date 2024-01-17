@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace LitMotion
@@ -8,22 +7,29 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
-        static MotionBuilderBuffer()
-        {
-            pool = new(4);
-            for (int i = 0; i < 4; i++) pool.Push(new());
-        }
-
-        static readonly Stack<MotionBuilderBuffer<TValue, TOptions>> pool;
+        static MotionBuilderBuffer<TValue, TOptions> PoolRoot = new();
 
         public static MotionBuilderBuffer<TValue, TOptions> Rent()
         {
-            if (!pool.TryPop(out var result)) result = new();
+            MotionBuilderBuffer<TValue, TOptions> result;
+            if (PoolRoot == null)
+            {
+                UnityEngine.Debug.Log("Created");
+                result = new();
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Rent");
+                result = PoolRoot;
+                PoolRoot = PoolRoot.NextNode;
+                result.NextNode = null;
+            }
             return result;
         }
 
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
+            UnityEngine.Debug.Log("Return");
             buffer.Version++;
             buffer.Duration = default;
             buffer.Ease = default;
@@ -43,11 +49,13 @@ namespace LitMotion
 
             if (buffer.Version != ushort.MaxValue)
             {
-                pool.Push(buffer);
+                buffer.NextNode = PoolRoot;
+                PoolRoot = buffer;
             }
         }
 
         public ushort Version;
+        public MotionBuilderBuffer<TValue, TOptions> NextNode;
 
         public float Duration;
         public Ease Ease;
