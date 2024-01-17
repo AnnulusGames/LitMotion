@@ -1,4 +1,4 @@
-# String Animation
+# Text Animation
 
 You can create a motion to animate strings using `LMotion.String.Create**Bytes()`.
 

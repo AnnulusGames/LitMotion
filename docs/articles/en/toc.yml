@@ -23,8 +23,10 @@
   href: waiting-for-motion-in-coroutine.md
 - name: Vibration Motion with Punch/Shake
   href: punch-and-shake.md
-- name: String Animation
-  href: string-animation.md
+- name: Text Animation
+  href: text-animation.md
+- name: TextMesh Pro Character Animation
+  href: textmesh-pro-character-animation.md
 - name: Updating Motion Manually
   href: updating-motion-manually.md
 - name: Reusing MotionBuilder
