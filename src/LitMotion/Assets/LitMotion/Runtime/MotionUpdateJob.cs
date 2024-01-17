@@ -42,42 +42,77 @@ namespace LitMotion
                 };
 
                 var motionTime = currentTime - ptr->StartTime;
-                var time = motionTime - ptr->Delay;
 
                 double t;
                 bool isCompleted;
+                bool isDelayed;
                 int completedLoops;
                 int clampedCompletedLoops;
 
                 if (Hint.Unlikely(ptr->Duration <= 0f))
                 {
-                    isCompleted = time > 0f;
-                    if (isCompleted)
+                    if (ptr->DelayType == DelayType.FirstLoop || ptr->Delay == 0f)
                     {
-                        t = 1f;
-                        completedLoops = ptr->Loops;
+                        var time = motionTime - ptr->Delay;
+                        isCompleted = ptr->Loops >= 0 && time > 0f;
+                        if (isCompleted)
+                        {
+                            t = 1f;
+                            completedLoops = ptr->Loops;
+                        }
+                        else
+                        {
+                            t = 0f;
+                            completedLoops = time < 0f ? -1 : 0;
+                        }
+                        clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                        isDelayed = time < 0;
                     }
                     else
                     {
-                        t = 0f;
-                        completedLoops = time < 0f ? -1 : 0;
+                        completedLoops = (int)math.floor(motionTime / ptr->Delay);
+                        clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                        isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
+                        isDelayed = !isCompleted;
+                        t = isCompleted ? 1f : 0f;
                     }
-                    clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
                 }
                 else
                 {
-                    completedLoops = (int)math.floor(time / ptr->Duration);
-                    clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
-                    isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
-
-                    if (isCompleted)
+                    if (ptr->DelayType == DelayType.FirstLoop)
                     {
-                        t = 1f;
+                        var time = motionTime - ptr->Delay;
+                        completedLoops = (int)math.floor(time / ptr->Duration);
+                        clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                        isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
+                        isDelayed = time < 0f;
+
+                        if (isCompleted)
+                        {
+                            t = 1f;
+                        }
+                        else
+                        {
+                            var currentLoopTime = time - ptr->Duration * clampedCompletedLoops;
+                            t = math.clamp(currentLoopTime / ptr->Duration, 0f, 1f);
+                        }
                     }
                     else
                     {
-                        var currentLoopTime = time - ptr->Duration * clampedCompletedLoops;
-                        t = math.clamp(currentLoopTime / ptr->Duration, 0f, 1f);
+                        var currentLoopTime = math.fmod(motionTime, ptr->Duration + ptr->Delay) - ptr->Delay;
+                        completedLoops = (int)math.floor(motionTime / (ptr->Duration + ptr->Delay));
+                        clampedCompletedLoops = ptr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, ptr->Loops);
+                        isCompleted = ptr->Loops >= 0 && clampedCompletedLoops > ptr->Loops - 1;
+                        isDelayed = currentLoopTime < ptr->Delay;
+
+                        if (isCompleted)
+                        {
+                            t = 1f;
+                        }
+                        else
+                        {
+                            t = math.clamp(currentLoopTime / ptr->Duration, 0f, 1f);
+                        }
                     }
                 }
 
@@ -97,11 +132,15 @@ namespace LitMotion
                         break;
                 }
 
-                if (ptr->Loops > 0 && time >= ptr->Duration * ptr->Loops)
+                var totalDuration = ptr->DelayType == DelayType.FirstLoop
+                    ? ptr->Delay + ptr->Duration * ptr->Loops
+                    : (ptr->Delay + ptr->Duration) * ptr->Loops;
+
+                if (ptr->Loops > 0 && motionTime >= totalDuration)
                 {
                     ptr->Status = MotionStatus.Completed;
                 }
-                else if (motionTime < ptr->Delay)
+                else if (isDelayed)
                 {
                     ptr->Status = MotionStatus.Delayed;
                 }

@@ -28,6 +28,7 @@ namespace LitMotion
             buffer.Duration = default;
             buffer.Ease = default;
             buffer.Delay = default;
+            buffer.DelayType = default;
             buffer.Loops = 1;
             buffer.LoopType = default;
             buffer.StartValue = default;
@@ -50,6 +51,7 @@ namespace LitMotion
         public float Duration;
         public Ease Ease;
         public float Delay;
+        public DelayType DelayType;
         public int Loops = 1;
         public LoopType LoopType;
 
@@ -108,6 +110,21 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.Delay = delay;
+            return this;
+        }
+
+        /// <summary>
+        /// Specify the delay time when the motion starts.
+        /// </summary>
+        /// <param name="delay">Delay time (seconds)</param>
+        /// <param name="delayType">Delay type</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay, DelayType delayType)
+        {
+            CheckBuffer();
+            buffer.Delay = delay;
+            buffer.DelayType = delayType;
             return this;
         }
 
@@ -344,6 +361,7 @@ namespace LitMotion
                 Duration = buffer.Duration,
                 Ease = buffer.Ease,
                 Delay = buffer.Delay,
+                DelayType = buffer.DelayType,
                 Loops = buffer.Loops,
                 LoopType = buffer.LoopType,
                 Status = MotionStatus.Scheduled,

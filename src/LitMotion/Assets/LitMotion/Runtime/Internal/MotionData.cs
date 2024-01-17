@@ -21,6 +21,7 @@ namespace LitMotion
         public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;
+        public DelayType DelayType;
         public LoopType LoopType;
 
         public TValue StartValue;
