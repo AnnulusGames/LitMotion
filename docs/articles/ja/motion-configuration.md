@@ -21,7 +21,21 @@ LMotion.Create(0f, 10f, 2f)
 
 #### WithDelay
 
-モーションの開始を指定された秒数だけ遅延させます。
+モーションの開始を指定された秒数だけ遅延させます。`DelayType`や`SkipValuesDuringDelay`を指定することで挙動を調整できます。
+
+* DelayType
+
+    ループ時の遅延の動作を指定します。
+
+    | DelayType           | 動作                                                 |
+    | ------------------- | ---------------------------------------------------- |
+    | DelayType.FirstLoop | デフォルトの設定。最初のループのみ遅延を適用します。 |
+    | DelayType.EveryLoop | 各ループごとに遅延を適用します。                     |
+
+* SkipValuesDuringDelay
+
+    遅延時間中にBindの処理をスキップするかどうかを指定します。デフォルトではtrueに設定されます。
+
 
 #### WithLoops
 

@@ -24,7 +24,7 @@
 - name: Punch/Shakeによる振動のモーション
   href: punch-and-shake.md
 - name: テキストアニメーション
-  href: string-animation.md
+  href: text-animation.md
 - name: TextMesh Proの文字をアニメーションさせる
   href: textmesh-pro-character-animation.md
 - name: モーションを手動で更新する

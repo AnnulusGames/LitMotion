@@ -20,7 +20,20 @@ Specifies the easing function to apply to the motion.
 
 #### WithDelay
 
-Delays the start of the motion by the specified number of seconds.
+Delay the start of a motion by a specified number of seconds. You can adjust the behavior by specifying `DelayType` and `SkipValuesDuringDelay`.
+
+* DelayType
+
+    Specifies the behavior of delay during looping.
+
+    | DelayType           | Behavior                                               |
+    | ------------------- | ------------------------------------------------------ |
+    | DelayType.FirstLoop | Default setting. Applies delay only in the first loop. |
+    | DelayType.EveryLoop | Applies delay in each loop.                            |
+
+* SkipValuesDuringDelay
+
+  Specifies whether to skip the processing of `Bind` during the delay time. It is set to `true` by default.
 
 #### WithLoops
 
