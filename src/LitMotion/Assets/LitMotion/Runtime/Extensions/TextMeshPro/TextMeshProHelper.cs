@@ -26,11 +26,11 @@ namespace LitMotion.Extensions
             ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
             ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
+            var colorSpan = meshInfo.colors32.AsSpan();
+            var value = (byte)Mathf.Round(Mathf.Clamp01(r) * 255f);
             for (var i = 0; i < 4; i++)
             {
-                var c = (Color)meshInfo.colors32[charInfo.vertexIndex + i];
-                c.r = r;
-                meshInfo.colors32[charInfo.vertexIndex + i] = c;
+                colorSpan[charInfo.vertexIndex + i].r = value;
             }
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
         }
@@ -41,11 +41,11 @@ namespace LitMotion.Extensions
             ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
             ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
+            var colorSpan = meshInfo.colors32.AsSpan();
+            var value = (byte)Mathf.Round(Mathf.Clamp01(g) * 255f);
             for (var i = 0; i < 4; i++)
             {
-                var c = (Color)meshInfo.colors32[charInfo.vertexIndex + i];
-                c.g = g;
-                meshInfo.colors32[charInfo.vertexIndex + i] = c;
+                colorSpan[charInfo.vertexIndex + i].g = value;
             }
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
         }
@@ -56,11 +56,11 @@ namespace LitMotion.Extensions
             ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
             ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
+            var colorSpan = meshInfo.colors32.AsSpan();
+            var value = (byte)Mathf.Round(Mathf.Clamp01(b) * 255f);
             for (var i = 0; i < 4; i++)
             {
-                var c = (Color)meshInfo.colors32[charInfo.vertexIndex + i];
-                c.b = b;
-                meshInfo.colors32[charInfo.vertexIndex + i] = c;
+                colorSpan[charInfo.vertexIndex + i].b = value;
             }
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
         }
@@ -71,11 +71,11 @@ namespace LitMotion.Extensions
             ref var charInfo = ref textInfo.characterInfo.AsSpan()[charIndex];
             ref var meshInfo = ref textInfo.meshInfo.AsSpan()[charInfo.materialReferenceIndex];
             if (meshInfo.colors32 == null) return;
+            var colorSpan = meshInfo.colors32.AsSpan();
+            var value = (byte)Mathf.Round(Mathf.Clamp01(a) * 255f);
             for (var i = 0; i < 4; i++)
             {
-                var c = (Color)meshInfo.colors32[charInfo.vertexIndex + i];
-                c.a = a;
-                meshInfo.colors32[charInfo.vertexIndex + i] = c;
+                colorSpan[charInfo.vertexIndex + i].a = value;
             }
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
         }
