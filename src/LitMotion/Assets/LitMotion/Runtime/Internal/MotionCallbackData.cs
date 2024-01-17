@@ -12,6 +12,7 @@ namespace LitMotion
         public byte StateCount;
         public bool IsCallbackRunning;
         public bool CancelOnError;
+        public bool SkipValuesDuringDelay;
         public object State1;
         public object State2;
         public object State3;

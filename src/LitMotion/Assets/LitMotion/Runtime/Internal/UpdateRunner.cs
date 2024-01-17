@@ -50,44 +50,43 @@ namespace LitMotion
                 for (int i = 0; i < callbackSpan.Length; i++)
                 {
                     var status = (dataPtr + i)->Status;
-                    if (status == MotionStatus.Playing)
+                    ref var callbackData = ref callbackSpan[i];
+                    if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !callbackData.SkipValuesDuringDelay))
                     {
-                        ref var callbacks = ref callbackSpan[i];
                         try
                         {
-                            callbacks.InvokeUnsafe(outputPtr[i]);
+                            callbackData.InvokeUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbacks.CancelOnError)
+                            if (callbackData.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
-                                callbacks.OnCancelAction?.Invoke();
+                                callbackData.OnCancelAction?.Invoke();
                             }
                         }
                     }
                     else if (status == MotionStatus.Completed)
                     {
-                        ref var callbacks = ref callbackSpan[i];
                         try
                         {
-                            callbacks.InvokeUnsafe(outputPtr[i]);
+                            callbackData.InvokeUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbacks.CancelOnError)
+                            if (callbackData.CancelOnError)
                             {
                                 (dataPtr + i)->Status = MotionStatus.Canceled;
-                                callbacks.OnCancelAction?.Invoke();
+                                callbackData.OnCancelAction?.Invoke();
                                 continue;
                             }
                         }
 
                         try
                         {
-                            callbacks.OnCompleteAction?.Invoke();
+                            callbackData.OnCompleteAction?.Invoke();
                         }
                         catch (Exception ex)
                         {
