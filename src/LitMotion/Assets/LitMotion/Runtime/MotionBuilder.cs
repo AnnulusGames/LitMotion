@@ -14,12 +14,10 @@ namespace LitMotion
             MotionBuilderBuffer<TValue, TOptions> result;
             if (PoolRoot == null)
             {
-                UnityEngine.Debug.Log("Created");
                 result = new();
             }
             else
             {
-                UnityEngine.Debug.Log("Rent");
                 result = PoolRoot;
                 PoolRoot = PoolRoot.NextNode;
                 result.NextNode = null;
@@ -29,7 +27,6 @@ namespace LitMotion
 
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
-            UnityEngine.Debug.Log("Return");
             buffer.Version++;
             buffer.Duration = default;
             buffer.Ease = default;
