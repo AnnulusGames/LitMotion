@@ -25,7 +25,7 @@ namespace LitMotion
         }
 
         /// <summary>
-        /// Cancel all Motion handles added.
+        /// Cancel all Motion handles and clear list.
         /// </summary>
         public void Cancel()
         {
@@ -34,10 +34,11 @@ namespace LitMotion
                 var handle = handleList[i];
                 if (handle.IsActive()) handle.Cancel();
             }
+            handleList.Clear();
         }
 
         /// <summary>
-        /// Complete all motion handles added .
+        /// Complete all motion handles and clear list.
         /// </summary>
         public void Complete()
         {
@@ -46,6 +47,7 @@ namespace LitMotion
                 var handle = handleList[i];
                 if (handle.IsActive()) handle.Complete();
             }
+            handleList.Clear();
         }
 
         /// <summary>
