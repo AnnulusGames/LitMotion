@@ -58,15 +58,15 @@ namespace LitMotion
         {
             initialized = true;
             var newLoop = playerLoop.subSystemList.ToArray();
-            
-            InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), () => MotionDispatcher.Update(PlayerLoopTiming.Initialization));
-            InsertLoop(newLoop, typeof(PlayerLoopType.EarlyUpdate), typeof(LitMotionLoopRunners.LitMotionEarlyUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.FixedUpdate), typeof(LitMotionLoopRunners.LitMotionFixedUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PreUpdate), typeof(LitMotionLoopRunners.LitMotionPreUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.Update), typeof(LitMotionLoopRunners.LitMotionUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.Update));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PreLateUpdate), typeof(LitMotionLoopRunners.LitMotionPreLateUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PostLateUpdate), typeof(LitMotionLoopRunners.LitMotionPostLateUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.TimeUpdate), typeof(LitMotionLoopRunners.LitMotionTimeUpdate), () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate));
+
+            InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), static () => MotionDispatcher.Update(PlayerLoopTiming.Initialization));
+            InsertLoop(newLoop, typeof(PlayerLoopType.EarlyUpdate), typeof(LitMotionLoopRunners.LitMotionEarlyUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.FixedUpdate), typeof(LitMotionLoopRunners.LitMotionFixedUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreUpdate), typeof(LitMotionLoopRunners.LitMotionPreUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.Update), typeof(LitMotionLoopRunners.LitMotionUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.Update));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreLateUpdate), typeof(LitMotionLoopRunners.LitMotionPreLateUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.PostLateUpdate), typeof(LitMotionLoopRunners.LitMotionPostLateUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.TimeUpdate), typeof(LitMotionLoopRunners.LitMotionTimeUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate));
 
             playerLoop.subSystemList = newLoop;
             PlayerLoop.SetPlayerLoop(playerLoop);

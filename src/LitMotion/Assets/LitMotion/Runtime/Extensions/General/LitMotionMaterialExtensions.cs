@@ -20,9 +20,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.BindWithState(material, name, static (x, m, n) =>
             {
-                m.SetFloat(name, x);
+                m.SetFloat(n, x);
             });
         }
 
@@ -58,9 +58,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.BindWithState(material, name, static (x, m, n) =>
             {
-                m.SetInteger(name, x);
+                m.SetInteger(n, x);
             });
         }
 
@@ -96,9 +96,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.BindWithState(material, name, static (x, m, n) =>
             {
-                m.SetColor(name, x);
+                m.SetColor(n, x);
             });
         }
 
