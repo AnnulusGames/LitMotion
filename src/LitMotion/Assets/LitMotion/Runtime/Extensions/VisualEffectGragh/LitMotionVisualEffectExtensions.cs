@@ -22,9 +22,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
             {
-                target.SetFloat(name, x);
+                target.SetFloat(n, x);
             });
         }
 
@@ -60,9 +60,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
             {
-                target.SetInt(name, x);
+                target.SetInt(n, x);
             });
         }
 
@@ -98,9 +98,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
             {
-                target.SetVector2(name, x);
+                target.SetVector2(n, x);
             });
         }
 
@@ -136,9 +136,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
             {
-                target.SetVector3(name, x);
+                target.SetVector3(n, x);
             });
         }
 
@@ -174,9 +174,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector4, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
             {
-                target.SetVector4(name, x);
+                target.SetVector4(n, x);
             });
         }
 

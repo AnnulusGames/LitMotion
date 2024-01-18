@@ -42,7 +42,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(reactiveProperty);
-            return builder.BindWithState(reactiveProperty, (x, target) =>
+            return builder.BindWithState(reactiveProperty, static (x, target) =>
             {
                 target.Value = x;
             });
@@ -113,7 +113,7 @@ namespace LitMotion
 
             if (cancellationToken.CanBeCanceled)
             {
-                result.cancellationRegistration = cancellationToken.RegisterWithoutCaptureExecutionContext(x =>
+                result.cancellationRegistration = cancellationToken.RegisterWithoutCaptureExecutionContext(static x =>
                 {
                     var source = (MotionConfiguredSource)x;
                     var motionHandle = source.motionHandle;

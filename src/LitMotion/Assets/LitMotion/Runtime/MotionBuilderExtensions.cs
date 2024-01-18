@@ -24,7 +24,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(progress);
-            return builder.BindWithState(progress, (x, progress) => progress.Report(x));
+            return builder.BindWithState(progress, static (x, progress) => progress.Report(x));
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace LitMotion
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            return builder.Bind(x => Debug.unityLogger.Log(x));
+            return builder.Bind(static x => Debug.unityLogger.Log(x));
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(logger);
-            return builder.BindWithState(logger, (x, logger) => logger.Log(x));
+            return builder.BindWithState(logger, static (x, logger) => logger.Log(x));
         }
 
         /// <summary>

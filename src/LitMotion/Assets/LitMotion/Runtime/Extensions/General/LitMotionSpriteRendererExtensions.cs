@@ -20,7 +20,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(spriteRenderer);
-            return builder.BindWithState(spriteRenderer, (x, m) =>
+            return builder.BindWithState(spriteRenderer, static (x, m) =>
             {
                 m.color = x;
             });
@@ -39,7 +39,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(spriteRenderer);
-            return builder.BindWithState(spriteRenderer, (x, m) =>
+            return builder.BindWithState(spriteRenderer, static (x, m) =>
             {
                 var c = m.color;
                 c.r = x;
@@ -60,7 +60,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(spriteRenderer);
-            return builder.BindWithState(spriteRenderer, (x, m) =>
+            return builder.BindWithState(spriteRenderer, static (x, m) =>
             {
                 var c = m.color;
                 c.g = x;
@@ -81,7 +81,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(spriteRenderer);
-            return builder.BindWithState(spriteRenderer, (x, m) =>
+            return builder.BindWithState(spriteRenderer, static (x, m) =>
             {
                 var c = m.color;
                 c.b = x;
@@ -102,7 +102,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(spriteRenderer);
-            return builder.BindWithState(spriteRenderer, (x, m) =>
+            return builder.BindWithState(spriteRenderer, static (x, m) =>
             {
                 var c = m.color;
                 c.a = x;
