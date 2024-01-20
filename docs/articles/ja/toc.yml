@@ -37,7 +37,9 @@
   href: exception-handling.md
 - name: Unity Editor上で再生する
   href: playing-in-editor.md
-- name: カスタムAdapter
+- name: Bind拡張メソッドを作成する
+  href: custom-binding-extension-method.md
+- name: カスタムAdapterを作成する
   href: custom-adapter.md
 - name: Motion Tracker
   href: motion-tracker.md

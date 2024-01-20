@@ -37,6 +37,8 @@
   href: exception-handling.md
 - name: Playing in UnityEditor
   href: playing-in-editor.md
+- name: Custom Binding Extension Method
+  href: custom-binding-extension-method.md
 - name: Custom Adapter
   href: custom-adapter.md
 - name: Motion Tracker
