@@ -1,4 +1,4 @@
-# カスタムAdapter
+# カスタムAdapterを作成する
 
 LitMotionでは拡張用のインターフェースとして`IMotionAdapter<T, TOptions>`と`IMotionOptions`が用意されています。
 
