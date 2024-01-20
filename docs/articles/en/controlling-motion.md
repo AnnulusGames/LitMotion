@@ -31,7 +31,7 @@ The mentioned methods throw exceptions if the motion has already ended or if the
 ```cs
 var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
 
-if (handle.IsActive) handle.Complete();
+if (handle.IsActive()) handle.Complete();
 ```
 
 ### Linking Cancellation to GameObject
