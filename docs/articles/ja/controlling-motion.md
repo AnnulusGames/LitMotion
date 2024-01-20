@@ -31,7 +31,7 @@ handle.Cancel();
 ```cs
 var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
 
-if (handle.IsActive) handle.Complete();
+if (handle.IsActive()) handle.Complete();
 ```
 
 ### GameObjectにキャンセル処理を紐づける
