@@ -36,6 +36,7 @@ namespace LitMotion.Extensions
 
             // set target
             animator.target = text;
+            animator.Reset();
 
             // add to array
             if (tail == animators.Length)
@@ -58,7 +59,6 @@ namespace LitMotion.Extensions
 
             textToAnimator.Remove(animator.target);
             animator.target = null;
-            animator.Reset();
         }
 
         static readonly Dictionary<TMP_Text, TextMeshProMotionAnimator> textToAnimator = new();
