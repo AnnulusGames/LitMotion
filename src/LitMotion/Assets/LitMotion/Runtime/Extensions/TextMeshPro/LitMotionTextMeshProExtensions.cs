@@ -642,7 +642,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset = x;
+                animator.charInfoArray[charIndex].position = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -668,7 +668,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.x = x;
+                animator.charInfoArray[charIndex].position.x = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -694,7 +694,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.y = x;
+                animator.charInfoArray[charIndex].position.y = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -720,7 +720,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.z = x;
+                animator.charInfoArray[charIndex].position.z = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -798,9 +798,9 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.x = x;
-                animator.charInfoArray[charIndex].rotation = eulerAngles;
+                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 
@@ -826,9 +826,9 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.y = x;
-                animator.charInfoArray[charIndex].rotation = eulerAngles;
+                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 
@@ -854,9 +854,9 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.z = x;
-                animator.charInfoArray[charIndex].rotation = eulerAngles;
+                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 

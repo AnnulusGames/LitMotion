@@ -9,6 +9,9 @@ namespace LitMotion.Extensions
 {
     // TODO: optimization
 
+    /// <summary>
+    /// Wrapper class for animating individual characters in TextMeshPro.
+    /// </summary>
     internal sealed class TextMeshProMotionAnimator
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -19,9 +22,14 @@ namespace LitMotion.Extensions
 
         static TextMeshProMotionAnimator rootNode;
 
-        public static TextMeshProMotionAnimator Get(TMP_Text text)
+        internal static TextMeshProMotionAnimator Get(TMP_Text text)
         {
-            if (textToAnimator.TryGetValue(text, out var animator)) return animator;
+            if (textToAnimator.TryGetValue(text, out var animator))
+            {
+                animator.RemoveCompletedMotions();
+                if (animator.motionHandleList.Length == 0) animator.Reset();
+                return animator;
+            }
 
             // get or create animator
             animator = rootNode ?? new();
@@ -30,6 +38,7 @@ namespace LitMotion.Extensions
 
             // set target
             animator.target = text;
+            animator.Reset();
 
             // add to array
             if (tail == animators.Length)
@@ -45,7 +54,7 @@ namespace LitMotion.Extensions
             return animator;
         }
 
-        public static void Return(TextMeshProMotionAnimator animator)
+        internal static void Return(TextMeshProMotionAnimator animator)
         {
             animator.nextNode = rootNode;
             rootNode = animator;
@@ -59,7 +68,7 @@ namespace LitMotion.Extensions
         static TextMeshProMotionAnimator[] animators = new TextMeshProMotionAnimator[8];
         static int tail;
 
-        public static void UpdateActiveAnimators()
+        internal static void UpdateActiveAnimators()
         {
             var j = tail - 1;
 
@@ -113,17 +122,29 @@ namespace LitMotion.Extensions
             }
         }
 
-        public struct CharInfo
+        internal struct CharInfo
         {
-            public Vector3 offset;
+            public Vector3 position;
             public Vector3 scale;
             public Quaternion rotation;
             public Color color;
         }
 
+        public TextMeshProMotionAnimator()
+        {
+            charInfoArray = new CharInfo[32];
+            for (int i = 0; i < charInfoArray.Length; i++)
+            {
+                charInfoArray[i].color = Color.white;
+                charInfoArray[i].rotation = Quaternion.identity;
+                charInfoArray[i].scale = Vector3.one;
+                charInfoArray[i].position = Vector3.zero;
+            }
+        }
+
         TMP_Text target;
-        public CharInfo[] charInfoArray = new CharInfo[32];
-        public MinimumList<MotionHandle> motionHandleList = new();
+        internal CharInfo[] charInfoArray;
+        internal MinimumList<MotionHandle> motionHandleList = new();
 
         TextMeshProMotionAnimator nextNode;
 
@@ -142,8 +163,61 @@ namespace LitMotion.Extensions
                         charInfoArray[i].color = new(target.color.r, target.color.g, target.color.b, target.color.a);
                         charInfoArray[i].rotation = Quaternion.identity;
                         charInfoArray[i].scale = Vector3.one;
-                        charInfoArray[i].offset = Vector3.zero;
+                        charInfoArray[i].position = Vector3.zero;
                     }
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Update()
+        {
+            TryUpdate();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetCharColor(int charIndex, Color color)
+        {
+            charInfoArray[charIndex].color = color;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetCharPosition(int charIndex, Vector3 position)
+        {
+            charInfoArray[charIndex].position = position;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetCharRotation(int charIndex, Quaternion rotation)
+        {
+            charInfoArray[charIndex].rotation = rotation;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetCharScale(int charIndex, Vector3 scale)
+        {
+            charInfoArray[charIndex].scale = scale;
+        }
+
+        public void Reset()
+        {
+            for (int i = 0; i < charInfoArray.Length; i++)
+            {
+                charInfoArray[i].color = new(target.color.r, target.color.g, target.color.b, target.color.a);
+                charInfoArray[i].rotation = Quaternion.identity;
+                charInfoArray[i].scale = Vector3.one;
+                charInfoArray[i].position = Vector3.zero;
+            }
+        }
+
+        void RemoveCompletedMotions()
+        {
+            for (int i = 0; i < motionHandleList.Length; i++)
+            {
+                if (!motionHandleList[i].IsActive())
+                {
+                    motionHandleList.RemoveAtSwapback(i);
+                    i--;
                 }
             }
         }
@@ -153,15 +227,7 @@ namespace LitMotion.Extensions
         {
             if (target == null) return false;
 
-            for (int i = 0; i < motionHandleList.Length; i++)
-            {
-                if (!motionHandleList[i].IsActive())
-                {
-                    motionHandleList.RemoveAtSwapback(i);
-                    i--;
-                }
-            }
-
+            RemoveCompletedMotions();
             if (motionHandleList.Length == 0) return false;
 
             target.ForceMeshUpdate();
@@ -191,7 +257,7 @@ namespace LitMotion.Extensions
 
                 var charRotation = motionCharInfo.rotation;
                 var charScale = motionCharInfo.scale;
-                var charOffset = motionCharInfo.offset;
+                var charOffset = motionCharInfo.position;
                 for (int n = 0; n < 4; n++)
                 {
                     var vert = verts[vertexIndex + n];
