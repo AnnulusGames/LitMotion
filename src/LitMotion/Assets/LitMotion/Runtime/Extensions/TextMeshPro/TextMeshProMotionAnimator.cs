@@ -26,6 +26,8 @@ namespace LitMotion.Extensions
         {
             if (textToAnimator.TryGetValue(text, out var animator))
             {
+                animator.RemoveCompletedMotions();
+                if (animator.motionHandleList.Length == 0) animator.Reset();
                 return animator;
             }
 
