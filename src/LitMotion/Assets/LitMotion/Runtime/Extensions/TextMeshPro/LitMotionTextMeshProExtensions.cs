@@ -642,7 +642,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset = x;
+                animator.charInfoArray[charIndex].position = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -668,7 +668,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.x = x;
+                animator.charInfoArray[charIndex].position.x = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -694,7 +694,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.y = x;
+                animator.charInfoArray[charIndex].position.y = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -720,7 +720,7 @@ namespace LitMotion.Extensions
             animator.EnsureCapacity(charIndex + 1);
             var handle = builder.BindWithState(animator, (x, target) =>
             {
-                animator.charInfoArray[charIndex].offset.z = x;
+                animator.charInfoArray[charIndex].position.z = x;
             });
             animator.motionHandleList.Add(handle);
 
