@@ -6,12 +6,15 @@ namespace LitMotion
     static class SharedRandom
     {
         readonly struct Key { }
-        public static readonly SharedStatic<Random> Random;
+        static readonly SharedStatic<Random> sharedStatic = SharedStatic<Random>.GetOrCreate<Key>();
 
-        static SharedRandom()
+        public static ref Random Random
         {
-            Random = SharedStatic<Random>.GetOrCreate<Key>();
-            Random.Data.InitState();
+            get
+            {
+                if (sharedStatic.Data.state == 0) sharedStatic.Data.InitState();
+                return ref sharedStatic.Data;
+            }
         }
     }
 }

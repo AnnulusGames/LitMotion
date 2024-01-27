@@ -19,7 +19,7 @@ namespace LitMotion.Adapters
             float multipliar;
             if (options.RandomState.state == 0)
             {
-                multipliar = SharedRandom.Random.Data.NextFloat(-1f, 1f);
+                multipliar = SharedRandom.Random.NextFloat(-1f, 1f);
             }
             else
             {
@@ -37,7 +37,7 @@ namespace LitMotion.Adapters
             Vector2 multipliar;
             if (options.RandomState.state == 0)
             {
-                multipliar = new Vector2(SharedRandom.Random.Data.NextFloat(-1f, 1f), SharedRandom.Random.Data.NextFloat(-1f, 1f));
+                multipliar = new Vector2(SharedRandom.Random.NextFloat(-1f, 1f), SharedRandom.Random.NextFloat(-1f, 1f));
             }
             else
             {
@@ -55,7 +55,7 @@ namespace LitMotion.Adapters
             Vector3 multipliar;
             if (options.RandomState.state == 0)
             {
-                multipliar = new Vector3(SharedRandom.Random.Data.NextFloat(-1f, 1f), SharedRandom.Random.Data.NextFloat(-1f, 1f), SharedRandom.Random.Data.NextFloat(-1f, 1f));
+                multipliar = new Vector3(SharedRandom.Random.NextFloat(-1f, 1f), SharedRandom.Random.NextFloat(-1f, 1f), SharedRandom.Random.NextFloat(-1f, 1f));
             }
             else
             {
