@@ -140,8 +140,17 @@ namespace LitMotion.Extensions
 
             var initCharPosition = (charInfo.vertex_BL.position + charInfo.vertex_TR.position) * 0.5f;
             var currentCharPosition = (verticesSpan[charInfo.vertexIndex] + verticesSpan[charInfo.vertexIndex + 2]) * 0.5f;
+
             for (var i = 0; i < 4; i++)
             {
+                // TODO: scale the TMP_Text character
+                // When the scale is 0, the direction vector from the center cannot be obtained, so it is forced to be rewritten to a small number.
+                // It's a brute force solution, so I'm looking for a better way.
+                var modifiedScale = scale;
+                if (scale.x == 0f) modifiedScale.x = 0.00005f;
+                if (scale.y == 0f) modifiedScale.y = 0.00005f;
+                if (scale.z == 0f) modifiedScale.z = 0.00005f;
+
                 var length = i switch
                 {
                     0 => (charInfo.vertex_BL.position - initCharPosition).magnitude,
@@ -151,11 +160,12 @@ namespace LitMotion.Extensions
                     _ => default
                 };
                 var dir = verticesSpan[charInfo.vertexIndex + i] - currentCharPosition;
+
                 var normalizedOffset = dir.normalized * length;
 
-                verticesSpan[charInfo.vertexIndex + i].x = currentCharPosition.x + normalizedOffset.x * scale.x;
-                verticesSpan[charInfo.vertexIndex + i].y = currentCharPosition.y + normalizedOffset.y * scale.y;
-                verticesSpan[charInfo.vertexIndex + i].z = currentCharPosition.z + normalizedOffset.z * scale.z;
+                verticesSpan[charInfo.vertexIndex + i].x = currentCharPosition.x + normalizedOffset.x * modifiedScale.x;
+                verticesSpan[charInfo.vertexIndex + i].y = currentCharPosition.y + normalizedOffset.y * modifiedScale.y;
+                verticesSpan[charInfo.vertexIndex + i].z = currentCharPosition.z + normalizedOffset.z * modifiedScale.z;
             }
 
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
