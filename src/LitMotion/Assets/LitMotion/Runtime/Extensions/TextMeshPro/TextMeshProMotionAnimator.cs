@@ -130,8 +130,20 @@ namespace LitMotion.Extensions
             public Color color;
         }
 
+        public TextMeshProMotionAnimator()
+        {
+            charInfoArray = new CharInfo[32];
+            for (int i = 0; i < charInfoArray.Length; i++)
+            {
+                charInfoArray[i].color = Color.white;
+                charInfoArray[i].rotation = Quaternion.identity;
+                charInfoArray[i].scale = Vector3.one;
+                charInfoArray[i].position = Vector3.zero;
+            }
+        }
+
         TMP_Text target;
-        internal CharInfo[] charInfoArray = new CharInfo[32];
+        internal CharInfo[] charInfoArray;
         internal MinimumList<MotionHandle> motionHandleList = new();
 
         TextMeshProMotionAnimator nextNode;
