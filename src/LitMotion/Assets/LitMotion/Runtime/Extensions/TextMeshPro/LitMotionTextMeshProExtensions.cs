@@ -650,6 +650,84 @@ namespace LitMotion.Extensions
         }
 
         /// <summary>
+        /// Create motion data and bind it to the character position.x.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharPositionX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].offset.x = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character position.y.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharPositionY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].offset.y = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character position.z.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharPositionZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].offset.z = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
         /// Create motion data and bind it to the character rotation.
         /// </summary>
         /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
@@ -702,6 +780,90 @@ namespace LitMotion.Extensions
         }
 
         /// <summary>
+        /// Create motion data and bind it to the character rotation (using euler angles).
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharEulerAnglesX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                eulerAngles.x = x;
+                animator.charInfoArray[charIndex].rotation = eulerAngles;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character rotation (using euler angles).
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharEulerAnglesY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                eulerAngles.y = x;
+                animator.charInfoArray[charIndex].rotation = eulerAngles;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character rotation (using euler angles).
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharEulerAnglesZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                var eulerAngles = animator.charInfoArray[charIndex].rotation;
+                eulerAngles.z = x;
+                animator.charInfoArray[charIndex].rotation = eulerAngles;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
         /// Create motion data and bind it to the character scale.
         /// </summary>
         /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
@@ -721,6 +883,84 @@ namespace LitMotion.Extensions
             var handle = builder.BindWithState(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].scale = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character scale.x.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharScaleX<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].scale.x = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character scale.y.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharScaleY<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].scale.y = x;
+            });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Create motion data and bind it to the character scale.z.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <param name="charIndex">Target character index</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToTMPCharScaleZ<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text, int charIndex)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
+            {
+                animator.charInfoArray[charIndex].scale.z = x;
             });
             animator.motionHandleList.Add(handle);
 
