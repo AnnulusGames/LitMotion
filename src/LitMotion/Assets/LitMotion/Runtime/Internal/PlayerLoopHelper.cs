@@ -38,6 +38,15 @@ namespace LitMotion
 
     internal static class PlayerLoopHelper
     {
+        public static event Action OnInitialization;
+        public static event Action OnEarlyUpdate;
+        public static event Action OnFixedUpdate;
+        public static event Action OnPreUpdate;
+        public static event Action OnUpdate;
+        public static event Action OnPreLateUpdate;
+        public static event Action OnPostLateUpdate;
+        public static event Action OnTimeUpdate;
+
         static bool initialized;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
@@ -50,6 +59,15 @@ namespace LitMotion
             if (initialized) return;
 #endif
 
+            OnInitialization += static () => MotionDispatcher.Update(PlayerLoopTiming.Initialization);
+            OnEarlyUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate);
+            OnFixedUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate);
+            OnPreUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate);
+            OnUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.Update);
+            OnPreLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate);
+            OnPostLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate);
+            OnTimeUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate);
+
             var playerLoop = PlayerLoop.GetCurrentPlayerLoop();
             Initialize(ref playerLoop);
         }
@@ -59,14 +77,14 @@ namespace LitMotion
             initialized = true;
             var newLoop = playerLoop.subSystemList.ToArray();
 
-            InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), static () => MotionDispatcher.Update(PlayerLoopTiming.Initialization));
-            InsertLoop(newLoop, typeof(PlayerLoopType.EarlyUpdate), typeof(LitMotionLoopRunners.LitMotionEarlyUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.FixedUpdate), typeof(LitMotionLoopRunners.LitMotionFixedUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PreUpdate), typeof(LitMotionLoopRunners.LitMotionPreUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.Update), typeof(LitMotionLoopRunners.LitMotionUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.Update));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PreLateUpdate), typeof(LitMotionLoopRunners.LitMotionPreLateUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.PostLateUpdate), typeof(LitMotionLoopRunners.LitMotionPostLateUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate));
-            InsertLoop(newLoop, typeof(PlayerLoopType.TimeUpdate), typeof(LitMotionLoopRunners.LitMotionTimeUpdate), static () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate));
+            InsertLoop(newLoop, typeof(PlayerLoopType.Initialization), typeof(LitMotionLoopRunners.LitMotionInitialization), static () => OnInitialization?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.EarlyUpdate), typeof(LitMotionLoopRunners.LitMotionEarlyUpdate), static () => OnEarlyUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.FixedUpdate), typeof(LitMotionLoopRunners.LitMotionFixedUpdate), static () => OnFixedUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreUpdate), typeof(LitMotionLoopRunners.LitMotionPreUpdate), static () => OnPreUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.Update), typeof(LitMotionLoopRunners.LitMotionUpdate), static () => OnUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.PreLateUpdate), typeof(LitMotionLoopRunners.LitMotionPreLateUpdate), static () => OnPreLateUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.PostLateUpdate), typeof(LitMotionLoopRunners.LitMotionPostLateUpdate), static () => OnPostLateUpdate?.Invoke());
+            InsertLoop(newLoop, typeof(PlayerLoopType.TimeUpdate), typeof(LitMotionLoopRunners.LitMotionTimeUpdate), static () => OnTimeUpdate?.Invoke());
 
             playerLoop.subSystemList = newLoop;
             PlayerLoop.SetPlayerLoop(playerLoop);
