@@ -507,10 +507,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharColor(target, charIndex, x);
+                animator.charInfoArray[charIndex].color = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -527,10 +533,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharColorR(target, charIndex, x);
+                animator.charInfoArray[charIndex].color.r = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -547,10 +559,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharColorG(target, charIndex, x);
+                animator.charInfoArray[charIndex].color.g = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -567,10 +585,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharColorB(target, charIndex, x);
+                animator.charInfoArray[charIndex].color.b = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -587,10 +611,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharColorA(target, charIndex, x);
+                animator.charInfoArray[charIndex].color.a = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -607,10 +637,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharPosition(target, charIndex, x);
+                animator.charInfoArray[charIndex].offset = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -627,10 +663,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharRotation(target, charIndex, x);
+                animator.charInfoArray[charIndex].rotation = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -647,10 +689,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharRotation(target, charIndex, Quaternion.Euler(x));
+                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(x);
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
 
         /// <summary>
@@ -667,10 +715,16 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, (x, target) =>
+
+            var animator = TextMeshProMotionAnimator.Get(text);
+            animator.EnsureCapacity(charIndex + 1);
+            var handle = builder.BindWithState(animator, (x, target) =>
             {
-                TextMeshProHelper.SetCharScale(target, charIndex, x);
+                animator.charInfoArray[charIndex].scale = x;
             });
+            animator.motionHandleList.Add(handle);
+
+            return handle;
         }
     }
 }
