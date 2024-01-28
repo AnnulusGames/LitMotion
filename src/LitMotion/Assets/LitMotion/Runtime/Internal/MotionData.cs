@@ -14,7 +14,8 @@ namespace LitMotion
     {
         public MotionStatus Status;
 
-        public double StartTime;
+        public double Time;
+        public float TimeScale;
         public float Duration;
 
         public Ease Ease;

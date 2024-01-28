@@ -312,19 +312,18 @@ namespace LitMotion
 #if UNITY_EDITOR
                 if (!UnityEditor.EditorApplication.isPlaying)
                 {
-                    data.StartTime = UnityEditor.EditorApplication.timeSinceStartup;
+                    // Inlined EditorUpdateMotionScheduler
                     handle = EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
                 else
                 {
                     // Inlined PlayerLoopMotionScheduler
                     data.TimeKind = MotionTimeKind.Time;
-                    data.StartTime = UnityEngine.Time.timeAsDouble;
                     handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
                 }
 #else
+                // Inlined PlayerLoopMotionScheduler
                 data.TimeKind = MotionTimeKind.Time;
-                data.StartTime = UnityEngine.Time.timeAsDouble;
                 handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
 #endif
             }
