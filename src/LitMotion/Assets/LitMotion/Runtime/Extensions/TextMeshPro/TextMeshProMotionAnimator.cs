@@ -14,10 +14,10 @@ namespace LitMotion.Extensions
     /// </summary>
     internal sealed class TextMeshProMotionAnimator
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Init()
         {
-            PlayerLoopHelper.OnUpdate += UpdateActiveAnimators;
+            PlayerLoopHelper.OnUpdate += UpdateAnimators;
         }
 
         static TextMeshProMotionAnimator rootNode;
@@ -41,12 +41,7 @@ namespace LitMotion.Extensions
             animator.Reset();
 
             // add to array
-            if (tail == animators.Length)
-            {
-                Array.Resize(ref animators, tail * 2);
-            }
-            animators[tail] = animator;
-            tail++;
+            animators.Add(animator);
 
             // add to dictionary
             textToAnimator.Add(text, animator);
@@ -64,61 +59,18 @@ namespace LitMotion.Extensions
         }
 
         static readonly Dictionary<TMP_Text, TextMeshProMotionAnimator> textToAnimator = new();
+        static readonly MinimumList<TextMeshProMotionAnimator> animators = new();
 
-        static TextMeshProMotionAnimator[] animators = new TextMeshProMotionAnimator[8];
-        static int tail;
-
-        internal static void UpdateActiveAnimators()
+        static void UpdateAnimators()
         {
-            var j = tail - 1;
-
-            for (int i = 0; i < animators.Length; i++)
+            var span = animators.AsSpan();
+            for (int i = 0; i < span.Length; i++)
             {
-                var animator = animators[i];
-                if (animator != null)
+                if (!span[i].TryUpdate())
                 {
-                    if (!animator.TryUpdate())
-                    {
-                        Return(animator);
-                        animators[i] = null;
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    animators.RemoveAtSwapback(i);
+                    i--;
                 }
-
-                while (i < j)
-                {
-                    var fromTail = animators[j];
-                    if (fromTail != null)
-                    {
-                        if (!fromTail.TryUpdate())
-                        {
-                            Return(fromTail);
-                            animators[j] = null;
-                            j--;
-                            continue;
-                        }
-                        else
-                        {
-                            animators[i] = fromTail;
-                            animators[j] = null;
-                            j--;
-                            goto NEXT_LOOP;
-                        }
-                    }
-                    else
-                    {
-                        j--;
-                    }
-                }
-
-                tail = i;
-                break;
-
-            NEXT_LOOP:
-                continue;
             }
         }
 
