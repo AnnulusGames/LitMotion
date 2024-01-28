@@ -36,6 +36,18 @@ namespace LitMotion
             return storageList[handle.StorageId].IsActive(handle);
         }
 
+        public static float GetMotionPlaybackSpeed(MotionHandle handle)
+        {
+            CheckStorageId(handle);
+            return storageList[handle.StorageId].GetPlaybackSpeed(handle);
+        }
+
+        public static void SetMotionPlaybackSpeed(MotionHandle handle, float value)
+        {
+            CheckStorageId(handle);
+            storageList[handle.StorageId].SetPlaybackSpeed(handle, value);
+        }
+
         public static MotionCallbackData GetMotionCallbacks(MotionHandle handle)
         {
             CheckStorageId(handle);

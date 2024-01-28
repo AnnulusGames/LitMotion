@@ -34,6 +34,8 @@ namespace LitMotion
         bool IsActive(MotionHandle handle);
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
+        float GetPlaybackSpeed(MotionHandle handle);
+        void SetPlaybackSpeed(MotionHandle handle, float value);
         MotionCallbackData GetMotionCallbacks(MotionHandle handle);
         void SetMotionCallbacks(MotionHandle handle, MotionCallbackData callbacks);
         void Reset();
@@ -376,6 +378,18 @@ namespace LitMotion
             dataArray.AsSpan().Clear();
             callbacksArray.AsSpan().Clear();
             tail = 0;
+        }
+
+        public float GetPlaybackSpeed(MotionHandle handle)
+        {
+            CheckIndex(handle);
+            return dataArray[entries[handle.Index].DenseIndex].PlaybackSpeed;
+        }
+
+        public void SetPlaybackSpeed(MotionHandle handle, float value)
+        {
+            CheckIndex(handle);
+            dataArray[entries[handle.Index].DenseIndex].PlaybackSpeed = value;
         }
     }
 }
