@@ -22,6 +22,9 @@ namespace LitMotion
         /// </summary>
         public int Version;
 
+        /// <summary>
+        /// Motion playback speed.
+        /// </summary>
         public readonly float PlaybackSpeed
         {
             get => MotionStorageManager.GetMotionPlaybackSpeed(this);
