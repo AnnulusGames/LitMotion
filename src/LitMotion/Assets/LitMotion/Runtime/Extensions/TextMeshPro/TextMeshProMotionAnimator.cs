@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace LitMotion.Extensions
 {
@@ -17,9 +20,25 @@ namespace LitMotion.Extensions
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Init()
         {
+#if UNITY_EDITOR
+            var domainReloadDisabled = EditorSettings.enterPlayModeOptionsEnabled && EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableDomainReload);
+            if (!domainReloadDisabled && initialized) return;
+#else
+            if (initialized) return;
+#endif
             PlayerLoopHelper.OnUpdate += UpdateAnimators;
+            initialized = true;
         }
 
+#if UNITY_EDITOR
+        [InitializeOnLoadMethod]
+        static void InitEditor()
+        {
+            EditorApplication.update += UpdateAnimatorsEditor;
+        }
+#endif
+
+        static bool initialized;
         static TextMeshProMotionAnimator rootNode;
 
         internal static TextMeshProMotionAnimator Get(TMP_Text text)
@@ -41,7 +60,12 @@ namespace LitMotion.Extensions
             animator.Reset();
 
             // add to array
-            animators.Add(animator);
+            if (tail == animators.Length)
+            {
+                Array.Resize(ref animators, tail * 2);
+            }
+            animators[tail] = animator;
+            tail++;
 
             // add to dictionary
             textToAnimator.Add(text, animator);
@@ -59,20 +83,73 @@ namespace LitMotion.Extensions
         }
 
         static readonly Dictionary<TMP_Text, TextMeshProMotionAnimator> textToAnimator = new();
-        static readonly MinimumList<TextMeshProMotionAnimator> animators = new();
+        static TextMeshProMotionAnimator[] animators = new TextMeshProMotionAnimator[8];
+        static int tail;
 
         static void UpdateAnimators()
         {
-            var span = animators.AsSpan();
-            for (int i = 0; i < span.Length; i++)
+            var j = tail - 1;
+
+            for (int i = 0; i < animators.Length; i++)
             {
-                if (!span[i].TryUpdate())
+                var animator = animators[i];
+                if (animator != null)
                 {
-                    animators.RemoveAtSwapback(i);
-                    i--;
+                    if (!animator.TryUpdate())
+                    {
+                        Return(animator);
+                        animators[i] = null;
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
+
+                while (i < j)
+                {
+                    var fromTail = animators[j];
+                    if (fromTail != null)
+                    {
+                        if (!fromTail.TryUpdate())
+                        {
+                            Return(fromTail);
+                            animators[j] = null;
+                            j--;
+                            continue;
+                        }
+                        else
+                        {
+                            animators[i] = fromTail;
+                            animators[j] = null;
+                            j--;
+                            goto NEXT_LOOP;
+                        }
+                    }
+                    else
+                    {
+                        j--;
+                    }
+                }
+
+                tail = i;
+                break;
+
+            NEXT_LOOP:
+                continue;
             }
         }
+
+#if UNITY_EDITOR
+        static void UpdateAnimatorsEditor()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+            {
+                return;
+            }
+            UpdateAnimators();
+        }
+#endif
 
         internal struct CharInfo
         {
