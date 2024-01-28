@@ -30,8 +30,8 @@ namespace LitMotion
         public void RemoveAtSwapback(int index)
         {
             CheckIndex(index);
-            array[index] = array[tailIndex];
-            array[tailIndex] = default;
+            array[index] = array[tailIndex - 1];
+            array[tailIndex - 1] = default;
             tailIndex--;
         }
 
