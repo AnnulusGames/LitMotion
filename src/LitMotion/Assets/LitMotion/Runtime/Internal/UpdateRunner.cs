@@ -38,13 +38,11 @@ namespace LitMotion
             using var completedIndexList = new NativeList<int>(count, Allocator.TempJob);
 
             var deltaTime = time - prevTime;
-            var unscaledDeltaTime = unscaledTime - prevRealtime;
+            var unscaledDeltaTime = unscaledTime - prevUnscaledTime;
             var realDeltaTime = realtime - prevRealtime;
             prevTime = time;
             prevUnscaledTime = unscaledTime;
             prevRealtime = realtime;
-
-            Debug.Log(deltaTime + ", " + unscaledDeltaTime + ", " + realDeltaTime);
 
             fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
             {
