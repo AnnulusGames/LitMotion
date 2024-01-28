@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace LitMotion.Extensions
 {
@@ -14,12 +17,28 @@ namespace LitMotion.Extensions
     /// </summary>
     internal sealed class TextMeshProMotionAnimator
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Init()
         {
-            PlayerLoopHelper.OnUpdate += UpdateActiveAnimators;
+#if UNITY_EDITOR
+            var domainReloadDisabled = EditorSettings.enterPlayModeOptionsEnabled && EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableDomainReload);
+            if (!domainReloadDisabled && initialized) return;
+#else
+            if (initialized) return;
+#endif
+            PlayerLoopHelper.OnUpdate += UpdateAnimators;
+            initialized = true;
         }
 
+#if UNITY_EDITOR
+        [InitializeOnLoadMethod]
+        static void InitEditor()
+        {
+            EditorApplication.update += UpdateAnimatorsEditor;
+        }
+#endif
+
+        static bool initialized;
         static TextMeshProMotionAnimator rootNode;
 
         internal static TextMeshProMotionAnimator Get(TMP_Text text)
@@ -64,11 +83,10 @@ namespace LitMotion.Extensions
         }
 
         static readonly Dictionary<TMP_Text, TextMeshProMotionAnimator> textToAnimator = new();
-
         static TextMeshProMotionAnimator[] animators = new TextMeshProMotionAnimator[8];
         static int tail;
 
-        internal static void UpdateActiveAnimators()
+        static void UpdateAnimators()
         {
             var j = tail - 1;
 
@@ -121,6 +139,17 @@ namespace LitMotion.Extensions
                 continue;
             }
         }
+
+#if UNITY_EDITOR
+        static void UpdateAnimatorsEditor()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+            {
+                return;
+            }
+            UpdateAnimators();
+        }
+#endif
 
         internal struct CharInfo
         {
