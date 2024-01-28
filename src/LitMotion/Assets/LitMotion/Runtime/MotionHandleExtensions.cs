@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace LitMotion
@@ -69,6 +70,22 @@ namespace LitMotion
             GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle);
             return handle;
         }
+
+#if UNITY_2022_2_OR_NEWER
+        /// <summary>
+        /// Link the motion lifecycle to the target object.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="target">Target object</param>
+        public static MotionHandle AddTo(this MotionHandle handle, MonoBehaviour target)
+        {
+            target.destroyCancellationToken.Register(() =>
+            {
+                if (handle.IsActive()) handle.Cancel();
+            }, false);
+            return handle;
+        }
+#endif
 
         static TComponent GetOrAddComponent<TComponent>(GameObject target) where TComponent : Component
         {
