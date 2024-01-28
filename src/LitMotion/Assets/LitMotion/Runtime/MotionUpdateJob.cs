@@ -41,7 +41,7 @@ namespace LitMotion
                     _ => default
                 };
 
-                ptr->Time = math.max(ptr->Time + deltaTime, 0.0);
+                ptr->Time = math.max(ptr->Time + deltaTime * ptr->PlaybackSpeed, 0.0);
                 var motionTime = ptr->Time;
 
                 double t;
