@@ -89,7 +89,7 @@ namespace LitMotion
             MotionStorage<TValue, TOptions, TAdapter> storage = Cache<TValue, TOptions, TAdapter>.GetOrCreate();
             if (Cache<TValue, TOptions, TAdapter>.updateRunner == null)
             {
-                var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, Time, Time, Time);
                 updateRunners.Add(runner);
                 Cache<TValue, TOptions, TAdapter>.updateRunner = runner;
             }

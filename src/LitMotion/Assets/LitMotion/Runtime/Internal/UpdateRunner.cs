@@ -17,9 +17,12 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
-        public UpdateRunner(MotionStorage<TValue, TOptions, TAdapter> storage)
+        public UpdateRunner(MotionStorage<TValue, TOptions, TAdapter> storage, double time, double unscaledTime, double realtime)
         {
             this.storage = storage;
+            prevTime = time;
+            prevUnscaledTime = unscaledTime;
+            prevRealtime = realtime;
         }
 
         readonly MotionStorage<TValue, TOptions, TAdapter> storage;
@@ -40,6 +43,8 @@ namespace LitMotion
             prevTime = time;
             prevUnscaledTime = unscaledTime;
             prevRealtime = realtime;
+
+            Debug.Log(deltaTime + ", " + unscaledDeltaTime + ", " + realDeltaTime);
 
             fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
             {
