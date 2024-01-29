@@ -24,9 +24,21 @@ var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
 handle.Cancel();
 ```
 
+### Motion Playback Speed
+
+You can change the playback speed of a motion using the `MotionHandle.PlaybackSpeed` property. This allows you to perform actions such as slow-motion or pause during the motion playback.
+
+```cs
+var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
+handle.PlaybackSpeed = 2f;
+```
+
+> [!WARNING]
+> PlaybackSpeed does not support values less than 0. Trying to set a negative value to `MotionHandle.PlaybackSpeed` will throw an exception.
+
 ### Motion Existence Check
 
-The mentioned methods throw exceptions if the motion has already ended or if the `MotionHandle` hasn’t been initialized. Use `IsActive()` to check if the motion referenced by `MotionHandle` exists.
+The methods and properties mentioned above will throw exceptions if the motion has already ended or if the `MotionHandle` has not been initialized. To check whether the motion pointed to by the `MotionHandle` exists, use `IsActive()`.
 
 ```cs
 var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();

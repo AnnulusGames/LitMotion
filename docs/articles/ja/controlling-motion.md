@@ -24,9 +24,21 @@ var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
 handle.Cancel();
 ```
 
+### モーションの再生速度
+
+`MotionHandle.PlaybackSpeed`プロパティを操作することで、モーションの再生速度を変更することができます。これを使用してモーションのスロー再生や一時停止などを行うことができます。
+
+```cs
+var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
+handle.PlaybackSpeed = 2f;
+```
+
+> [!WARNING]
+> PlaybackSpeedは0未満の値をサポートしていません。`MotionHandle.PlaybackSpeed`に負の値を設定しようとすると例外をスローします。
+
 ### モーションの存在チェック
 
-上記のメソッドはモーションが既に終了している、または`MotionHandle`が初期化されていない場合に例外をスローします。`MotionHandle`の指すモーションが存在しているかをチェックするには`IsActive()`を使用します。
+上記のメソッド/プロパティはモーションが既に終了している、または`MotionHandle`が初期化されていない場合に例外をスローします。`MotionHandle`の指すモーションが存在しているかをチェックするには`IsActive()`を使用します。
 
 ```cs
 var handle = LMotion.Create(0f, 10f, 2f).RunWithoutBinding();
