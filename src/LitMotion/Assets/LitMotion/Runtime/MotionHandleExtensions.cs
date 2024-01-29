@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
 
@@ -120,12 +122,10 @@ namespace LitMotion
         }
 
 #if UNITY_2023_1_OR_NEWER
-        public static async Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
+        public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
-            while (handle.IsActive())
-            {
-                await Awaitable.NextFrameAsync(cancellationToken);
-            }
+            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancellationToken).Awaitable;
         }
 #endif
 
