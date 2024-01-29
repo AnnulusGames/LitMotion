@@ -1,72 +1,14 @@
+#if UNITY_2023_1_OR_NEWER
 using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
 
 namespace LitMotion
 {
-#if UNITY_2023_1_OR_NEWER
-
-    internal sealed class AwaitableMotionConfiguredSource
+    internal sealed class AwaitableMotionConfiguredSource : IMotionTaskSourcePoolNode<AwaitableMotionConfiguredSource>
     {
-        [StructLayout(LayoutKind.Auto)]
-        public struct Pool
-        {
-            static readonly int MaxPoolSize = int.MaxValue;
+        static MotionTaskSourcePool<AwaitableMotionConfiguredSource> pool;
 
-            int gate;
-            int size;
-            AwaitableMotionConfiguredSource root;
-
-            public readonly int Size => size;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool TryPop(out AwaitableMotionConfiguredSource result)
-            {
-                if (Interlocked.CompareExchange(ref gate, 1, 0) == 0)
-                {
-                    var v = root;
-                    if (v != null)
-                    {
-                        ref var nextNode = ref v.NextNode;
-                        root = nextNode;
-                        nextNode = null;
-                        size--;
-                        result = v;
-                        Volatile.Write(ref gate, 0);
-                        return true;
-                    }
-
-                    Volatile.Write(ref gate, 0);
-                }
-                result = default;
-                return false;
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool TryPush(AwaitableMotionConfiguredSource item)
-            {
-                if (Interlocked.CompareExchange(ref gate, 1, 0) == 0)
-                {
-                    if (size < MaxPoolSize)
-                    {
-                        item.NextNode = root;
-                        root = item;
-                        size++;
-                        Volatile.Write(ref gate, 0);
-                        return true;
-                    }
-                    else
-                    {
-                        Volatile.Write(ref gate, 0);
-                    }
-                }
-                return false;
-            }
-        }
-
-        static Pool pool;
         AwaitableMotionConfiguredSource nextNode;
         public ref AwaitableMotionConfiguredSource NextNode => ref nextNode;
 
@@ -215,6 +157,6 @@ namespace LitMotion
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
         }
     }
+}
 
 #endif
-}
