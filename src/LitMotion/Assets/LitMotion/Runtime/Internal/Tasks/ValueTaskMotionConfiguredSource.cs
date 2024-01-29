@@ -79,8 +79,14 @@ namespace LitMotion
                 {
                     var source = (ValueTaskMotionConfiguredSource)x;
                     var motionHandle = source.motionHandle;
-                    if (motionHandle.IsActive()) motionHandle.Cancel();
-                    source.core.SetException(new OperationCanceledException());
+                    if (motionHandle.IsActive())
+                    {
+                        motionHandle.Cancel();
+                    }
+                    else
+                    {
+                        source.core.SetException(new OperationCanceledException());
+                    }
                 }, result);
             }
 
@@ -142,6 +148,7 @@ namespace LitMotion
             cancellationToken = default;
             originalCompleteAction = default;
             originalCancelAction = default;
+
             return pool.TryPush(this);
         }
 
