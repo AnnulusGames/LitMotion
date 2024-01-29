@@ -11,7 +11,6 @@ namespace LitMotion.Editor
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            data.StartTime = Time;
             return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
         }
     }

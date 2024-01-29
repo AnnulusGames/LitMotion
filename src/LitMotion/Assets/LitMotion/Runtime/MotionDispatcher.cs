@@ -89,7 +89,14 @@ namespace LitMotion
             {
                 if (runner == null)
                 {
-                    runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                    if (playerLoopTiming == PlayerLoopTiming.FixedUpdate)
+                    {
+                        runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, Time.fixedTimeAsDouble, Time.fixedUnscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
+                    }
+                    else
+                    {
+                        runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, Time.timeAsDouble, Time.unscaledTimeAsDouble, Time.realtimeSinceStartupAsDouble);
+                    }
                     GetRunnerList(playerLoopTiming).Add(runner);
                     return (runner, true);
                 }
@@ -245,7 +252,8 @@ namespace LitMotion
             {
                 if (updateRunner == null)
                 {
-                    updateRunner = new UpdateRunner<TValue, TOptions, TAdapter>(storage);
+                    var time = EditorApplication.timeSinceStartup;
+                    updateRunner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, time, time, time);
                     updateRunners.Add(updateRunner);
                 }
             }

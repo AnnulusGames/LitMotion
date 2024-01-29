@@ -20,9 +20,9 @@ namespace LitMotion
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
         [NativeDisableUnsafePtrRestriction] public MotionData<TValue, TOptions>* DataPtr;
-        [ReadOnly] public double Time;
-        [ReadOnly] public double UnscaledTime;
-        [ReadOnly] public double Realtime;
+        [ReadOnly] public double DeltaTime;
+        [ReadOnly] public double UnscaledDeltaTime;
+        [ReadOnly] public double RealDeltaTime;
 
         [WriteOnly] public NativeList<int>.ParallelWriter CompletedIndexList;
         [WriteOnly] public NativeArray<TValue> Output;
@@ -33,15 +33,16 @@ namespace LitMotion
 
             if (Hint.Likely(ptr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing))
             {
-                var currentTime = ptr->TimeKind switch
+                var deltaTime = ptr->TimeKind switch
                 {
-                    MotionTimeKind.Time => Time,
-                    MotionTimeKind.UnscaledTime => UnscaledTime,
-                    MotionTimeKind.Realtime => Realtime,
+                    MotionTimeKind.Time => DeltaTime,
+                    MotionTimeKind.UnscaledTime => UnscaledDeltaTime,
+                    MotionTimeKind.Realtime => RealDeltaTime,
                     _ => default
                 };
 
-                var motionTime = currentTime - ptr->StartTime;
+                ptr->Time = math.max(ptr->Time + deltaTime * ptr->PlaybackSpeed, 0.0);
+                var motionTime = ptr->Time;
 
                 double t;
                 bool isCompleted;

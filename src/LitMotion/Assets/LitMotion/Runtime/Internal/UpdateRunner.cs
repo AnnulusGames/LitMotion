@@ -17,12 +17,19 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
-        public UpdateRunner(MotionStorage<TValue, TOptions, TAdapter> storage)
+        public UpdateRunner(MotionStorage<TValue, TOptions, TAdapter> storage, double time, double unscaledTime, double realtime)
         {
             this.storage = storage;
+            prevTime = time;
+            prevUnscaledTime = unscaledTime;
+            prevRealtime = realtime;
         }
 
         readonly MotionStorage<TValue, TOptions, TAdapter> storage;
+
+        double prevTime;
+        double prevUnscaledTime;
+        double prevRealtime;
 
         public unsafe void Update(double time, double unscaledTime, double realtime)
         {
@@ -30,15 +37,22 @@ namespace LitMotion
             using var output = new NativeArray<TValue>(count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
             using var completedIndexList = new NativeList<int>(count, Allocator.TempJob);
 
+            var deltaTime = time - prevTime;
+            var unscaledDeltaTime = unscaledTime - prevUnscaledTime;
+            var realDeltaTime = realtime - prevRealtime;
+            prevTime = time;
+            prevUnscaledTime = unscaledTime;
+            prevRealtime = realtime;
+
             fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
             {
                 // update data
                 var job = new MotionUpdateJob<TValue, TOptions, TAdapter>()
                 {
                     DataPtr = dataPtr,
-                    Time = time,
-                    UnscaledTime = unscaledTime,
-                    Realtime = realtime,
+                    DeltaTime = deltaTime,
+                    UnscaledDeltaTime = unscaledDeltaTime,
+                    RealDeltaTime = realDeltaTime,
                     Output = output,
                     CompletedIndexList = completedIndexList.AsParallelWriter()
                 };
