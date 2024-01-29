@@ -29,7 +29,6 @@ namespace LitMotion
         {
             buffer.Version++;
             buffer.Duration = default;
-            buffer.PlaybackSpeed = 1f;
             buffer.Ease = default;
             buffer.Delay = default;
             buffer.DelayType = default;
@@ -56,7 +55,6 @@ namespace LitMotion
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
 
         public float Duration;
-        public float PlaybackSpeed = 1f;
         public Ease Ease;
         public float Delay;
         public DelayType DelayType;
@@ -361,7 +359,7 @@ namespace LitMotion
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
                 Duration = buffer.Duration,
-                PlaybackSpeed = buffer.PlaybackSpeed,
+                PlaybackSpeed = 1f,
                 Ease = buffer.Ease,
                 Delay = buffer.Delay,
                 DelayType = buffer.DelayType,
