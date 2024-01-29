@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LitMotion
@@ -119,6 +118,13 @@ namespace LitMotion
             {
                 yield return null;
             }
+        }
+        
+        public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return default;
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancellationToken, out var token);
+            return new ValueTask(source, token);
         }
 
 #if UNITY_2023_1_OR_NEWER
