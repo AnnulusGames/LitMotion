@@ -92,7 +92,11 @@ namespace LitMotion.Tests.Runtime
         public async Task Test_CancelWhileAwait()
         {
             var handle = LMotion.Create(0f, 10f, 1f).BindToUnityLogger();
-            _ = DelayedCall(0.2f, () => handle.Cancel());
+
+            _ = LMotion.Create(0f, 1f, 0.2f)
+                .WithOnComplete(() => handle.Cancel())
+                .RunWithoutBinding();
+
             try
             {
                 await handle.ToValueTask();
@@ -125,17 +129,6 @@ namespace LitMotion.Tests.Runtime
                 return;
             }
             Assert.Fail();
-        }
-
-        async Task DelayedCall(float delay, Action action)
-        {
-            var timer = 0f;
-            while (timer < delay)
-            {
-                await Task.Yield();
-                timer += Time.deltaTime;
-            }
-            action.Invoke();
         }
     }
 }
