@@ -44,6 +44,7 @@ namespace LitMotion
 
         public static void SetMotionPlaybackSpeed(MotionHandle handle, float value)
         {
+            if (value < 0f) throw new ArgumentOutOfRangeException("Playback speed must be 0 or greater.");
             CheckStorageId(handle);
             storageList[handle.StorageId].SetPlaybackSpeed(handle, value);
         }
