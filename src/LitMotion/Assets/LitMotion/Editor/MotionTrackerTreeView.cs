@@ -60,7 +60,7 @@ namespace LitMotion.Editor
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 55},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Scheduler"), width = 25},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Elapsed"), width = 15},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Position")},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Stack Trace")},
             })))
         {
 
