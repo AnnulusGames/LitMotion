@@ -21,6 +21,8 @@
   href: motion-configuration.md
 - name: コルーチンでモーションを待機する
   href: waiting-for-motion-in-coroutine.md
+- name: async/awaitでモーションを待機する
+  href: waiting-for-motion-in-async-await.md
 - name: Punch/Shakeによる振動のモーション
   href: punch-and-shake.md
 - name: テキストアニメーション

@@ -21,6 +21,8 @@
   href: motion-configuration.md
 - name: Waiting for Motion in Coroutine
   href: waiting-for-motion-in-coroutine.md
+- name: Waiting for Motion in async/await
+  href: waiting-for-motion-in-async-await.md
 - name: Vibration Motion with Punch/Shake
   href: punch-and-shake.md
 - name: Text Animation
