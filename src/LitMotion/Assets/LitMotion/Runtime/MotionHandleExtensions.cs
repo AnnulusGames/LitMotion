@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 namespace LitMotion
@@ -117,6 +118,17 @@ namespace LitMotion
                 yield return null;
             }
         }
+
+#if UNITY_2023_1_OR_NEWER
+        public static async Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
+        {
+            while (handle.IsActive())
+            {
+                await Awaitable.NextFrameAsync(cancellationToken);
+            }
+        }
+#endif
+
     }
 
     internal sealed class MotionHandleDisposable : IDisposable
