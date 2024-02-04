@@ -1,0 +1,20 @@
+{
+    "name": "LitMotion.Sequencer.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3",
+        "GUID:8c41f684b6199433cbfc54bfc4a1c78e",
+        "GUID:303bc987a04464494a1b186f66bc88cb"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
