@@ -13,7 +13,7 @@ namespace LitMotion.Sequences
         static readonly Action<object> AvailableContinuation = _ => { };
         static readonly Action<object> CompletedContinuation = _ => { };
 
-        public static ValueTask WhenAll(ref TempList<ValueTask> tasks)
+        public static ValueTask WhenAll(MinimumList<ValueTask> tasks)
         {
             var promise = new WhenAllPromiseAll();
             promise.Run(tasks.AsSpan());

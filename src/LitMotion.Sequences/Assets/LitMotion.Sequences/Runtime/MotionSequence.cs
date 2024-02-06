@@ -24,6 +24,7 @@ namespace LitMotion.Sequences
         float playbackSpeed = 1f;
 
         static readonly MinimumList<MotionHandle> buffer = new();
+        static readonly MinimumList<ValueTask> taskBuffer = new();
 
         public float PlaybackSpeed
         {
@@ -123,25 +124,18 @@ namespace LitMotion.Sequences
                     }
                     else
                     {
-                        var tmpList = new TempList<ValueTask>(buffer.Count);
-                        try
+                        taskBuffer.Clear();
+                        for (int i = 0; i < buffer.Count; i++)
                         {
-                            for (int i = 0; i < buffer.Count; i++)
+                            var handle = buffer[i];
+                            if (handle.IsActive())
                             {
-                                var handle = buffer[i];
-                                if (handle.IsActive())
-                                {
-                                    handles.Add(handle);
-                                    handle.PlaybackSpeed = playbackSpeed;
-                                    tmpList.Add(handle.ToValueTask());
-                                }
+                                handles.Add(handle);
+                                handle.PlaybackSpeed = playbackSpeed;
+                                taskBuffer.Add(handle.ToValueTask());
                             }
-                            await ValueTaskHelper.WhenAll(ref tmpList);
                         }
-                        finally
-                        {
-                            tmpList.Dispose();
-                        }
+                        await ValueTaskHelper.WhenAll(taskBuffer);
                     }
                 }
                 catch (OperationCanceledException)
