@@ -21,7 +21,27 @@ namespace LitMotion.Sequences
         readonly MinimumList<MotionHandle> handles;
         readonly MinimumQueue<IMotionSequenceConfiguration> factoryQueue;
 
+        float playbackSpeed = 1f;
+
         static readonly MinimumList<MotionHandle> buffer = new();
+
+        public float PlaybackSpeed
+        {
+            get => playbackSpeed;
+            set
+            {
+                playbackSpeed = value;
+                var handleSpan = handles.AsSpan();
+                for (int i = 0; i < handleSpan.Length; i++)
+                {
+                    var handle = handleSpan[i];
+                    if (handle.IsActive())
+                    {
+                        handle.PlaybackSpeed = playbackSpeed;
+                    }
+                }
+            }
+        }
 
         public void Play()
         {
@@ -93,8 +113,13 @@ namespace LitMotion.Sequences
                     }
                     if (buffer.Count == 1)
                     {
-                        handles.Add(buffer[0]);
-                        await buffer[0].ToValueTask();
+                        var handle = buffer[0];
+                        if (handle.IsActive())
+                        {
+                            handles.Add(handle);
+                            handle.PlaybackSpeed = playbackSpeed;
+                            await handle.ToValueTask();
+                        }
                     }
                     else
                     {
@@ -104,8 +129,12 @@ namespace LitMotion.Sequences
                             for (int i = 0; i < buffer.Count; i++)
                             {
                                 var handle = buffer[i];
-                                handles.Add(handle);
-                                tmpList.Add(handle.ToValueTask());
+                                if (handle.IsActive())
+                                {
+                                    handles.Add(handle);
+                                    handle.PlaybackSpeed = playbackSpeed;
+                                    tmpList.Add(handle.ToValueTask());
+                                }
                             }
                             await ValueTaskHelper.WhenAll(ref tmpList);
                         }
