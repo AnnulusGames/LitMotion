@@ -3,7 +3,7 @@
     "rootNamespace": "LitMotion.Sequences.Tests.Runtime",
     "references": [
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
+        "Unity.PerformanceTesting",
         "LitMotion",
         "LitMotion.Sequences"
     ],
