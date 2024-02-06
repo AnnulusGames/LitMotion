@@ -28,13 +28,13 @@ namespace LitMotion.Sequences
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceBufferWriter> factoryDelegate)
+        public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceItemBuilder> factoryDelegate)
         {
             builder.Items.Add(new _AppendGroup(factoryDelegate));
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceBufferWriter> factoryDelegate)
+        public static IMotionSequenceBuilder AppendGroup<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceItemBuilder> factoryDelegate)
         {
             builder.Items.Add(new _AppendGroupWithState<TState>(state, factoryDelegate));
             return builder;
@@ -49,9 +49,9 @@ namespace LitMotion.Sequences
 
             readonly Func<MotionHandle> factoryDelegate;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
-                writer.Add(factoryDelegate());
+                builder.Add(factoryDelegate());
             }
         }
 
@@ -66,9 +66,9 @@ namespace LitMotion.Sequences
             readonly T state;
             readonly Func<T, MotionHandle> factoryDelegate;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
-                writer.Add(factoryDelegate(state));
+                builder.Add(factoryDelegate(state));
             }
         }
 
@@ -82,7 +82,7 @@ namespace LitMotion.Sequences
 
             readonly Action callback;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
                 callback.Invoke();
             }
@@ -99,7 +99,7 @@ namespace LitMotion.Sequences
             readonly T state;
             readonly Action<T> callback;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
                 callback.Invoke(state);
             }
@@ -107,33 +107,33 @@ namespace LitMotion.Sequences
 
         sealed class _AppendGroup : IMotionSequenceItem
         {
-            public _AppendGroup(Action<MotionSequenceBufferWriter> Delegate)
+            public _AppendGroup(Action<MotionSequenceItemBuilder> Delegate)
             {
                 this.factoryDelegate = Delegate;
             }
 
-            readonly Action<MotionSequenceBufferWriter> factoryDelegate;
+            readonly Action<MotionSequenceItemBuilder> factoryDelegate;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
-                factoryDelegate(writer);
+                factoryDelegate(builder);
             }
         }
 
         sealed class _AppendGroupWithState<T> : IMotionSequenceItem
         {
-            public _AppendGroupWithState(T state, Action<T, MotionSequenceBufferWriter> Delegate)
+            public _AppendGroupWithState(T state, Action<T, MotionSequenceItemBuilder> Delegate)
             {
                 this.state = state;
                 this.factoryDelegate = Delegate;
             }
 
             readonly T state;
-            readonly Action<T, MotionSequenceBufferWriter> factoryDelegate;
+            readonly Action<T, MotionSequenceItemBuilder> factoryDelegate;
 
-            public void Configure(MotionSequenceBufferWriter writer)
+            public void Configure(MotionSequenceItemBuilder builder)
             {
-                factoryDelegate(state, writer);
+                factoryDelegate(state, builder);
             }
         }
     }
