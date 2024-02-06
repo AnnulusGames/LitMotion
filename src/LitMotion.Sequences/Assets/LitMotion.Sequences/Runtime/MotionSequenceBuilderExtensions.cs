@@ -16,6 +16,18 @@ namespace LitMotion.Sequences
             return builder;
         }
 
+        public static IMotionSequenceBuilder AppendCallback(this IMotionSequenceBuilder builder, Action callback)
+        {
+            builder.Factories.Add(new AppendCallbackConfiguration(callback));
+            return builder;
+        }
+
+        public static IMotionSequenceBuilder AppendCallback<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState> callback)
+        {
+            builder.Factories.Add(new AppendCallbackConfigurationWithState<TState>(state, callback));
+            return builder;
+        }
+
         public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceBufferWriter> configureDelegate)
         {
             builder.Factories.Add(new AppendGroupConfiguration(configureDelegate));
@@ -57,6 +69,39 @@ namespace LitMotion.Sequences
             public void Configure(MotionSequenceBufferWriter writer)
             {
                 writer.Add(factoryDelegate(state));
+            }
+        }
+
+
+        sealed class AppendCallbackConfiguration : IMotionSequenceConfiguration
+        {
+            public AppendCallbackConfiguration(Action callback)
+            {
+                this.callback = callback;
+            }
+
+            readonly Action callback;
+
+            public void Configure(MotionSequenceBufferWriter writer)
+            {
+                callback.Invoke();
+            }
+        }
+
+        sealed class AppendCallbackConfigurationWithState<T> : IMotionSequenceConfiguration
+        {
+            public AppendCallbackConfigurationWithState(T state, Action<T> callback)
+            {
+                this.state = state;
+                this.callback = callback;
+            }
+
+            readonly T state;
+            readonly Action<T> callback;
+
+            public void Configure(MotionSequenceBufferWriter writer)
+            {
+                callback.Invoke(state);
             }
         }
 
