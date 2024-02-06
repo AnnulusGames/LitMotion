@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LitMotion.Sequences
 {
-    internal class MinimumQueue<T>
+    internal sealed class MinimumQueue<T>
     {
         const int MinimumGrow = 4;
         const int GrowFactor = 200;

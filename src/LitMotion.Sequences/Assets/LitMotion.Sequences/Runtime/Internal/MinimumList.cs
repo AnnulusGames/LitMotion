@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace LitMotion
+namespace LitMotion.Sequences
 {
     internal sealed class MinimumList<T>
     {

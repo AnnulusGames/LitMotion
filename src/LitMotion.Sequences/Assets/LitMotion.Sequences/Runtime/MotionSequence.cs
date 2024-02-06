@@ -9,17 +9,19 @@ namespace LitMotion.Sequences
     {
         public static IMotionSequenceBuilder CreateBuilder() => new MotionSequenceBuilder();
 
-        public MotionSequence(IEnumerable<IMotionFactory> factories)
+        public MotionSequence(IEnumerable<IMotionSequenceConfiguration> factories)
         {
             this.factories = factories.ToArray();
             handles = new(this.factories.Length);
             factoryQueue = new(this.factories.Length);
         }
 
-        readonly IMotionFactory[] factories;
+        readonly IMotionSequenceConfiguration[] factories;
 
         readonly MinimumList<MotionHandle> handles;
-        readonly MinimumQueue<IMotionFactory> factoryQueue;
+        readonly MinimumQueue<IMotionSequenceConfiguration> factoryQueue;
+
+        static readonly MinimumList<MotionHandle> buffer = new();
 
         public void Play(SequencePlayMode playMode = SequencePlayMode.Sequential)
         {
@@ -48,7 +50,10 @@ namespace LitMotion.Sequences
 
             while (factoryQueue.TryDequeue(out var factory))
             {
-                factory.CreateMotion().Complete();
+                buffer.Clear();
+                factory.Configure(new MotionSequenceBufferWriter(buffer));
+                var bufferSpan = buffer.AsSpan();
+                for (int i = 0; i < bufferSpan.Length; i++) bufferSpan[i].Complete();
             }
         }
 
@@ -88,9 +93,36 @@ namespace LitMotion.Sequences
             {
                 try
                 {
-                    var handle = factory.CreateMotion();
-                    handles.Add(handle);
-                    await handle.ToValueTask();
+                    buffer.Clear();
+                    factory.Configure(new MotionSequenceBufferWriter(buffer));
+
+                    if (buffer.Count == 0)
+                    {
+                        // do nothing
+                    }
+                    if (buffer.Count == 1)
+                    {
+                        handles.Add(buffer[0]);
+                        await buffer[0].ToValueTask();
+                    }
+                    else
+                    {
+                        var tmpList = new TempList<ValueTask>(buffer.Count);
+                        try
+                        {
+                            for (int i = 0; i < buffer.Count; i++)
+                            {
+                                var handle = buffer[i];
+                                handles.Add(handle);
+                                tmpList.Add(handle.ToValueTask());
+                            }
+                            await ValueTaskHelper.WhenAll(ref tmpList);
+                        }
+                        finally
+                        {
+                            tmpList.Dispose();
+                        }
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -111,8 +143,10 @@ namespace LitMotion.Sequences
 
                 try
                 {
-                    var handle = factory.CreateMotion();
-                    handles.Add(handle);
+                    buffer.Clear();
+                    factory.Configure(new MotionSequenceBufferWriter(buffer));
+                    var bufferSpan = buffer.AsSpan();
+                    for (int n = 0; n < bufferSpan.Length; n++) handles.Add(buffer[n]);
                 }
                 catch (Exception ex)
                 {

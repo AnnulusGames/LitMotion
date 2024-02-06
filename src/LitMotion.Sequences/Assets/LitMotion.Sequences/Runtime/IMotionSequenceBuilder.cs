@@ -4,7 +4,7 @@ namespace LitMotion.Sequences
 {
     public interface IMotionSequenceBuilder
     {
-        ICollection<IMotionFactory> Factories { get; }
+        ICollection<IMotionSequenceConfiguration> Factories { get; }
         MotionSequence Build();
     }
 }
