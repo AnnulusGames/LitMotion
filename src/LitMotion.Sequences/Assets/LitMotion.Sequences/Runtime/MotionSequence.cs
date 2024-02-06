@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+#if LITMOTION_SUPPORT_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 
 namespace LitMotion.Sequences
 {
@@ -25,7 +28,11 @@ namespace LitMotion.Sequences
         bool canceled;
 
         static readonly MinimumList<MotionHandle> buffer = new();
+#if LITMOTION_SUPPORT_UNITASK
+        static readonly List<UniTask> taskBuffer = new();
+#else
         static readonly MinimumList<ValueTask> taskBuffer = new();
+#endif
 
         public event Action OnCompleted;
         public event Action OnCanceled;
@@ -51,7 +58,7 @@ namespace LitMotion.Sequences
         public void Play()
         {
             if (IsActive()) throw new InvalidOperationException("Play cannot be called because the sequence is playing.");
-            _ = PlaySequentialAsync();
+            _ = InternalPlayAsync();
         }
 
         public void Complete()
@@ -103,10 +110,14 @@ namespace LitMotion.Sequences
             return false;
         }
 
-        async ValueTask PlaySequentialAsync()
+#if LITMOTION_SUPPORT_UNITASK
+        async UniTask InternalPlayAsync()
+#else
+        async ValueTask InternalPlayAsync()
+#endif
         {
             canceled = false;
-            
+
             for (int i = 0; i < factories.Length; i++)
             {
                 var factory = factories[i];
@@ -131,7 +142,11 @@ namespace LitMotion.Sequences
                         {
                             handles.Add(handle);
                             handle.PlaybackSpeed = playbackSpeed;
+#if LITMOTION_SUPPORT_UNITASK
+                            await handle.ToUniTask();
+#else
                             await handle.ToValueTask();
+#endif
                         }
                     }
                     else
@@ -144,10 +159,18 @@ namespace LitMotion.Sequences
                             {
                                 handles.Add(handle);
                                 handle.PlaybackSpeed = playbackSpeed;
+#if LITMOTION_SUPPORT_UNITASK
+                                taskBuffer.Add(handle.ToUniTask());
+#else
                                 taskBuffer.Add(handle.ToValueTask());
+#endif
                             }
                         }
+#if LITMOTION_SUPPORT_UNITASK
+                        await UniTask.WhenAll(taskBuffer);
+#else
                         await ValueTaskHelper.WhenAll(taskBuffer);
+#endif
                     }
                 }
                 catch (OperationCanceledException)

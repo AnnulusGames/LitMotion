@@ -3,7 +3,8 @@
     "rootNamespace": "LitMotion.Sequences",
     "references": [
         "GUID:3b570a5146f9d4f0fa107ed4559471a3",
-        "GUID:3aa1866a824b5472da50fe142777d95f"
+        "GUID:3aa1866a824b5472da50fe142777d95f",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,6 +13,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_UNITASK"
+        }
+    ],
     "noEngineReferences": false
 }
