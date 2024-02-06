@@ -21,7 +21,7 @@ namespace LitMotion.Sequences
         readonly MinimumQueue<IMotionSequenceItem> itemQueue;
 
         float playbackSpeed = 1f;
-        bool canceledOrCompletedMannually;
+        bool canceledOrCompletedManually;
 
         static readonly MinimumList<MotionHandle> buffer = new();
 
@@ -54,7 +54,7 @@ namespace LitMotion.Sequences
 
         public void Complete()
         {
-            canceledOrCompletedMannually = true;
+            canceledOrCompletedManually = true;
 
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
@@ -77,7 +77,7 @@ namespace LitMotion.Sequences
 
         public void Cancel()
         {
-            canceledOrCompletedMannually = true;
+            canceledOrCompletedManually = true;
 
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
@@ -105,7 +105,7 @@ namespace LitMotion.Sequences
 
         void InternalPlay()
         {
-            canceledOrCompletedMannually = false;
+            canceledOrCompletedManually = false;
 
             for (int i = 0; i < items.Length; i++)
             {
@@ -142,14 +142,14 @@ namespace LitMotion.Sequences
                 MotionSequencePromise.Create(buffer.AsSpan(), this, state =>
                 {
                     var sequence = (MotionSequence)state;
-                    if (sequence.canceledOrCompletedMannually) return;
+                    if (sequence.canceledOrCompletedManually) return;
                     sequence.Run();
                 });
 
                 return;
             }
 
-            if (canceledOrCompletedMannually) return;
+            if (canceledOrCompletedManually) return;
             Run();
         }
     }
