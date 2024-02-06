@@ -18,8 +18,8 @@ namespace LitMotion.Sequences
 
         readonly IMotionFactory[] factories;
 
-        readonly List<MotionHandle> handles;
-        readonly Queue<IMotionFactory> factoryQueue;
+        readonly MinimumList<MotionHandle> handles;
+        readonly MinimumQueue<IMotionFactory> factoryQueue;
 
         public void Play(SequencePlayMode playMode = SequencePlayMode.Sequential)
         {
@@ -38,9 +38,10 @@ namespace LitMotion.Sequences
 
         public void Complete()
         {
-            for (int i = 0; i < handles.Count; i++)
+            var handleSpan = handles.AsSpan();
+            for (int i = 0; i < handleSpan.Length; i++)
             {
-                var handle = handles[i];
+                var handle = handleSpan[i];
                 if (handle.IsActive()) handle.Complete();
             }
             handles.Clear();
@@ -53,9 +54,10 @@ namespace LitMotion.Sequences
 
         public void Cancel()
         {
-            for (int i = 0; i < handles.Count; i++)
+            var handleSpan = handles.AsSpan();
+            for (int i = 0; i < handleSpan.Length; i++)
             {
-                var handle = handles[i];
+                var handle = handleSpan[i];
                 if (handle.IsActive()) handle.Cancel();
             }
             handles.Clear();
@@ -65,9 +67,10 @@ namespace LitMotion.Sequences
         public bool IsPlaying()
         {
             if (factoryQueue.Count > 0) return true;
-            for (int i = 0; i < handles.Count; i++)
+            var handleSpan = handles.AsSpan();
+            for (int i = 0; i < handleSpan.Length; i++)
             {
-                var handle = handles[i];
+                var handle = handleSpan[i];
                 if (handle.IsActive()) return true;
             }
             return false;
