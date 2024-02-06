@@ -14,11 +14,15 @@ public class SequenceSandbox : MonoBehaviour
     void Start()
     {
         sequence = MotionSequence.CreateBuilder()
-            .AppendGroup((target1, target2, target3), (state, motions) =>
+            .Append(() => LMotion.Create(0f, 180f, 1f).BindToEulerAnglesZ(target1))
+            .Append(() => LMotion.Create(0f, 180f, 1f).BindToEulerAnglesZ(target2))
+            .Append(() => LMotion.Create(0f, 180f, 1f).BindToEulerAnglesZ(target3))
+            .AppendCallback(() => Debug.Log("Callback"))
+            .AppendGroup(motions =>
             {
-                motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(3, LoopType.Yoyo).BindToPositionX(state.target1));
-                motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(2, LoopType.Yoyo).BindToPositionX(state.target2));
-                motions.Add(LMotion.Create(-2f, 2f, 1f).BindToPositionX(state.target3));
+                motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(3, LoopType.Yoyo).BindToPositionX(target1));
+                motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(2, LoopType.Yoyo).BindToPositionX(target2));
+                motions.Add(LMotion.Create(-2f, 2f, 1f).BindToPositionX(target3));
             })
             .Build()
             .AddTo(this);
