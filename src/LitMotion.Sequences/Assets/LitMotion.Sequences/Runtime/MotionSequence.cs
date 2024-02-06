@@ -115,13 +115,15 @@ namespace LitMotion.Sequences
             }
 
             Run();
-
-            OnCompleted?.Invoke();
         }
 
         void Run()
         {
-            if (!factoryQueue.TryDequeue(out var factory)) return;
+            if (!factoryQueue.TryDequeue(out var factory))
+            {
+                OnCompleted?.Invoke();
+                return;
+            }
 
             buffer.Clear();
             factory.Configure(new MotionSequenceBufferWriter(buffer));
