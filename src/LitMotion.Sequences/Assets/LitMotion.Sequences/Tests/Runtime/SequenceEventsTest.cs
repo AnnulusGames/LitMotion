@@ -21,12 +21,18 @@ namespace LitMotion.Sequences.Tests.Runtime
 
             sequence.OnCanceled += () => sequenceCanceled = true;
             sequence.OnCompleted += () => sequenceCompleted = true;
-            sequence.Play();
-            sequence.Cancel();
 
-            Assert.That(motionCanceled, Is.True);
-            Assert.That(sequenceCanceled, Is.True);
-            Assert.That(sequenceCompleted, Is.False);
+            for (int i = 0; i < 10; i++)
+            {
+                sequence.Play();
+                sequence.Cancel();
+
+                Assert.That(motionCanceled, Is.True);
+                Assert.That(sequenceCanceled, Is.True);
+                Assert.That(sequenceCompleted, Is.False);
+
+                motionCanceled = sequenceCanceled = sequenceCompleted = false;
+            }
         }
 
         [Test]
@@ -43,13 +49,20 @@ namespace LitMotion.Sequences.Tests.Runtime
 
             sequence.OnCanceled += () => sequenceCanceled = true;
             sequence.OnCompleted += () => sequenceCompleted = true;
-            sequence.Play();
-            sequence.Complete();
 
-            Assert.That(motionCompleted, Is.True);
-            Assert.That(sequenceCanceled, Is.False);
-            Assert.That(sequenceCompleted, Is.True);
-            Assert.That(value, Is.EqualTo(1f).Using(FloatEqualityComparer.Instance));
+            for (int i = 0; i < 10; i++)
+            {
+                sequence.Play();
+                sequence.Complete();
+
+                Assert.That(motionCompleted, Is.True);
+                Assert.That(sequenceCanceled, Is.False);
+                Assert.That(sequenceCompleted, Is.True);
+                Assert.That(value, Is.EqualTo(1f).Using(FloatEqualityComparer.Instance));
+
+                motionCompleted = sequenceCanceled = sequenceCompleted = false;
+                value = 0f;
+            }
         }
     }
 }
