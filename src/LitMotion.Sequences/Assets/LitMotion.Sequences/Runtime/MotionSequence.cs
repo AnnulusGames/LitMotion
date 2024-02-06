@@ -4,22 +4,21 @@ using System.Linq;
 
 namespace LitMotion.Sequences
 {
-
     public sealed class MotionSequence
     {
         public static IMotionSequenceBuilder CreateBuilder() => new MotionSequenceBuilder();
 
-        public MotionSequence(IEnumerable<IMotionSequenceConfiguration> factories)
+        public MotionSequence(IEnumerable<IMotionSequenceItem> items)
         {
-            this.factories = factories.ToArray();
-            handles = new(this.factories.Length);
-            factoryQueue = new(this.factories.Length);
+            this.items = items.ToArray();
+            handles = new(this.items.Length);
+            itemQueue = new(this.items.Length);
         }
 
-        readonly IMotionSequenceConfiguration[] factories;
+        readonly IMotionSequenceItem[] items;
 
         readonly MinimumList<MotionHandle> handles;
-        readonly MinimumQueue<IMotionSequenceConfiguration> factoryQueue;
+        readonly MinimumQueue<IMotionSequenceItem> itemQueue;
 
         float playbackSpeed = 1f;
         bool canceledOrCompletedMannually;
@@ -65,10 +64,10 @@ namespace LitMotion.Sequences
             }
             handles.Clear();
 
-            while (factoryQueue.TryDequeue(out var factory))
+            while (itemQueue.TryDequeue(out var item))
             {
                 buffer.Clear();
-                factory.Configure(new MotionSequenceBufferWriter(buffer));
+                item.Configure(new MotionSequenceBufferWriter(buffer));
                 var bufferSpan = buffer.AsSpan();
                 for (int i = 0; i < bufferSpan.Length; i++) bufferSpan[i].Complete();
             }
@@ -87,14 +86,14 @@ namespace LitMotion.Sequences
                 if (handle.IsActive()) handle.Cancel();
             }
             handles.Clear();
-            factoryQueue.Clear();
+            itemQueue.Clear();
 
             OnCanceled?.Invoke();
         }
 
         public bool IsActive()
         {
-            if (factoryQueue.Count > 0) return true;
+            if (itemQueue.Count > 0) return true;
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
             {
@@ -108,10 +107,10 @@ namespace LitMotion.Sequences
         {
             canceledOrCompletedMannually = false;
 
-            for (int i = 0; i < factories.Length; i++)
+            for (int i = 0; i < items.Length; i++)
             {
-                var factory = factories[i];
-                factoryQueue.Enqueue(factory);
+                var factory = items[i];
+                itemQueue.Enqueue(factory);
             }
 
             Run();
@@ -119,14 +118,14 @@ namespace LitMotion.Sequences
 
         void Run()
         {
-            if (!factoryQueue.TryDequeue(out var factory))
+            if (!itemQueue.TryDequeue(out var item))
             {
                 OnCompleted?.Invoke();
                 return;
             }
 
             buffer.Clear();
-            factory.Configure(new MotionSequenceBufferWriter(buffer));
+            item.Configure(new MotionSequenceBufferWriter(buffer));
 
             if (buffer.Count > 0)
             {

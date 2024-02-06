@@ -4,12 +4,12 @@ namespace LitMotion.Sequences
 {
     internal sealed class MotionSequenceBuilder : IMotionSequenceBuilder
     {
-        public ICollection<IMotionSequenceConfiguration> Factories => factories;
-        readonly List<IMotionSequenceConfiguration> factories = new();
+        public ICollection<IMotionSequenceItem> Items => items;
+        readonly List<IMotionSequenceItem> items = new();
 
         public MotionSequence Build()
         {
-            return new MotionSequence(factories);
+            return new MotionSequence(items);
         }
     }
 }

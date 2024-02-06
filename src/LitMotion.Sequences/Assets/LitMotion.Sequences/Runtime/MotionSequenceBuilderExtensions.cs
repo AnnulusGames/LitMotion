@@ -6,43 +6,43 @@ namespace LitMotion.Sequences
     {
         public static IMotionSequenceBuilder Append(this IMotionSequenceBuilder builder, Func<MotionHandle> factoryDelegate)
         {
-            builder.Factories.Add(new AppendConfiguration(factoryDelegate));
+            builder.Items.Add(new _Append(factoryDelegate));
             return builder;
         }
 
         public static IMotionSequenceBuilder Append<TState>(this IMotionSequenceBuilder builder, TState state, Func<TState, MotionHandle> factoryDelegate)
         {
-            builder.Factories.Add(new AppendConfigurationWithState<TState>(state, factoryDelegate));
+            builder.Items.Add(new _AppendWithState<TState>(state, factoryDelegate));
             return builder;
         }
 
         public static IMotionSequenceBuilder AppendCallback(this IMotionSequenceBuilder builder, Action callback)
         {
-            builder.Factories.Add(new AppendCallbackConfiguration(callback));
+            builder.Items.Add(new _AppendCallback(callback));
             return builder;
         }
 
         public static IMotionSequenceBuilder AppendCallback<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState> callback)
         {
-            builder.Factories.Add(new AppendCallbackConfigurationWithState<TState>(state, callback));
+            builder.Items.Add(new _AppendCallbackWithState<TState>(state, callback));
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceBufferWriter> configureDelegate)
+        public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceBufferWriter> factoryDelegate)
         {
-            builder.Factories.Add(new AppendGroupConfiguration(configureDelegate));
+            builder.Items.Add(new _AppendGroup(factoryDelegate));
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceBufferWriter> configureDelegate)
+        public static IMotionSequenceBuilder AppendGroup<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceBufferWriter> factoryDelegate)
         {
-            builder.Factories.Add(new AppendGroupCongigurationWithState<TState>(state, configureDelegate));
+            builder.Items.Add(new _AppendGroupWithState<TState>(state, factoryDelegate));
             return builder;
         }
 
-        sealed class AppendConfiguration : IMotionSequenceConfiguration
+        sealed class _Append : IMotionSequenceItem
         {
-            public AppendConfiguration(Func<MotionHandle> factoryDelegate)
+            public _Append(Func<MotionHandle> factoryDelegate)
             {
                 this.factoryDelegate = factoryDelegate;
             }
@@ -55,9 +55,9 @@ namespace LitMotion.Sequences
             }
         }
 
-        sealed class AppendConfigurationWithState<T> : IMotionSequenceConfiguration
+        sealed class _AppendWithState<T> : IMotionSequenceItem
         {
-            public AppendConfigurationWithState(T state, Func<T, MotionHandle> factoryDelegate)
+            public _AppendWithState(T state, Func<T, MotionHandle> factoryDelegate)
             {
                 this.state = state;
                 this.factoryDelegate = factoryDelegate;
@@ -73,9 +73,9 @@ namespace LitMotion.Sequences
         }
 
 
-        sealed class AppendCallbackConfiguration : IMotionSequenceConfiguration
+        sealed class _AppendCallback : IMotionSequenceItem
         {
-            public AppendCallbackConfiguration(Action callback)
+            public _AppendCallback(Action callback)
             {
                 this.callback = callback;
             }
@@ -88,9 +88,9 @@ namespace LitMotion.Sequences
             }
         }
 
-        sealed class AppendCallbackConfigurationWithState<T> : IMotionSequenceConfiguration
+        sealed class _AppendCallbackWithState<T> : IMotionSequenceItem
         {
-            public AppendCallbackConfigurationWithState(T state, Action<T> callback)
+            public _AppendCallbackWithState(T state, Action<T> callback)
             {
                 this.state = state;
                 this.callback = callback;
@@ -105,35 +105,35 @@ namespace LitMotion.Sequences
             }
         }
 
-        sealed class AppendGroupConfiguration : IMotionSequenceConfiguration
+        sealed class _AppendGroup : IMotionSequenceItem
         {
-            public AppendGroupConfiguration(Action<MotionSequenceBufferWriter> configurationDelegate)
+            public _AppendGroup(Action<MotionSequenceBufferWriter> Delegate)
             {
-                this.configurationDelegate = configurationDelegate;
+                this.factoryDelegate = Delegate;
             }
 
-            readonly Action<MotionSequenceBufferWriter> configurationDelegate;
+            readonly Action<MotionSequenceBufferWriter> factoryDelegate;
 
             public void Configure(MotionSequenceBufferWriter writer)
             {
-                configurationDelegate(writer);
+                factoryDelegate(writer);
             }
         }
 
-        sealed class AppendGroupCongigurationWithState<T> : IMotionSequenceConfiguration
+        sealed class _AppendGroupWithState<T> : IMotionSequenceItem
         {
-            public AppendGroupCongigurationWithState(T state, Action<T, MotionSequenceBufferWriter> configurationDelegate)
+            public _AppendGroupWithState(T state, Action<T, MotionSequenceBufferWriter> Delegate)
             {
                 this.state = state;
-                this.configurationDelegate = configurationDelegate;
+                this.factoryDelegate = Delegate;
             }
 
             readonly T state;
-            readonly Action<T, MotionSequenceBufferWriter> configurationDelegate;
+            readonly Action<T, MotionSequenceBufferWriter> factoryDelegate;
 
             public void Configure(MotionSequenceBufferWriter writer)
             {
-                configurationDelegate(state, writer);
+                factoryDelegate(state, writer);
             }
         }
     }

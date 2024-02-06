@@ -1,6 +1,6 @@
 namespace LitMotion.Sequences
 {
-    public interface IMotionSequenceConfiguration
+    public interface IMotionSequenceItem
     {
         void Configure(MotionSequenceBufferWriter writer);
     }
