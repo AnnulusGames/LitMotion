@@ -44,5 +44,20 @@ public class SequenceSandbox : MonoBehaviour
         {
             sequence.Cancel();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            sequence.PlaybackSpeed = 0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            sequence.PlaybackSpeed = 1f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            sequence.PlaybackSpeed = 2f;
+        }
     }
 }
