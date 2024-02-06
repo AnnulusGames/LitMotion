@@ -4,6 +4,18 @@ namespace LitMotion.Sequences
 {
     public static class MotionSequenceBuilderExtensions
     {
+        public static IMotionSequenceBuilder Append(this IMotionSequenceBuilder builder, Func<MotionHandle> factoryDelegate)
+        {
+            builder.Factories.Add(new AppendConfiguration(factoryDelegate));
+            return builder;
+        }
+
+        public static IMotionSequenceBuilder Append<TState>(this IMotionSequenceBuilder builder, TState state, Func<TState, MotionHandle> factoryDelegate)
+        {
+            builder.Factories.Add(new AppendConfigurationWithState<TState>(state, factoryDelegate));
+            return builder;
+        }
+
         public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceBufferWriter> configureDelegate)
         {
             builder.Factories.Add(new AppendGroupConfiguration(configureDelegate));
