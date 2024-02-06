@@ -10,7 +10,7 @@ namespace LitMotion.Sequences
             target.destroyCancellationToken.Register(state =>
             {
                 var sequence = (MotionSequence)state;
-                if (sequence.IsPlaying()) sequence.Cancel();     
+                if (sequence.IsActive()) sequence.Cancel();
             }, sequence, false);
             return sequence;
         }

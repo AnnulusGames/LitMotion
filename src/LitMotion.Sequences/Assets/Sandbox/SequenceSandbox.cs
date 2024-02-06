@@ -30,17 +30,17 @@ public class SequenceSandbox : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !sequence.IsPlaying())
+        if (Input.GetKeyDown(KeyCode.Space) && !sequence.IsActive())
         {
             sequence.Play();
         }
 
-        if (Input.GetKeyDown(KeyCode.A) && sequence.IsPlaying())
+        if (Input.GetKeyDown(KeyCode.A) && sequence.IsActive())
         {
             sequence.Complete();
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && sequence.IsPlaying())
+        if (Input.GetKeyDown(KeyCode.Z) && sequence.IsActive())
         {
             sequence.Cancel();
         }

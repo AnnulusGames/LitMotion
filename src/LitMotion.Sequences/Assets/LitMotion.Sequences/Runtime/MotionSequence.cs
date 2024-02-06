@@ -25,7 +25,7 @@ namespace LitMotion.Sequences
 
         public void Play()
         {
-            if (IsPlaying()) throw new InvalidOperationException("Play cannot be called because the sequence is playing.");
+            if (IsActive()) throw new InvalidOperationException("Play cannot be called because the sequence is playing.");
             _ = PlaySequentialAsync();
         }
 
@@ -60,7 +60,7 @@ namespace LitMotion.Sequences
             factoryQueue.Clear();
         }
 
-        public bool IsPlaying()
+        public bool IsActive()
         {
             if (factoryQueue.Count > 0) return true;
             var handleSpan = handles.AsSpan();
