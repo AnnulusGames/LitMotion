@@ -25,7 +25,7 @@ namespace LitMotion.Sequences
         readonly MinimumQueue<IMotionSequenceConfiguration> factoryQueue;
 
         float playbackSpeed = 1f;
-        bool canceled;
+        bool canceledOrCompletedMannually;
 
         static readonly MinimumList<MotionHandle> buffer = new();
 #if LITMOTION_SUPPORT_UNITASK
@@ -63,6 +63,8 @@ namespace LitMotion.Sequences
 
         public void Complete()
         {
+            canceledOrCompletedMannually = true;
+            
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
             {
@@ -84,7 +86,7 @@ namespace LitMotion.Sequences
 
         public void Cancel()
         {
-            canceled = true;
+            canceledOrCompletedMannually = true;
 
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
@@ -116,7 +118,7 @@ namespace LitMotion.Sequences
         async ValueTask InternalPlayAsync()
 #endif
         {
-            canceled = false;
+            canceledOrCompletedMannually = false;
 
             for (int i = 0; i < factories.Length; i++)
             {
@@ -181,9 +183,9 @@ namespace LitMotion.Sequences
                 {
                     MotionDispatcher.GetUnhandledExceptionHandler()(ex);
                 }
-            }
 
-            if (canceled) return;
+                if (canceledOrCompletedMannually) return;
+            }
 
             OnCompleted?.Invoke();
         }
