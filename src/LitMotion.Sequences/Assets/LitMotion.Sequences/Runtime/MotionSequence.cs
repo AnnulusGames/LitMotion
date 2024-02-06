@@ -23,19 +23,10 @@ namespace LitMotion.Sequences
 
         static readonly MinimumList<MotionHandle> buffer = new();
 
-        public void Play(SequencePlayMode playMode = SequencePlayMode.Sequential)
+        public void Play()
         {
             if (IsPlaying()) throw new InvalidOperationException("Play cannot be called because the sequence is playing.");
-
-            switch (playMode)
-            {
-                case SequencePlayMode.Sequential:
-                    _ = PlaySequentialAsync();
-                    break;
-                case SequencePlayMode.Parallel:
-                    PlayParallel();
-                    break;
-            }
+            _ = PlaySequentialAsync();
         }
 
         public void Complete()
@@ -127,26 +118,6 @@ namespace LitMotion.Sequences
                 catch (OperationCanceledException)
                 {
                     // ignore cancellation
-                }
-                catch (Exception ex)
-                {
-                    MotionDispatcher.GetUnhandledExceptionHandler()(ex);
-                }
-            }
-        }
-
-        void PlayParallel()
-        {
-            for (int i = 0; i < factories.Length; i++)
-            {
-                var factory = factories[i];
-
-                try
-                {
-                    buffer.Clear();
-                    factory.Configure(new MotionSequenceBufferWriter(buffer));
-                    var bufferSpan = buffer.AsSpan();
-                    for (int n = 0; n < bufferSpan.Length; n++) handles.Add(buffer[n]);
                 }
                 catch (Exception ex)
                 {
