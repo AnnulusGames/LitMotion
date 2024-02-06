@@ -22,9 +22,13 @@ namespace LitMotion.Sequences
         readonly MinimumQueue<IMotionSequenceConfiguration> factoryQueue;
 
         float playbackSpeed = 1f;
+        bool canceled;
 
         static readonly MinimumList<MotionHandle> buffer = new();
         static readonly MinimumList<ValueTask> taskBuffer = new();
+
+        public event Action OnCompleted;
+        public event Action OnCanceled;
 
         public float PlaybackSpeed
         {
@@ -67,10 +71,14 @@ namespace LitMotion.Sequences
                 var bufferSpan = buffer.AsSpan();
                 for (int i = 0; i < bufferSpan.Length; i++) bufferSpan[i].Complete();
             }
+
+            OnCompleted?.Invoke();
         }
 
         public void Cancel()
         {
+            canceled = true;
+
             var handleSpan = handles.AsSpan();
             for (int i = 0; i < handleSpan.Length; i++)
             {
@@ -79,6 +87,8 @@ namespace LitMotion.Sequences
             }
             handles.Clear();
             factoryQueue.Clear();
+
+            OnCanceled?.Invoke();
         }
 
         public bool IsActive()
@@ -95,6 +105,8 @@ namespace LitMotion.Sequences
 
         async ValueTask PlaySequentialAsync()
         {
+            canceled = false;
+            
             for (int i = 0; i < factories.Length; i++)
             {
                 var factory = factories[i];
@@ -147,6 +159,10 @@ namespace LitMotion.Sequences
                     MotionDispatcher.GetUnhandledExceptionHandler()(ex);
                 }
             }
+
+            if (canceled) return;
+
+            OnCompleted?.Invoke();
         }
     }
 }
