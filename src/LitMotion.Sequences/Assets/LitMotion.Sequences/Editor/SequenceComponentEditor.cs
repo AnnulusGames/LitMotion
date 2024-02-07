@@ -7,7 +7,7 @@ namespace LitMotion.Sequences.Editor
     [CustomEditor(typeof(SequenceComponent), true, isFallback = true)]
     public class SequenceComponentEditor : UnityEditor.Editor
     {
-        public override VisualElement CreateInspectorGUI()
+        public sealed override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
             var foldout = CreateFoldout();
@@ -18,13 +18,17 @@ namespace LitMotion.Sequences.Editor
             iterator.NextVisible(true); // displayName
             iterator.NextVisible(true); // enabled
 
+            AddInspectorElements(foldout, iterator);
+            return root;
+        }
+
+        protected virtual void AddInspectorElements(VisualElement root, SerializedProperty iterator)
+        {
             while (iterator.NextVisible(false))
             {
                 var field = new PropertyField(iterator);
-                foldout.Add(field);
+                root.Add(field);
             }
-
-            return root;
         }
 
         protected SequenceComponentFoldout CreateFoldout()
