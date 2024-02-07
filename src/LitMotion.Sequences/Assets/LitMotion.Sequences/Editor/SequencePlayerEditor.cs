@@ -83,7 +83,7 @@ namespace LitMotion.Sequences.Editor
                     if (iterator.propertyType == SerializedPropertyType.ExposedReference)
                     {
                         var property = iterator.Copy();
-                        var label = component.GetType().Name;
+                        var label = component.displayName;
 
                         var field = new ObjectField(label)
                         {
