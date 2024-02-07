@@ -12,3 +12,7 @@
 .unity-collection-view__item:hover {
     background-color: rgb(210, 210, 210);
 }
+
+.unity-decorator-drawers-container > .unity-header-drawer__label {
+    color: rgb(0, 0, 0);
+}

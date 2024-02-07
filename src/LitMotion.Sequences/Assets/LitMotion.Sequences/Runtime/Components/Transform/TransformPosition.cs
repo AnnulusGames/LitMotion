@@ -6,6 +6,7 @@ namespace LitMotion.Sequences.Components
     [SequenceComponentMenu("Transform/Position")]
     public sealed class TransformPosition : SequenceComponentBase<Vector3, Transform>
     {
+        [Header("Transform Settings")]
         public TransformScalingMode scalingMode;
 
         public override void Configure(MotionSequenceItemBuilder builder)

@@ -8,17 +8,21 @@ namespace LitMotion.Sequences
     {
         public ExposedReference<TObject> target;
 
+        [Header("Moiton Settings")]
         public TValue startValue;
         public TValue endValue;
+        public bool useRelativeValue;
         public float duration = 1f;
-
         public Ease ease;
+
+        [Header("Delay Settings")]
         public float delay;
         public DelayType delayType;
         public bool skipValuesDuringDelay = true;
+
+        [Header("Loop Settings")]
         public int loops = 1;
         public LoopType loopType;
-        public bool useRelativeValue;
 
         public TObject Target { get; private set; }
 
