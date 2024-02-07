@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace LitMotion.Sequences.Editor
@@ -31,6 +32,8 @@ namespace LitMotion.Sequences.Editor
             }
         }
 
+        protected virtual GUIContent GetIconContent() => EditorGUIUtility.IconContent("ScriptableObject Icon");
+
         protected SequenceComponentFoldout CreateFoldout()
         {
             var displayNameProperty = serializedObject.FindProperty("displayName");
@@ -38,6 +41,7 @@ namespace LitMotion.Sequences.Editor
             var foldout = new SequenceComponentFoldout
             {
                 Label = displayNameProperty.stringValue,
+                Icon = GetIconContent(),
                 IsActive = enabledProperty.boolValue,
                 IsExpanded = enabledProperty.isExpanded,
             };

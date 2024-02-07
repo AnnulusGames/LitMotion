@@ -82,7 +82,7 @@ namespace LitMotion.Sequences.Editor
         bool isActive;
 
         public string Label { get; set; }
-        public GUIContent Icon { get; set; } = EditorGUIUtility.IconContent("ScriptableObject Icon");
+        public GUIContent Icon { get; set; }
 
         readonly IMGUIContainer foldout;
         readonly VisualElement contents;
