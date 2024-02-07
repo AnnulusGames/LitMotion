@@ -6,7 +6,7 @@ namespace LitMotion.Sequences
         where TValue : unmanaged
         where TObject : Object
     {
-        public ExposedReference<TObject> targetReference;
+        public ExposedReference<TObject> target;
 
         public TValue startValue;
         public TValue endValue;
@@ -24,7 +24,7 @@ namespace LitMotion.Sequences
 
         public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)
         {
-            Target = targetReference.Resolve(exposedPropertyTable);
+            Target = target.Resolve(exposedPropertyTable);
         }
     }
 }
