@@ -127,9 +127,9 @@ namespace LitMotion.Sequences
             buffer.Clear();
             item.Configure(new MotionSequenceItemBuilder(buffer));
 
-            if (buffer.Count > 0)
+            if (buffer.Length > 0)
             {
-                for (int i = 0; i < buffer.Count; i++)
+                for (int i = 0; i < buffer.Length; i++)
                 {
                     var handle = buffer[i];
                     if (handle.IsActive())
