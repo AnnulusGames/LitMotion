@@ -7,26 +7,19 @@ namespace LitMotion.Sequences.Editor
 {
     public sealed class SequenceComponentFoldout : VisualElement
     {
-        public static Color BackgroundColor
-        {
-            get
-            {
-                if (EditorGUIUtility.isProSkin) return new Color(0.15f, 0.15f, 0.15f);
-                else return new Color(0.9f, 0.9f, 0.9f);
-            }
-        }
-
         public SequenceComponentFoldout()
         {
             foldout = new IMGUIContainer(() =>
             {
                 var foldoutRect = EditorGUILayout.GetControlRect();
                 var toggleRect = foldoutRect.AddXMin(16f).SetWidth(20f);
-                var labelRect = foldoutRect.AddXMin(35f);
+                var iconRect = foldoutRect.AddXMin(35f).SetWidth(18f).SetHeight(18f);
+                var labelRect = foldoutRect.AddXMin(55f);
 
                 IsActive = EditorGUI.ToggleLeft(toggleRect, string.Empty, IsActive);
                 IsExpanded = EditorGUI.Foldout(foldoutRect, IsExpanded, string.Empty, true);
 
+                EditorGUI.LabelField(iconRect, Icon);
                 EditorGUI.LabelField(labelRect, Label, EditorStyles.boldLabel);
             });
             hierarchy.Add(foldout);
@@ -40,7 +33,7 @@ namespace LitMotion.Sequences.Editor
             hierarchy.Add(contents);
         }
 
-        public bool IsExpanded 
+        public bool IsExpanded
         {
             get => isExpanded;
             set
@@ -62,7 +55,7 @@ namespace LitMotion.Sequences.Editor
             set
             {
                 contents.SetEnabled(isActive);
-                
+
                 if (isActive != value)
                 {
                     isActive = value;
@@ -73,6 +66,7 @@ namespace LitMotion.Sequences.Editor
         bool isActive;
 
         public string Label { get; set; }
+        public GUIContent Icon { get; set; } = EditorGUIUtility.IconContent("ScriptableObject Icon");
 
         readonly IMGUIContainer foldout;
         readonly VisualElement contents;

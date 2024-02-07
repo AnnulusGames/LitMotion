@@ -1,0 +1,11 @@
+.unity-collection-view__item {
+    background-color: rgb(40, 40, 40);
+}
+
+.unity-collection-view__item:selected {
+    background-color: rgb(40, 40, 40);
+}
+
+.unity-collection-view__item:hover {
+    background-color: rgb(40, 40, 40);
+}
