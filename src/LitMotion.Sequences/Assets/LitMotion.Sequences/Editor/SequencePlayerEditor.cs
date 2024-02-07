@@ -111,6 +111,11 @@ namespace LitMotion.Sequences.Editor
                         });
 
                         bindingView.Add(field);
+                        field.TrackPropertyValue(serializedObject.FindProperty("displayName"), property =>
+                        {
+                            var player = (SequencePlayer)target;
+                            UpdateBindingView(player, player.asset);
+                        });
                     }
                 }
             }
