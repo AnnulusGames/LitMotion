@@ -11,7 +11,7 @@ namespace LitMotion.Sequences
         [Header("Moiton Settings")]
         public TValue startValue;
         public TValue endValue;
-        public bool useRelativeValue;
+        public MotionMode motionMode;
         public float duration = 1f;
         public Ease ease;
 
