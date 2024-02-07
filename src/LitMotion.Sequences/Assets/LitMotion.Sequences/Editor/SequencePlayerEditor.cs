@@ -104,6 +104,11 @@ namespace LitMotion.Sequences.Editor
             }
         }
 
+        void UpdateOverrideView()
+        {
+            
+        }
+
         void SetExposedNames(IExposedPropertyTable table, SequenceAsset asset)
         {
             foreach (var component in asset.Components)
