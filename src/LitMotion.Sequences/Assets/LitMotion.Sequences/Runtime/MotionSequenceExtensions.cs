@@ -13,6 +13,15 @@ namespace LitMotion.Sequences
             return new ValueTask(source, token);
         }
 
+#if UNITY_2023_1_OR_NEWER
+        public static Awaitable ToAwaitable(this MotionSequence sequence, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested) return default;
+            var source = SequenceAwaitableSource.Create(sequence, cancellationToken);
+            return source.Awaitable;
+        }
+#endif
+
 #if UNITY_2022_2_OR_NEWER
         public static MotionSequence AddTo(this MotionSequence sequence, MonoBehaviour target)
         {

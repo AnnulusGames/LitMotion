@@ -26,5 +26,29 @@ namespace LitMotion.Sequences.Tests.Runtime
                 sequenceCompleted = false;
             }
         }
+
+#if UNITY_2023_1_OR_NEWER
+        [Test]
+        public async Task Test_ToAwaitable_AwaitForComplete()
+        {
+            var sequenceCompleted = false;
+
+            var sequence = MotionSequence.CreateBuilder()
+                .Append(() => LMotion.Create(0f, 1f, 1f).RunWithoutBinding())
+                .Build();
+
+            sequence.OnCompleted += () => sequenceCompleted = true;
+
+            for (int i = 0; i < 10; i++)
+            {
+                sequence.Play();
+                await sequence.ToAwaitable();
+
+                Assert.That(sequenceCompleted, Is.True);
+
+                sequenceCompleted = false;
+            }
+        }
+#endif
     }
 }

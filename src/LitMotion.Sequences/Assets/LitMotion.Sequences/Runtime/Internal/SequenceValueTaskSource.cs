@@ -47,20 +47,20 @@ namespace LitMotion.Sequences
                 return FromCanceled(out token);
             }
 
-            if (!pool.TryPop(out var result))
+            if (!pool.TryPop(out var source))
             {
-                result = new SequenceValueTaskSource();
+                source = new SequenceValueTaskSource();
             }
 
-            result.sequence = sequence;
-            result.cancellationToken = cancellationToken;
+            source.sequence = sequence;
+            source.cancellationToken = cancellationToken;
 
-            sequence.OnCanceled += result.onCancelCallbackDelegate;
-            sequence.OnCompleted += result.onCompleteCallbackDelegate;
+            sequence.OnCanceled += source.onCancelCallbackDelegate;
+            sequence.OnCompleted += source.onCompleteCallbackDelegate;
 
             if (cancellationToken.CanBeCanceled)
             {
-                result.cancellationRegistration = cancellationToken.Register(static x =>
+                source.cancellationRegistration = cancellationToken.Register(static x =>
                 {
                     var source = (SequenceValueTaskSource)x;
                     var sequence = source.sequence;
@@ -72,11 +72,11 @@ namespace LitMotion.Sequences
                     {
                         source.core.SetException(new OperationCanceledException());
                     }
-                }, result);
+                }, source);
             }
 
-            token = result.core.Version;
-            return result;
+            token = source.core.Version;
+            return source;
         }
 
         public short Version => core.Version;
