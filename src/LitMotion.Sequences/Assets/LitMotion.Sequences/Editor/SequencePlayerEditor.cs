@@ -25,18 +25,12 @@ namespace LitMotion.Sequences.Editor
             assetField.RegisterValueChangeCallback(eventData =>
             {
                 var property = eventData.changedProperty;
-                if (property.objectReferenceValue == null)
-                {
-                    UpdateBindingView(null, null);
-                    UpdateOverrideView(property);
-                    return;
-                }
-
+                
                 var player = (SequencePlayer)property.serializedObject.targetObject;
                 var asset = (SequenceAsset)property.objectReferenceValue;
 
-                SetExposedNames(player, asset);
-                UpdateBindingView(player, asset);
+                if (asset != null) SetExposedNames(player, asset);
+                UpdateBindingView();
                 UpdateOverrideView(property);
             });
 
@@ -62,15 +56,18 @@ namespace LitMotion.Sequences.Editor
             overrideView = new VisualElement();
             root.Add(overrideView);
 
-            UpdateBindingView(player, player.asset);
+            UpdateBindingView();
             UpdateOverrideView(assetProperty);
 
             return root;
         }
 
-        void UpdateBindingView(IExposedPropertyTable table, SequenceAsset asset)
+        void UpdateBindingView()
         {
             bindingView.Clear();
+
+            var table = (IExposedPropertyTable)target;
+            var asset = ((SequencePlayer)target).asset;
 
             if (asset == null || asset.Components.Count == 0)
             {
@@ -113,8 +110,7 @@ namespace LitMotion.Sequences.Editor
                         bindingView.Add(field);
                         field.TrackPropertyValue(serializedObject.FindProperty("displayName"), property =>
                         {
-                            var player = (SequencePlayer)target;
-                            UpdateBindingView(player, player.asset);
+                            UpdateBindingView();
                         });
                     }
                 }
@@ -141,6 +137,7 @@ namespace LitMotion.Sequences.Editor
 
             var listView = new SequenceComponentListView(new SerializedObject(assetProperty.objectReferenceValue));
             listView.style.marginLeft = 2f;
+            listView.OnOrdered += () => UpdateBindingView();
             overrideView.Add(listView);
         }
 

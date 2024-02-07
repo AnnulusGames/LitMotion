@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
+using UnityObject = UnityEngine.Object;
 
 namespace LitMotion.Sequences.Editor
 {
     public sealed class SequenceComponentListView : VisualElement
     {
-        static readonly Dictionary<Object, VisualElement> inspectorCache = new();
-        static VisualElement GetOrCreateInspector(Object key)
+        static readonly Dictionary<UnityObject, VisualElement> inspectorCache = new();
+        static VisualElement GetOrCreateInspector(UnityObject key)
         {
             if (!inspectorCache.TryGetValue(key, out var element))
             {
@@ -55,6 +56,7 @@ namespace LitMotion.Sequences.Editor
                 bindingPath = "components",
             };
             listView.Bind(serializedObject);
+            listView.itemIndexChanged += (i, j) => OnOrdered?.Invoke();
             listView.styleSheets.Add(styleSheet);
 
             Add(listView);
@@ -75,5 +77,7 @@ namespace LitMotion.Sequences.Editor
 
             Add(button);
         }
+
+        public event Action OnOrdered;
     }
 }
