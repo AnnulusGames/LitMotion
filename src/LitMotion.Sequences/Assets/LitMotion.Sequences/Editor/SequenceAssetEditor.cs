@@ -27,8 +27,17 @@ namespace LitMotion.Sequences.Editor
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
-            var componentsProperty = serializedObject.FindProperty("components");
 
+            root.Add(new Label("Settings")
+            {
+                style = {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    fontSize = 12.5f,
+                    marginTop = 5f, marginBottom = 2f
+                },
+            });
+
+            var componentsProperty = serializedObject.FindProperty("components");
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(AssetDatabase.GUIDToAssetPath(
                 EditorGUIUtility.isProSkin ? DarkStyleSheetGUID : LightStyleSheetGUID
             ));

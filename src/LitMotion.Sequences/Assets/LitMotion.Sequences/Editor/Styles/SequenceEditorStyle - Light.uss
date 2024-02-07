@@ -16,3 +16,7 @@
 .unity-decorator-drawers-container > .unity-header-drawer__label {
     color: rgb(0, 0, 0);
 }
+
+.unity-list-view__reorderable-item__container {
+    padding-left: 3px;
+}
