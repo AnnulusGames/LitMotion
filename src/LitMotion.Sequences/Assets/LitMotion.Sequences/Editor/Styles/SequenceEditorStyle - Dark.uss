@@ -1,11 +1,14 @@
 .unity-collection-view__item {
-    background-color: rgb(40, 40, 40);
+    background-color: rgb(45, 45, 45);
+    border-color: rgb(10, 10, 10);
+    border-top-width: 0.66px;
+    border-bottom-width: 0.66px;
 }
 
 .unity-collection-view__item:selected {
-    background-color: rgb(40, 40, 40);
+    background-color: rgb(45, 45, 45);
 }
 
 .unity-collection-view__item:hover {
-    background-color: rgb(40, 40, 40);
+    background-color: rgb(45, 45, 45);
 }
