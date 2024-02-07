@@ -34,6 +34,34 @@ namespace LitMotion.Sequences.Editor
 
         protected virtual GUIContent GetIconContent() => EditorGUIUtility.IconContent("ScriptableObject Icon");
 
+        protected virtual string GetCaption(SerializedObject serializedObject)
+        {
+            var caption = "";
+
+            var delayProperty = serializedObject.FindProperty("delay");
+            var hasDelay = delayProperty != null && delayProperty.floatValue > 0f;
+            if (hasDelay)
+            {
+                caption += "Delay " + delayProperty.floatValue.ToString("F2") + "s";
+            }
+
+            var durationProperty = serializedObject.FindProperty("duration");
+            if (durationProperty != null)
+            {
+                if (hasDelay) caption += " | ";
+                caption += "Duration " + durationProperty.floatValue.ToString("F2") + "s";
+            }
+
+            var loopsProperty = serializedObject.FindProperty("loops");
+            var hasLoop = loopsProperty != null && (loopsProperty.intValue is not (0 or 1));
+            if (hasLoop)
+            {
+                caption += " | ";
+                caption += "Loops x" + loopsProperty.intValue;
+            }
+            return caption;
+        }
+
         protected SequenceComponentFoldout CreateFoldout()
         {
             var displayNameProperty = serializedObject.FindProperty("displayName");
@@ -69,34 +97,6 @@ namespace LitMotion.Sequences.Editor
             foldout.Add(displayNameField);
 
             return foldout;
-        }
-
-        string GetCaption(SerializedObject serializedObject)
-        {
-            var caption = "";
-
-            var delayProperty = serializedObject.FindProperty("delay");
-            var hasDelay = delayProperty != null && delayProperty.floatValue > 0f;
-            if (hasDelay)
-            {
-                caption += "Delay " + delayProperty.floatValue.ToString("F2") + "s";
-            }
-
-            var durationProperty = serializedObject.FindProperty("duration");
-            if (durationProperty != null)
-            {
-                if (hasDelay) caption += " | ";
-                caption += "Duration " + durationProperty.floatValue.ToString("F2") + "s";
-            }
-
-            var loopsProperty = serializedObject.FindProperty("loops");
-            var hasLoop = loopsProperty != null && (loopsProperty.intValue is not (0 or 1));
-            if (hasLoop)
-            {
-                caption += " | ";
-                caption += "Loops x" + loopsProperty.intValue;
-            }
-            return caption;
         }
     }
 }
