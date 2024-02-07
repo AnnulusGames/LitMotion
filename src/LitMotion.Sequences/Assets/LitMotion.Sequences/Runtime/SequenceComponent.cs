@@ -12,6 +12,7 @@ namespace LitMotion.Sequences
 
         public bool enabled;
         public string displayName;
+        [SerializeField] bool expanded;
 
         public abstract void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable);
         public abstract void Configure(MotionSequenceItemBuilder builder);

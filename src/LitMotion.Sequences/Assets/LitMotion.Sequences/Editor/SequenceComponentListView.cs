@@ -25,7 +25,6 @@ namespace LitMotion.Sequences.Editor
 
         public SequenceComponentListView(SerializedObject serializedObject)
         {
-
             var componentsProperty = serializedObject.FindProperty("components");
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(AssetDatabase.GUIDToAssetPath(
                 EditorGUIUtility.isProSkin ? DarkStyleSheetGUID : LightStyleSheetGUID
@@ -59,6 +58,22 @@ namespace LitMotion.Sequences.Editor
             listView.styleSheets.Add(styleSheet);
 
             Add(listView);
+
+            var button = new Button(() =>
+            {
+
+            })
+            {
+                text = "Add Motion",
+                style = {
+                    alignSelf = Align.Center,
+                    width = 220f,
+                    height = 22f,
+                    marginTop = 5f, marginBottom = 5f
+                }
+            };
+
+            Add(button);
         }
     }
 }

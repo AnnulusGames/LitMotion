@@ -18,6 +18,7 @@ namespace LitMotion.Sequences.Editor
             iterator.NextVisible(true); // script field
             iterator.NextVisible(true); // displayName
             iterator.NextVisible(true); // enabled
+            iterator.NextVisible(true); // expanded
 
             AddInspectorElements(foldout, iterator);
             return root;
@@ -66,13 +67,14 @@ namespace LitMotion.Sequences.Editor
         {
             var displayNameProperty = serializedObject.FindProperty("displayName");
             var enabledProperty = serializedObject.FindProperty("enabled");
+            var expandedProperty = serializedObject.FindProperty("expanded");
             var foldout = new SequenceComponentFoldout
             {
                 Label = displayNameProperty.stringValue,
                 Caption = GetCaption(serializedObject),
                 Icon = GetIconContent(),
                 IsActive = enabledProperty.boolValue,
-                IsExpanded = enabledProperty.isExpanded,
+                IsExpanded = expandedProperty.boolValue,
             };
             foldout.TrackPropertyValue(displayNameProperty, property =>
             {
@@ -89,7 +91,7 @@ namespace LitMotion.Sequences.Editor
             };
             foldout.OnFoldoutStateChanged += x =>
             {
-                enabledProperty.isExpanded = x;
+                expandedProperty.boolValue = x;
                 serializedObject.ApplyModifiedProperties();
             };
 
