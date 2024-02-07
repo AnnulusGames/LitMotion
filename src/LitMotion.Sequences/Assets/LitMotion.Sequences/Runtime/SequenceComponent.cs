@@ -4,7 +4,7 @@ namespace LitMotion.Sequences
 {
     public abstract class SequenceComponent : ScriptableObject, IMotionSequenceItem
     {
-        protected void Reset()
+        protected virtual void Reset()
         {
             enabled = true;
             displayName = GetType().Name;
