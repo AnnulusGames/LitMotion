@@ -4,7 +4,7 @@ using LitMotion.Extensions;
 namespace LitMotion.Sequences.Components
 {
     [SequenceComponentMenu("Transform/Position")]
-    public sealed class TransformPositionSequenceComponent : SequenceComponentBase<Vector3, Transform>
+    public sealed class TransformPositionComponent : SequenceComponentBase<Vector3, Transform>
     {
         [Header("Transform Settings")]
         public TransformScalingMode scalingMode;
@@ -51,10 +51,8 @@ namespace LitMotion.Sequences.Components
                     break;
             }
 
-            var motionBuilder = LMotion.Create(currentValue + startValue, currentValue + endValue, duration)
-                .WithEase(ease)
-                .WithDelay(delay, delayType, skipValuesDuringDelay)
-                .WithLoops(loops, loopType);
+            var motionBuilder = LMotion.Create(currentValue + startValue, currentValue + endValue, duration);
+            ConfigureMotionBuilder(ref motionBuilder);
 
             var handle = scalingMode switch
             {

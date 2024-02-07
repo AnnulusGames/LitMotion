@@ -30,5 +30,15 @@ namespace LitMotion.Sequences
         {
             Target = target.Resolve(exposedPropertyTable);
         }
+
+        protected void ConfigureMotionBuilder<T, TOptions, TAdapter>(ref MotionBuilder<T, TOptions, TAdapter> motionBuilder)
+            where T : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<T, TOptions>
+        {
+            motionBuilder.WithEase(ease)
+                .WithDelay(delay, delayType, skipValuesDuringDelay)
+                .WithLoops(loops, loopType);
+        }
     }
 }
