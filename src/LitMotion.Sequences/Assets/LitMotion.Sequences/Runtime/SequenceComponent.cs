@@ -15,5 +15,11 @@ namespace LitMotion.Sequences
 
         public abstract void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable);
         public abstract void Configure(MotionSequenceItemBuilder builder);
+
+        void IMotionSequenceItem.Configure(MotionSequenceItemBuilder builder)
+        {
+            if (!enabled) return;
+            Configure(builder);
+        }
     }
 }
