@@ -7,6 +7,22 @@ namespace LitMotion.Sequences.Editor
 {
     public sealed class SequenceComponentFoldout : VisualElement
     {
+        static GUIStyle BoldLabelStyle
+        {
+            get
+            {
+                if (boldLabelStyle == null)
+                {
+                    boldLabelStyle = new GUIStyle(EditorStyles.boldLabel)
+                    {
+                        fontSize = 11
+                    };
+                }
+                return boldLabelStyle;
+            }
+        }
+        static GUIStyle boldLabelStyle;
+
         public SequenceComponentFoldout()
         {
             foldout = new IMGUIContainer(() =>
@@ -20,7 +36,7 @@ namespace LitMotion.Sequences.Editor
                 IsExpanded = EditorGUI.Foldout(foldoutRect, IsExpanded, string.Empty, true);
 
                 EditorGUI.LabelField(iconRect, Icon);
-                EditorGUI.LabelField(labelRect, Label, EditorStyles.boldLabel);
+                EditorGUI.LabelField(labelRect, Label, BoldLabelStyle);
             });
             hierarchy.Add(foldout);
 
