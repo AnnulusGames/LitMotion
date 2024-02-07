@@ -41,6 +41,7 @@ namespace LitMotion.Sequences.Editor
             var foldout = new SequenceComponentFoldout
             {
                 Label = displayNameProperty.stringValue,
+                Caption = GetCaption(serializedObject),
                 Icon = GetIconContent(),
                 IsActive = enabledProperty.boolValue,
                 IsExpanded = enabledProperty.isExpanded,
@@ -48,6 +49,10 @@ namespace LitMotion.Sequences.Editor
             foldout.TrackPropertyValue(displayNameProperty, property =>
             {
                 foldout.Label = property.stringValue;
+            });
+            foldout.TrackSerializedObjectValue(serializedObject, so =>
+            {
+                foldout.Caption = GetCaption(so);
             });
             foldout.OnCheckboxStateChanged += x =>
             {
@@ -64,6 +69,34 @@ namespace LitMotion.Sequences.Editor
             foldout.Add(displayNameField);
 
             return foldout;
+        }
+
+        string GetCaption(SerializedObject serializedObject)
+        {
+            var caption = "";
+
+            var delayProperty = serializedObject.FindProperty("delay");
+            var hasDelay = delayProperty != null && delayProperty.floatValue > 0f;
+            if (hasDelay)
+            {
+                caption += "Delay " + delayProperty.floatValue.ToString("F2") + "s";
+            }
+
+            var durationProperty = serializedObject.FindProperty("duration");
+            if (durationProperty != null)
+            {
+                if (hasDelay) caption += " | ";
+                caption += "Duration " + durationProperty.floatValue.ToString("F2") + "s";
+            }
+
+            var loopsProperty = serializedObject.FindProperty("loops");
+            var hasLoop = loopsProperty != null && (loopsProperty.intValue is not (0 or 1));
+            if (hasLoop)
+            {
+                caption += " | ";
+                caption += "Loops x" + loopsProperty.intValue;
+            }
+            return caption;
         }
     }
 }

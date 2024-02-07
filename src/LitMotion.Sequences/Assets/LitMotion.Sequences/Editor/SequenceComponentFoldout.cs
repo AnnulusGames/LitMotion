@@ -23,6 +23,23 @@ namespace LitMotion.Sequences.Editor
         }
         static GUIStyle boldLabelStyle;
 
+        static GUIStyle CaptionStyle
+        {
+            get
+            {
+                if (captionStyle == null)
+                {
+                    captionStyle = new GUIStyle(EditorStyles.label)
+                    {
+                        alignment = TextAnchor.MiddleRight,
+                        fontSize = 10,
+                    };
+                }
+                return captionStyle;
+            }
+        }
+        static GUIStyle captionStyle;
+
         public SequenceComponentFoldout()
         {
             foldout = new IMGUIContainer(() =>
@@ -31,12 +48,14 @@ namespace LitMotion.Sequences.Editor
                 var toggleRect = foldoutRect.AddXMin(16f).SetWidth(20f);
                 var iconRect = foldoutRect.AddXMin(35f).SetWidth(18f).SetHeight(18f);
                 var labelRect = foldoutRect.AddXMin(55f);
+                var captionRect = foldoutRect;
 
                 IsActive = EditorGUI.ToggleLeft(toggleRect, string.Empty, IsActive);
                 IsExpanded = EditorGUI.Foldout(foldoutRect, IsExpanded, string.Empty, true);
 
                 EditorGUI.LabelField(iconRect, Icon);
                 EditorGUI.LabelField(labelRect, Label, BoldLabelStyle);
+                EditorGUI.LabelField(captionRect, Caption, CaptionStyle);
             });
             hierarchy.Add(foldout);
 
@@ -82,6 +101,7 @@ namespace LitMotion.Sequences.Editor
         bool isActive;
 
         public string Label { get; set; }
+        public string Caption { get; set; }
         public GUIContent Icon { get; set; }
 
         readonly IMGUIContainer foldout;
