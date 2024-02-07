@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace LitMotion.Sequences
 {
+    [Serializable]
     public abstract class SequenceComponent : ScriptableObject, IMotionSequenceItem
     {
         protected virtual void Reset()

@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityObject = UnityEngine.Object;
 
@@ -12,6 +15,7 @@ namespace LitMotion.Sequences.Editor
         static readonly Dictionary<UnityObject, VisualElement> inspectorCache = new();
         static VisualElement GetOrCreateInspector(UnityObject key)
         {
+            if (key == null) return null;
             if (!inspectorCache.TryGetValue(key, out var element))
             {
                 element = UnityEditor.Editor.CreateEditor(key).CreateInspectorGUI();
@@ -43,7 +47,8 @@ namespace LitMotion.Sequences.Editor
                 bindItem = (element, index) =>
                 {
                     var elementProperty = componentsProperty.GetArrayElementAtIndex(index);
-                    element.Add(GetOrCreateInspector(elementProperty.objectReferenceValue));
+                    var inspector = GetOrCreateInspector(elementProperty.objectReferenceValue);
+                    if (inspector != null) element.Add(inspector);
                 },
                 unbindItem = (element, index) =>
                 {
@@ -61,9 +66,46 @@ namespace LitMotion.Sequences.Editor
 
             Add(listView);
 
-            var button = new Button(() =>
+            Button button = null;
+            button = new Button(() =>
             {
+                const int MaxTypePopupLineCount = 13;
 
+                var baseType = typeof(SequenceComponent);
+                var dropdown = new TypeDropdown(
+                    TypeCache.GetTypesDerivedFrom(baseType).Where(t =>
+                        (t.IsPublic || t.IsNestedPublic) &&
+                        !t.IsAbstract &&
+                        !t.IsGenericType
+                    ),
+                    MaxTypePopupLineCount,
+                    new AdvancedDropdownState()
+                );
+
+                dropdown.OnItemSelected += item =>
+                {
+                    var target = serializedObject.targetObject;
+                    var component = ScriptableObject.CreateInstance(item.type);
+                    component.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+                    component.name = item.type.Name;
+                    var path = AssetDatabase.GetAssetPath(target);
+                    if (EditorUtility.IsPersistent(target))
+                    {
+                        AssetDatabase.AddObjectToAsset(component, path);
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.ImportAsset(path);
+                    }
+
+                    var so = new SerializedObject(target);
+                    var componentsProperty = so.FindProperty("components");
+                    var index = componentsProperty.arraySize;
+                    componentsProperty.InsertArrayElementAtIndex(index);
+                    componentsProperty.GetArrayElementAtIndex(index).objectReferenceValue = component;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                };
+
+                var position = button.contentRect;
+                dropdown.Show(position);
             })
             {
                 text = "Add Motion",
