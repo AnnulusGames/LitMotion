@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using LitMotion.Extensions;
 
@@ -9,19 +8,17 @@ namespace LitMotion.Sequences.Components
     {
         public TransformScalingMode scalingMode;
 
-        Transform transform;
-
         public override void Configure(MotionSequenceItemBuilder builder)
         {
-            if (transform == null) return;
+            if (Target == null) return;
 
             var currentValue = Vector3.zero;
             if (useRelativeValue)
             {
                 currentValue = scalingMode switch
                 {
-                    TransformScalingMode.Local => transform.localPosition,
-                    TransformScalingMode.World => transform.position,
+                    TransformScalingMode.Local => Target.localPosition,
+                    TransformScalingMode.World => Target.position,
                     _ => default
                 };
             }
@@ -33,17 +30,12 @@ namespace LitMotion.Sequences.Components
 
             var handle = scalingMode switch
             {
-                TransformScalingMode.Local => motionBuilder.BindToLocalPosition(transform),
-                TransformScalingMode.World => motionBuilder.BindToPosition(transform),
+                TransformScalingMode.Local => motionBuilder.BindToLocalPosition(Target),
+                TransformScalingMode.World => motionBuilder.BindToPosition(Target),
                 _ => default
             };
 
             builder.Add(handle);
-        }
-
-        public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)
-        {
-            transform = target.Resolve(exposedPropertyTable);
         }
     }
 }
