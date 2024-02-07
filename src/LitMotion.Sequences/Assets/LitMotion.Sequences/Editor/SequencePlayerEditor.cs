@@ -28,6 +28,7 @@ namespace LitMotion.Sequences.Editor
                 if (property.objectReferenceValue == null)
                 {
                     UpdateBindingView(null, null);
+                    UpdateOverrideView(property);
                     return;
                 }
 
@@ -119,7 +120,7 @@ namespace LitMotion.Sequences.Editor
         {
             overrideView.Clear();
 
-            overrideView.Add(new Label("Overrides")
+            overrideView.Add(new Label("Motions")
             {
                 style = {
                     unityFontStyleAndWeight = FontStyle.Bold,

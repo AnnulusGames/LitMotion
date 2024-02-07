@@ -11,7 +11,7 @@ namespace LitMotion.Sequences.Editor
         {
             var root = new VisualElement();
 
-            root.Add(new Label("Settings")
+            root.Add(new Label("Motions")
             {
                 style = {
                     unityFontStyleAndWeight = FontStyle.Bold,
