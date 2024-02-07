@@ -44,9 +44,12 @@ namespace LitMotion.Sequences.Editor
                 makeItem = () => new VisualElement(),
                 bindItem = (element, index) =>
                 {
-                    element.Clear();
                     var elementProperty = componentsProperty.GetArrayElementAtIndex(index);
                     element.Add(GetOrCreateInspector(elementProperty.objectReferenceValue));
+                },
+                unbindItem = (element, index) =>
+                {
+                    element.Clear();
                 },
                 style = {
                     marginLeft = -15f,
