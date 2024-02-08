@@ -86,6 +86,14 @@ namespace LitMotion.Sequences.Editor
 
                     element.Clear();
                 },
+                makeNoneElement = () => new Label
+                {
+                    style = {
+                        marginTop = 3f,
+                        marginLeft = 18f
+                    },
+                    text = "Empty"
+                },
                 style = {
                     marginLeft = -15f,
                     marginRight = -5f,
