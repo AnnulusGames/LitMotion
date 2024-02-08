@@ -35,6 +35,21 @@ namespace LitMotion.Sequences.Editor
                 EditorGUIUtility.isProSkin ? DarkStyleSheetGUID : LightStyleSheetGUID
             ));
 
+            void OnContextButtonClicked()
+            {
+                var menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Reset"), false, () =>
+                {
+
+                });
+                menu.AddItem(new GUIContent("Remove Motion"), false, () =>
+                {
+
+                });
+
+                menu.ShowAsContext();
+            }
+
             var listView = new ListView
             {
                 showBorder = false,
@@ -48,10 +63,18 @@ namespace LitMotion.Sequences.Editor
                 {
                     var elementProperty = componentsProperty.GetArrayElementAtIndex(index);
                     var inspector = GetOrCreateInspector(elementProperty.objectReferenceValue);
-                    if (inspector != null) element.Add(inspector);
+                    if (inspector != null)
+                    {
+                        element.Add(inspector);
+                        var foldout = element.Q<SequenceComponentFoldout>();
+                        foldout.OnContextButtonClicked += OnContextButtonClicked;
+                    }
                 },
                 unbindItem = (element, index) =>
                 {
+                    var foldout = element.Q<SequenceComponentFoldout>();
+                    if (foldout != null) foldout.OnContextButtonClicked += OnContextButtonClicked;
+
                     element.Clear();
                 },
                 style = {

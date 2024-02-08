@@ -40,15 +40,22 @@ namespace LitMotion.Sequences.Editor
         }
         static GUIStyle captionStyle;
 
+        static readonly GUIContent MenuIconContent = EditorGUIUtility.IconContent("_Menu@2x");
+
         public SequenceComponentFoldout()
         {
             foldout = new IMGUIContainer(() =>
             {
-                var foldoutRect = EditorGUILayout.GetControlRect();
-                var toggleRect = foldoutRect.AddXMin(16f).SetWidth(20f);
-                var iconRect = foldoutRect.AddXMin(35f).SetWidth(18f).SetHeight(18f);
-                var labelRect = foldoutRect.AddXMin(55f);
-                var captionRect = foldoutRect;
+                var rect = EditorGUILayout.GetControlRect();
+                var foldoutRect = rect.AddXMax(-20f);
+                var toggleRect = rect.AddXMin(16f).SetWidth(20f);
+                var iconRect = rect.AddXMin(35f).SetWidth(18f).SetHeight(18f);
+                var labelRect = rect.AddXMin(55f);
+                var captionRect = rect.AddXMax(-20f);
+                var contextMenuButtonRect = rect.AddX(rect.width - 20f).SetWidth(20f).SetHeight(20f);
+                var rightClickRect = foldoutRect.SetHeight(16f);
+
+                var e = Event.current;
 
                 IsActive = EditorGUI.ToggleLeft(toggleRect, string.Empty, IsActive);
                 IsExpanded = EditorGUI.Foldout(foldoutRect, IsExpanded, string.Empty, true);
@@ -56,6 +63,21 @@ namespace LitMotion.Sequences.Editor
                 EditorGUI.LabelField(iconRect, Icon);
                 EditorGUI.LabelField(labelRect, Label, BoldLabelStyle);
                 EditorGUI.LabelField(captionRect, Caption, CaptionStyle);
+                EditorGUI.LabelField(contextMenuButtonRect, MenuIconContent);
+
+                if (e.type == EventType.MouseDown)
+                {
+                    if (e.button == 0 && contextMenuButtonRect.Contains(e.mousePosition))
+                    {
+                        e.Use();
+                        OnContextButtonClicked?.Invoke();
+                    }
+                    else if (e.button == 1 && rightClickRect.Contains(e.mousePosition))
+                    {
+                        e.Use();
+                        OnContextButtonClicked?.Invoke();
+                    }
+                }
             });
             hierarchy.Add(foldout);
 
@@ -111,5 +133,6 @@ namespace LitMotion.Sequences.Editor
 
         public event Action<bool> OnFoldoutStateChanged;
         public event Action<bool> OnCheckboxStateChanged;
+        public event Action OnContextButtonClicked;
     }
 }
