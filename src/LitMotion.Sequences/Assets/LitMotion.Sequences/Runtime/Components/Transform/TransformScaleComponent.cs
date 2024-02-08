@@ -8,9 +8,9 @@ namespace LitMotion.Sequences.Components
     {
         Vector3 initialLocalScale;
 
-        protected override void Reset()
+        public override void ResetComponent()
         {
-            base.Reset();
+            base.ResetComponent();
             displayName = "Scale";
         }
 

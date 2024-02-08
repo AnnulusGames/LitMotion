@@ -6,7 +6,12 @@ namespace LitMotion.Sequences
     [Serializable]
     public abstract class SequenceComponent : ScriptableObject, IMotionSequenceItem
     {
-        protected virtual void Reset()
+        protected void Reset()
+        {
+            ResetComponent();
+        }
+
+        public virtual void ResetComponent()
         {
             enabled = true;
             displayName = GetType().Name;

@@ -12,10 +12,11 @@ namespace LitMotion.Sequences.Components
         Vector3 initialPosition;
         Vector3 initialLocalPosition;
 
-        protected override void Reset()
+        public override void ResetComponent()
         {
-            base.Reset();
+            base.ResetComponent();
             displayName = "Position";
+            scalingMode = default;
         }
 
         public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)

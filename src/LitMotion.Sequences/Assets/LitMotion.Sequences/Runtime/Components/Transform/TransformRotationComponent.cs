@@ -13,10 +13,12 @@ namespace LitMotion.Sequences.Components
         Quaternion initialRotation;
         Quaternion initialLocalRotation;
 
-        protected override void Reset()
+        public override void ResetComponent()
         {
-            base.Reset();
+            base.ResetComponent();
             displayName = "Rotation";
+            scalingMode = default;
+            useEulerAngles = default;
         }
 
         public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)

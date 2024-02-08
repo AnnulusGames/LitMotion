@@ -6,6 +6,21 @@ namespace LitMotion.Sequences
         where TValue : unmanaged
         where TObject : Object
     {
+        public override void ResetComponent()
+        {
+            base.ResetComponent();
+            startValue = default;
+            endValue = default;
+            motionMode = default;
+            duration = 1f;
+            ease = default;
+            delay = default;
+            delayType = default;
+            skipValuesDuringDelay = true;
+            loops = 1;
+            loopType = default;
+        }
+
         public ExposedReference<TObject> target;
 
         [Header("Moiton Settings")]
