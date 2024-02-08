@@ -4,8 +4,23 @@ using UnityEngine;
 namespace LitMotion.Sequences
 {
     [Serializable]
-    public abstract class SequenceComponent : ScriptableObject, IMotionSequenceItem
+    public abstract class SequenceComponent : ScriptableObject
     {
+        sealed class SequenceItem : IMotionSequenceItem
+        {
+            public SequenceComponent Component { get; set; }
+            public ISequencePropertyTable SequencePropertyTable { get; set; }
+
+            public void Configure(MotionSequenceItemBuilder builder)
+            {
+                Component.Configure(SequencePropertyTable, builder);
+            }
+        }
+
+        public bool enabled;
+        public string displayName;
+        [SerializeField] bool expanded;
+
         protected void Reset()
         {
             ResetComponent();
@@ -17,17 +32,22 @@ namespace LitMotion.Sequences
             displayName = GetType().Name;
         }
 
-        public bool enabled;
-        public string displayName;
-        [SerializeField] bool expanded;
-
-        public abstract void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable);
-        public abstract void Configure(MotionSequenceItemBuilder builder);
-
-        void IMotionSequenceItem.Configure(MotionSequenceItemBuilder builder)
+        internal void InternalConfigure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
         {
             if (!enabled) return;
-            Configure(builder);
+            Configure(sequencePropertyTable, builder);
         }
+
+        internal IMotionSequenceItem CreateSequenceItem(ISequencePropertyTable sequencePropertyTable)
+        {
+            return new SequenceItem()
+            {
+                Component = this,
+                SequencePropertyTable = sequencePropertyTable
+            };
+        }
+
+        public abstract void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder);
+        public abstract void RestoreValues(ISequencePropertyTable sequencePropertyTable);
     }
 }

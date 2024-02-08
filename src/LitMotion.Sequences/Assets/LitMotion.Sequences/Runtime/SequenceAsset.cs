@@ -9,17 +9,12 @@ namespace LitMotion.Sequences
         [SerializeField] SequenceComponent[] components;
         public IReadOnlyCollection<SequenceComponent> Components => components;
 
-        internal void ResolveExposedPropeties(IExposedPropertyTable exposedPropertyTable)
-        {
-            foreach (var component in components) component.ResolveExposedReferences(exposedPropertyTable);
-        }
-
-        internal MotionSequence CreateSequence()
+        internal MotionSequence CreateSequence(ISequencePropertyTable sequencePropertyTable)
         {
             var builder = MotionSequence.CreateBuilder();
             foreach (var component in components)
             {
-                builder.Items.Add(component);
+                builder.Items.Add(component.CreateSequenceItem(sequencePropertyTable));
             }
 
             return builder.Build();

@@ -8,16 +8,49 @@ namespace LitMotion.Sequences.Editor
     [CustomEditor(typeof(SequencePlayer))]
     public sealed class SequencePlayerEditor : UnityEditor.Editor
     {
+        internal sealed class BoldLabel : Label
+        {
+            public BoldLabel(string text) : base(text)
+            {
+                style.unityFontStyleAndWeight = FontStyle.Bold;
+                style.fontSize = 12f;
+                style.marginLeft = 4f;
+                style.marginTop = 3f;
+                style.marginBottom = 3f;
+            }
+        }
+
         VisualElement bindingView;
         VisualElement overrideView;
 
         static readonly string ExposedNamePropertyName = "exposedName";
 
+        SequencePlayer Player => (SequencePlayer)target;
+
+        void OnEnable()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        void OnDisable()
+        {
+            Player.CancelAndRestoreValues();
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+            {
+                Player.CancelAndRestoreValues();
+            }
+        }
+
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
-            var player = (SequencePlayer)target;
 
+            // Asset -----------------------------------------------------------
             var assetProperty = serializedObject.FindProperty("asset");
             var assetField = new PropertyField(assetProperty);
             root.Add(assetField);
@@ -25,7 +58,7 @@ namespace LitMotion.Sequences.Editor
             assetField.RegisterValueChangeCallback(eventData =>
             {
                 var property = eventData.changedProperty;
-                
+
                 var player = (SequencePlayer)property.serializedObject.targetObject;
                 var asset = (SequenceAsset)property.objectReferenceValue;
 
@@ -34,15 +67,8 @@ namespace LitMotion.Sequences.Editor
                 UpdateOverrideView(property);
             });
 
-            var label = new Label("Bindings")
-            {
-                style = {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    fontSize = 12f,
-                    marginLeft = 4f, marginTop = 3f, marginBottom = 3f,
-                }
-            };
-            root.Add(label);
+            // Bindings -----------------------------------------------------------
+            root.Add(new BoldLabel("Bindings"));
 
             bindingView = new Box
             {
@@ -56,8 +82,32 @@ namespace LitMotion.Sequences.Editor
             overrideView = new VisualElement();
             root.Add(overrideView);
 
+            // Debug -----------------------------------------------------------
+            root.Add(new BoldLabel("Debug"));
+
+            var playButton = new IMGUIContainer(() =>
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("Play")) Player.PlayPreview();
+                    if (GUILayout.Button("Reset")) Player.CancelAndRestoreValues();
+                }
+            });
+            root.Add(playButton);
+
             UpdateBindingView();
             UpdateOverrideView(assetProperty);
+
+            // TODO:
+            // tmp impl
+            root.schedule.Execute(() =>
+            {
+                var isModified = Player.IsModified;
+                assetField.SetEnabled(!isModified);
+                bindingView.SetEnabled(!isModified);
+                overrideView.SetEnabled(!isModified);
+            })
+            .Every(20);
 
             return root;
         }

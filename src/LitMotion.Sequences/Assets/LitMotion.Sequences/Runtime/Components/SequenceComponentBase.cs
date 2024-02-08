@@ -6,21 +6,6 @@ namespace LitMotion.Sequences
         where TValue : unmanaged
         where TObject : Object
     {
-        public override void ResetComponent()
-        {
-            base.ResetComponent();
-            startValue = default;
-            endValue = default;
-            motionMode = default;
-            duration = 1f;
-            ease = default;
-            delay = default;
-            delayType = default;
-            skipValuesDuringDelay = true;
-            loops = 1;
-            loopType = default;
-        }
-
         public ExposedReference<TObject> target;
 
         [Header("Moiton Settings")]
@@ -39,11 +24,19 @@ namespace LitMotion.Sequences
         public int loops = 1;
         public LoopType loopType;
 
-        public TObject Target { get; private set; }
-
-        public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)
+        public override void ResetComponent()
         {
-            Target = target.Resolve(exposedPropertyTable);
+            base.ResetComponent();
+            startValue = default;
+            endValue = default;
+            motionMode = default;
+            duration = 1f;
+            ease = default;
+            delay = default;
+            delayType = default;
+            skipValuesDuringDelay = true;
+            loops = 1;
+            loopType = default;
         }
 
         protected void ConfigureMotionBuilder<T, TOptions, TAdapter>(ref MotionBuilder<T, TOptions, TAdapter> motionBuilder)

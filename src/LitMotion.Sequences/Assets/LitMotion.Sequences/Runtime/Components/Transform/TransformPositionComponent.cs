@@ -9,9 +9,6 @@ namespace LitMotion.Sequences.Components
         [Header("Transform Settings")]
         public TransformScalingMode scalingMode;
 
-        Vector3 initialPosition;
-        Vector3 initialLocalPosition;
-
         public override void ResetComponent()
         {
             base.ResetComponent();
@@ -19,16 +16,21 @@ namespace LitMotion.Sequences.Components
             scalingMode = default;
         }
 
-        public override void ResolveExposedReferences(IExposedPropertyTable exposedPropertyTable)
+        public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
         {
-            base.ResolveExposedReferences(exposedPropertyTable);
-            initialPosition = Target.position;
-            initialLocalPosition = Target.localPosition;
-        }
-
-        public override void Configure(MotionSequenceItemBuilder builder)
-        {
-            if (Target == null) return;
+            var target = this.target.Resolve(sequencePropertyTable);
+            if (target == null) return;
+            
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.Local), out var initialLocalPosition))
+            {
+                initialLocalPosition = target.localPosition;
+                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.Local), initialLocalPosition);
+            }
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.World), out var initialPosition))
+            {
+                initialPosition = target.position;
+                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.World), initialPosition);
+            }
 
             var currentValue = Vector3.zero;
 
@@ -45,8 +47,8 @@ namespace LitMotion.Sequences.Components
                 case MotionMode.Additive:
                     currentValue = scalingMode switch
                     {
-                        TransformScalingMode.Local => Target.localPosition,
-                        TransformScalingMode.World => Target.position,
+                        TransformScalingMode.Local => target.localPosition,
+                        TransformScalingMode.World => target.position,
                         _ => default
                     };
                     break;
@@ -57,12 +59,27 @@ namespace LitMotion.Sequences.Components
 
             var handle = scalingMode switch
             {
-                TransformScalingMode.Local => motionBuilder.BindToLocalPosition(Target),
-                TransformScalingMode.World => motionBuilder.BindToPosition(Target),
+                TransformScalingMode.Local => motionBuilder.BindToLocalPosition(target),
+                TransformScalingMode.World => motionBuilder.BindToPosition(target),
                 _ => default
             };
 
             builder.Add(handle);
+        }
+
+        public override void RestoreValues(ISequencePropertyTable sequencePropertyTable)
+        {
+            var target = this.target.Resolve(sequencePropertyTable);
+            if (target == null) return;
+
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.Local), out var initialLocalPosition))
+            {
+                target.localPosition = initialLocalPosition;
+            }
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.World), out var initialPosition))
+            {
+                target.position = initialPosition;
+            }
         }
     }
 }
