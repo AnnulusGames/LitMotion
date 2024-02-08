@@ -12,6 +12,7 @@ namespace LitMotion.Sequences.Editor
             Assert.IsTrue(componentType.IsSubclassOf(typeof(SequenceComponent)));
 
             var component = ScriptableObject.CreateInstance(componentType);
+            Undo.RegisterCreatedObjectUndo(component, $"Create Sequence Component ({componentType.Name})");
             component.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
             component.name = componentType.Name;
             var path = AssetDatabase.GetAssetPath(asset);

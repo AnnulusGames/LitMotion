@@ -44,6 +44,34 @@ MonoBehaviour:
   components:
   - {fileID: -6748111596782963572}
   - {fileID: 9064623851710500091}
+--- !u!114 &4567882758882337781
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b57874c4a9747cd98cd6348c5695db, type: 3}
+  m_Name: TransformScaleComponent
+  m_EditorClassIdentifier: 
+  enabled: 1
+  displayName: Scale
+  expanded: 0
+  target:
+    exposedName: 
+    defaultValue: {fileID: 0}
+  startValue: {x: 0, y: 0, z: 0}
+  endValue: {x: 0, y: 0, z: 0}
+  motionMode: 0
+  duration: 1
+  ease: 0
+  delay: 0
+  delayType: 0
+  skipValuesDuringDelay: 1
+  loops: 1
+  loopType: 0
 --- !u!114 &9064623851710500091
 MonoBehaviour:
   m_ObjectHideFlags: 3

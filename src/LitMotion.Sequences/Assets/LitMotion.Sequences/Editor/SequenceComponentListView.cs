@@ -124,7 +124,7 @@ namespace LitMotion.Sequences.Editor
                     var index = componentsProperty.arraySize;
                     componentsProperty.InsertArrayElementAtIndex(index);
                     componentsProperty.GetArrayElementAtIndex(index).objectReferenceValue = component;
-                    so.ApplyModifiedPropertiesWithoutUndo();
+                    so.ApplyModifiedProperties();
                 };
 
                 var position = button.contentRect;
