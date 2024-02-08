@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using LitMotion.Extensions;
 
@@ -6,6 +7,8 @@ namespace LitMotion.Sequences.Components
     [SequenceComponentMenu("Transform/Rotation")]
     public sealed class TransformRotationComponent : SequenceComponentBase<Vector3, Transform>
     {
+        static readonly Type componentType = typeof(TransformRotationComponent);
+
         [Header("Transform Settings")]
         public TransformScalingMode scalingMode;
         public bool useEulerAngles;
@@ -23,15 +26,15 @@ namespace LitMotion.Sequences.Components
             var target = this.target.Resolve(sequencePropertyTable);
             if (target == null) return;
 
-            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Quaternion>((target, TransformScalingMode.Local), out var initialLocalRotation))
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.Local), out var initialLocalRotation))
             {
                 initialLocalRotation = target.localRotation;
-                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.Local), initialLocalRotation);
+                sequencePropertyTable.SetInitialValue((target, componentType, TransformScalingMode.Local), initialLocalRotation);
             }
-            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Quaternion>((target, TransformScalingMode.World), out var initialRotation))
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.World), out var initialRotation))
             {
                 initialRotation = target.rotation;
-                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.World), initialRotation);
+                sequencePropertyTable.SetInitialValue((target, componentType, TransformScalingMode.World), initialRotation);
             }
 
             var currentValue = Quaternion.identity;
@@ -90,11 +93,11 @@ namespace LitMotion.Sequences.Components
             var target = this.target.Resolve(sequencePropertyTable);
             if (target == null) return;
 
-            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Quaternion>((target, TransformScalingMode.Local), out var initialLocalRotation))
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.Local), out var initialLocalRotation))
             {
                 target.localRotation = initialLocalRotation;
             }
-            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Quaternion>((target, TransformScalingMode.World), out var initialRotation))
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.World), out var initialRotation))
             {
                 target.rotation = initialRotation;
             }

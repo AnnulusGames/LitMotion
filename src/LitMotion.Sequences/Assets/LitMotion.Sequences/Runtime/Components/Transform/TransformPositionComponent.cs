@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using LitMotion.Extensions;
 
@@ -6,6 +7,8 @@ namespace LitMotion.Sequences.Components
     [SequenceComponentMenu("Transform/Position")]
     public sealed class TransformPositionComponent : SequenceComponentBase<Vector3, Transform>
     {
+        static readonly Type componentType = typeof(TransformPositionComponent);
+
         [Header("Transform Settings")]
         public TransformScalingMode scalingMode;
 
@@ -21,15 +24,15 @@ namespace LitMotion.Sequences.Components
             var target = this.target.Resolve(sequencePropertyTable);
             if (target == null) return;
             
-            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.Local), out var initialLocalPosition))
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Vector3>((target, componentType, TransformScalingMode.Local), out var initialLocalPosition))
             {
                 initialLocalPosition = target.localPosition;
-                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.Local), initialLocalPosition);
+                sequencePropertyTable.SetInitialValue((target, componentType, TransformScalingMode.Local), initialLocalPosition);
             }
-            if (!sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.World), out var initialPosition))
+            if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Vector3>((target, componentType, TransformScalingMode.World), out var initialPosition))
             {
                 initialPosition = target.position;
-                sequencePropertyTable.SetInitialValue((target, TransformScalingMode.World), initialPosition);
+                sequencePropertyTable.SetInitialValue((target, componentType, TransformScalingMode.World), initialPosition);
             }
 
             var currentValue = Vector3.zero;
@@ -72,11 +75,11 @@ namespace LitMotion.Sequences.Components
             var target = this.target.Resolve(sequencePropertyTable);
             if (target == null) return;
 
-            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.Local), out var initialLocalPosition))
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Vector3>((target, componentType, TransformScalingMode.Local), out var initialLocalPosition))
             {
                 target.localPosition = initialLocalPosition;
             }
-            if (sequencePropertyTable.TryGetInitialValue<(Transform, TransformScalingMode), Vector3>((target, TransformScalingMode.World), out var initialPosition))
+            if (sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Vector3>((target, componentType, TransformScalingMode.World), out var initialPosition))
             {
                 target.position = initialPosition;
             }
