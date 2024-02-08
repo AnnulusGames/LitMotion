@@ -48,7 +48,12 @@ namespace LitMotion.Sequences.Editor
                 });
                 menu.AddItem(new GUIContent("Remove Motion"), false, () =>
                 {
+                    var elementProperty = componentsProperty.GetArrayElementAtIndex(index);
+                    var component = (SequenceComponent)elementProperty.objectReferenceValue;
+                    Undo.DestroyObjectImmediate(component);
 
+                    componentsProperty.DeleteArrayElementAtIndex(index);
+                    serializedObject.ApplyModifiedProperties();
                 });
 
                 menu.ShowAsContext();
