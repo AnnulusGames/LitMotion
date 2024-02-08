@@ -8,7 +8,6 @@ public class SequenceSandbox : MonoBehaviour
     [SerializeField] Transform target1;
     [SerializeField] Transform target2;
     [SerializeField] Transform target3;
-    [SerializeField] SequencePlayer player;
 
     MotionSequence sequence;
 
@@ -31,11 +30,6 @@ public class SequenceSandbox : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            player.Play();
-        }
-
         if (Input.GetKeyDown(KeyCode.Space) && !sequence.IsActive())
         {
             sequence.Play();
