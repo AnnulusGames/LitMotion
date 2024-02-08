@@ -166,8 +166,8 @@ namespace LitMotion.Sequences.Editor
                         {
                             var obj = x.newValue;
                             property.exposedReferenceValue = obj;
-                            serializedObject.ApplyModifiedProperties();
                             SetExposedNames(table, asset);
+                            serializedObject.ApplyModifiedProperties();
                         });
 
                         bindingView.Add(field);
@@ -193,10 +193,7 @@ namespace LitMotion.Sequences.Editor
                 },
             });
 
-            if (assetProperty.objectReferenceValue == null)
-            {
-                return;
-            }
+            if (assetProperty.objectReferenceValue == null) return;
 
             var listView = new SequenceComponentListView(new SerializedObject(assetProperty.objectReferenceValue));
             listView.style.marginLeft = 2f;
@@ -223,6 +220,7 @@ namespace LitMotion.Sequences.Editor
                         }
                     }
                 }
+                serializedObject.ApplyModifiedProperties();
             }
         }
     }
