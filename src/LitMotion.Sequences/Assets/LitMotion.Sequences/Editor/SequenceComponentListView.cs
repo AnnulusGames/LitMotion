@@ -10,7 +10,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace LitMotion.Sequences.Editor
 {
-    public sealed class SequenceComponentListView : VisualElement
+    public sealed class SequenceComponentListView : BindableElement
     {
         static readonly Dictionary<UnityObject, VisualElement> inspectorCache = new();
         static VisualElement GetOrCreateInspector(UnityObject key)

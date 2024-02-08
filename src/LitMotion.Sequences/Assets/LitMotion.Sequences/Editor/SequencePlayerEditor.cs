@@ -172,21 +172,12 @@ namespace LitMotion.Sequences.Editor
         void UpdateOverrideView(SerializedProperty assetProperty)
         {
             overrideView.Clear();
-
-            overrideView.Add(new Label("Motions")
-            {
-                style = {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    fontSize = 12.5f,
-                    marginLeft = 4f, marginTop = 5f, marginBottom = 2f
-                },
-            });
-
             if (assetProperty.objectReferenceValue == null) return;
 
-            var listView = new SequenceComponentListView(new SerializedObject(assetProperty.objectReferenceValue));
-            listView.style.marginLeft = 2f;
-            overrideView.Add(listView);
+            var view = new SequenceAssetView(new SerializedObject(assetProperty.objectReferenceValue));
+            view.style.marginLeft = 2f;
+            view.style.marginTop = 3f;
+            overrideView.Add(view);
         }
 
         void SetExposedNames(IExposedPropertyTable table, IEnumerable<SequenceComponent> components)

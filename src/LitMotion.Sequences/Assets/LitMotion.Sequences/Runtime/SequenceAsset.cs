@@ -6,15 +6,49 @@ namespace LitMotion.Sequences
     [CreateAssetMenu(fileName = "SequenceAsset", menuName = "LitMotion/Sequence Asset")]
     public sealed class SequenceAsset : ScriptableObject
     {
+        internal enum PlayMode
+        {
+            Sequential,
+            Group
+        }
+
+        sealed class SequenceGroupItem : IMotionSequenceItem
+        {
+            public SequenceAsset Asset { get; set; }
+            public ISequencePropertyTable SequencePropertyTable { get; set; }
+
+            public void Configure(MotionSequenceItemBuilder builder)
+            {
+                foreach (var component in Asset.components)
+                {
+                    component.Configure(SequencePropertyTable, builder);
+                }
+            }
+        }
+
+        [SerializeField] PlayMode playMode;
         [SerializeField] SequenceComponent[] components;
         public IReadOnlyCollection<SequenceComponent> Components => components;
 
         internal MotionSequence CreateSequence(ISequencePropertyTable sequencePropertyTable)
         {
             var builder = MotionSequence.CreateBuilder();
-            foreach (var component in components)
+
+            switch (playMode)
             {
-                builder.Items.Add(component.CreateSequenceItem(sequencePropertyTable));
+                case PlayMode.Sequential:
+                    foreach (var component in components)
+                    {
+                        builder.Items.Add(component.CreateSequenceItem(sequencePropertyTable));
+                    }
+                    break;
+                case PlayMode.Group:
+                    builder.Items.Add(new SequenceGroupItem()
+                    {
+                        Asset = this,
+                        SequencePropertyTable = sequencePropertyTable
+                    });
+                    break;
             }
 
             return builder.Build();
