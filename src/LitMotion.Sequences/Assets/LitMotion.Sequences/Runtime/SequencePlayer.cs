@@ -17,17 +17,18 @@ namespace LitMotion.Sequences
 
         MotionSequence sequence;
 
-        void Start()
-        {
-            sequence = asset.CreateSequence(this);
-        }
-
         public bool IsPlaying() => sequence != null && sequence.IsActive();
 
         public void Play()
         {
             if (IsPlaying()) throw new InvalidOperationException("Sequence is now playing.");
-            sequence?.Play();
+#if UNITY_EDITOR
+            sequence = asset.CreateSequence(this);
+            IsModified = true;
+#else
+            if (sequence == null) sequence = asset.CreateSequence(this); // cache sequence
+#endif
+            sequence.Play();
         }
 
         public void Complete()
@@ -42,7 +43,7 @@ namespace LitMotion.Sequences
 
 #if UNITY_EDITOR
         internal bool IsModified { get; private set; }
-
+        
         internal void CancelAndRestoreValues()
         {
             sequence?.Cancel();
