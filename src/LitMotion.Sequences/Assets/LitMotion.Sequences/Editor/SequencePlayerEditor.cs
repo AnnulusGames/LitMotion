@@ -5,6 +5,8 @@ using UnityEditor.UIElements;
 
 namespace LitMotion.Sequences.Editor
 {
+    // TODO: Simplify implementation, separate VisualElements, and optimize
+
     [CustomEditor(typeof(SequencePlayer))]
     public sealed class SequencePlayerEditor : UnityEditor.Editor
     {
@@ -62,7 +64,16 @@ namespace LitMotion.Sequences.Editor
                 var player = (SequencePlayer)property.serializedObject.targetObject;
                 var asset = (SequenceAsset)property.objectReferenceValue;
 
-                if (asset != null) SetExposedNames(player, asset);
+                overrideView.Unbind();
+                if (asset != null)
+                {
+                    SetExposedNames(player, asset);
+                    overrideView.TrackSerializedObjectValue(new SerializedObject(asset), so =>
+                    {
+                        UpdateBindingView();
+                    });
+                }
+
                 UpdateBindingView();
                 UpdateOverrideView(property);
             });
@@ -87,10 +98,14 @@ namespace LitMotion.Sequences.Editor
 
             var playButton = new IMGUIContainer(() =>
             {
+                using (new EditorGUI.DisabledScope(assetProperty.objectReferenceValue == null))
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (GUILayout.Button("Play")) Player.PlayPreview();
-                    if (GUILayout.Button("Reset")) Player.CancelAndRestoreValues();
+                    using (new EditorGUI.DisabledScope(!Player.IsModified))
+                    {
+                        if (GUILayout.Button("Reset")) Player.CancelAndRestoreValues();
+                    }
                 }
             });
             root.Add(playButton);
@@ -98,8 +113,6 @@ namespace LitMotion.Sequences.Editor
             UpdateBindingView();
             UpdateOverrideView(assetProperty);
 
-            // TODO:
-            // tmp impl
             root.schedule.Execute(() =>
             {
                 var isModified = Player.IsModified;
