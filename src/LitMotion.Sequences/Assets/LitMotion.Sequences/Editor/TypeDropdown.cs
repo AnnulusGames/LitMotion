@@ -90,7 +90,7 @@ namespace LitMotion.Sequences.Editor
 
         protected override AdvancedDropdownItem BuildRoot()
         {
-            var root = new AdvancedDropdownItem("Select Type");
+            var root = new AdvancedDropdownItem("Search");
             AddTo(root, types);
             return root;
         }
