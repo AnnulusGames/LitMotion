@@ -38,7 +38,7 @@ namespace LitMotion.Sequences.Editor
 
         void OnDisable()
         {
-            Player.CancelAndRestoreValues();
+            if (target != null) Player.CancelAndRestoreValues();
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         }
 
