@@ -92,7 +92,7 @@ namespace LitMotion.Sequences.Editor
             foldout.OnFoldoutStateChanged += x =>
             {
                 expandedProperty.boolValue = x;
-                serializedObject.ApplyModifiedProperties();
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
             };
 
             var displayNameField = new PropertyField(displayNameProperty);
