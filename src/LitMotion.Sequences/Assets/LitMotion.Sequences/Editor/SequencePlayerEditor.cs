@@ -115,7 +115,7 @@ namespace LitMotion.Sequences.Editor
                     if (GUILayout.Button("Play")) Player.PlayPreview();
                     using (new EditorGUI.DisabledScope(!Player.IsModified))
                     {
-                        if (GUILayout.Button("Reset")) Player.CancelAndRestoreValues();
+                        if (GUILayout.Button("Stop")) Player.CancelAndRestoreValues();
                     }
                 }
             })
