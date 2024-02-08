@@ -7,7 +7,7 @@ namespace LitMotion.Sequences.Editor
 {
     internal static class SequenceComponentHelper
     {
-        public static SequenceComponent CreateAndAddTo(SequenceAsset asset, Type componentType)
+        public static SequenceComponent CreateAndAddTo(UnityEngine.Object asset, Type componentType)
         {
             Assert.IsTrue(componentType.IsSubclassOf(typeof(SequenceComponent)));
 

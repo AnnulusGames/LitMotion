@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace LitMotion.Sequences.Editor
 {
@@ -67,14 +69,8 @@ namespace LitMotion.Sequences.Editor
                 overrideView.Unbind();
                 if (asset != null)
                 {
-                    SetExposedNames(player, asset);
-                    overrideView.TrackSerializedObjectValue(new SerializedObject(asset), so =>
-                    {
-                        UpdateBindingView();
-                    });
+                    SetExposedNames(player, asset.Components);
                 }
-
-                UpdateBindingView();
                 UpdateOverrideView(property);
             });
 
@@ -90,6 +86,22 @@ namespace LitMotion.Sequences.Editor
             };
             root.Add(bindingView);
 
+            var bindingsContainer = new IMGUIContainer(() =>
+            {
+                var table = (IExposedPropertyTable)target;
+                var asset = (SequenceAsset)serializedObject.FindProperty("asset").objectReferenceValue;
+
+                if (asset == null || asset.Components.Count == 0)
+                {
+                    EditorGUILayout.LabelField("Empty");
+                    return;
+                }
+
+                DrawBindingFields(asset.Components);
+            });
+            bindingView.Add(bindingsContainer);
+
+            // Motions -----------------------------------------------------------
             overrideView = new VisualElement();
             root.Add(overrideView);
 
@@ -110,7 +122,6 @@ namespace LitMotion.Sequences.Editor
             });
             root.Add(playButton);
 
-            UpdateBindingView();
             UpdateOverrideView(assetProperty);
 
             root.schedule.Execute(() =>
@@ -120,31 +131,16 @@ namespace LitMotion.Sequences.Editor
                 bindingView.SetEnabled(!isModified);
                 overrideView.SetEnabled(!isModified);
             })
-            .Every(20);
+            .Every(50);
 
             return root;
         }
-
-        void UpdateBindingView()
+        void DrawBindingFields(IEnumerable<SequenceComponent> components)
         {
-            bindingView.Clear();
-
+            if (target == null) return;
             var table = (IExposedPropertyTable)target;
-            var asset = (SequenceAsset)serializedObject.FindProperty("asset").objectReferenceValue;
 
-            if (asset == null || asset.Components.Count == 0)
-            {
-                bindingView.Add(new Label("Empty")
-                {
-                    style = {
-                        marginLeft = 4f,
-                        paddingBottom = 3f, paddingTop = 3f, paddingLeft = 3f, paddingRight = 3f
-                    }
-                });
-                return;
-            }
-
-            foreach (var component in asset.Components)
+            foreach (var component in components)
             {
                 if (component == null) continue;
 
@@ -152,29 +148,22 @@ namespace LitMotion.Sequences.Editor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.NextVisible(true))
                 {
-                    if (iterator.propertyType == SerializedPropertyType.ExposedReference)
+                    if (iterator.name == "components")
                     {
-                        var property = iterator.Copy();
+                        DrawBindingFields(iterator.GetValue<SequenceComponent[]>());
+                    }
+                    else if (iterator.propertyType == SerializedPropertyType.ExposedReference)
+                    {
+                        var property = iterator;
                         var label = component.displayName + " / " + property.displayName;
 
-                        var field = new ObjectField(label)
+                        var obj = EditorGUILayout.ObjectField(label, property.exposedReferenceValue, property.GetPropertyType().GenericTypeArguments[0], true);
+                        if (obj != property.exposedReferenceValue)
                         {
-                            objectType = property.GetPropertyType().GenericTypeArguments[0],
-                            value = property.exposedReferenceValue
-                        };
-                        field.RegisterValueChangedCallback(x =>
-                        {
-                            var obj = x.newValue;
                             property.exposedReferenceValue = obj;
-                            SetExposedNames(table, asset);
                             serializedObject.ApplyModifiedProperties();
-                        });
-
-                        bindingView.Add(field);
-                        field.TrackPropertyValue(serializedObject.FindProperty("displayName"), property =>
-                        {
-                            UpdateBindingView();
-                        });
+                            SetExposedNames(table, components);
+                        }
                     }
                 }
             }
@@ -197,13 +186,12 @@ namespace LitMotion.Sequences.Editor
 
             var listView = new SequenceComponentListView(new SerializedObject(assetProperty.objectReferenceValue));
             listView.style.marginLeft = 2f;
-            listView.OnOrdered += () => UpdateBindingView();
             overrideView.Add(listView);
         }
 
-        void SetExposedNames(IExposedPropertyTable table, SequenceAsset asset)
+        void SetExposedNames(IExposedPropertyTable table, IEnumerable<SequenceComponent> components)
         {
-            foreach (var component in asset.Components)
+            foreach (var component in components)
             {
                 if (component == null) continue;
 
@@ -211,7 +199,11 @@ namespace LitMotion.Sequences.Editor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.NextVisible(true))
                 {
-                    if (iterator.name == ExposedNamePropertyName)
+                    if (iterator.name == "components")
+                    {
+                        SetExposedNames(table, iterator.GetValue<SequenceComponent[]>());
+                    }
+                    else if (iterator.name == ExposedNamePropertyName)
                     {
                         table.GetReferenceValue(iterator.stringValue, out var isValid);
                         if (!isValid)

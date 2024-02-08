@@ -125,7 +125,7 @@ namespace LitMotion.Sequences.Editor
                 dropdown.OnItemSelected += item =>
                 {
                     var target = serializedObject.targetObject;
-                    var component = SequenceComponentHelper.CreateAndAddTo((SequenceAsset)target, item.type);
+                    var component = SequenceComponentHelper.CreateAndAddTo(target, item.type);
 
                     var so = new SerializedObject(target);
                     var componentsProperty = so.FindProperty("components");
