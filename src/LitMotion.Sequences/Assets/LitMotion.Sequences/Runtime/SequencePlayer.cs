@@ -24,7 +24,6 @@ namespace LitMotion.Sequences
             if (IsPlaying()) throw new InvalidOperationException("Sequence is now playing.");
 #if UNITY_EDITOR
             sequence = asset.CreateSequence(this);
-            IsModified = true;
 #else
             if (sequence == null) sequence = asset.CreateSequence(this); // cache sequence
 #endif
@@ -42,7 +41,7 @@ namespace LitMotion.Sequences
         }
 
 #if UNITY_EDITOR
-        internal bool IsModified { get; private set; }
+        internal bool IsModified => dictionaries.Count > 0;
         
         internal void CancelAndRestoreValues()
         {
@@ -51,14 +50,13 @@ namespace LitMotion.Sequences
             {
                 component.RestoreValues(this);
             }
-            IsModified = false;
+            ((ISequencePropertyTable)this).ClearInitialValues();
         }
 
         internal void PlayPreview()
         {
             if (asset == null) return;
 
-            IsModified = true;
             sequence?.Complete();
             sequence = asset.CreateSequence(this);
             sequence.Play();
@@ -99,45 +97,30 @@ namespace LitMotion.Sequences
             }
         }
 
-        static class InitialValueCache<TKey, TValue>
+        readonly Dictionary<Type, IDictionary> dictionaries = new();
+
+        Dictionary<TKey, TValue> GetDictionary<TKey, TValue>()
         {
-            static InitialValueCache()
-            {
-                store = new();
-                dictionaries.Add(store);
-            }
-
-            readonly static Dictionary<TKey, TValue> store;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static bool TryGet(TKey key, out TValue result)
-            {
-                return store.TryGetValue(key, out result);
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static void Set(TKey key, TValue value)
-            {
-                store[key] = value;
-            }
-        }
-
-        static readonly MinimumList<IDictionary> dictionaries = new();
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void Init()
-        {
-            foreach (var dict in dictionaries.AsSpan()) dict.Clear();
+            var typeKey = typeof((TKey, TValue));
+            if (dictionaries.TryGetValue(typeKey, out var dictionary)) return (Dictionary<TKey, TValue>)dictionary;
+            dictionary = new Dictionary<TKey, TValue>();
+            dictionaries.Add(typeKey, dictionary);
+            return (Dictionary<TKey, TValue>)dictionary;
         }
 
         void ISequencePropertyTable.SetInitialValue<TKey, TValue>(TKey key, TValue value)
         {
-            InitialValueCache<(SequencePlayer, TKey), TValue>.Set((this, key), value);
+            GetDictionary<TKey, TValue>()[key] = value;
         }
 
         bool ISequencePropertyTable.TryGetInitialValue<TKey, TValue>(TKey key, out TValue value)
         {
-            return InitialValueCache<(SequencePlayer, TKey), TValue>.TryGet((this, key), out value);
+            return GetDictionary<TKey, TValue>().TryGetValue(key, out value);
+        }
+
+        void ISequencePropertyTable.ClearInitialValues()
+        {
+            dictionaries.Clear();
         }
     }
 }
