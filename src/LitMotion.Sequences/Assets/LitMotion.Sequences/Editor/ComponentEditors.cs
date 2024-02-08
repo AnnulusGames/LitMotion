@@ -14,4 +14,10 @@ namespace LitMotion.Sequences.Editor
 
     [CustomEditor(typeof(TransformPositionComponent))]
     internal sealed class TransformPositionComponentEditor : TransformComponentEditorBase { }
+
+    [CustomEditor(typeof(TransformRotationComponent))]
+    internal sealed class TransformRotationComponentEditor : TransformComponentEditorBase { }
+
+    [CustomEditor(typeof(TransformScaleComponent))]
+    internal sealed class TransformScaleComponentEditor : TransformComponentEditorBase { }
 }
