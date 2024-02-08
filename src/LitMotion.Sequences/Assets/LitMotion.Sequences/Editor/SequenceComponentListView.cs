@@ -135,7 +135,7 @@ namespace LitMotion.Sequences.Editor
                     so.ApplyModifiedProperties();
                 };
 
-                var position = button.contentRect;
+                var position = button.LocalToWorld(button.contentRect);
                 dropdown.Show(position);
             })
             {
