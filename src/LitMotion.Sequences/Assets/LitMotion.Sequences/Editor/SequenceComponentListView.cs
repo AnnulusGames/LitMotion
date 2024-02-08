@@ -85,16 +85,7 @@ namespace LitMotion.Sequences.Editor
                 dropdown.OnItemSelected += item =>
                 {
                     var target = serializedObject.targetObject;
-                    var component = ScriptableObject.CreateInstance(item.type);
-                    component.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
-                    component.name = item.type.Name;
-                    var path = AssetDatabase.GetAssetPath(target);
-                    if (EditorUtility.IsPersistent(target))
-                    {
-                        AssetDatabase.AddObjectToAsset(component, path);
-                        AssetDatabase.SaveAssets();
-                        AssetDatabase.ImportAsset(path);
-                    }
+                    var component = SequenceComponentHelper.CreateAndAddTo((SequenceAsset)target, item.type);
 
                     var so = new SerializedObject(target);
                     var componentsProperty = so.FindProperty("components");
