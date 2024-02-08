@@ -133,6 +133,11 @@ namespace LitMotion.Sequences.Editor
 
         public event Action<bool> OnFoldoutStateChanged;
         public event Action<bool> OnCheckboxStateChanged;
-        public event Action OnContextButtonClicked;
+        public Action OnContextButtonClicked;
+
+        public void ResetContextButtonEvents()
+        {
+            OnContextButtonClicked = null;
+        }
     }
 }
