@@ -119,7 +119,12 @@ namespace LitMotion.Sequences.Editor
                         if (GUILayout.Button("Reset")) Player.CancelAndRestoreValues();
                     }
                 }
-            });
+            })
+            {
+                style = {
+                    marginLeft = 4f
+                }
+            };
             root.Add(playButton);
 
             UpdateOverrideView(assetProperty);
