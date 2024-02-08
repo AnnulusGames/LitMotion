@@ -117,7 +117,7 @@ namespace LitMotion.Sequences.Editor
             bindingView.Clear();
 
             var table = (IExposedPropertyTable)target;
-            var asset = ((SequencePlayer)target).asset;
+            var asset = (SequenceAsset)serializedObject.FindProperty("asset").objectReferenceValue;
 
             if (asset == null || asset.Components.Count == 0)
             {

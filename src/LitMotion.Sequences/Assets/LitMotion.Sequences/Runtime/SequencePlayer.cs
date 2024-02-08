@@ -10,7 +10,7 @@ namespace LitMotion.Sequences
     [AddComponentMenu("LitMotion/Sequence Player")]
     public sealed class SequencePlayer : MonoBehaviour, ISequencePropertyTable
     {
-        public SequenceAsset asset;
+        [SerializeField] SequenceAsset asset;
 
         [SerializeField] List<PropertyName> propertyNameList;
         [SerializeField] List<UnityObject> objectList;
