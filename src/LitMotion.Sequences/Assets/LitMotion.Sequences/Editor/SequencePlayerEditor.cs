@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace LitMotion.Sequences.Editor
@@ -153,11 +152,7 @@ namespace LitMotion.Sequences.Editor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.NextVisible(true))
                 {
-                    if (iterator.name == "components")
-                    {
-                        DrawBindingFields(iterator.GetValue<SequenceComponent[]>());
-                    }
-                    else if (iterator.propertyType == SerializedPropertyType.ExposedReference)
+                    if (iterator.propertyType == SerializedPropertyType.ExposedReference)
                     {
                         var property = iterator;
                         var label = component.displayName + " / " + property.displayName;
@@ -195,11 +190,7 @@ namespace LitMotion.Sequences.Editor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.NextVisible(true))
                 {
-                    if (iterator.name == "components")
-                    {
-                        SetExposedNames(table, iterator.GetValue<SequenceComponent[]>());
-                    }
-                    else if (iterator.name == ExposedNamePropertyName)
+                    if (iterator.name == ExposedNamePropertyName)
                     {
                         table.GetReferenceValue(iterator.stringValue, out var isValid);
                         if (!isValid)
