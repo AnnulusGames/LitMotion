@@ -10,9 +10,7 @@ namespace LitMotion.Sequences
     public sealed class SequencePlayer : MonoBehaviour, ISequencePropertyTable
     {
         [SerializeField] SequenceAsset asset;
-
-        [SerializeField] List<PropertyName> propertyNameList;
-        [SerializeField] List<UnityObject> objectList;
+        [SerializeField] SerializableDictionary<PropertyName, UnityObject> exposedReferenceDictionary;
 
         MotionSequence sequence;
 
@@ -64,36 +62,19 @@ namespace LitMotion.Sequences
 
         void IExposedPropertyTable.ClearReferenceValue(PropertyName id)
         {
-            var index = propertyNameList.IndexOf(id);
-            if (index != -1)
-            {
-                propertyNameList.RemoveAt(index);
-                objectList.RemoveAt(index);
-            }
+            exposedReferenceDictionary.Remove(id);
         }
 
         UnityObject IExposedPropertyTable.GetReferenceValue(PropertyName id, out bool idValid)
         {
-            var index = propertyNameList.IndexOf(id);
-            idValid = index != -1;
-            return idValid ? objectList[index] : null;
+            idValid = exposedReferenceDictionary.TryGetValue(id, out var obj);
+            return obj;
         }
 
         void IExposedPropertyTable.SetReferenceValue(PropertyName id, UnityObject value)
         {
             if (PropertyName.IsNullOrEmpty(id)) return;
-
-            var index = propertyNameList.IndexOf(id);
-            if (index != -1)
-            {
-                propertyNameList[index] = id;
-                objectList[index] = value;
-            }
-            else if (value == null)
-            {
-                propertyNameList.Add(id);
-                objectList.Add(value);
-            }
+            exposedReferenceDictionary[id] = value;
         }
 
         readonly Dictionary<Type, IDictionary> dictionaries = new();
