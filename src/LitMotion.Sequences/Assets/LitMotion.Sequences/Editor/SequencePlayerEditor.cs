@@ -139,6 +139,7 @@ namespace LitMotion.Sequences.Editor
 
             return root;
         }
+        
         void DrawBindingFields(IEnumerable<SequenceComponent> components)
         {
             if (target == null) return;
@@ -150,6 +151,7 @@ namespace LitMotion.Sequences.Editor
 
                 var serializedObject = new SerializedObject(component, target);
                 var iterator = serializedObject.GetIterator();
+
                 while (iterator.NextVisible(true))
                 {
                     if (iterator.propertyType == SerializedPropertyType.ExposedReference)
@@ -160,12 +162,15 @@ namespace LitMotion.Sequences.Editor
                         var obj = EditorGUILayout.ObjectField(label, property.exposedReferenceValue, property.GetPropertyType().GenericTypeArguments[0], true);
                         if (obj != property.exposedReferenceValue)
                         {
+                            Undo.RecordObjects(new Object[] { component, target }, "Change SequencePlayer Binding");
+
                             property.exposedReferenceValue = obj;
-                            serializedObject.ApplyModifiedProperties();
+                            serializedObject.ApplyModifiedPropertiesWithoutUndo();
                             SetExposedNames(table, components);
                         }
                     }
                 }
+
             }
         }
 
@@ -199,7 +204,7 @@ namespace LitMotion.Sequences.Editor
                         }
                     }
                 }
-                serializedObject.ApplyModifiedProperties();
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
         }
     }
