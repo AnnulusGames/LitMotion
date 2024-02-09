@@ -32,22 +32,22 @@ namespace LitMotion.Sequences
             displayName = GetType().Name;
         }
 
-        internal void InternalConfigure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
+        internal void InternalConfigure(ISequencePropertyTable propertyTable, MotionSequenceItemBuilder builder)
         {
             if (!enabled) return;
-            Configure(sequencePropertyTable, builder);
+            Configure(propertyTable, builder);
         }
 
-        internal IMotionSequenceItem CreateSequenceItem(ISequencePropertyTable sequencePropertyTable)
+        internal IMotionSequenceItem CreateSequenceItem(ISequencePropertyTable propertyTable)
         {
             return new SequenceItem()
             {
                 Component = this,
-                SequencePropertyTable = sequencePropertyTable
+                SequencePropertyTable = propertyTable
             };
         }
 
-        public abstract void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder);
-        public abstract void RestoreValues(ISequencePropertyTable sequencePropertyTable);
+        public abstract void Configure(ISequencePropertyTable propertyTable, MotionSequenceItemBuilder builder);
+        public abstract void RestoreValues(ISequencePropertyTable propertyTable);
     }
 }

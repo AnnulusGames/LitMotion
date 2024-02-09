@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace LitMotion.Sequences
 {
     public abstract class SequenceComponentBase<TValue, TObject> : SequenceComponent
         where TValue : unmanaged
-        where TObject : Object
+        where TObject : UnityEngine.Object
     {
         public ExposedReference<TObject> target;
 
@@ -47,6 +48,16 @@ namespace LitMotion.Sequences
             motionBuilder.WithEase(ease)
                 .WithDelay(delay, delayType, skipValuesDuringDelay)
                 .WithLoops(loops, loopType);
+        }
+
+        protected bool TryGetInitialValue(ISequencePropertyTable propertyTable, out TValue result)
+        {
+            return propertyTable.TryGetInitialValue((target.Resolve(propertyTable), GetType()), out result);
+        }
+
+        protected void SetInitialValue(ISequencePropertyTable propertyTable, TValue value)
+        {
+            propertyTable.SetInitialValue((target.Resolve(propertyTable), GetType()), value);
         }
     }
 }
