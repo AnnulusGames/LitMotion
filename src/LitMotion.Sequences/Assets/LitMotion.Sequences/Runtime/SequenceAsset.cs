@@ -21,7 +21,7 @@ namespace LitMotion.Sequences
             {
                 foreach (var component in Asset.components)
                 {
-                    component.Configure(SequencePropertyTable, builder);
+                    component.InternalConfigure(SequencePropertyTable, builder);
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace LitMotion.Sequences
 
             public void Configure(MotionSequenceItemBuilder builder)
             {
-                Component.Configure(SequencePropertyTable, builder);
+                Component.InternalConfigure(SequencePropertyTable, builder);
             }
         }
 
