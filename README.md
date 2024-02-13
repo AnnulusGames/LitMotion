@@ -31,6 +31,7 @@ The full version of documentation can be found [here](https://annulusgames.githu
 - Character animation for TextMeshPro text.
 - Motion Tracker Window for monitoring motions in progress.
 - Convert to Observables using UniRx.
+- Convert to Observables using R3.
 - Supports async/await via UniTask.
 - Extend types using `IMotionOptions` and `IMotionAdapter`.
 

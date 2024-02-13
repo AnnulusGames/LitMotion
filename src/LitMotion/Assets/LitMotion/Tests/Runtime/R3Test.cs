@@ -1,14 +1,14 @@
-#if LITMOTION_TEST_UNIRX
+﻿#if LITMOTION_TEST_R3
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
-using UniRx;
+using R3;
 using NUnit.Framework;
 
 namespace LitMotion.Tests.Runtime
 {
-    public class UniRxTest
+    public class R3Test
     {
         readonly CompositeDisposable disposables = new();
 
@@ -24,7 +24,7 @@ namespace LitMotion.Tests.Runtime
             bool completed = false;
             LMotion.Create(0f, 10f, 2f)
                 .WithOnComplete(() => completed = true)
-                .ToRxObservable()
+                .ToR3Observable()
                 .Subscribe(x => Debug.Log(x))
                 .AddTo(disposables);
             while (!completed) yield return null;
