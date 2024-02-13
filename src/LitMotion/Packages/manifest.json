@@ -14,7 +14,7 @@
     "com.unity.visualeffectgraph": "16.0.4",
     "com.unity.visualscripting": "1.8.0",
     "org.nuget.microsoft.bcl.timeprovider": "8.0.1",
-    "org.nuget.r3": "0.1.21",
+    "org.nuget.r3": "1.1.10",
     "org.nuget.system.componentmodel.annotations": "5.0.0",
     "org.nuget.system.threading.channels": "8.0.0",
     "com.unity.modules.accessibility": "1.0.0",

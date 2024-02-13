@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "3bf68621f9af5cacf5a1f1e2920a1f89a08b6c06"
+      "hash": "f0d7a6ee7f8a31dfeef3e25f120d4e2e55ecbdbe"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -285,7 +285,7 @@
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.r3": {
-      "version": "0.1.21",
+      "version": "1.1.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
