@@ -47,6 +47,8 @@
   href: motion-tracker.md
 
 - name: Integrations
+- name: R3
+  href: integration-r3.md
 - name: UniRx
   href: integration-unirx.md
 - name: UniTask
