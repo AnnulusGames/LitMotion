@@ -29,6 +29,7 @@ namespace LitMotion
         {
             buffer.Version++;
             buffer.Duration = default;
+            buffer.StartTime = default;
             buffer.Ease = default;
             buffer.Delay = default;
             buffer.DelayType = default;
@@ -55,6 +56,7 @@ namespace LitMotion
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
 
         public float Duration;
+        public double StartTime;
         public Ease Ease;
         public float Delay;
         public DelayType DelayType;
@@ -104,6 +106,19 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.Ease = ease;
+            return this;
+        }
+
+        /// <summary>
+        /// Specify start time
+        /// </summary>
+        /// <param name="ease">The start time</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithStartTime(double time)
+        {
+            CheckBuffer();
+            buffer.StartTime = time;
             return this;
         }
 
@@ -358,6 +373,7 @@ namespace LitMotion
                 StartValue = buffer.StartValue,
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
+                Time = buffer.StartTime,
                 Duration = buffer.Duration,
                 PlaybackSpeed = 1f,
                 Ease = buffer.Ease,

@@ -42,6 +42,12 @@ namespace LitMotion
             return storageList[handle.StorageId].GetPlaybackSpeed(handle);
         }
 
+        public static double GetMotionTime(MotionHandle handle)
+        {
+            CheckStorageId(handle);
+            return storageList[handle.StorageId].GetTime(handle);
+        }
+
         public static void SetMotionPlaybackSpeed(MotionHandle handle, float value)
         {
             if (value < 0f) throw new ArgumentOutOfRangeException("Playback speed must be 0 or greater.");

@@ -35,6 +35,7 @@ namespace LitMotion
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
         float GetPlaybackSpeed(MotionHandle handle);
+        double GetTime(MotionHandle handle);
         void SetPlaybackSpeed(MotionHandle handle, float value);
         MotionCallbackData GetMotionCallbacks(MotionHandle handle);
         void SetMotionCallbacks(MotionHandle handle, MotionCallbackData callbacks);
@@ -384,6 +385,12 @@ namespace LitMotion
         {
             CheckIndex(handle);
             return dataArray[entries[handle.Index].DenseIndex].PlaybackSpeed;
+        }
+
+        public double GetTime(MotionHandle handle)
+        {
+            CheckIndex(handle);
+            return dataArray[entries[handle.Index].DenseIndex].Time;
         }
 
         public void SetPlaybackSpeed(MotionHandle handle, float value)
