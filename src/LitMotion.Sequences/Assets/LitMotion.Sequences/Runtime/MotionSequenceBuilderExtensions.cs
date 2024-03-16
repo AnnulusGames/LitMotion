@@ -28,15 +28,15 @@ namespace LitMotion.Sequences
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup(this IMotionSequenceBuilder builder, Action<MotionSequenceItemBuilder> factoryDelegate)
+        public static IMotionSequenceBuilder AppendParallel(this IMotionSequenceBuilder builder, Action<MotionSequenceItemBuilder> factoryDelegate)
         {
-            builder.Items.Add(new _AppendGroup(factoryDelegate));
+            builder.Items.Add(new _AppendParallel(factoryDelegate));
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendGroup<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceItemBuilder> factoryDelegate)
+        public static IMotionSequenceBuilder AppendParallel<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceItemBuilder> factoryDelegate)
         {
-            builder.Items.Add(new _AppendGroupWithState<TState>(state, factoryDelegate));
+            builder.Items.Add(new _AppendParallelWithState<TState>(state, factoryDelegate));
             return builder;
         }
 
@@ -105,9 +105,9 @@ namespace LitMotion.Sequences
             }
         }
 
-        sealed class _AppendGroup : IMotionSequenceItem
+        sealed class _AppendParallel : IMotionSequenceItem
         {
-            public _AppendGroup(Action<MotionSequenceItemBuilder> Delegate)
+            public _AppendParallel(Action<MotionSequenceItemBuilder> Delegate)
             {
                 this.factoryDelegate = Delegate;
             }
@@ -120,9 +120,9 @@ namespace LitMotion.Sequences
             }
         }
 
-        sealed class _AppendGroupWithState<T> : IMotionSequenceItem
+        sealed class _AppendParallelWithState<T> : IMotionSequenceItem
         {
-            public _AppendGroupWithState(T state, Action<T, MotionSequenceItemBuilder> Delegate)
+            public _AppendParallelWithState(T state, Action<T, MotionSequenceItemBuilder> Delegate)
             {
                 this.state = state;
                 this.factoryDelegate = Delegate;

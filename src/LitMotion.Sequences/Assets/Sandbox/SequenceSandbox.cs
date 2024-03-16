@@ -18,7 +18,7 @@ public class SequenceSandbox : MonoBehaviour
             .Append(() => LMotion.Create(0f, 180f, 1f).BindToEulerAnglesZ(target2))
             .Append(() => LMotion.Create(0f, 180f, 1f).BindToEulerAnglesZ(target3))
             .AppendCallback(() => Debug.Log("Callback"))
-            .AppendGroup(motions =>
+            .AppendParallel(motions =>
             {
                 motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(3, LoopType.Yoyo).BindToPositionX(target1));
                 motions.Add(LMotion.Create(-2f, 2f, 1f).WithLoops(2, LoopType.Yoyo).BindToPositionX(target2));

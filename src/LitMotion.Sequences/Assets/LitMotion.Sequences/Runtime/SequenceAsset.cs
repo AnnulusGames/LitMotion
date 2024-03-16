@@ -9,7 +9,7 @@ namespace LitMotion.Sequences
         internal enum PlayMode
         {
             Sequential,
-            Group
+            Parallel
         }
 
         sealed class SequenceGroupItem : IMotionSequenceItem
@@ -42,7 +42,7 @@ namespace LitMotion.Sequences
                         builder.Items.Add(component.CreateSequenceItem(sequencePropertyTable));
                     }
                     break;
-                case PlayMode.Group:
+                case PlayMode.Parallel:
                     builder.Items.Add(new SequenceGroupItem()
                     {
                         Asset = this,
