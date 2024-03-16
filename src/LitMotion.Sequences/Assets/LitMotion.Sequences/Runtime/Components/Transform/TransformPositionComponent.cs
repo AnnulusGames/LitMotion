@@ -10,7 +10,7 @@ namespace LitMotion.Sequences.Components
         static readonly Type componentType = typeof(TransformPositionComponent);
 
         [Header("Transform Settings")]
-        public TransformScalingMode scalingMode;
+        [SerializeField] TransformScalingMode scalingMode;
 
         public override void ResetComponent()
         {

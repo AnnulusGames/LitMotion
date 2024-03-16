@@ -10,8 +10,8 @@ namespace LitMotion.Sequences.Components
         static readonly Type componentType = typeof(TransformRotationComponent);
 
         [Header("Transform Settings")]
-        public TransformScalingMode scalingMode;
-        public bool useEulerAngles;
+        [SerializeField] TransformScalingMode scalingMode;
+        [SerializeField] bool useEulerAngles;
 
         public override void ResetComponent()
         {
