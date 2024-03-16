@@ -10,11 +10,6 @@ namespace LitMotion
     /// </summary>
     public static class LitMotionUniTaskExtensions
     {
-        public static UniTask.Awaiter GetAwaiter(this MotionHandle handle)
-        {
-            return ToUniTask(handle).GetAwaiter();
-        }
-
         /// <summary>
         /// Convert motion handle to UniTask.
         /// </summary>

@@ -119,6 +119,11 @@ namespace LitMotion
                 yield return null;
             }
         }
+
+        public static MotionAwaiter GetAwaiter(this MotionHandle handle)
+        {
+            return new MotionAwaiter(handle);
+        }
         
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
