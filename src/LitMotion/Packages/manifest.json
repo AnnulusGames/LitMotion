@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
     "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
@@ -12,6 +13,10 @@
     "com.unity.ugui": "2.0.0",
     "com.unity.visualeffectgraph": "16.0.4",
     "com.unity.visualscripting": "1.8.0",
+    "org.nuget.microsoft.bcl.timeprovider": "8.0.1",
+    "org.nuget.r3": "1.1.10",
+    "org.nuget.system.componentmodel.annotations": "5.0.0",
+    "org.nuget.system.threading.channels": "8.0.0",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
@@ -44,5 +49,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [
+        "org.nuget"
+      ]
+    }
+  ]
 }

@@ -2,7 +2,7 @@
 
 Introducing [UniTask](https://github.com/Cysharp/UniTask) into your project adds extension methods that allow motion waiting to be compatible with async/await.
 
-If you have installed UniTask via the Package Manager, the following functionality will be automatically added. However, if you have imported UniTask via a unitypackage or similar method, you'll need to add `LITMOTION_UNITASK_SUPPORT` to `Settings > Player > Scripting Define Symbols`.
+If you have installed UniTask via the Package Manager, the following functionality will be automatically added. However, if you have imported UniTask via a unitypackage or similar method, you'll need to add `LITMOTION_SUPPORT_UNITASK` to `Settings > Player > Scripting Define Symbols`.
 
 ### Waiting for Motion
 

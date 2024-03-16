@@ -31,6 +31,7 @@ LitMotionは[Magic Tween](https://github.com/AnnulusGames/MagicTween)に続い�
 - TextMeshProのテキストを文字ごとにアニメーション可能
 - MotionTrackerウィンドウによる動作中のモーションの追跡
 - UniRxを利用したObservableへの変換
+- R3を利用したObservableへの変換
 - UniTaskを利用したasync/await対応
 - `IMotionOptions`と`IMotionAdapter`を用いた型の拡張
 
