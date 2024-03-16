@@ -175,7 +175,7 @@ namespace LitMotion.Extensions
 
         TMP_Text target;
         internal CharInfo[] charInfoArray;
-        internal FastListCore<MotionHandle> motionHandleList = new();
+        internal FastListCore<MotionHandle> motionHandleList = new(16);
 
         TextMeshProMotionAnimator nextNode;
 
