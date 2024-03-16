@@ -1,11 +1,12 @@
 using System;
 using System.Runtime.CompilerServices;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
     internal static class MotionStorageManager
     {
-        static readonly MinimumList<IMotionStorage> storageList = new();
+        static FastListCore<IMotionStorage> storageList = new(16);
 
         public static int CurrentStorageId { get; private set; }
 

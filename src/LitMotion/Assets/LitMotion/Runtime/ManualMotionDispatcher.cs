@@ -1,4 +1,5 @@
 using System;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
@@ -27,7 +28,7 @@ namespace LitMotion
             }
         }
 
-        static readonly MinimumList<IUpdateRunner> updateRunners = new();
+        static FastListCore<IUpdateRunner> updateRunners = new(16);
 
         /// <summary>
         /// ManualMotionDispatcher time. It increases every time Update is called.

@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
@@ -7,7 +8,7 @@ namespace LitMotion
     [AddComponentMenu("")]
     internal sealed class MotionHandleLinker : MonoBehaviour
     {
-        readonly MinimumList<MotionHandle> handleList = new(8);
+        FastListCore<MotionHandle> handleList = new(8);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Register(MotionHandle handle)
