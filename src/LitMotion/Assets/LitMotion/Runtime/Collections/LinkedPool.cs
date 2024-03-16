@@ -2,13 +2,14 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace LitMotion
+namespace LitMotion.Collections
 {
-    // This implementation is based on UniTask's TaskPool<T>
-    // Reference: https://github.com/Cysharp/UniTask/blob/64792b672d35e43b3412fc74861f8bdbf41e3a6f/src/UniTask/Assets/Plugins/UniTask/Runtime/TaskPool.cs
-
+    /// <summary>
+    /// Thread-safe linked list object pool
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [StructLayout(LayoutKind.Auto)]
-    internal struct MotionTaskSourcePool<T> where T : class, IMotionTaskSourcePoolNode<T>
+    public struct LinkedPool<T> where T : class, ILinkedPoolNode<T>
     {
         static readonly int MaxPoolSize = int.MaxValue;
 

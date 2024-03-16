@@ -2,12 +2,13 @@
 using System;
 using System.Threading;
 using UnityEngine;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
-    internal sealed class AwaitableMotionConfiguredSource : IMotionTaskSourcePoolNode<AwaitableMotionConfiguredSource>
+    internal sealed class AwaitableMotionConfiguredSource : ILinkedPoolNode<AwaitableMotionConfiguredSource>
     {
-        static MotionTaskSourcePool<AwaitableMotionConfiguredSource> pool;
+        static LinkedPool<AwaitableMotionConfiguredSource> pool;
 
         AwaitableMotionConfiguredSource nextNode;
         public ref AwaitableMotionConfiguredSource NextNode => ref nextNode;
