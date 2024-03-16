@@ -17,7 +17,7 @@ namespace LitMotion.Sequences.Components
 
         public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
         {
-            var target = this.target.Resolve(sequencePropertyTable);
+            var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
             
             if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type), Vector3>((target, componentType), out var initialLocalScale))
@@ -28,7 +28,7 @@ namespace LitMotion.Sequences.Components
 
             var currentValue = Vector3.zero;
 
-            switch (motionMode)
+            switch (MotionMode)
             {
                 case MotionMode.Relative:
                     currentValue = initialLocalScale;
@@ -38,7 +38,7 @@ namespace LitMotion.Sequences.Components
                     break;
             }
 
-            var motionBuilder = LMotion.Create(currentValue + startValue, currentValue + endValue, duration);
+            var motionBuilder = LMotion.Create(currentValue + StartValue, currentValue + EndValue, Duration);
             ConfigureMotionBuilder(ref motionBuilder);
 
             var handle = motionBuilder.BindToLocalScale(target);
@@ -47,7 +47,7 @@ namespace LitMotion.Sequences.Components
 
         public override void RestoreValues(ISequencePropertyTable sequencePropertyTable)
         {
-            var target = this.target.Resolve(sequencePropertyTable);
+            var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
 
             if (sequencePropertyTable.TryGetInitialValue<(Transform, Type), Vector3>((target, componentType), out var initialLocalScale))

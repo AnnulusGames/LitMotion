@@ -23,7 +23,7 @@ namespace LitMotion.Sequences.Components
 
         public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
         {
-            var target = this.target.Resolve(sequencePropertyTable);
+            var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
 
             if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.Local), out var initialLocalRotation))
@@ -39,7 +39,7 @@ namespace LitMotion.Sequences.Components
 
             var currentValue = Quaternion.identity;
 
-            switch (motionMode)
+            switch (MotionMode)
             {
                 case MotionMode.Relative:
                     currentValue = scalingMode switch
@@ -61,7 +61,7 @@ namespace LitMotion.Sequences.Components
 
             if (useEulerAngles)
             {
-                var motionBuilder = LMotion.Create(currentValue.eulerAngles + startValue, currentValue.eulerAngles + endValue, duration);
+                var motionBuilder = LMotion.Create(currentValue.eulerAngles + StartValue, currentValue.eulerAngles + EndValue, Duration);
                 ConfigureMotionBuilder(ref motionBuilder);
 
                 var handle = scalingMode switch
@@ -74,7 +74,7 @@ namespace LitMotion.Sequences.Components
             }
             else
             {
-                var motionBuilder = LMotion.Create(currentValue * Quaternion.Euler(startValue), currentValue * Quaternion.Euler(endValue), duration);
+                var motionBuilder = LMotion.Create(currentValue * Quaternion.Euler(StartValue), currentValue * Quaternion.Euler(EndValue), Duration);
                 ConfigureMotionBuilder(ref motionBuilder);
 
                 var handle = scalingMode switch
@@ -90,7 +90,7 @@ namespace LitMotion.Sequences.Components
 
         public override void RestoreValues(ISequencePropertyTable sequencePropertyTable)
         {
-            var target = this.target.Resolve(sequencePropertyTable);
+            var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
 
             if (sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Quaternion>((target, componentType, TransformScalingMode.Local), out var initialLocalRotation))

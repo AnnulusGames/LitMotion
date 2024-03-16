@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace LitMotion.Sequences
@@ -7,23 +6,34 @@ namespace LitMotion.Sequences
         where TValue : unmanaged
         where TObject : UnityEngine.Object
     {
-        public ExposedReference<TObject> target;
+        [SerializeField] ExposedReference<TObject> target;
 
         [Header("Moiton Settings")]
-        public TValue startValue;
-        public TValue endValue;
-        public MotionMode motionMode;
-        public float duration = 1f;
-        public Ease ease;
+        [SerializeField] TValue startValue;
+        [SerializeField] TValue endValue;
+        [SerializeField] MotionMode motionMode;
+        [SerializeField] float duration = 1f;
+        [SerializeField] Ease ease;
 
         [Header("Delay Settings")]
-        public float delay;
-        public DelayType delayType;
-        public bool skipValuesDuringDelay = true;
+        [SerializeField] float delay;
+        [SerializeField] DelayType delayType;
+        [SerializeField] bool skipValuesDuringDelay = true;
 
         [Header("Loop Settings")]
-        public int loops = 1;
-        public LoopType loopType;
+        [SerializeField] int loops = 1;
+        [SerializeField] LoopType loopType;
+
+        public TValue StartValue => startValue;
+        public TValue EndValue => endValue;
+        public MotionMode MotionMode => motionMode;
+        public float Duration => duration;
+        public Ease Ease => ease;
+        public float Delay => delay;
+        public DelayType DelayType => delayType;
+        public bool SkipValuesDuringDelay => skipValuesDuringDelay;
+        public int Loops => loops;
+        public LoopType LoopType => loopType;
 
         public override void ResetComponent()
         {
@@ -58,6 +68,11 @@ namespace LitMotion.Sequences
         protected void SetInitialValue(ISequencePropertyTable propertyTable, TValue value)
         {
             propertyTable.SetInitialValue((target.Resolve(propertyTable), GetType()), value);
+        }
+
+        protected TObject ResolveTarget(ISequencePropertyTable propertyTable)
+        {
+            return target.Resolve(propertyTable);
         }
     }
 }
