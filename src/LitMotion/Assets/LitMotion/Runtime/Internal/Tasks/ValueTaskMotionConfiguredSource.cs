@@ -1,12 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks.Sources;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
-    internal sealed class ValueTaskMotionConfiguredSource : IValueTaskSource, IMotionTaskSourcePoolNode<ValueTaskMotionConfiguredSource>
+    internal sealed class ValueTaskMotionConfiguredSource : IValueTaskSource, ILinkedPoolNode<ValueTaskMotionConfiguredSource>
     {
-        static MotionTaskSourcePool<ValueTaskMotionConfiguredSource> pool;
+        static LinkedPool<ValueTaskMotionConfiguredSource> pool;
 
         ValueTaskMotionConfiguredSource nextNode;
         public ref ValueTaskMotionConfiguredSource NextNode => ref nextNode;

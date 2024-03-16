@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using LitMotion.Collections;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -104,29 +106,41 @@ namespace LitMotion
             }
         }
 
-        static readonly MinimumList<IUpdateRunner> initializationRunners = new();
-        static readonly MinimumList<IUpdateRunner> earlyUpdateRunners = new();
-        static readonly MinimumList<IUpdateRunner> fixedUpdateRunners = new();
-        static readonly MinimumList<IUpdateRunner> preUpdateRunners = new();
-        static readonly MinimumList<IUpdateRunner> updateRunners = new();
-        static readonly MinimumList<IUpdateRunner> preLateUpdateRunners = new();
-        static readonly MinimumList<IUpdateRunner> postLateUpdateRunners = new();
-        static readonly MinimumList<IUpdateRunner> timeUpdateRunners = new();
+        static FastListCore<IUpdateRunner> initializationRunners = new(16);
+        static FastListCore<IUpdateRunner> earlyUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> fixedUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> preUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> updateRunners = new(16);
+        static FastListCore<IUpdateRunner> preLateUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> postLateUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> timeUpdateRunners = new(16);
+
+        internal static FastListCore<IUpdateRunner> EmptyList = new(0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static MinimumList<IUpdateRunner> GetRunnerList(PlayerLoopTiming playerLoopTiming)
+        static ref FastListCore<IUpdateRunner> GetRunnerList(PlayerLoopTiming playerLoopTiming)
         {
-            return playerLoopTiming switch
+            // FastListCore<T> must be passed as ref
+            switch (playerLoopTiming)
             {
-                PlayerLoopTiming.Initialization => initializationRunners,
-                PlayerLoopTiming.EarlyUpdate => earlyUpdateRunners,
-                PlayerLoopTiming.FixedUpdate => fixedUpdateRunners,
-                PlayerLoopTiming.PreUpdate => preUpdateRunners,
-                PlayerLoopTiming.Update => updateRunners,
-                PlayerLoopTiming.PreLateUpdate => preLateUpdateRunners,
-                PlayerLoopTiming.PostLateUpdate => postLateUpdateRunners,
-                PlayerLoopTiming.TimeUpdate => timeUpdateRunners,
-                _ => null
+                default:
+                    return ref EmptyList;
+                case PlayerLoopTiming.Initialization:
+                    return ref initializationRunners;
+                case PlayerLoopTiming.EarlyUpdate:
+                    return ref earlyUpdateRunners;
+                case PlayerLoopTiming.FixedUpdate:
+                    return ref fixedUpdateRunners;
+                case PlayerLoopTiming.PreUpdate:
+                    return ref preUpdateRunners;
+                case PlayerLoopTiming.Update:
+                    return ref updateRunners;
+                case PlayerLoopTiming.PreLateUpdate:
+                    return ref preLateUpdateRunners;
+                case PlayerLoopTiming.PostLateUpdate:
+                    return ref postLateUpdateRunners;
+                case PlayerLoopTiming.TimeUpdate:
+                    return ref timeUpdateRunners;
             };
         }
 
@@ -259,7 +273,7 @@ namespace LitMotion
             }
         }
         
-        static readonly MinimumList<IUpdateRunner> updateRunners = new();
+        static FastListCore<IUpdateRunner> updateRunners = new(16);
 
         public static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
             where TValue : unmanaged

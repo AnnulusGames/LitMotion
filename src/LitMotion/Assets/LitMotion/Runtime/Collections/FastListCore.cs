@@ -1,15 +1,23 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-namespace LitMotion
+namespace LitMotion.Collections
 {
-    internal sealed class MinimumList<T>
+    /// <summary>
+    /// A list of minimal features. Note that it is NOT thread-safe and must NOT be marked readonly as it is a mutable struct.
+    /// </summary>
+    /// <typeparam name="T">Element type</typeparam>
+    [StructLayout(LayoutKind.Auto)]
+    public struct FastListCore<T>
     {
-        public MinimumList(int initialCapacity = 16)
+        public FastListCore(int initialCapacity)
         {
             array = new T[initialCapacity];
+            tailIndex = 0;
         }
+
+        public static readonly FastListCore<T> Empty = new(0);
 
         T[] array;
         int tailIndex;
@@ -51,7 +59,7 @@ namespace LitMotion
             }
         }
 
-        public T this[int index]
+        public readonly T this[int index]
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => array[index];
@@ -59,16 +67,16 @@ namespace LitMotion
             set => array[index] = value;
         }
 
-        public int Length
+        public readonly int Length
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => tailIndex;
         }
 
-        public Span<T> AsSpan() => array.AsSpan(0, tailIndex);
+        public readonly Span<T> AsSpan() => array.AsSpan(0, tailIndex);
+        public readonly T[] AsArray() => array;
 
-        [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS")]
-        void CheckIndex(int index)
+        readonly void CheckIndex(int index)
         {
             if (index < 0 || index > tailIndex) throw new IndexOutOfRangeException();
         }

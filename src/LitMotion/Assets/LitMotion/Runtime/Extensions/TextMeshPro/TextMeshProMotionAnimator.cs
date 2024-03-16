@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using TMPro;
+using LitMotion.Collections;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -173,7 +175,7 @@ namespace LitMotion.Extensions
 
         TMP_Text target;
         internal CharInfo[] charInfoArray;
-        internal MinimumList<MotionHandle> motionHandleList = new();
+        internal FastListCore<MotionHandle> motionHandleList = new(16);
 
         TextMeshProMotionAnimator nextNode;
 
