@@ -21,6 +21,11 @@
             "define": "LITMOTION_SUPPORT_TMP"
         },
         {
+            "name": "com.unity.ugui",
+            "expression": "2.0.0",
+            "define": "LITMOTION_SUPPORT_TMP"
+        },
+        {
             "name": "com.unity.visualeffectgraph",
             "expression": "",
             "define": "LITMOTION_SUPPORT_VFX_GRAPH"
