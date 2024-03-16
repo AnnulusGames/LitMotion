@@ -136,6 +136,25 @@ namespace LitMotion.Extensions
         }
 
         /// <summary>
+        /// Create a motion data and bind it to CanvasGroup.alpha
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToCanvasGroupAlpha<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, CanvasGroup canvasGroup)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(canvasGroup);
+            return builder.BindWithState(canvasGroup, static (x, target) =>
+            {
+                target.alpha = x;
+            });
+        }
+
+        /// <summary>
         /// Create a motion data and bind it to Text.fontSize
         /// </summary>
         /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
