@@ -24,7 +24,8 @@ namespace LitMotion.Tests.Runtime
         public IEnumerator Test_ToUniTask() => UniTask.ToCoroutine(async () =>
         {
             await LMotion.Create(0f, 10f, 1f)
-                .BindToUnityLogger();
+                .BindToUnityLogger()
+                .ToUniTask();
         });
 
         [UnityTest]
@@ -51,7 +52,8 @@ namespace LitMotion.Tests.Runtime
             for (int i = 0; i < 50; i++)
             {
                 await LMotion.Create(startValue, endValue, 0.1f)
-                    .Bind(x => value = x);
+                    .Bind(x => value = x)
+                    .ToUniTask();
                 Assert.That(value, Is.EqualTo(10f).Using(FloatEqualityComparer.Instance));
             }
         });
@@ -63,7 +65,7 @@ namespace LitMotion.Tests.Runtime
             DelayedCall(0.2f, () => handle.Cancel()).Forget();
             try
             {
-                await handle;
+                await handle.ToUniTask();
             }
             catch (OperationCanceledException)
             {
@@ -86,7 +88,7 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle;
+                await handle.ToUniTask();
             }
             catch (OperationCanceledException)
             {
