@@ -76,7 +76,7 @@ namespace LitMotion.Sequences.Editor
             var splits = property.propertyPath.Split('.');
 
             var targetType = target.GetType();
-            var fieldInfo = targetType.GetField(splits[0]);
+            var fieldInfo = GetAllFieldsIncludingBaseNonPublic(targetType).Where(x => x.Name == splits[0]).First();
             target = fieldInfo.GetValue(target);
 
             for (var i = 1; i < splits.Length; i++)
@@ -306,6 +306,20 @@ namespace LitMotion.Sequences.Editor
                     yield return item;
                 }
             }
+        }
+
+        static IEnumerable<Type> EnumerateTypeHierarchy(Type type)
+        {
+            while (type != null)
+            {
+                yield return type;
+                type = type.BaseType;
+            }
+        }
+
+        static IEnumerable<FieldInfo> GetAllFieldsIncludingBaseNonPublic(Type type, BindingFlags bindingAttr = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
+        {
+            return EnumerateTypeHierarchy(type).Reverse().SelectMany(t => t.GetFields(bindingAttr | BindingFlags.DeclaredOnly));
         }
     }
 
