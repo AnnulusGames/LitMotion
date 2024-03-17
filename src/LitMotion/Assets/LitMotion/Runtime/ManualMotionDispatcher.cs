@@ -28,7 +28,7 @@ namespace LitMotion
             }
         }
 
-        static FastListCore<IUpdateRunner> updateRunners = new(16);
+        static FastListCore<IUpdateRunner> updateRunners;
 
         /// <summary>
         /// ManualMotionDispatcher time. It increases every time Update is called.
