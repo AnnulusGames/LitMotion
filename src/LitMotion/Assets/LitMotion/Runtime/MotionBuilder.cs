@@ -312,19 +312,14 @@ namespace LitMotion
 #if UNITY_EDITOR
                 if (!UnityEditor.EditorApplication.isPlaying)
                 {
-                    // Inlined EditorUpdateMotionScheduler
                     handle = EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
                 else
                 {
-                    // Inlined PlayerLoopMotionScheduler
-                    data.TimeKind = MotionTimeKind.Time;
-                    handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
+                    handle = MotionScheduler.DefaultScheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
                 }
 #else
-                // Inlined PlayerLoopMotionScheduler
-                data.TimeKind = MotionTimeKind.Time;
-                handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
+                handle = MotionScheduler.DefaultScheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
 #endif
             }
             else
@@ -382,7 +377,6 @@ namespace LitMotion
             };
             return callbacks;
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal MotionCallbackData BuildCallbackData(Action<TValue> action)

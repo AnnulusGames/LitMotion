@@ -121,18 +121,14 @@ namespace LitMotion.Editor
             }
             if (scheduler == null)
             {
-#if UNITY_EDITOR
                 if (isCreatedOnEditor)
                 {
-                    scheduler = MotionScheduler.Update;
+                    scheduler = MotionScheduler.DefaultScheduler;
                 }
                 else
                 {
                     scheduler = EditorMotionScheduler.Update;
                 }
-#else
-                scheduler = MotionScheduler.Update;
-#endif
             }
 
             return scheduler switch
@@ -153,7 +149,7 @@ namespace LitMotion.Editor
             foreach (var tracking in MotionTracker.Items)
             {
                 children.Add(new MotionTrackerViewItem(id)
-                { 
+                {
                     MotionType = $"[{tracking.ValueType.Name}, {tracking.OptionsType.Name}, {tracking.AdapterType.Name}]",
                     SchedulerType = GetSchedulerName(tracking.Scheduler, tracking.CreatedOnEditor),
                     Elapsed = (DateTime.UtcNow - tracking.CreationTime).TotalSeconds.ToString("00.00"),
