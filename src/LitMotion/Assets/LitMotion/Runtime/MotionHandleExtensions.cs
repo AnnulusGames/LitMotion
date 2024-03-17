@@ -57,7 +57,19 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, GameObject target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target).Register(handle);
+            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, LinkBehaviour.CancelOnDestroy);
+            return handle;
+        }
+
+        /// <summary>
+        /// Link the motion lifecycle to the target object.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="target">Target object</param>
+        /// <param name="linkBehaviour">Link behaviour</param>
+        public static MotionHandle AddTo(this MotionHandle handle, GameObject target, LinkBehaviour linkBehaviour)
+        {
+            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, linkBehaviour);
             return handle;
         }
 
@@ -68,7 +80,19 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, Component target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle);
+            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, LinkBehaviour.CancelOnDestroy);
+            return handle;
+        }
+
+        /// <summary>
+        /// Link the motion lifecycle to the target object.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="target">Target object</param>
+        /// <param name="linkBehaviour">Link behaviour</param>
+        public static MotionHandle AddTo(this MotionHandle handle, Component target, LinkBehaviour linkBehaviour)
+        {
+            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, linkBehaviour);
             return handle;
         }
 
