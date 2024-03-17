@@ -8,17 +8,47 @@ namespace LitMotion
     [AddComponentMenu("")]
     internal sealed class MotionHandleLinker : MonoBehaviour
     {
-        FastListCore<MotionHandle> handleList = new(8);
+        FastListCore<MotionHandle> cancelOnDestroyList = new(8);
+        FastListCore<MotionHandle> cancelOnDisableList = new(8);
+        FastListCore<MotionHandle> completeOnDisableList = new(8);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Register(MotionHandle handle)
+        public void Register(MotionHandle handle, LinkBehaviour linkBehaviour)
         {
-            handleList.Add(handle);
+            switch (linkBehaviour)
+            {
+                case LinkBehaviour.CancelOnDestroy:
+                    cancelOnDestroyList.Add(handle);
+                    break;
+                case LinkBehaviour.CancelOnDisable:
+                    cancelOnDisableList.Add(handle);
+                    break;
+                case LinkBehaviour.CompleteOnDisable:
+                    completeOnDisableList.Add(handle);
+                    break;
+            }
+        }
+
+        void OnDisable()
+        {
+            var cancelSpan = cancelOnDisableList.AsSpan();
+            for (int i = 0; i < cancelSpan.Length; i++)
+            {
+                ref var handle = ref cancelSpan[i];
+                if (handle.IsActive()) handle.Cancel();
+            }
+
+            var completeSpan = completeOnDisableList.AsSpan();
+            for (int i = 0; i < completeSpan.Length; i++)
+            {
+                ref var handle = ref completeSpan[i];
+                if (handle.IsActive()) handle.Complete();
+            }
         }
 
         void OnDestroy()
         {
-            var span = handleList.AsSpan();
+            var span = cancelOnDestroyList.AsSpan();
             for (int i = 0; i < span.Length; i++)
             {
                 ref var handle = ref span[i];
