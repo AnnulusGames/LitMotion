@@ -34,6 +34,7 @@ namespace LitMotion
             
             var callbackData = MotionStorageManager.GetMotionCallbacks(handle);
             callbackData.OnCompleteAction += continuation;
+            callbackData.OnCancelAction += continuation;
             MotionStorageManager.SetMotionCallbacks(handle, callbackData);
         }
     }
