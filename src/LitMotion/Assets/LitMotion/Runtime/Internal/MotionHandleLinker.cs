@@ -8,9 +8,9 @@ namespace LitMotion
     [AddComponentMenu("")]
     internal sealed class MotionHandleLinker : MonoBehaviour
     {
-        FastListCore<MotionHandle> cancelOnDestroyList = new(8);
-        FastListCore<MotionHandle> cancelOnDisableList = new(8);
-        FastListCore<MotionHandle> completeOnDisableList = new(8);
+        FastListCore<MotionHandle> cancelOnDestroyList;
+        FastListCore<MotionHandle> cancelOnDisableList;
+        FastListCore<MotionHandle> completeOnDisableList;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Register(MotionHandle handle, LinkBehaviour linkBehaviour)

@@ -11,13 +11,9 @@ namespace LitMotion.Collections
     [StructLayout(LayoutKind.Auto)]
     public struct FastListCore<T>
     {
-        public FastListCore(int initialCapacity)
-        {
-            array = new T[initialCapacity];
-            tailIndex = 0;
-        }
+        const int InitialCapacity = 8;
 
-        public static readonly FastListCore<T> Empty = new(0);
+        public static readonly FastListCore<T> Empty = default;
 
         T[] array;
         int tailIndex;
@@ -25,7 +21,11 @@ namespace LitMotion.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add(T element)
         {
-            if (array.Length == tailIndex)
+            if (array == null)
+            {
+                array = new T[InitialCapacity];
+            }
+            else if (array.Length == tailIndex)
             {
                 Array.Resize(ref array, tailIndex * 2);
             }
@@ -37,22 +37,32 @@ namespace LitMotion.Collections
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void RemoveAtSwapback(int index)
         {
+            Error.IsNull(array);
             CheckIndex(index);
+
             array[index] = array[tailIndex - 1];
             array[tailIndex - 1] = default;
             tailIndex--;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clear()
+        public void Clear(bool removeArray = false)
         {
+            if (array == null) return;
+
             array.AsSpan().Clear();
             tailIndex = 0;
+            if (removeArray) array = null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnsureCapacity(int capacity)
         {
+            if (array == null)
+            {
+                array = new T[InitialCapacity];
+            }
+
             while (array.Length < capacity)
             {
                 Array.Resize(ref array, array.Length * 2);
@@ -73,7 +83,7 @@ namespace LitMotion.Collections
             get => tailIndex;
         }
 
-        public readonly Span<T> AsSpan() => array.AsSpan(0, tailIndex);
+        public readonly Span<T> AsSpan() => array == null ? Span<T>.Empty : array.AsSpan(0, tailIndex);
         public readonly T[] AsArray() => array;
 
         readonly void CheckIndex(int index)

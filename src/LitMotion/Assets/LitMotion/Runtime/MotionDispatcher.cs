@@ -106,16 +106,16 @@ namespace LitMotion
             }
         }
 
-        static FastListCore<IUpdateRunner> initializationRunners = new(16);
-        static FastListCore<IUpdateRunner> earlyUpdateRunners = new(16);
-        static FastListCore<IUpdateRunner> fixedUpdateRunners = new(16);
-        static FastListCore<IUpdateRunner> preUpdateRunners = new(16);
-        static FastListCore<IUpdateRunner> updateRunners = new(16);
-        static FastListCore<IUpdateRunner> preLateUpdateRunners = new(16);
-        static FastListCore<IUpdateRunner> postLateUpdateRunners = new(16);
-        static FastListCore<IUpdateRunner> timeUpdateRunners = new(16);
+        static FastListCore<IUpdateRunner> initializationRunners;
+        static FastListCore<IUpdateRunner> earlyUpdateRunners;
+        static FastListCore<IUpdateRunner> fixedUpdateRunners;
+        static FastListCore<IUpdateRunner> preUpdateRunners;
+        static FastListCore<IUpdateRunner> updateRunners;
+        static FastListCore<IUpdateRunner> preLateUpdateRunners;
+        static FastListCore<IUpdateRunner> postLateUpdateRunners;
+        static FastListCore<IUpdateRunner> timeUpdateRunners;
 
-        internal static FastListCore<IUpdateRunner> EmptyList = new(0);
+        internal static FastListCore<IUpdateRunner> EmptyList = FastListCore<IUpdateRunner>.Empty;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref FastListCore<IUpdateRunner> GetRunnerList(PlayerLoopTiming playerLoopTiming)
@@ -273,7 +273,7 @@ namespace LitMotion
             }
         }
         
-        static FastListCore<IUpdateRunner> updateRunners = new(16);
+        static FastListCore<IUpdateRunner> updateRunners;
 
         public static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
             where TValue : unmanaged

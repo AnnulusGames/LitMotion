@@ -6,7 +6,7 @@ namespace LitMotion
 {
     internal static class MotionStorageManager
     {
-        static FastListCore<IMotionStorage> storageList = new(16);
+        static FastListCore<IMotionStorage> storageList;
 
         public static int CurrentStorageId { get; private set; }
 
