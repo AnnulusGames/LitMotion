@@ -169,7 +169,7 @@ namespace LitMotion
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
-                    prevAnimationCurve = AllocatorUtility.Allocate<NativeAnimationCurve>();
+                    prevAnimationCurve = new NativeAnimationCurve(SharedRewindableAllocator.Allocator.Handle);
                 }
 
                 prevAnimationCurve.CopyFrom(data.AnimationCurve);
