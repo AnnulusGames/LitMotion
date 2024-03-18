@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
@@ -10,17 +9,11 @@ using UnityEngine;
 
 namespace LitMotion.Collections
 {
-    [NativeContainer]
     public unsafe struct NativeAnimationCurve : IDisposable
     {
-        UnsafeList<Keyframe> keys;
+        NativeList<Keyframe> keys;
         WrapMode preWrapMode;
         WrapMode postWrapMode;
-
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-        AtomicSafetyHandle m_Safety;
-        internal static readonly SharedStatic<int> s_staticSafetyId = SharedStatic<int>.GetOrCreate<NativeAnimationCurve>();
-#endif
 
         readonly struct KeyframeComparer : IComparer<Keyframe>
         {
@@ -44,40 +37,32 @@ namespace LitMotion.Collections
 
         public NativeAnimationCurve(AllocatorManager.AllocatorHandle allocator)
         {
-            keys = new UnsafeList<Keyframe>(0, allocator);
+            keys = new NativeList<Keyframe>(0, allocator);
             preWrapMode = default;
             postWrapMode = default;
-            
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-            m_Safety = CollectionHelper.CreateSafetyHandle(allocator);
-            CollectionHelper.SetStaticSafetyId<NativeAnimationCurve>(ref m_Safety, ref s_staticSafetyId.Data);
-#endif
         }
 
         public NativeAnimationCurve(AnimationCurve animationCurve, AllocatorManager.AllocatorHandle allocator)
         {
-            keys = new UnsafeList<Keyframe>(animationCurve.length, allocator);
+            var l = animationCurve.length;
+            keys = new NativeList<Keyframe>(l, allocator);
+            keys.Resize(l, NativeArrayOptions.UninitializedMemory);
             fixed (Keyframe* src = &animationCurve.keys[0])
             {
-                UnsafeUtility.MemCpy(keys.Ptr, src, animationCurve.length * sizeof(Keyframe));
+                UnsafeUtility.MemCpy(keys.GetUnsafePtr(), src, l * sizeof(Keyframe));
             }
-            keys.Length = animationCurve.length;
             keys.Sort(default(KeyframeComparer));
             preWrapMode = animationCurve.preWrapMode;
             postWrapMode = animationCurve.postWrapMode;
-
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-            m_Safety = CollectionHelper.CreateSafetyHandle(allocator);
-            CollectionHelper.SetStaticSafetyId<NativeAnimationCurve>(ref m_Safety, ref s_staticSafetyId.Data);
-#endif
         }
 
         public void CopyFrom(AnimationCurve animationCurve)
         {
-            keys.Resize(animationCurve.length);
+            var l = animationCurve.length;
+            keys.Resize(l, NativeArrayOptions.UninitializedMemory);
             fixed (Keyframe* src = &animationCurve.keys[0])
             {
-                UnsafeUtility.MemCpy(keys.Ptr, src, animationCurve.length * sizeof(Keyframe));
+                UnsafeUtility.MemCpy(keys.GetUnsafePtr(), src, l * sizeof(Keyframe));
             }
             keys.Sort(default(KeyframeComparer));
             preWrapMode = animationCurve.preWrapMode;
@@ -93,10 +78,6 @@ namespace LitMotion.Collections
 
         public void Dispose()
         {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-            CollectionHelper.DisposeSafetyHandle(ref m_Safety);
-#endif
-
             keys.Dispose();
         }
 
@@ -104,11 +85,6 @@ namespace LitMotion.Collections
 
         public float Evaluate(float time)
         {
-
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-            AtomicSafetyHandle.CheckReadAndThrow(m_Safety);
-#endif
-
             time = WrapTime(time);
             int length = keys.Length;
             Keyframe keyframe = default;
