@@ -169,7 +169,7 @@ namespace LitMotion
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
-                    prevAnimationCurve = NativeContainerPool<NativeAnimationCurve>.Alloc();
+                    prevAnimationCurve = AllocatorUtility.Allocate<NativeAnimationCurve>();
                 }
 
                 prevAnimationCurve.CopyFrom(data.AnimationCurve);
@@ -322,7 +322,7 @@ namespace LitMotion
                 Ease.CustomAnimationCurve => motion.AnimationCurve.Evaluate(endProgress),
                 _ => EaseUtility.Evaluate(endProgress, motion.Ease),
             };
-            
+
             var endValue = default(TAdapter).Evaluate(
                 ref motion.StartValue,
                 ref motion.EndValue,
