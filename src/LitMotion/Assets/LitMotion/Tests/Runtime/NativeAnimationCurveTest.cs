@@ -14,9 +14,9 @@ namespace LitMotion.Tests.Runtime
         {
             var curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
             using var native = new NativeAnimationCurve(curve, Allocator.Temp);
-            for (int i = 1; i <= 100; i++)
+            for (int i = 0; i < 100; i++)
             {
-                var t = 1f / i;
+                var t = Mathf.InverseLerp(0, 99, i);
                 Assert.That(curve.Evaluate(t), Is.EqualTo(native.Evaluate(t)).Using(FloatEqualityComparer.Instance));
             }
         }
@@ -29,6 +29,25 @@ namespace LitMotion.Tests.Runtime
             var native = new NativeAnimationCurve(curve, Allocator.Temp);
 
             native.Dispose();
+
+            try
+            {
+                native.Evaluate(0f);
+            }
+            catch (ObjectDisposedException)
+            {
+                return;
+            }
+
+            Assert.Fail();
+        }
+        [Test]
+        public void Test_Dispose_RewindableAllocator()
+        {
+            var curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+            var native = new NativeAnimationCurve(curve, SharedRewindableAllocator<NativeAnimationCurveTest>.Allocator.Handle);
+
+            SharedRewindableAllocator<NativeAnimationCurveTest>.Allocator.Rewind();
 
             try
             {
