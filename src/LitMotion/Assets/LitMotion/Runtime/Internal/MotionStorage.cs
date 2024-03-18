@@ -402,6 +402,8 @@ namespace LitMotion
             dataArray.AsSpan().Clear();
             callbacksArray.AsSpan().Clear();
             tail = 0;
+
+            SharedRewindableAllocator<AnimationCurveAllocatorKey>.Allocator.Rewind();
         }
 
         public float GetPlaybackSpeed(MotionHandle handle)
