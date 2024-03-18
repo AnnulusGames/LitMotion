@@ -6,14 +6,16 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 
+// TODO: avoid animationCurve.keys allocation
+
 namespace LitMotion.Collections
 {
     [NativeContainer]
     public unsafe struct NativeAnimationCurve : IDisposable
     {
         UnsafeList<Keyframe> keys;
-        readonly WrapMode preWrapMode;
-        readonly WrapMode postWrapMode;
+        WrapMode preWrapMode;
+        WrapMode postWrapMode;
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
         AtomicSafetyHandle m_Safety;
@@ -56,6 +58,19 @@ namespace LitMotion.Collections
             m_Safety = CollectionHelper.CreateSafetyHandle(allocator);
             CollectionHelper.SetStaticSafetyId<NativeAnimationCurve>(ref m_Safety, ref s_staticSafetyId.Data);
 #endif
+        }
+
+        public void CopyFrom(AnimationCurve animationCurve)
+        {
+            keys.Clear();
+            fixed (Keyframe* src = &animationCurve.keys[0])
+            {
+                UnsafeUtility.MemCpy(keys.Ptr, src, animationCurve.length * sizeof(Keyframe));
+            }
+            keys.Length = animationCurve.length;
+            keys.Sort(default(KeyframeComparer));
+            preWrapMode = animationCurve.preWrapMode;
+            postWrapMode = animationCurve.postWrapMode;
         }
 
         public void Dispose()
