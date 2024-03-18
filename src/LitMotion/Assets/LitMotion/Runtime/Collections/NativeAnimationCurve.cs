@@ -74,13 +74,19 @@ namespace LitMotion.Collections
 
         public void CopyFrom(AnimationCurve animationCurve)
         {
-            keys.Clear();
+            keys.Resize(animationCurve.length);
             fixed (Keyframe* src = &animationCurve.keys[0])
             {
                 UnsafeUtility.MemCpy(keys.Ptr, src, animationCurve.length * sizeof(Keyframe));
             }
-            keys.Length = animationCurve.length;
             keys.Sort(default(KeyframeComparer));
+            preWrapMode = animationCurve.preWrapMode;
+            postWrapMode = animationCurve.postWrapMode;
+        }
+
+        public void CopyFrom(in NativeAnimationCurve animationCurve)
+        {
+            keys.CopyFrom(animationCurve.keys);
             preWrapMode = animationCurve.preWrapMode;
             postWrapMode = animationCurve.postWrapMode;
         }
