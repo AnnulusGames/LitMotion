@@ -62,21 +62,19 @@ namespace LitMotion.Collections
             return Container<TContainner>.Alloc();
         }
 
-#if !UNITY_EDITOR
-        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        static void Init()
-        {
-            InitPools();
-            UnityEngine.Application.quitting += Dispose;
-        }
-#endif
-
 #if UNITY_EDITOR
         [InitializeOnLoadMethod]
         static void InitEditor()
         {
             InitPools();
             AssemblyReloadEvents.beforeAssemblyReload += Dispose;
+        }
+#else
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void Init()
+        {
+            InitPools();
+            UnityEngine.Application.quitting += Dispose;
         }
 #endif
     }
