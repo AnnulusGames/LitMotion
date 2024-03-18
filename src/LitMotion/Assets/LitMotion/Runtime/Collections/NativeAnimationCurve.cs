@@ -42,6 +42,18 @@ namespace LitMotion.Collections
             1, -2, 1
         );
 
+        public NativeAnimationCurve(AllocatorManager.AllocatorHandle allocator)
+        {
+            keys = new UnsafeList<Keyframe>(0, allocator);
+            preWrapMode = default;
+            postWrapMode = default;
+            
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+            m_Safety = CollectionHelper.CreateSafetyHandle(allocator);
+            CollectionHelper.SetStaticSafetyId<NativeAnimationCurve>(ref m_Safety, ref s_staticSafetyId.Data);
+#endif
+        }
+
         public NativeAnimationCurve(AnimationCurve animationCurve, AllocatorManager.AllocatorHandle allocator)
         {
             keys = new UnsafeList<Keyframe>(animationCurve.length, allocator);
