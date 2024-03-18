@@ -45,9 +45,10 @@ namespace LitMotion.Tests.Runtime
         public void Test_Dispose_RewindableAllocator()
         {
             var curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-            var native = new NativeAnimationCurve(curve, SharedRewindableAllocator<NativeAnimationCurveTest>.Allocator.Handle);
+            var allocator = RewindableAllocatorFactory.CreateAllocator();
+            var native = new NativeAnimationCurve(curve, allocator.Allocator.Handle);
 
-            SharedRewindableAllocator<NativeAnimationCurveTest>.Allocator.Rewind();
+            allocator.Allocator.Rewind();
 
             try
             {

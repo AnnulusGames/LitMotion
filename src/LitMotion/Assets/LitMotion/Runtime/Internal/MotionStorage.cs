@@ -121,9 +121,11 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
-        readonly struct AnimationCurveAllocatorKey { }
-
-        public MotionStorage(int id) => StorageId = id;
+        public MotionStorage(int id)
+        {
+            StorageId = id;
+            AllocatorHelper = RewindableAllocatorFactory.CreateAllocator();
+        }
 
         // Entry
         readonly StorageEntryList entries = new(InitialCapacity);
@@ -132,6 +134,9 @@ namespace LitMotion
         public int?[] toEntryIndex = new int?[InitialCapacity];
         public MotionData<TValue, TOptions>[] dataArray = new MotionData<TValue, TOptions>[InitialCapacity];
         public MotionCallbackData[] callbacksArray = new MotionCallbackData[InitialCapacity];
+
+        // Allocator
+        AllocatorHelper<RewindableAllocator> AllocatorHelper;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Span<MotionData<TValue, TOptions>> GetDataSpan() => dataArray.AsSpan(0, tail);
@@ -171,7 +176,7 @@ namespace LitMotion
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
-                    prevAnimationCurve = new NativeAnimationCurve(SharedRewindableAllocator<AnimationCurveAllocatorKey>.Allocator.Handle);
+                    prevAnimationCurve = new NativeAnimationCurve(AllocatorHelper.Allocator.Handle);
                 }
 
                 prevAnimationCurve.CopyFrom(data.AnimationCurve);
@@ -403,7 +408,7 @@ namespace LitMotion
             callbacksArray.AsSpan().Clear();
             tail = 0;
 
-            SharedRewindableAllocator<AnimationCurveAllocatorKey>.Allocator.Rewind();
+            AllocatorHelper.Allocator.Rewind();
         }
 
         public float GetPlaybackSpeed(MotionHandle handle)
