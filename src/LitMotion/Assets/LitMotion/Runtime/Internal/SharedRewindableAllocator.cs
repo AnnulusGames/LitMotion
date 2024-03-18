@@ -11,6 +11,7 @@ namespace LitMotion
     {
         const int InitialSize = 128 * 1024;
         static bool isCreated;
+        static bool isInitialized;
         static AllocatorHelper<RewindableAllocator> allocatorHelper;
 
         public static ref RewindableAllocator Allocator
@@ -25,16 +26,20 @@ namespace LitMotion
 
         static void Create()
         {
+            if (!isInitialized)
+            {
+#if UNITY_EDITOR
+                AssemblyReloadEvents.beforeAssemblyReload += Dispose;
+#else
+                UnityEngine.Application.quitting += Dispose;
+#endif
+                isInitialized = true;
+            }
+
             if (isCreated) return;
 
             allocatorHelper = new AllocatorHelper<RewindableAllocator>(Unity.Collections.Allocator.Persistent);
             allocatorHelper.Allocator.Initialize(InitialSize, true);
-
-#if UNITY_EDITOR
-            AssemblyReloadEvents.beforeAssemblyReload += Dispose;
-#else
-            UnityEngine.Application.quitting += Dispose;
-#endif
 
             isCreated = true;
         }
