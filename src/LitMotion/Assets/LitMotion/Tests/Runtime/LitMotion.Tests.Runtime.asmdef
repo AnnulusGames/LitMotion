@@ -5,6 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.Burst",
+        "Unity.Collections",
         "LitMotion",
         "LitMotion.Extensions",
         "UniTask",
