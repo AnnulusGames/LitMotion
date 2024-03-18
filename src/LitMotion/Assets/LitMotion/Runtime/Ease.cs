@@ -35,6 +35,7 @@ namespace LitMotion
         InOutBack,
         InBounce,
         OutBounce,
-        InOutBounce
+        InOutBounce,
+        CustomAnimationCurve
     }
 }

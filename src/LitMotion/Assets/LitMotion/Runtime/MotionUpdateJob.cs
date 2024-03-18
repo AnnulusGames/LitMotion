@@ -122,14 +122,14 @@ namespace LitMotion
                 {
                     default:
                     case LoopType.Restart:
-                        progress = EaseUtility.Evaluate((float)t, ptr->Ease);
+                        progress = GetEasedValue(ptr, (float)t);
                         break;
                     case LoopType.Yoyo:
-                        progress = EaseUtility.Evaluate((float)t, ptr->Ease);
+                        progress = GetEasedValue(ptr, (float)t);
                         if ((clampedCompletedLoops + (int)t) % 2 == 1) progress = 1f - progress;
                         break;
                     case LoopType.Incremental:
-                        progress = EaseUtility.Evaluate(1f, ptr->Ease) * clampedCompletedLoops + EaseUtility.Evaluate((float)math.fmod(t, 1f), ptr->Ease);
+                        progress = GetEasedValue(ptr, 1f) * clampedCompletedLoops + GetEasedValue(ptr, (float)math.fmod(t, 1f));
                         break;
                 }
 
@@ -162,6 +162,15 @@ namespace LitMotion
                 CompletedIndexList.AddNoResize(index);
                 ptr->Status = MotionStatus.Disposed;
             }
+        }
+
+        static float GetEasedValue(MotionData<TValue, TOptions>* data, float value)
+        {
+            return data->Ease switch
+            {
+                Ease.CustomAnimationCurve => data->AnimationCurve.Evaluate(value),
+                _ => EaseUtility.Evaluate(value, data->Ease)
+            };
         }
     }
 }

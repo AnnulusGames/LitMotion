@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using LitMotion.Collections;
 using Unity.Collections;
 
 // TODO: Constantize the exception message
@@ -120,6 +121,8 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
+        readonly struct AnimationCurveAllocatorKey { }
+
         public MotionStorage(int id) => StorageId = id;
 
         // Entry
@@ -158,9 +161,23 @@ namespace LitMotion
             UnityEngine.Debug.Log("[Add] Entry:" + entryIndex + " Dense:" + entry.DenseIndex + " Version:" + entry.Version);
 #endif
 
+            var prevAnimationCurve = dataArray[tail].AnimationCurve;
+
             toEntryIndex[tail] = entryIndex;
             dataArray[tail] = data;
             callbacksArray[tail] = callbacks;
+
+            if (data.Ease == Ease.CustomAnimationCurve)
+            {
+                if (!prevAnimationCurve.IsCreated)
+                {
+                    prevAnimationCurve = new NativeAnimationCurve(SharedRewindableAllocator<AnimationCurveAllocatorKey>.Allocator.Handle);
+                }
+
+                prevAnimationCurve.CopyFrom(data.AnimationCurve);
+                dataArray[tail].AnimationCurve = prevAnimationCurve;
+            }
+
             tail++;
 
             return (entryIndex, entry.Version);
@@ -294,18 +311,25 @@ namespace LitMotion
             // To avoid duplication of Complete processing, it is treated as canceled internally.
             motion.Status = MotionStatus.Canceled;
 
-            float endProgress = motion.LoopType switch
+            var endProgress = motion.LoopType switch
             {
                 LoopType.Restart => 1f,
                 LoopType.Yoyo => motion.Loops % 2 == 0 ? 0f : 1f,
                 LoopType.Incremental => motion.Loops,
                 _ => 1f
             };
+
+            var easedEndProgress = motion.Ease switch
+            {
+                Ease.CustomAnimationCurve => motion.AnimationCurve.Evaluate(endProgress),
+                _ => EaseUtility.Evaluate(endProgress, motion.Ease),
+            };
+
             var endValue = default(TAdapter).Evaluate(
                 ref motion.StartValue,
                 ref motion.EndValue,
                 ref motion.Options,
-                new() { Progress = EaseUtility.Evaluate(endProgress, motion.Ease) }
+                new() { Progress = easedEndProgress }
             );
 
             try

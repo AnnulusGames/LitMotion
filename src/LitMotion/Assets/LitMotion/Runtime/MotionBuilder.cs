@@ -1,5 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
+using Unity.Collections;
+using UnityEngine;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
@@ -28,8 +31,9 @@ namespace LitMotion
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             buffer.Version++;
-            buffer.Duration = default;
             buffer.Ease = default;
+            buffer.AnimationCurve = default;
+            buffer.Duration = default;
             buffer.Delay = default;
             buffer.DelayType = default;
             buffer.SkipValuesDuringDelay = true;
@@ -54,8 +58,10 @@ namespace LitMotion
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
 
-        public float Duration;
         public Ease Ease;
+        public AnimationCurve AnimationCurve;
+
+        public float Duration;
         public float Delay;
         public DelayType DelayType;
         public bool SkipValuesDuringDelay = true;
@@ -102,8 +108,23 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithEase(Ease ease)
         {
+            CheckEaseType(ease);
             CheckBuffer();
             buffer.Ease = ease;
+            return this;
+        }
+
+        /// <summary>
+        /// Specify easing for motion.
+        /// </summary>
+        /// <param name="animationCurve">Animation curve</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithEase(AnimationCurve animationCurve)
+        {
+            CheckBuffer();
+            buffer.AnimationCurve = animationCurve;
+            buffer.Ease = Ease.CustomAnimationCurve;
             return this;
         }
 
@@ -362,6 +383,12 @@ namespace LitMotion
                 LoopType = buffer.LoopType,
                 Status = MotionStatus.Scheduled,
             };
+
+            if (buffer.AnimationCurve != null)
+            {
+                data.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
+            }
+            
             if (!buffer.IsPreserved) Dispose();
             return data;
         }
@@ -456,6 +483,12 @@ namespace LitMotion
         readonly void CheckBuffer()
         {
             if (buffer == null || buffer.Version != version) throw new InvalidOperationException("MotionBuilder is either not initialized or has already run a Build (or Bind). If you want to build or bind multiple times, call Preseve() for MotionBuilder.");
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        readonly void CheckEaseType(Ease ease)
+        {
+            if (ease is Ease.CustomAnimationCurve) throw new ArgumentException($"Ease.{ease} cannot be specified directly.");
         }
     }
 }

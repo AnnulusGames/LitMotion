@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using LitMotion.Collections;
 
 namespace LitMotion
 {
@@ -19,6 +20,8 @@ namespace LitMotion
         public float Duration;
 
         public Ease Ease;
+        public NativeAnimationCurve AnimationCurve;
+
         public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;
