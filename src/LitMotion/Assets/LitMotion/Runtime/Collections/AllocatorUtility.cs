@@ -15,28 +15,18 @@ namespace LitMotion.Collections
             const int InitialSize = 128 * 1024;
 
             static AllocatorHelper<RewindableAllocator> allocatorHelper;
-
-            // not a NativeQueue<T> because native containers cannot be nested
-            static UnsafeQueue<T> pool;
             static Func<AllocatorManager.AllocatorHandle, T> factory;
 
             public static void Init(Func<AllocatorManager.AllocatorHandle, T> factory)
             {
                 allocatorHelper = new AllocatorHelper<RewindableAllocator>(Allocator.Persistent);
                 allocatorHelper.Allocator.Initialize(InitialSize, true);
-
-                pool = new UnsafeQueue<T>(allocatorHelper.Allocator.Handle);
                 Container<T>.factory = factory;
             }
 
             public static T Alloc()
             {
-                if (!pool.TryDequeue(out var result))
-                {
-                    result = factory(allocatorHelper.Allocator.Handle);
-                }
-
-                return result;
+                return factory(allocatorHelper.Allocator.Handle);
             }
 
             public static void Dispose()
