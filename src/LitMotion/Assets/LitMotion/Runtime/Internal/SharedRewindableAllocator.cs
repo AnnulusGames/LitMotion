@@ -7,25 +7,10 @@ using UnityEditor;
 
 namespace LitMotion
 {
-    internal static class SharedRewindableAllocator
+    internal static class SharedRewindableAllocator<TKey>
     {
-#if UNITY_EDITOR
-        [InitializeOnLoadMethod]
-        static void InitEditor()
-        {
-            Create();
-            AssemblyReloadEvents.beforeAssemblyReload += Dispose;
-        }
-#else
-        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        static void Init()
-        {
-            Create();
-            UnityEngine.Application.quitting += Dispose;
-        }
-#endif
-
         const int InitialSize = 128 * 1024;
+        static bool isCreated;
         static AllocatorHelper<RewindableAllocator> allocatorHelper;
 
         public static ref RewindableAllocator Allocator
@@ -33,20 +18,34 @@ namespace LitMotion
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
+                Create();
                 return ref allocatorHelper.Allocator;
             }
         }
 
         static void Create()
         {
+            if (isCreated) return;
+
             allocatorHelper = new AllocatorHelper<RewindableAllocator>(Unity.Collections.Allocator.Persistent);
             allocatorHelper.Allocator.Initialize(InitialSize, true);
+
+#if UNITY_EDITOR
+            AssemblyReloadEvents.beforeAssemblyReload += Dispose;
+#else
+            UnityEngine.Application.quitting += Dispose;
+#endif
+
+            isCreated = true;
         }
 
         static void Dispose()
         {
+            if (!isCreated) return;
+
             allocatorHelper.Allocator.Dispose();
             allocatorHelper.Dispose();
+            isCreated = false;
         }
     }
 }

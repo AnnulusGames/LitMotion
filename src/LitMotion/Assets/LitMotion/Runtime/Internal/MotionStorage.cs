@@ -121,6 +121,8 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
+        readonly struct AnimationCurveAllocatorKey { }
+
         public MotionStorage(int id) => StorageId = id;
 
         // Entry
@@ -169,7 +171,7 @@ namespace LitMotion
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
-                    prevAnimationCurve = new NativeAnimationCurve(SharedRewindableAllocator.Allocator.Handle);
+                    prevAnimationCurve = new NativeAnimationCurve(SharedRewindableAllocator<AnimationCurveAllocatorKey>.Allocator.Handle);
                 }
 
                 prevAnimationCurve.CopyFrom(data.AnimationCurve);
