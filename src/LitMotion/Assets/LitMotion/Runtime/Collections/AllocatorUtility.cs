@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace LitMotion.Collections
 {
-    public static class AllocatorUtility
+    internal static class AllocatorUtility
     {
         static class Container<T> where T : unmanaged
         {
