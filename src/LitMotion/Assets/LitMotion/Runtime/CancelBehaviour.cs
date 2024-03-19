@@ -3,7 +3,7 @@ namespace LitMotion
     /// <summary>
     /// Specifies the behavior when await is canceled.
     /// </summary>
-    public enum CancelBahaviour
+    public enum CancelBehaviour
     {
         CancelAndCancelAwait,
         CompleteAndCancelAwait,

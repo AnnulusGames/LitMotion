@@ -20,7 +20,7 @@ namespace LitMotion
         public static UniTask ToUniTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(MotionConfiguredSource.Create(handle, CancelBahaviour.CancelAndCancelAwait, cancellationToken, out var token), token);
+            return new UniTask(MotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token), token);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace LitMotion
         /// <param name="cancelBahaviour">Behavior when canceling</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static UniTask ToUniTask(this MotionHandle handle, CancelBahaviour cancelBahaviour, CancellationToken cancellationToken = default)
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBahaviour, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
             return new UniTask(MotionConfiguredSource.Create(handle, cancelBahaviour, cancellationToken, out var token), token);
@@ -73,7 +73,7 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
-        CancelBahaviour cancelBahaviour;
+        CancelBehaviour cancelBahaviour;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
 
@@ -87,7 +87,7 @@ namespace LitMotion
             onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
         }
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBahaviour cancelBahaviour, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBahaviour, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -130,12 +130,12 @@ namespace LitMotion
                     {
                         switch (source.cancelBahaviour)
                         {
-                            case CancelBahaviour.Cancel:
-                            case CancelBahaviour.CancelAndCancelAwait:
+                            case CancelBehaviour.Cancel:
+                            case CancelBehaviour.CancelAndCancelAwait:
                                 motionHandle.Cancel();
                                 break;
-                            case CancelBahaviour.Complete:
-                            case CancelBahaviour.CompleteAndCancelAwait:
+                            case CancelBehaviour.Complete:
+                            case CancelBehaviour.CompleteAndCancelAwait:
                                 motionHandle.Complete();
                                 break;
                         }
@@ -174,7 +174,7 @@ namespace LitMotion
 
         void SetResultOrCanceled()
         {
-            if (cancelBahaviour is CancelBahaviour.CancelAwait or CancelBahaviour.CancelAndCancelAwait or CancelBahaviour.CompleteAndCancelAwait)
+            if (cancelBahaviour is CancelBehaviour.CancelAwait or CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait)
             {
                 core.TrySetCanceled(cancellationToken);
             }
