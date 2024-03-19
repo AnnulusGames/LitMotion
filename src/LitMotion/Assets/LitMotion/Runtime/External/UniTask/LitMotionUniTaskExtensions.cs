@@ -1,6 +1,5 @@
 #if LITMOTION_SUPPORT_UNITASK
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -73,9 +72,10 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
-        CancelBehaviour cancelBahaviour;
+        CancelBehaviour cancelBehaviour;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
+        bool canceled;
 
         Action originalCompleteAction;
         Action originalCancelAction;
@@ -87,11 +87,21 @@ namespace LitMotion
             onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
         }
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBahaviour, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                motionHandle.Cancel();
+                switch (cancelBehaviour)
+                {
+                    case CancelBehaviour.Cancel:
+                    case CancelBehaviour.CancelAndCancelAwait:
+                        motionHandle.Cancel();
+                        break;
+                    case CancelBehaviour.Complete:
+                    case CancelBehaviour.CompleteAndCancelAwait:
+                        motionHandle.Complete();
+                        break;
+                }
                 return AutoResetUniTaskCompletionSource.CreateFromCanceled(cancellationToken, out token);
             }
 
@@ -101,7 +111,7 @@ namespace LitMotion
             }
 
             result.motionHandle = motionHandle;
-            result.cancelBahaviour = cancelBahaviour;
+            result.cancelBehaviour = cancelBehaviour;
             result.cancellationToken = cancellationToken;
 
             var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
@@ -125,24 +135,27 @@ namespace LitMotion
                 result.cancellationRegistration = cancellationToken.RegisterWithoutCaptureExecutionContext(static x =>
                 {
                     var source = (MotionConfiguredSource)x;
-                    var motionHandle = source.motionHandle;
-                    if (motionHandle.IsActive())
+                    switch (source.cancelBehaviour)
                     {
-                        switch (source.cancelBahaviour)
-                        {
-                            case CancelBehaviour.Cancel:
-                            case CancelBehaviour.CancelAndCancelAwait:
-                                motionHandle.Cancel();
-                                break;
-                            case CancelBehaviour.Complete:
-                            case CancelBehaviour.CompleteAndCancelAwait:
-                                motionHandle.Complete();
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        source.SetResultOrCanceled();
+                        case CancelBehaviour.CancelAndCancelAwait:
+                        default:
+                            source.canceled = true;
+                            source.motionHandle.Cancel();
+                            break;
+                        case CancelBehaviour.Cancel:
+                            source.motionHandle.Cancel();
+                            break;
+                        case CancelBehaviour.CompleteAndCancelAwait:
+                            source.canceled = true;
+                            source.motionHandle.Complete();
+                            break;
+                        case CancelBehaviour.Complete:
+                            source.motionHandle.Complete();
+                            break;
+                        case CancelBehaviour.CancelAwait:
+                            source.RestoreOriginalCallback();
+                            source.core.TrySetCanceled(source.cancellationToken);
+                            break;
                     }
                 }, result);
             }
@@ -157,24 +170,15 @@ namespace LitMotion
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                SetResultOrCanceled();
+                if (cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait)
+                {
+                    canceled = true;
+                }
             }
-            else
-            {
-                originalCompleteAction?.Invoke();
-                core.TrySetResult(AsyncUnit.Default);
-            }
-        }
 
-        void OnCancelCallbackDelegate()
-        {
-            originalCancelAction?.Invoke();
-            SetResultOrCanceled();
-        }
+            originalCompleteAction?.Invoke();
 
-        void SetResultOrCanceled()
-        {
-            if (cancelBahaviour is CancelBehaviour.CancelAwait or CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait)
+            if (canceled)
             {
                 core.TrySetCanceled(cancellationToken);
             }
@@ -182,6 +186,20 @@ namespace LitMotion
             {
                 core.TrySetResult(AsyncUnit.Default);
             }
+        }
+
+        void OnCancelCallbackDelegate()
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                if (cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait)
+                {
+                    canceled = true;
+                }
+            }
+
+            originalCancelAction?.Invoke();
+            core.TrySetCanceled(cancellationToken);
         }
 
         public void GetResult(short token)
@@ -220,10 +238,12 @@ namespace LitMotion
             RestoreOriginalCallback();
 
             motionHandle = default;
-            cancelBahaviour = default;
+            cancelBehaviour = default;
             cancellationToken = default;
             originalCompleteAction = default;
             originalCancelAction = default;
+            canceled = default;
+
             return pool.TryPush(this);
         }
 
