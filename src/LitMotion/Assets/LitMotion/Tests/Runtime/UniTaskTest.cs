@@ -157,6 +157,26 @@ namespace LitMotion.Tests.Runtime
             Assert.Fail();
         });
 
+        [UnityTest]
+        public IEnumerator Test_CancelWhileAwaitFollowedByAnother() => UniTask.ToCoroutine(async () =>
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            LMotion.Create(0f, 10f, 1.0f)
+                .RunWithoutBinding()
+                .ToUniTask(cancellationTokenSource.Token)
+                .Forget();
+
+            await UniTask.Delay(100);
+            cancellationTokenSource.Cancel();
+
+            var canceled = await LMotion.Create(10.0f, 0.0f, 1.0f)
+                .RunWithoutBinding()
+                .ToUniTask()
+                .SuppressCancellationThrow();
+
+            Assert.IsFalse(canceled);
+        });
+
         async UniTaskVoid DelayedCall(float delay, Action action)
         {
             await UniTask.WaitForSeconds(delay);
