@@ -29,6 +29,66 @@ namespace LitMotion.Tests.Runtime
         });
 
         [UnityTest]
+        public IEnumerator Test_ToUniTask_CompleteAndCancelAwait() => UniTask.ToCoroutine(async () =>
+        {
+            var completed = false;
+            var source = new CancellationTokenSource();
+            source.CancelAfterSlim(TimeSpan.FromSeconds(0.5f));
+
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithOnComplete(() => completed = true)
+                .RunWithoutBinding();
+
+            try
+            {
+                await handle.ToUniTask(CancelBehaviour.CompleteAndCancelAwait, source.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Assert.IsFalse(handle.IsActive());
+                Assert.IsTrue(completed);
+                return;
+            }
+
+            Assert.Fail();
+        });
+
+        [UnityTest]
+        public IEnumerator Test_ToUniTask_CancelAwait() => UniTask.ToCoroutine(async () =>
+        {
+            var completed = false;
+            var canceled = false;
+            var source = new CancellationTokenSource();
+            source.CancelAfterSlim(TimeSpan.FromSeconds(0.5f));
+
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithOnComplete(() => completed = true)
+                .WithOnCancel(() => canceled = true)
+                .RunWithoutBinding();
+
+            try
+            {
+                await handle.ToUniTask(CancelBehaviour.CancelAwait, source.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Assert.IsTrue(handle.IsActive());
+                Assert.IsFalse(canceled);
+                Assert.IsFalse(completed);
+
+                await UniTask.WaitForSeconds(1f);
+
+                Assert.IsFalse(handle.IsActive());
+                Assert.IsFalse(canceled);
+                Assert.IsTrue(completed);
+
+                return;
+            }
+
+            Assert.Fail();
+        });
+
+        [UnityTest]
         public IEnumerator Test_BindToAsyncReactiveProperty() => UniTask.ToCoroutine(async () =>
         {
             var reactiveProperty = new AsyncReactiveProperty<float>(0f);
@@ -81,7 +141,7 @@ namespace LitMotion.Tests.Runtime
 
             var handle = LMotion.Create(0f, 10f, 1f)
                 .WithCancelOnError()
-                .Bind(x => 
+                .Bind(x =>
                 {
                     if (x > 5f) throw new Exception("Test");
                 });
