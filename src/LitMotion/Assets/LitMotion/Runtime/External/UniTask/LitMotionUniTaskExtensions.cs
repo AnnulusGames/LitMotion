@@ -1,5 +1,6 @@
 #if LITMOTION_SUPPORT_UNITASK
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -19,7 +20,20 @@ namespace LitMotion
         public static UniTask ToUniTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(MotionConfiguredSource.Create(handle, cancellationToken, out var token), token);
+            return new UniTask(MotionConfiguredSource.Create(handle, CancelBahaviour.CancelAndCancelAwait, cancellationToken, out var token), token);
+        }
+
+        /// <summary>
+        /// Convert motion handle to UniTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBahaviour">Behavior when canceling</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBahaviour cancelBahaviour, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return UniTask.CompletedTask;
+            return new UniTask(MotionConfiguredSource.Create(handle, cancelBahaviour, cancellationToken, out var token), token);
         }
 
         /// <summary>
@@ -59,9 +73,9 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
+        CancelBahaviour cancelBahaviour;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
-        bool canceled;
 
         Action originalCompleteAction;
         Action originalCancelAction;
@@ -73,7 +87,7 @@ namespace LitMotion
             onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
         }
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBahaviour cancelBahaviour, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -87,8 +101,8 @@ namespace LitMotion
             }
 
             result.motionHandle = motionHandle;
+            result.cancelBahaviour = cancelBahaviour;
             result.cancellationToken = cancellationToken;
-            result.canceled = false;
 
             var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
             result.originalCancelAction = callbacks.OnCancelAction;
@@ -112,8 +126,24 @@ namespace LitMotion
                 {
                     var source = (MotionConfiguredSource)x;
                     var motionHandle = source.motionHandle;
-                    if (motionHandle.IsActive()) motionHandle.Cancel();
-                    source.core.TrySetCanceled(source.cancellationToken);
+                    if (motionHandle.IsActive())
+                    {
+                        switch (source.cancelBahaviour)
+                        {
+                            case CancelBahaviour.Cancel:
+                            case CancelBahaviour.CancelAndCancelAwait:
+                                motionHandle.Cancel();
+                                break;
+                            case CancelBahaviour.Complete:
+                            case CancelBahaviour.CompleteAndCancelAwait:
+                                motionHandle.Complete();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        source.SetResultOrCanceled();
+                    }
                 }, result);
             }
 
@@ -127,11 +157,7 @@ namespace LitMotion
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                canceled = true;
-            }
-            if (canceled)
-            {
-                core.TrySetCanceled(cancellationToken);
+                SetResultOrCanceled();
             }
             else
             {
@@ -143,7 +169,19 @@ namespace LitMotion
         void OnCancelCallbackDelegate()
         {
             originalCancelAction?.Invoke();
-            core.TrySetCanceled(cancellationToken);
+            SetResultOrCanceled();
+        }
+
+        void SetResultOrCanceled()
+        {
+            if (cancelBahaviour is CancelBahaviour.CancelAwait or CancelBahaviour.CancelAndCancelAwait or CancelBahaviour.CompleteAndCancelAwait)
+            {
+                core.TrySetCanceled(cancellationToken);
+            }
+            else
+            {
+                core.TrySetResult(AsyncUnit.Default);
+            }
         }
 
         public void GetResult(short token)
@@ -182,6 +220,7 @@ namespace LitMotion
             RestoreOriginalCallback();
 
             motionHandle = default;
+            cancelBahaviour = default;
             cancellationToken = default;
             originalCompleteAction = default;
             originalCancelAction = default;
