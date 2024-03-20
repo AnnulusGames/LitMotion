@@ -39,7 +39,7 @@ namespace LitMotion
             originalCancelAction?.Invoke();
             SetTaskCanceled(cancellationToken);
         }
-        
+
         protected void OnCompleteCallbackDelegate()
         {
             if (cancellationToken.IsCancellationRequested)
@@ -83,12 +83,11 @@ namespace LitMotion
             this.cancelBehaviour = cancelBehaviour;
             this.cancellationToken = cancellationToken;
 
-            var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
+            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
             originalCancelAction = callbackData.OnCancelAction;
             originalCompleteAction = callbackData.OnCompleteAction;
             callbackData.OnCancelAction = onCancelCallbackDelegate;
             callbackData.OnCompleteAction = onCompleteCallbackDelegate;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
 
             if (originalCancelAction == onCancelCallbackDelegate)
             {
@@ -143,10 +142,9 @@ namespace LitMotion
         protected void RestoreOriginalCallback()
         {
             if (!motionHandle.IsActive()) return;
-            var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
+            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
             callbackData.OnCancelAction = originalCancelAction;
             callbackData.OnCompleteAction = originalCompleteAction;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
         }
 
         protected void DisposeRegistration()

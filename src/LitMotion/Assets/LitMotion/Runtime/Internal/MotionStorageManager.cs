@@ -50,16 +50,10 @@ namespace LitMotion
             storageList[handle.StorageId].SetPlaybackSpeed(handle, value);
         }
 
-        public static MotionCallbackData GetMotionCallbacks(MotionHandle handle)
+        public static ref MotionCallbackData GetMotionCallbackDataRef(MotionHandle handle)
         {
             CheckStorageId(handle);
-            return storageList[handle.StorageId].GetMotionCallbacks(handle);
-        }
-
-        public static void SetMotionCallbacks(MotionHandle handle, MotionCallbackData callbacks)
-        {
-            CheckStorageId(handle);
-            storageList[handle.StorageId].SetMotionCallbacks(handle, callbacks);
+            return ref storageList[handle.StorageId].GetCallbackDataRef(handle);
         }
 
         // For MotionTracker

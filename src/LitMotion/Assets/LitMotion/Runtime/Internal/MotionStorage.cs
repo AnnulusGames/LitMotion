@@ -37,8 +37,7 @@ namespace LitMotion
         void Complete(MotionHandle handle);
         float GetPlaybackSpeed(MotionHandle handle);
         void SetPlaybackSpeed(MotionHandle handle, float value);
-        MotionCallbackData GetMotionCallbacks(MotionHandle handle);
-        void SetMotionCallbacks(MotionHandle handle, MotionCallbackData callbacks);
+        ref MotionCallbackData GetCallbackDataRef(MotionHandle handle);
         void Reset();
     }
 
@@ -370,16 +369,10 @@ namespace LitMotion
             return motion.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
-        public MotionCallbackData GetMotionCallbacks(MotionHandle handle)
+        public ref MotionCallbackData GetCallbackDataRef(MotionHandle handle)
         {
             CheckIndex(handle);
-            return callbacksArray[entries[handle.Index].DenseIndex];
-        }
-
-        public void SetMotionCallbacks(MotionHandle handle, MotionCallbackData callbacks)
-        {
-            CheckIndex(handle);
-            callbacksArray[entries[handle.Index].DenseIndex] = callbacks;
+            return ref callbacksArray[entries[handle.Index].DenseIndex];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
