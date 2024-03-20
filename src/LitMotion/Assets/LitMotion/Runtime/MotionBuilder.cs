@@ -31,21 +31,10 @@ namespace LitMotion
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             buffer.Version++;
-            buffer.Ease = default;
+            buffer.Data = MotionData<TValue, TOptions>.Default;
+            buffer.CallbackData = MotionCallbackData.Default;
             buffer.AnimationCurve = default;
-            buffer.Duration = default;
-            buffer.Delay = default;
-            buffer.DelayType = default;
-            buffer.SkipValuesDuringDelay = true;
-            buffer.Loops = 1;
-            buffer.LoopType = default;
-            buffer.StartValue = default;
-            buffer.EndValue = default;
-            buffer.Options = default;
             buffer.Scheduler = default;
-            buffer.OnComplete = default;
-            buffer.OnCancel = default;
-            buffer.CancelOnError = default;
             buffer.IsPreserved = default;
 
             if (buffer.Version != ushort.MaxValue)
@@ -57,27 +46,13 @@ namespace LitMotion
 
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
+        public bool IsPreserved;
 
-        public Ease Ease;
+        public MotionData<TValue, TOptions> Data = MotionData<TValue, TOptions>.Default;
+        public MotionCallbackData CallbackData = MotionCallbackData.Default;
         public AnimationCurve AnimationCurve;
 
-        public float Duration;
-        public float Delay;
-        public DelayType DelayType;
-        public bool SkipValuesDuringDelay = true;
-        public int Loops = 1;
-        public LoopType LoopType;
-
-        public TValue StartValue;
-        public TValue EndValue;
-        public TOptions Options;
-
         public IMotionScheduler Scheduler;
-
-        public Action OnComplete;
-        public Action OnCancel;
-        public bool CancelOnError;
-        public bool IsPreserved;
     }
 
     /// <summary>
@@ -110,7 +85,7 @@ namespace LitMotion
         {
             CheckEaseType(ease);
             CheckBuffer();
-            buffer.Ease = ease;
+            buffer.Data.Core.Ease = ease;
             return this;
         }
 
@@ -124,7 +99,7 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.AnimationCurve = animationCurve;
-            buffer.Ease = Ease.CustomAnimationCurve;
+            buffer.Data.Core.Ease = Ease.CustomAnimationCurve;
             return this;
         }
 
@@ -139,9 +114,9 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay, DelayType delayType = DelayType.FirstLoop, bool skipValuesDuringDelay = true)
         {
             CheckBuffer();
-            buffer.Delay = delay;
-            buffer.DelayType = delayType;
-            buffer.SkipValuesDuringDelay = skipValuesDuringDelay;
+            buffer.Data.Core.Delay = delay;
+            buffer.Data.Core.DelayType = delayType;
+            buffer.CallbackData.SkipValuesDuringDelay = skipValuesDuringDelay;
             return this;
         }
 
@@ -155,8 +130,8 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithLoops(int loops, LoopType loopType = LoopType.Restart)
         {
             CheckBuffer();
-            buffer.Loops = loops;
-            buffer.LoopType = loopType;
+            buffer.Data.Core.Loops = loops;
+            buffer.Data.Core.LoopType = loopType;
             return this;
         }
 
@@ -169,7 +144,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOptions(TOptions options)
         {
             CheckBuffer();
-            buffer.Options = options;
+            buffer.Data.Options = options;
             return this;
         }
 
@@ -182,7 +157,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOnCancel(Action callback)
         {
             CheckBuffer();
-            buffer.OnCancel += callback;
+            buffer.CallbackData.OnCancelAction += callback;
             return this;
         }
 
@@ -195,7 +170,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOnComplete(Action callback)
         {
             CheckBuffer();
-            buffer.OnComplete += callback;
+            buffer.CallbackData.OnCompleteAction += callback;
             return this;
         }
 
@@ -208,7 +183,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithCancelOnError(bool cancelOnError = true)
         {
             CheckBuffer();
-            buffer.CancelOnError = cancelOnError;
+            buffer.CallbackData.CancelOnError = cancelOnError;
             return this;
         }
 
@@ -232,10 +207,9 @@ namespace LitMotion
         public MotionHandle RunWithoutBinding()
         {
             CheckBuffer();
-            var callbacks = BuildCallbackData();
+            SetMotionData();
             var scheduler = buffer.Scheduler;
-            var data = BuildMotionData();
-            return Schedule(scheduler, ref data, ref callbacks);
+            return Schedule(scheduler, ref buffer.Data, ref buffer.CallbackData);
         }
 
         /// <summary>
@@ -246,11 +220,10 @@ namespace LitMotion
         public MotionHandle Bind(Action<TValue> action)
         {
             CheckBuffer();
-            var callbacks = BuildCallbackData(action);
-            callbacks.OnCompleteAction = buffer.OnComplete;
+            SetMotionData();
+            SetCallbackData(action);
             var scheduler = buffer.Scheduler;
-            var data = BuildMotionData();
-            return Schedule(scheduler, ref data, ref callbacks);
+            return Schedule(scheduler, ref buffer.Data, ref buffer.CallbackData);
         }
 
         /// <summary>
@@ -263,10 +236,10 @@ namespace LitMotion
         public MotionHandle BindWithState<TState>(TState state, Action<TValue, TState> action) where TState : class
         {
             CheckBuffer();
-            var callbacks = BuildCallbackData(state, action);
+            SetMotionData();
+            SetCallbackData(state, action);
             var scheduler = buffer.Scheduler;
-            var data = BuildMotionData();
-            return Schedule(scheduler, ref data, ref callbacks);
+            return Schedule(scheduler, ref buffer.Data, ref buffer.CallbackData);
         }
 
         /// <summary>
@@ -282,10 +255,10 @@ namespace LitMotion
             where TState2 : class
         {
             CheckBuffer();
-            var callbacks = BuildCallbackData(state1, state2, action);
+            SetMotionData();
+            SetCallbackData(state1, state2, action);
             var scheduler = buffer.Scheduler;
-            var data = BuildMotionData();
-            return Schedule(scheduler, ref data, ref callbacks);
+            return Schedule(scheduler, ref buffer.Data, ref buffer.CallbackData);
         }
 
 
@@ -304,10 +277,10 @@ namespace LitMotion
             where TState3 : class
         {
             CheckBuffer();
-            var callbacks = BuildCallbackData(state1, state2, state3, action);
+            SetMotionData();
+            SetCallbackData(state1, state2, state3, action);
             var scheduler = buffer.Scheduler;
-            var data = BuildMotionData();
-            return Schedule(scheduler, ref data, ref callbacks);
+            return Schedule(scheduler, ref buffer.Data, ref buffer.CallbackData);
         }
 
         /// <summary>
@@ -324,7 +297,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
+        internal MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
         {
             MotionHandle handle;
 
@@ -335,12 +308,23 @@ namespace LitMotion
                 {
                     handle = EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
                 }
+                else if (MotionScheduler.DefaultScheduler == MotionScheduler.Update) // avoid virtual method call
+                {
+                    handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
+                }
                 else
                 {
                     handle = MotionScheduler.DefaultScheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
                 }
 #else
-                handle = MotionScheduler.DefaultScheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                if (MotionScheduler.DefaultScheduler == MotionScheduler.Update) // avoid virtual method call
+                {
+                    handle = MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, PlayerLoopTiming.Update);
+                }
+                else
+                {
+                    handle = MotionScheduler.DefaultScheduler.Schedule<TValue, TOptions, TAdapter>(ref data, ref callbackData);
+                }
 #endif
             }
             else
@@ -352,6 +336,8 @@ namespace LitMotion
             {
                 MotionTracker.AddTracking(handle, scheduler);
             }
+
+            if (!buffer.IsPreserved) Dispose();
 
             return handle;
         }
@@ -367,116 +353,53 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionData<TValue, TOptions> BuildMotionData()
+        internal readonly void SetMotionData()
         {
-            var data = new MotionData<TValue, TOptions>()
-            {
-                StartValue = buffer.StartValue,
-                EndValue = buffer.EndValue,
-                Options = buffer.Options,
-                Duration = buffer.Duration,
-                PlaybackSpeed = 1f,
-                Ease = buffer.Ease,
-                Delay = buffer.Delay,
-                DelayType = buffer.DelayType,
-                Loops = buffer.Loops,
-                LoopType = buffer.LoopType,
-                Status = MotionStatus.Scheduled,
-            };
+            buffer.Data.Core.Status = MotionStatus.Scheduled;
 
             if (buffer.AnimationCurve != null)
             {
-                data.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
+                buffer.Data.Core.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
             }
-            
-            if (!buffer.IsPreserved) Dispose();
-            return data;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionCallbackData BuildCallbackData()
+        internal readonly void SetCallbackData(Action<TValue> action)
         {
-            var callbacks = new MotionCallbackData
-            {
-                OnCancelAction = buffer.OnCancel,
-                OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError
-            };
-            return callbacks;
+            buffer.CallbackData.UpdateAction = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionCallbackData BuildCallbackData(Action<TValue> action)
-        {
-            var callbacks = new MotionCallbackData
-            {
-                UpdateAction = action,
-                OnCancelAction = buffer.OnCancel,
-                OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError,
-                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
-            };
-            return callbacks;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionCallbackData BuildCallbackData<TState>(TState state, Action<TValue, TState> action)
+        internal readonly void SetCallbackData<TState>(TState state, Action<TValue, TState> action)
             where TState : class
         {
-            var callbacks = new MotionCallbackData
-            {
-                StateCount = 1,
-                State1 = state,
-                UpdateAction = action,
-                OnCancelAction = buffer.OnCancel,
-                OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError,
-                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
-            };
-
-            return callbacks;
+            buffer.CallbackData.StateCount = 1;
+            buffer.CallbackData.State1 = state;
+            buffer.CallbackData.UpdateAction = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionCallbackData BuildCallbackData<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
+        internal readonly void SetCallbackData<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
             where TState1 : class
             where TState2 : class
         {
-            var callbacks = new MotionCallbackData
-            {
-                StateCount = 2,
-                State1 = state1,
-                State2 = state2,
-                UpdateAction = action,
-                OnCancelAction = buffer.OnCancel,
-                OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError,
-                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
-            };
-
-            return callbacks;
+            buffer.CallbackData.StateCount = 2;
+            buffer.CallbackData.State1 = state1;
+            buffer.CallbackData.State2 = state2;
+            buffer.CallbackData.UpdateAction = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionCallbackData BuildCallbackData<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
+        internal readonly void SetCallbackData<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
             where TState1 : class
             where TState2 : class
             where TState3 : class
         {
-            var callbacks = new MotionCallbackData
-            {
-                StateCount = 3,
-                State1 = state1,
-                State2 = state2,
-                State3 = state3,
-                UpdateAction = action,
-                OnCancelAction = buffer.OnCancel,
-                OnCompleteAction = buffer.OnComplete,
-                CancelOnError = buffer.CancelOnError,
-                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay
-            };
-
-            return callbacks;
+            buffer.CallbackData.StateCount = 3;
+            buffer.CallbackData.State1 = state1;
+            buffer.CallbackData.State2 = state2;
+            buffer.CallbackData.State3 = state3;
+            buffer.CallbackData.UpdateAction = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

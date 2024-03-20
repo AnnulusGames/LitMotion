@@ -31,11 +31,10 @@ namespace LitMotion
         public void UnsafeOnCompleted(Action continuation)
         {
             if (continuation == null) return;
-            
-            var callbackData = MotionStorageManager.GetMotionCallbacks(handle);
+
+            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(handle);
             callbackData.OnCompleteAction += continuation;
             callbackData.OnCancelAction += continuation;
-            MotionStorageManager.SetMotionCallbacks(handle, callbackData);
         }
     }
 }

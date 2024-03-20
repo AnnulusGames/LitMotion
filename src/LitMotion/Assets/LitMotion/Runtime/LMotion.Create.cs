@@ -114,9 +114,9 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var buffer = MotionBuilderBuffer<TValue, TOptions>.Rent();
-            buffer.StartValue = from;
-            buffer.EndValue = to;
-            buffer.Duration = duration;
+            buffer.Data.StartValue = from;
+            buffer.Data.EndValue = to;
+            buffer.Data.Core.Duration = duration;
             return new MotionBuilder<TValue, TOptions, TAdapter>(buffer);
         }
     }

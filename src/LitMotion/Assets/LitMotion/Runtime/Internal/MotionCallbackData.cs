@@ -40,5 +40,10 @@ namespace LitMotion
                     break;
             }
         }
+
+        public readonly static MotionCallbackData Default = new()
+        {
+            SkipValuesDuringDelay = true,
+        };
     }
 }
