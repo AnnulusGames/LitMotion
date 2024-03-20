@@ -19,8 +19,10 @@ namespace LitMotion
             if (canceledSource == null)
             {
                 canceledSource = new();
-                canceledSource.core.SetException(new OperationCanceledException());
             }
+
+            canceledSource.core.Reset();
+            canceledSource.core.SetException(new OperationCanceledException());
 
             token = canceledSource.Version;
             return canceledSource;
@@ -75,7 +77,7 @@ namespace LitMotion
         bool TryReturn()
         {
             core.Reset();
-            
+
             DisposeRegistration();
             RestoreOriginalCallback();
             ResetFields();

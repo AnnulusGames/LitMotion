@@ -15,8 +15,9 @@ namespace LitMotion
                 if (completedSource == null)
                 {
                     completedSource = new();
-                    completedSource.core.SetResult();
                 }
+                completedSource.core.Reset();
+                completedSource.core.SetResult();
                 return completedSource;
             }
         }
@@ -29,8 +30,9 @@ namespace LitMotion
                 if (canceledSource == null)
                 {
                     canceledSource = new();
-                    canceledSource.core.SetCanceled();
                 }
+                canceledSource.core.Reset();
+                canceledSource.core.SetCanceled();
                 return canceledSource;
             }
         }
