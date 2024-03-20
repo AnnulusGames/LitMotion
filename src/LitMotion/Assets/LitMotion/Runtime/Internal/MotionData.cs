@@ -21,6 +21,12 @@ namespace LitMotion
         public int Loops;
         public DelayType DelayType;
         public LoopType LoopType;
+
+        public static readonly MotionDataCore Default = new()
+        {
+            Loops = 1,
+            PlaybackSpeed = 1f,
+        };
     }
     
     /// <summary>
@@ -39,5 +45,10 @@ namespace LitMotion
         public TValue StartValue;
         public TValue EndValue;
         public TOptions Options;
+
+        public static readonly MotionData<TValue, TOptions> Default = new()
+        {
+            Core = MotionDataCore.Default,
+        };
     }
 }
