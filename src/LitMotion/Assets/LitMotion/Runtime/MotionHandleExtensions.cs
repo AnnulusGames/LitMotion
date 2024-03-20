@@ -152,7 +152,14 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token);
+            return new ValueTask(source, token);
+        }
+
+        public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return default;
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -160,7 +167,13 @@ namespace LitMotion
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken).Awaitable;
+        }
+
+        public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken).Awaitable;
         }
 #endif
 

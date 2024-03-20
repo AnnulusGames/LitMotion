@@ -5,22 +5,13 @@ using LitMotion.Collections;
 
 namespace LitMotion
 {
-    internal sealed class ValueTaskMotionConfiguredSource : IValueTaskSource, ILinkedPoolNode<ValueTaskMotionConfiguredSource>
+    internal sealed class ValueTaskMotionConfiguredSource : MotionConfiguredSourceBase, IValueTaskSource, ILinkedPoolNode<ValueTaskMotionConfiguredSource>
     {
         static LinkedPool<ValueTaskMotionConfiguredSource> pool;
 
         ValueTaskMotionConfiguredSource nextNode;
         public ref ValueTaskMotionConfiguredSource NextNode => ref nextNode;
 
-        readonly Action onCancelCallbackDelegate;
-        readonly Action onCompleteCallbackDelegate;
-
-        MotionHandle motionHandle;
-        CancellationToken cancellationToken;
-        CancellationTokenRegistration cancellationRegistration;
-
-        Action originalCompleteAction;
-        Action originalCancelAction;
         ManualResetValueTaskSourceCore<object> core;
 
         static ValueTaskMotionConfiguredSource FromCanceled(out short token)
@@ -36,17 +27,13 @@ namespace LitMotion
         }
         static ValueTaskMotionConfiguredSource canceledSource;
 
-        ValueTaskMotionConfiguredSource()
-        {
-            onCancelCallbackDelegate = new(OnCancelCallbackDelegate);
-            onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
-        }
+        ValueTaskMotionConfiguredSource() : base() { }
 
-        public static IValueTaskSource Create(MotionHandle motionHandle, CancellationToken cancellationToken, out short token)
+        public static IValueTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                motionHandle.Cancel();
+                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
                 return FromCanceled(out token);
             }
 
@@ -55,66 +42,13 @@ namespace LitMotion
                 result = new ValueTaskMotionConfiguredSource();
             }
 
-            result.motionHandle = motionHandle;
-            result.cancellationToken = cancellationToken;
-
-            var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
-            result.originalCancelAction = callbacks.OnCancelAction;
-            result.originalCompleteAction = callbacks.OnCompleteAction;
-            callbacks.OnCancelAction = result.onCancelCallbackDelegate;
-            callbacks.OnCompleteAction = result.onCompleteCallbackDelegate;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
-
-            if (result.originalCancelAction == result.onCancelCallbackDelegate)
-            {
-                result.originalCancelAction = null;
-            }
-            if (result.originalCompleteAction == result.onCompleteCallbackDelegate)
-            {
-                result.originalCompleteAction = null;
-            }
-
-            if (cancellationToken.CanBeCanceled)
-            {
-                result.cancellationRegistration = cancellationToken.Register(static x =>
-                {
-                    var source = (ValueTaskMotionConfiguredSource)x;
-                    var motionHandle = source.motionHandle;
-                    if (motionHandle.IsActive())
-                    {
-                        motionHandle.Cancel();
-                    }
-                    else
-                    {
-                        source.core.SetException(new OperationCanceledException());
-                    }
-                }, result);
-            }
+            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
 
             token = result.core.Version;
             return result;
         }
 
         public short Version => core.Version;
-
-        void OnCompleteCallbackDelegate()
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                core.SetException(new OperationCanceledException());
-            }
-            else
-            {
-                originalCompleteAction?.Invoke();
-                core.SetResult(null);
-            }
-        }
-
-        void OnCancelCallbackDelegate()
-        {
-            originalCancelAction?.Invoke();
-            core.SetException(new OperationCanceledException());
-        }
 
         public void GetResult(short token)
         {
@@ -144,22 +78,19 @@ namespace LitMotion
             cancellationRegistration.Dispose();
 
             RestoreOriginalCallback();
-
-            motionHandle = default;
-            cancellationToken = default;
-            originalCompleteAction = default;
-            originalCancelAction = default;
+            ResetFields();
 
             return pool.TryPush(this);
         }
 
-        void RestoreOriginalCallback()
+        protected override void SetTaskCanceled(CancellationToken cancellationToken)
         {
-            if (!motionHandle.IsActive()) return;
-            var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
-            callbacks.OnCancelAction = originalCancelAction;
-            callbacks.OnCompleteAction = originalCompleteAction;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
+            core.SetException(new OperationCanceledException());
+        }
+
+        protected override void SetTaskCompleted()
+        {
+            core.SetResult(null);
         }
     }
 }
