@@ -1,4 +1,3 @@
-#if LITMOTION_SUPPORT_UNITASK
 using System;
 using System.Runtime.CompilerServices;
 
@@ -38,4 +37,3 @@ namespace LitMotion
         }
     }
 }
-#endif
