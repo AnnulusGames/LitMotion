@@ -33,6 +33,7 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
+        // Because of pointer casting, this field must always be placed at the beginning.
         public MotionDataCore Core;
 
         public TValue StartValue;

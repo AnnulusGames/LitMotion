@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using LitMotion.Collections;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 // TODO: Constantize the exception message
 
@@ -35,8 +36,7 @@ namespace LitMotion
         bool IsActive(MotionHandle handle);
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
-        float GetPlaybackSpeed(MotionHandle handle);
-        void SetPlaybackSpeed(MotionHandle handle, float value);
+        ref MotionDataCore GetDataRef(MotionHandle handle);
         ref MotionCallbackData GetCallbackDataRef(MotionHandle handle);
         void Reset();
     }
@@ -375,6 +375,12 @@ namespace LitMotion
             return ref callbacksArray[entries[handle.Index].DenseIndex];
         }
 
+        public ref MotionDataCore GetDataRef(MotionHandle handle)
+        {
+            CheckIndex(handle);
+            return ref UnsafeUtility.As<MotionData<TValue, TOptions>, MotionDataCore>(ref dataArray[entries[handle.Index].DenseIndex]);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void CheckIndex(MotionHandle handle)
         {
@@ -402,18 +408,6 @@ namespace LitMotion
             tail = 0;
 
             AllocatorHelper.Allocator.Rewind();
-        }
-
-        public float GetPlaybackSpeed(MotionHandle handle)
-        {
-            CheckIndex(handle);
-            return dataArray[entries[handle.Index].DenseIndex].Core.PlaybackSpeed;
-        }
-
-        public void SetPlaybackSpeed(MotionHandle handle, float value)
-        {
-            CheckIndex(handle);
-            dataArray[entries[handle.Index].DenseIndex].Core.PlaybackSpeed = value;
         }
     }
 }
