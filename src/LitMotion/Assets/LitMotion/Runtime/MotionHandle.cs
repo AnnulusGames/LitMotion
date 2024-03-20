@@ -33,7 +33,7 @@ namespace LitMotion
             }
             set
             {
-                if (value < 0f) throw new ArgumentOutOfRangeException("Playback speed must be 0 or greater.");
+                if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
                 MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed = value;
             }
         }
