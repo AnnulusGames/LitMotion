@@ -25,13 +25,13 @@ namespace LitMotion
         /// Convert motion handle to UniTask.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBahaviour">Behavior when canceling</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBahaviour, CancellationToken cancellationToken = default)
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBahaviour, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token), token);
         }
 
         /// <summary>
