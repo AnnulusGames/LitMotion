@@ -374,19 +374,22 @@ namespace LitMotion
                 StartValue = buffer.StartValue,
                 EndValue = buffer.EndValue,
                 Options = buffer.Options,
-                Duration = buffer.Duration,
-                PlaybackSpeed = 1f,
-                Ease = buffer.Ease,
-                Delay = buffer.Delay,
-                DelayType = buffer.DelayType,
-                Loops = buffer.Loops,
-                LoopType = buffer.LoopType,
-                Status = MotionStatus.Scheduled,
+                Core = new()
+                {
+                    Duration = buffer.Duration,
+                    PlaybackSpeed = 1f,
+                    Ease = buffer.Ease,
+                    Delay = buffer.Delay,
+                    DelayType = buffer.DelayType,
+                    Loops = buffer.Loops,
+                    LoopType = buffer.LoopType,
+                    Status = MotionStatus.Scheduled,
+                },
             };
 
             if (buffer.AnimationCurve != null)
             {
-                data.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
+                data.Core.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
             }
             
             if (!buffer.IsPreserved) Dispose();

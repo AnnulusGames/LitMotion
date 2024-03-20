@@ -165,21 +165,21 @@ namespace LitMotion
             UnityEngine.Debug.Log("[Add] Entry:" + entryIndex + " Dense:" + entry.DenseIndex + " Version:" + entry.Version);
 #endif
 
-            var prevAnimationCurve = dataArray[tail].AnimationCurve;
+            var prevAnimationCurve = dataArray[tail].Core.AnimationCurve;
 
             toEntryIndex[tail] = entryIndex;
             dataArray[tail] = data;
             callbacksArray[tail] = callbacks;
 
-            if (data.Ease == Ease.CustomAnimationCurve)
+            if (data.Core.Ease == Ease.CustomAnimationCurve)
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
                     prevAnimationCurve = new NativeAnimationCurve(AllocatorHelper.Allocator.Handle);
                 }
 
-                prevAnimationCurve.CopyFrom(data.AnimationCurve);
-                dataArray[tail].AnimationCurve = prevAnimationCurve;
+                prevAnimationCurve.CopyFrom(data.Core.AnimationCurve);
+                dataArray[tail].Core.AnimationCurve = prevAnimationCurve;
             }
 
             tail++;
@@ -265,12 +265,12 @@ namespace LitMotion
 
             ref var motion = ref GetDataSpan()[denseIndex];
             var version = entry.Version;
-            if (version <= 0 || version != handle.Version || motion.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version || motion.Core.Status == MotionStatus.None)
             {
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
 
-            motion.Status = MotionStatus.Canceled;
+            motion.Core.Status = MotionStatus.Canceled;
 
             ref var callbackData = ref GetCallbacksSpan()[denseIndex];
             try
@@ -294,12 +294,12 @@ namespace LitMotion
 
             ref var motion = ref GetDataSpan()[denseIndex];
             var version = entry.Version;
-            if (version <= 0 || version != handle.Version || motion.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version || motion.Core.Status == MotionStatus.None)
             {
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
 
-            if (motion.Loops < 0)
+            if (motion.Core.Loops < 0)
             {
                 UnityEngine.Debug.LogWarning("[LitMotion] Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
                 return;
@@ -313,20 +313,20 @@ namespace LitMotion
             callbackData.IsCallbackRunning = true;
 
             // To avoid duplication of Complete processing, it is treated as canceled internally.
-            motion.Status = MotionStatus.Canceled;
+            motion.Core.Status = MotionStatus.Canceled;
 
-            var endProgress = motion.LoopType switch
+            var endProgress = motion.Core.LoopType switch
             {
                 LoopType.Restart => 1f,
-                LoopType.Yoyo => motion.Loops % 2 == 0 ? 0f : 1f,
-                LoopType.Incremental => motion.Loops,
+                LoopType.Yoyo => motion.Core.Loops % 2 == 0 ? 0f : 1f,
+                LoopType.Incremental => motion.Core.Loops,
                 _ => 1f
             };
 
-            var easedEndProgress = motion.Ease switch
+            var easedEndProgress = motion.Core.Ease switch
             {
-                Ease.CustomAnimationCurve => motion.AnimationCurve.Evaluate(endProgress),
-                _ => EaseUtility.Evaluate(endProgress, motion.Ease),
+                Ease.CustomAnimationCurve => motion.Core.AnimationCurve.Evaluate(endProgress),
+                _ => EaseUtility.Evaluate(endProgress, motion.Core.Ease),
             };
 
             var endValue = default(TAdapter).Evaluate(
@@ -366,7 +366,7 @@ namespace LitMotion
             var version = entry.Version;
             if (version <= 0 || version != handle.Version) return false;
             var motion = dataArray[denseIndex];
-            return motion.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
+            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
         public ref MotionCallbackData GetCallbackDataRef(MotionHandle handle)
@@ -386,7 +386,7 @@ namespace LitMotion
             }
 
             var version = entry.Version;
-            if (version <= 0 || version != handle.Version || dataArray[denseIndex].Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version || dataArray[denseIndex].Core.Status == MotionStatus.None)
             {
                 throw new ArgumentException("Motion has been destroyed or no longer exists.");
             }
@@ -407,13 +407,13 @@ namespace LitMotion
         public float GetPlaybackSpeed(MotionHandle handle)
         {
             CheckIndex(handle);
-            return dataArray[entries[handle.Index].DenseIndex].PlaybackSpeed;
+            return dataArray[entries[handle.Index].DenseIndex].Core.PlaybackSpeed;
         }
 
         public void SetPlaybackSpeed(MotionHandle handle, float value)
         {
             CheckIndex(handle);
-            dataArray[entries[handle.Index].DenseIndex].PlaybackSpeed = value;
+            dataArray[entries[handle.Index].DenseIndex].Core.PlaybackSpeed = value;
         }
     }
 }
