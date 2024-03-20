@@ -82,8 +82,8 @@ namespace LitMotion
         {
             TaskTracker.RemoveTracking(this);
             core.Reset();
-            cancellationRegistration.Dispose();
-
+            
+            DisposeRegistration();
             RestoreOriginalCallback();
             ResetFields();
 

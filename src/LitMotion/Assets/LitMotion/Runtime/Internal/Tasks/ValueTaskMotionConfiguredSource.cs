@@ -75,8 +75,8 @@ namespace LitMotion
         bool TryReturn()
         {
             core.Reset();
-            cancellationRegistration.Dispose();
-
+            
+            DisposeRegistration();
             RestoreOriginalCallback();
             ResetFields();
 

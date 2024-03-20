@@ -11,17 +11,17 @@ namespace LitMotion
             onCompleteCallbackDelegate = OnCompleteCallbackDelegate;
         }
 
-        protected readonly Action onCancelCallbackDelegate;
-        protected readonly Action onCompleteCallbackDelegate;
+        readonly Action onCancelCallbackDelegate;
+        readonly Action onCompleteCallbackDelegate;
 
-        protected MotionHandle motionHandle;
-        protected CancelBehaviour cancelBehaviour;
-        protected CancellationToken cancellationToken;
-        protected CancellationTokenRegistration cancellationRegistration;
-        protected bool canceled;
+        MotionHandle motionHandle;
+        CancelBehaviour cancelBehaviour;
+        CancellationToken cancellationToken;
+        CancellationTokenRegistration cancellationRegistration;
+        bool canceled;
 
-        protected Action originalCompleteAction;
-        protected Action originalCancelAction;
+        Action originalCompleteAction;
+        Action originalCancelAction;
 
         protected abstract void SetTaskCanceled(CancellationToken cancellationToken);
         protected abstract void SetTaskCompleted();
@@ -147,6 +147,11 @@ namespace LitMotion
             callbackData.OnCancelAction = originalCancelAction;
             callbackData.OnCompleteAction = originalCompleteAction;
             MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
+        }
+
+        protected void DisposeRegistration()
+        {
+            cancellationRegistration.Dispose();
         }
 
         static CancellationTokenRegistration RegisterWithoutCaptureExecutionContext(CancellationToken cancellationToken, Action<object> callback, object state)
