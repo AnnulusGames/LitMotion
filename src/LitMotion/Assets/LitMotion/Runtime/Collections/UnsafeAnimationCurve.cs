@@ -7,27 +7,27 @@ using UnityEngine;
 
 namespace LitMotion.Collections
 {
-    public unsafe struct NativeAnimationCurve : IDisposable
+    public unsafe struct UnsafeAnimationCurve : IDisposable
     {
-        NativeList<Keyframe> keys;
-        WrapMode preWrapMode;
-        WrapMode postWrapMode;
+        internal UnsafeList<Keyframe> keys;
+        internal WrapMode preWrapMode;
+        internal WrapMode postWrapMode;
 
-        public NativeAnimationCurve(AllocatorManager.AllocatorHandle allocator)
+        public UnsafeAnimationCurve(AllocatorManager.AllocatorHandle allocator)
         {
-            keys = new NativeList<Keyframe>(0, allocator);
+            keys = new UnsafeList<Keyframe>(0, allocator);
             preWrapMode = default;
             postWrapMode = default;
         }
 
-        public NativeAnimationCurve(AnimationCurve animationCurve, AllocatorManager.AllocatorHandle allocator)
+        public UnsafeAnimationCurve(AnimationCurve animationCurve, AllocatorManager.AllocatorHandle allocator)
         {
             var l = animationCurve.length;
-            keys = new NativeList<Keyframe>(l, allocator);
+            keys = new UnsafeList<Keyframe>(l, allocator);
             keys.Resize(l, NativeArrayOptions.UninitializedMemory);
             fixed (Keyframe* src = &animationCurve.keys[0])
             {
-                UnsafeUtility.MemCpy(keys.GetUnsafePtr(), src, l * sizeof(Keyframe));
+                UnsafeUtility.MemCpy(keys.Ptr, src, l * sizeof(Keyframe));
             }
             keys.Sort(default(KeyframeComparer));
             preWrapMode = animationCurve.preWrapMode;
@@ -40,14 +40,14 @@ namespace LitMotion.Collections
             keys.Resize(l, NativeArrayOptions.UninitializedMemory);
             fixed (Keyframe* src = &animationCurve.keys[0])
             {
-                UnsafeUtility.MemCpy(keys.GetUnsafePtr(), src, l * sizeof(Keyframe));
+                UnsafeUtility.MemCpy(keys.Ptr, src, l * sizeof(Keyframe));
             }
             keys.Sort(default(KeyframeComparer));
             preWrapMode = animationCurve.preWrapMode;
             postWrapMode = animationCurve.postWrapMode;
         }
 
-        public void CopyFrom(in NativeAnimationCurve animationCurve)
+        public void CopyFrom(in UnsafeAnimationCurve animationCurve)
         {
             keys.CopyFrom(animationCurve.keys);
             preWrapMode = animationCurve.preWrapMode;
@@ -63,7 +63,7 @@ namespace LitMotion.Collections
 
         public float Evaluate(float time)
         {
-            return NativeAnimationCurveHelper.Evaluate((Keyframe*)keys.GetUnsafePtr(), keys.Length, preWrapMode, postWrapMode, time);
+            return NativeAnimationCurveHelper.Evaluate(keys.Ptr, keys.Length, preWrapMode, postWrapMode, time);
         }
     }
 }

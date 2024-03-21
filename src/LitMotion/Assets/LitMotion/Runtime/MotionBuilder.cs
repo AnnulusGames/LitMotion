@@ -359,7 +359,11 @@ namespace LitMotion
 
             if (buffer.AnimationCurve != null)
             {
+#if LITMOTION_COLLECTIONS_2_0_OR_NEWER
                 buffer.Data.Core.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
+#else
+                buffer.Data.Core.AnimationCurve = new UnsafeAnimationCurve(buffer.AnimationCurve, Allocator.Temp);
+#endif
             }
         }
 

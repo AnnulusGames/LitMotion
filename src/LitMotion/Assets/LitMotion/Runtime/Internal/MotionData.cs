@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LitMotion.Collections;
 
@@ -14,7 +13,12 @@ namespace LitMotion
         public float Duration;
 
         public Ease Ease;
+
+#if LITMOTION_COLLECTIONS_2_0_OR_NEWER
         public NativeAnimationCurve AnimationCurve;
+#else
+        public UnsafeAnimationCurve AnimationCurve;
+#endif
 
         public MotionTimeKind TimeKind;
         public float Delay;
