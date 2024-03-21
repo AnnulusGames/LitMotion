@@ -175,7 +175,11 @@ namespace LitMotion
             {
                 if (!prevAnimationCurve.IsCreated)
                 {
+#if LITMOTION_COLLECTIONS_2_0_OR_NEWER
                     prevAnimationCurve = new NativeAnimationCurve(AllocatorHelper.Allocator.Handle);
+#else
+                    prevAnimationCurve = new UnsafeAnimationCurve(AllocatorHelper.Allocator.Handle);
+#endif
                 }
 
                 prevAnimationCurve.CopyFrom(data.Core.AnimationCurve);
