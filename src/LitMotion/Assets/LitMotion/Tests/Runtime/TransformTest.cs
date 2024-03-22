@@ -55,6 +55,30 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(1f, endValue, Duration).BindToPositionZ(target).ToYieldInteraction();
             Assert.That(target.position.z, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
         }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToPositionXY()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToPositionXY(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.position.x, target.position.y), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToPositionXZ()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToPositionXZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.position.x, target.position.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToPositionYZ()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToPositionYZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.position.y, target.position.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
 
         [UnityTest]
         public IEnumerator Test_BindToLocalPosition()
@@ -86,6 +110,30 @@ namespace LitMotion.Tests.Runtime
             var endValue = 10f;
             yield return LMotion.Create(1f, endValue, Duration).BindToLocalPositionZ(target).ToYieldInteraction();
             Assert.That(target.localPosition.z, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalPositionXY()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalPositionXY(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localPosition.x, target.localPosition.y), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalPositionXZ()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalPositionXZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localPosition.x, target.localPosition.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalPositionYZ()
+        {
+            var endValue = Vector2.one;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalPositionYZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localPosition.y, target.localPosition.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
         }
 
         [UnityTest]
@@ -135,6 +183,30 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, endValue, Duration).BindToEulerAnglesZ(target).ToYieldInteraction();
             Assert.That(target.eulerAngles.z, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
         }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToEulerAnglesXY()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToEulerAnglesXY(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.eulerAngles.x, target.eulerAngles.y), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToEulerAnglesXZ()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToEulerAnglesXZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.eulerAngles.x, target.eulerAngles.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToEulerAnglesYZ()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToEulerAnglesYZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.eulerAngles.y, target.eulerAngles.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
 
         [UnityTest]
         public IEnumerator Test_BindToLocalEulerAngles()
@@ -167,6 +239,30 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, endValue, Duration).BindToLocalEulerAnglesZ(target).ToYieldInteraction();
             Assert.That(target.localEulerAngles.z, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
         }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalEulerAnglesXY()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalEulerAnglesXY(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localEulerAngles.x, target.localEulerAngles.y), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalEulerAnglesXZ()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalEulerAnglesXZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localEulerAngles.x, target.localEulerAngles.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalEulerAnglesYZ()
+        {
+            var endValue = Vector2.one * 10f;
+            yield return LMotion.Create(Vector2.zero, endValue, Duration).BindToLocalEulerAnglesYZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localEulerAngles.y, target.localEulerAngles.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
 
         [UnityTest]
         public IEnumerator Test_BindToLocalScale()
@@ -198,6 +294,30 @@ namespace LitMotion.Tests.Runtime
             var endValue = 2f;
             yield return LMotion.Create(1f, endValue, Duration).BindToLocalScaleZ(target).ToYieldInteraction();
             Assert.That(target.localScale.z, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalScaleXY()
+        {
+            var endValue = Vector2.one * 2f;
+            yield return LMotion.Create(Vector2.one, endValue, Duration).BindToLocalScaleXY(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localScale.x, target.localScale.y), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalScaleXZ()
+        {
+            var endValue = Vector2.one * 2f;
+            yield return LMotion.Create(Vector2.one, endValue, Duration).BindToLocalScaleXZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localScale.x, target.localScale.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BindToLocalScaleYZ()
+        {
+            var endValue = Vector2.one * 2f;
+            yield return LMotion.Create(Vector2.one, endValue, Duration).BindToLocalScaleYZ(target).ToYieldInteraction();
+            Assert.That(new Vector2(target.localScale.y, target.localScale.z), Is.EqualTo(endValue).Using(Vector2EqualityComparer.Instance));
         }
     }
 }
