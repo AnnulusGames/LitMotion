@@ -1,22 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks.Sources;
+using LitMotion.Collections;
 
 namespace LitMotion.Sequences
 {
-    internal sealed class SequenceValueTaskSource : IValueTaskSource, IMotionTaskSourcePoolNode<SequenceValueTaskSource>
+    internal sealed class SequenceValueTaskSource : SequenceConfiguredSourceBase, ILinkedPoolNode<SequenceValueTaskSource>, IValueTaskSource
     {
-        static MotionTaskSourcePool<SequenceValueTaskSource> pool;
-
-        SequenceValueTaskSource nextNode;
+        static LinkedPool<SequenceValueTaskSource> pool;
         public ref SequenceValueTaskSource NextNode => ref nextNode;
-
-        readonly Action onCancelCallbackDelegate;
-        readonly Action onCompleteCallbackDelegate;
-
-        MotionSequence sequence;
-        CancellationToken cancellationToken;
-        CancellationTokenRegistration cancellationRegistration;
+        SequenceValueTaskSource nextNode;
 
         ManualResetValueTaskSourceCore<object> core;
 
@@ -25,21 +18,17 @@ namespace LitMotion.Sequences
             if (canceledSource == null)
             {
                 canceledSource = new();
-                canceledSource.core.SetException(new OperationCanceledException());
             }
+
+            canceledSource.core.Reset();
+            canceledSource.core.SetException(new OperationCanceledException());
 
             token = canceledSource.Version;
             return canceledSource;
         }
         static SequenceValueTaskSource canceledSource;
 
-        SequenceValueTaskSource()
-        {
-            onCancelCallbackDelegate = new(OnCancelCallbackDelegate);
-            onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
-        }
-
-        public static IValueTaskSource Create(MotionSequence sequence, CancellationToken cancellationToken, out short token)
+        public static IValueTaskSource Create(MotionSequence sequence, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -51,52 +40,13 @@ namespace LitMotion.Sequences
             {
                 source = new SequenceValueTaskSource();
             }
-
-            source.sequence = sequence;
-            source.cancellationToken = cancellationToken;
-
-            sequence.OnCanceled += source.onCancelCallbackDelegate;
-            sequence.OnCompleted += source.onCompleteCallbackDelegate;
-
-            if (cancellationToken.CanBeCanceled)
-            {
-                source.cancellationRegistration = cancellationToken.Register(static x =>
-                {
-                    var source = (SequenceValueTaskSource)x;
-                    var sequence = source.sequence;
-                    if (sequence.IsActive())
-                    {
-                        sequence.Cancel();
-                    }
-                    else
-                    {
-                        source.core.SetException(new OperationCanceledException());
-                    }
-                }, source);
-            }
+            source.Initialize(sequence, cancelBehaviour, cancellationToken);
 
             token = source.core.Version;
             return source;
         }
 
         public short Version => core.Version;
-
-        void OnCompleteCallbackDelegate()
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                core.SetException(new OperationCanceledException());
-            }
-            else
-            {
-                core.SetResult(null);
-            }
-        }
-
-        void OnCancelCallbackDelegate()
-        {
-            core.SetException(new OperationCanceledException());
-        }
 
         public void GetResult(short token)
         {
@@ -123,15 +73,22 @@ namespace LitMotion.Sequences
         bool TryReturn()
         {
             core.Reset();
-            cancellationRegistration.Dispose();
-
-            sequence.OnCanceled -= onCancelCallbackDelegate;
-            sequence.OnCompleted -= onCompleteCallbackDelegate;
-
-            sequence = default;
-            cancellationToken = default;
+            
+            DisposeRegistration();
+            RestoreOriginalCallback();
+            ResetFields();
 
             return pool.TryPush(this);
+        }
+
+        protected override void SetTaskCanceled(CancellationToken cancellationToken)
+        {
+            core.SetException(new OperationCanceledException());
+        }
+
+        protected override void SetTaskCompleted()
+        {
+            core.SetResult(null);
         }
     }
 }

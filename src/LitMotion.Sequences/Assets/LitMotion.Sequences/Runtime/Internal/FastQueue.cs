@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LitMotion.Sequences
 {
-    internal sealed class MinimumQueue<T>
+    internal sealed class FastQueue<T>
     {
         const int MinimumGrow = 4;
         const int GrowFactor = 200;
@@ -13,7 +13,7 @@ namespace LitMotion.Sequences
         int tail;
         int size;
 
-        public MinimumQueue(int capacity)
+        public FastQueue(int capacity)
         {
             if (capacity < 0) throw new ArgumentOutOfRangeException("capacity");
             array = new T[capacity];

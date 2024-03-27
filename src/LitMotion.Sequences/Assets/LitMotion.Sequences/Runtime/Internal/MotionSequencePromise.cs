@@ -1,4 +1,5 @@
 using System;
+using LitMotion.Collections;
 
 namespace LitMotion.Sequences
 {
@@ -16,16 +17,15 @@ namespace LitMotion.Sequences
 
             public static MotionCompletionSource Create(MotionHandle handle, MotionSequencePromise promise)
             {
-                if (!pool.TryGet(out var source)) source = new();
+                if (!pool.TryPop(out var source)) source = new();
 
                 source.promise = promise;
 
-                var callbacks = MotionStorageManager.GetMotionCallbacks(handle);
-                source.originalCancelAction = callbacks.OnCancelAction;
-                source.originalCompleteAction = callbacks.OnCompleteAction;
-                callbacks.OnCancelAction = source.onCancelCallbackDelegate;
-                callbacks.OnCompleteAction = source.onCompleteCallbackDelegate;
-                MotionStorageManager.SetMotionCallbacks(handle, callbacks);
+                ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(handle);
+                source.originalCancelAction = callbackData.OnCancelAction;
+                source.originalCompleteAction = callbackData.OnCompleteAction;
+                callbackData.OnCancelAction = source.onCancelCallbackDelegate;
+                callbackData.OnCompleteAction = source.onCompleteCallbackDelegate;
 
                 if (source.originalCancelAction == source.onCancelCallbackDelegate)
                 {
@@ -44,7 +44,7 @@ namespace LitMotion.Sequences
                 source.promise = default;
                 source.originalCancelAction = default;
                 source.originalCompleteAction = default;
-                pool.Return(source);
+                pool.TryPush(source);
             }
 
             public ref MotionCompletionSource NextNode => ref nextNode;
@@ -56,7 +56,6 @@ namespace LitMotion.Sequences
 
             readonly Action onCompleteCallbackDelegate;
             readonly Action onCancelCallbackDelegate;
-
 
             void OnCompleteCallback()
             {
@@ -108,7 +107,7 @@ namespace LitMotion.Sequences
 
         public static MotionSequencePromise Create(ReadOnlySpan<MotionHandle> handles, object state, Action<object> continuation)
         {
-            if (!pool.TryGet(out var promise)) promise = new();
+            if (!pool.TryPop(out var promise)) promise = new();
 
             promise.state = state;
             promise.continuation = continuation;

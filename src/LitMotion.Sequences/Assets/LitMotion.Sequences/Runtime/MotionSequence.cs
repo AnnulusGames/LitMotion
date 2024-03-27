@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LitMotion.Collections;
 
 namespace LitMotion.Sequences
 {
@@ -11,19 +12,18 @@ namespace LitMotion.Sequences
         public MotionSequence(IEnumerable<IMotionSequenceItem> items)
         {
             this.items = items.ToArray();
-            handles = new(this.items.Length);
             itemQueue = new(this.items.Length);
         }
 
         readonly IMotionSequenceItem[] items;
 
-        readonly MinimumList<MotionHandle> handles;
-        readonly MinimumQueue<IMotionSequenceItem> itemQueue;
+        FastListCore<MotionHandle> handles;
+        readonly FastQueue<IMotionSequenceItem> itemQueue;
 
         float playbackSpeed = 1f;
         bool canceledOrCompletedManually;
 
-        static readonly MinimumList<MotionHandle> buffer = new();
+        static readonly FastList<MotionHandle> buffer = new();
 
         public event Action OnCompleted;
         public event Action OnCanceled;
@@ -95,7 +95,7 @@ namespace LitMotion.Sequences
         {
             if (itemQueue.Count > 0) return true;
             var handleSpan = handles.AsSpan();
-            for (int i = 0; i < handleSpan.Length; i++)
+            for (int i = 0; i < handles.Length; i++)
             {
                 var handle = handleSpan[i];
                 if (handle.IsActive()) return true;
