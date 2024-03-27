@@ -88,6 +88,72 @@ namespace LitMotion.Extensions
                 t.position = p;
             });
         }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.position.xy
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToPositionXY<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.position;
+                p.x = x.x;
+                p.y = x.y;
+                t.position = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.position.xz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToPositionXZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.position;
+                p.x = x.x;
+                p.z = x.y;
+                t.position = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.position.yz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToPositionYZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.position;
+                p.y = x.x;
+                p.z = x.y;
+                t.position = p;
+            });
+        }
 
         /// <summary>
         /// Create a motion data and bind it to Transform.localPosition
@@ -168,6 +234,72 @@ namespace LitMotion.Extensions
             {
                 var p = t.localPosition;
                 p.z = x;
+                t.localPosition = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localPosition.xy
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalPositionXY<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localPosition;
+                p.x = x.x;
+                p.y = x.y;
+                t.localPosition = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localPosition.xz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalPositionXZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localPosition;
+                p.x = x.x;
+                p.z = x.y;
+                t.localPosition = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localPosition.yz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalPositionYZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localPosition;
+                p.y = x.x;
+                p.z = x.y;
                 t.localPosition = p;
             });
         }
@@ -291,6 +423,72 @@ namespace LitMotion.Extensions
                 t.eulerAngles = p;
             });
         }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.eulerAngles.xy
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToEulerAnglesXY<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.eulerAngles;
+                p.x = x.x;
+                p.y = x.y;
+                t.eulerAngles = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.eulerAngles.xz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToEulerAnglesXZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.eulerAngles;
+                p.x = x.x;
+                p.z = x.y;
+                t.eulerAngles = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.eulerAngles.yz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToEulerAnglesYZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.eulerAngles;
+                p.y = x.x;
+                p.z = x.y;
+                t.eulerAngles = p;
+            });
+        }
 
         /// <summary>
         /// Create a motion data and bind it to Transform.localEulerAngles
@@ -373,6 +571,72 @@ namespace LitMotion.Extensions
                 t.localEulerAngles = p;
             });
         }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localEulerAngles.xy
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalEulerAnglesXY<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localEulerAngles;
+                p.x = x.x;
+                p.y = x.y;
+                t.localEulerAngles = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localEulerAngles.xz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalEulerAnglesXZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localEulerAngles;
+                p.x = x.x;
+                p.z = x.y;
+                t.localEulerAngles = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localEulerAngles.yz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalEulerAnglesYZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localEulerAngles;
+                p.y = x.x;
+                p.z = x.y;
+                t.localEulerAngles = p;
+            });
+        }
 
         /// <summary>
         /// Create a motion data and bind it to Transform.localScale
@@ -452,6 +716,72 @@ namespace LitMotion.Extensions
             {
                 var p = t.localScale;
                 p.z = x;
+                t.localScale = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localScale.xy
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalScaleXY<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localScale;
+                p.x = x.x;
+                p.y = x.y;
+                t.localScale = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localScale.xz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalScaleXZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localScale;
+                p.x = x.x;
+                p.z = x.y;
+                t.localScale = p;
+            });
+        }
+        
+        /// <summary>
+        /// Create a motion data and bind it to Transform.localScale.yz
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="transform"></param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLocalScaleYZ<TOptions, TAdapter>(this MotionBuilder<Vector2, TOptions, TAdapter> builder, Transform transform)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
+        {
+            Error.IsNull(transform);
+            return builder.BindWithState(transform, static (x, t) =>
+            {
+                var p = t.localScale;
+                p.y = x.x;
+                p.z = x.y;
                 t.localScale = p;
             });
         }

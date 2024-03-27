@@ -57,7 +57,19 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, GameObject target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target).Register(handle);
+            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, LinkBehaviour.CancelOnDestroy);
+            return handle;
+        }
+
+        /// <summary>
+        /// Link the motion lifecycle to the target object.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="target">Target object</param>
+        /// <param name="linkBehaviour">Link behaviour</param>
+        public static MotionHandle AddTo(this MotionHandle handle, GameObject target, LinkBehaviour linkBehaviour)
+        {
+            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, linkBehaviour);
             return handle;
         }
 
@@ -68,7 +80,19 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, Component target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle);
+            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, LinkBehaviour.CancelOnDestroy);
+            return handle;
+        }
+
+        /// <summary>
+        /// Link the motion lifecycle to the target object.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="target">Target object</param>
+        /// <param name="linkBehaviour">Link behaviour</param>
+        public static MotionHandle AddTo(this MotionHandle handle, Component target, LinkBehaviour linkBehaviour)
+        {
+            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, linkBehaviour);
             return handle;
         }
 
@@ -119,19 +143,63 @@ namespace LitMotion
                 yield return null;
             }
         }
-        
+
+        public static MotionAwaiter GetAwaiter(this MotionHandle handle)
+        {
+            return new MotionAwaiter(handle);
+        }
+
+        /// <summary>
+        /// Convert motion handle to ValueTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token);
+            return new ValueTask(source, token);
+        }
+
+        /// <summary>
+        /// Convert motion handle to ValueTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return default;
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
 #if UNITY_2023_1_OR_NEWER
+        /// <summary>
+        /// Convert motion handle to Awaitable.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken).Awaitable;
+        }
+
+        /// <summary>
+        /// Convert motion handle to Awaitable.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken).Awaitable;
         }
 #endif
 

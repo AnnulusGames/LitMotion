@@ -23,8 +23,8 @@ namespace LitMotion.Tests.Runtime
         {
             bool completed = false;
             LMotion.Create(0f, 10f, 2f)
-                .WithOnComplete(() => completed = true) 
-                .ToObservable()
+                .WithOnComplete(() => completed = true)
+                .ToRxObservable()
                 .Subscribe(x => Debug.Log(x))
                 .AddTo(disposables);
             while (!completed) yield return null;

@@ -63,7 +63,7 @@ namespace LitMotion
                 var outputPtr = (TValue*)output.GetUnsafePtr();
                 for (int i = 0; i < callbackSpan.Length; i++)
                 {
-                    var status = (dataPtr + i)->Status;
+                    var status = (dataPtr + i)->Core.Status;
                     ref var callbackData = ref callbackSpan[i];
                     if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !callbackData.SkipValuesDuringDelay))
                     {
@@ -76,7 +76,7 @@ namespace LitMotion
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (callbackData.CancelOnError)
                             {
-                                (dataPtr + i)->Status = MotionStatus.Canceled;
+                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
                                 callbackData.OnCancelAction?.Invoke();
                             }
                         }
@@ -92,7 +92,7 @@ namespace LitMotion
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (callbackData.CancelOnError)
                             {
-                                (dataPtr + i)->Status = MotionStatus.Canceled;
+                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
                                 callbackData.OnCancelAction?.Invoke();
                                 continue;
                             }

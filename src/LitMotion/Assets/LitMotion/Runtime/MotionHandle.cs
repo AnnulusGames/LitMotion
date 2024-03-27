@@ -27,8 +27,15 @@ namespace LitMotion
         /// </summary>
         public readonly float PlaybackSpeed
         {
-            get => MotionStorageManager.GetMotionPlaybackSpeed(this);
-            set => MotionStorageManager.SetMotionPlaybackSpeed(this, value);
+            get
+            {
+                return MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed;
+            }
+            set
+            {
+                if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
+                MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed = value;
+            }
         }
 
         public readonly bool Equals(MotionHandle other)

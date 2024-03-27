@@ -23,13 +23,13 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var subject = new Subject<TValue>();
-            var callbacks = builder.BuildCallbackData(subject, static (x, subject) => subject.OnNext(x));
-            callbacks.OnCompleteAction += () => subject.OnCompleted();
-            callbacks.OnCancelAction += () => subject.OnCompleted();
+            builder.SetCallbackData(subject, static (x, subject) => subject.OnNext(x));
+            builder.buffer.CallbackData.OnCompleteAction += () => subject.OnCompleted();
+            builder.buffer.CallbackData.OnCancelAction += () => subject.OnCompleted();
             var scheduler = builder.buffer.Scheduler;
-            var entity = builder.BuildMotionData();
+            builder.SetMotionData();
 
-            builder.Schedule(scheduler, ref entity, ref callbacks);
+            builder.Schedule(scheduler, ref builder.buffer.Data, ref builder.buffer.CallbackData);
             return subject;
         }
 

@@ -5,6 +5,16 @@ namespace LitMotion
     /// </summary>
     public static class MotionScheduler
     {
+        static MotionScheduler()
+        {
+            DefaultScheduler = Update;
+        }
+
+        /// <summary>
+        /// Default scheduler used if not specified
+        /// </summary>
+        public static IMotionScheduler DefaultScheduler { get; set; }
+
         /// <summary>
         /// Scheduler that updates motion at Initialization.
         /// </summary>

@@ -27,12 +27,11 @@ namespace LitMotion
 
             if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
-            var callbackData = MotionStorageManager.GetMotionCallbacks(motionHandle);
+            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
             state.OriginalOnCompleteCallback = callbackData.OnCompleteAction;
             callbackData.OnCompleteAction = state.OnCompleteDelegate;
             state.OriginalOnCancelCallback = callbackData.OnCancelAction;
             callbackData.OnCancelAction = state.OnCancelDelegate;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbackData);
 
             trackings.Add(state);
         }

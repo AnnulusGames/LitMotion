@@ -1,17 +1,13 @@
 #if UNITY_2023_1_OR_NEWER
-using System;
 using System.Threading;
 using UnityEngine;
 
 namespace LitMotion
 {
-    internal sealed class AwaitableMotionConfiguredSource : IMotionTaskSourcePoolNode<AwaitableMotionConfiguredSource>
+    // TODO: use object pool
+
+    internal sealed class AwaitableMotionConfiguredSource : MotionConfiguredSourceBase
     {
-        static MotionTaskSourcePool<AwaitableMotionConfiguredSource> pool;
-
-        AwaitableMotionConfiguredSource nextNode;
-        public ref AwaitableMotionConfiguredSource NextNode => ref nextNode;
-
         public static AwaitableMotionConfiguredSource CompletedSource
         {
             get
@@ -19,8 +15,9 @@ namespace LitMotion
                 if (completedSource == null)
                 {
                     completedSource = new();
-                    completedSource.core.SetResult();
                 }
+                completedSource.core.Reset();
+                completedSource.core.SetResult();
                 return completedSource;
             }
         }
@@ -33,128 +30,41 @@ namespace LitMotion
                 if (canceledSource == null)
                 {
                     canceledSource = new();
-                    canceledSource.core.SetCanceled();
                 }
+                canceledSource.core.Reset();
+                canceledSource.core.SetCanceled();
                 return canceledSource;
             }
         }
         static AwaitableMotionConfiguredSource canceledSource;
 
-        readonly Action onCancelCallbackDelegate;
-        readonly Action onCompleteCallbackDelegate;
-
-        MotionHandle motionHandle;
-        CancellationToken cancellationToken;
-        CancellationTokenRegistration cancellationRegistration;
-
-        Action originalCompleteAction;
-        Action originalCancelAction;
         readonly AwaitableCompletionSource core = new();
 
         public Awaitable Awaitable => core.Awaitable;
 
-        AwaitableMotionConfiguredSource()
-        {
-            onCancelCallbackDelegate = new(OnCancelCallbackDelegate);
-            onCompleteCallbackDelegate = new(OnCompleteCallbackDelegate);
-        }
+        AwaitableMotionConfiguredSource() : base() { }
 
-        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, CancellationToken cancellationToken)
+        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                motionHandle.Cancel();
+                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
                 return CanceledSource;
             }
 
-            if (!pool.TryPop(out var result))
-            {
-                result = new AwaitableMotionConfiguredSource();
-            }
-
-            result.motionHandle = motionHandle;
-            result.cancellationToken = cancellationToken;
-
-            var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
-            result.originalCancelAction = callbacks.OnCancelAction;
-            result.originalCompleteAction = callbacks.OnCompleteAction;
-            callbacks.OnCancelAction = result.onCancelCallbackDelegate;
-            callbacks.OnCompleteAction = result.onCompleteCallbackDelegate;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
-
-            if (result.originalCancelAction == result.onCancelCallbackDelegate)
-            {
-                result.originalCancelAction = null;
-            }
-            if (result.originalCompleteAction == result.onCompleteCallbackDelegate)
-            {
-                result.originalCompleteAction = null;
-            }
-
-            if (cancellationToken.CanBeCanceled)
-            {
-                result.cancellationRegistration = cancellationToken.Register(static x =>
-                {
-                    var source = (AwaitableMotionConfiguredSource)x;
-                    var motionHandle = source.motionHandle;
-                    if (motionHandle.IsActive())
-                    {
-                        motionHandle.Cancel();
-                    }
-                    else
-                    {
-                        source.core.SetCanceled();
-                        source.TryReturn();
-                    }
-                }, result);
-            }
-
+            var result = new AwaitableMotionConfiguredSource();
+            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
             return result;
         }
 
-        void OnCompleteCallbackDelegate()
+        protected override void SetTaskCanceled(CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                core.SetCanceled();
-            }
-            else
-            {
-                originalCompleteAction?.Invoke();
-                core.SetResult();
-            }
-
-            TryReturn();
-        }
-
-        void OnCancelCallbackDelegate()
-        {
-            originalCancelAction?.Invoke();
             core.SetCanceled();
-            TryReturn();
         }
 
-        bool TryReturn()
+        protected override void SetTaskCompleted()
         {
-            core.Reset();
-            cancellationRegistration.Dispose();
-
-            RestoreOriginalCallback();
-
-            motionHandle = default;
-            cancellationToken = default;
-            originalCompleteAction = default;
-            originalCancelAction = default;
-            return pool.TryPush(this);
-        }
-
-        void RestoreOriginalCallback()
-        {
-            if (!motionHandle.IsActive()) return;
-            var callbacks = MotionStorageManager.GetMotionCallbacks(motionHandle);
-            callbacks.OnCancelAction = originalCancelAction;
-            callbacks.OnCompleteAction = originalCompleteAction;
-            MotionStorageManager.SetMotionCallbacks(motionHandle, callbacks);
+            core.SetResult();
         }
     }
 }
