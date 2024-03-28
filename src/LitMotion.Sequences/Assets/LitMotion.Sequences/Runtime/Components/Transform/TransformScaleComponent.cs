@@ -19,7 +19,7 @@ namespace LitMotion.Sequences.Components
         {
             var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
-
+            
             if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type), Vector3>((target, componentType), out var initialLocalScale))
             {
                 initialLocalScale = target.localScale;

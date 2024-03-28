@@ -40,7 +40,7 @@ namespace LitMotion.Sequences
 
 #if UNITY_EDITOR
         internal bool IsModified => dictionaries.Count > 0;
-        
+
         internal void CancelAndRestoreValues()
         {
             sequence?.Cancel();
@@ -79,7 +79,6 @@ namespace LitMotion.Sequences
         }
 
         readonly Dictionary<Type, IDictionary> dictionaries = new();
-        readonly HashSet<UnityObject> tmpObjects = new();
 
         Dictionary<TKey, TValue> GetDictionary<TKey, TValue>()
         {
@@ -103,21 +102,6 @@ namespace LitMotion.Sequences
         void ISequencePropertyTable.ClearInitialValues()
         {
             dictionaries.Clear();
-        }
-
-        void ISequencePropertyTable.RegisterTemporaryObject(UnityObject obj)
-        {
-            tmpObjects.Add(obj);
-        }
-
-        void OnDestroy()
-        {
-            foreach (var obj in tmpObjects)
-            {
-                if (obj == null) continue;
-                Destroy(obj);
-            }
-            tmpObjects.Clear();
         }
     }
 }

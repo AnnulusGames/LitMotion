@@ -20,4 +20,13 @@ namespace LitMotion.Sequences.Editor
 
     [CustomEditor(typeof(TransformScaleComponent))]
     internal sealed class TransformScaleComponentEditor : TransformComponentEditorBase { }
+
+    [CustomEditor(typeof(MaterialPropertyComponentBase<>), editorForChildClasses: true)]
+    internal sealed class MaterialComponentEditor : SequenceComponentBaseEditor
+    {
+        protected override GUIContent GetIconContent()
+        {
+            return EditorGUIUtility.IconContent("Material Icon");
+        }
+    }
 }

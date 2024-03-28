@@ -7,6 +7,5 @@ namespace LitMotion.Sequences
         void SetInitialValue<TKey, TValue>(TKey key, TValue value);
         bool TryGetInitialValue<TKey, TValue>(TKey key, out TValue value);
         void ClearInitialValues();
-        void RegisterTemporaryObject(Object obj);
     }
 }

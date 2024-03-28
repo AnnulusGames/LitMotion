@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace LitMotion.Sequences
@@ -51,7 +52,7 @@ namespace LitMotion.Sequences
             loopType = default;
         }
 
-        protected void ConfigureMotionBuilder<T, TOptions, TAdapter>(ref MotionBuilder<T, TOptions, TAdapter> motionBuilder)
+        protected virtual void ConfigureMotionBuilder<T, TOptions, TAdapter>(ref MotionBuilder<T, TOptions, TAdapter> motionBuilder)
             where T : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<T, TOptions>

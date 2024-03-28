@@ -24,7 +24,7 @@ namespace LitMotion.Sequences.Editor
 
                     field.schedule
                         .Execute(() => field.style.display = serializedObject.FindProperty("ease").enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None)
-                        .Every(10);
+                        .Until(() => serializedObject != null);
                 }
             }
         }
