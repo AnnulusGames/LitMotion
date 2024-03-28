@@ -11,7 +11,7 @@ namespace LitMotion.Sequences
             public SequenceComponent Component { get; set; }
             public ISequencePropertyTable SequencePropertyTable { get; set; }
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 Component.InternalConfigure(SequencePropertyTable, builder);
             }
@@ -32,7 +32,7 @@ namespace LitMotion.Sequences
             displayName = GetType().Name;
         }
 
-        internal void InternalConfigure(ISequencePropertyTable propertyTable, MotionSequenceItemBuilder builder)
+        internal void InternalConfigure(ISequencePropertyTable propertyTable, SequenceItemBuilder builder)
         {
             if (!enabled) return;
             Configure(propertyTable, builder);
@@ -47,7 +47,7 @@ namespace LitMotion.Sequences
             };
         }
 
-        public abstract void Configure(ISequencePropertyTable propertyTable, MotionSequenceItemBuilder builder);
+        public abstract void Configure(ISequencePropertyTable propertyTable, SequenceItemBuilder builder);
         public abstract void RestoreValues(ISequencePropertyTable propertyTable);
     }
 }

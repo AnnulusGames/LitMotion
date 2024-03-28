@@ -28,13 +28,13 @@ namespace LitMotion.Sequences
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendParallel(this IMotionSequenceBuilder builder, Action<MotionSequenceItemBuilder> factoryDelegate)
+        public static IMotionSequenceBuilder AppendParallel(this IMotionSequenceBuilder builder, Action<SequenceItemBuilder> factoryDelegate)
         {
             builder.Items.Add(new _AppendParallel(factoryDelegate));
             return builder;
         }
 
-        public static IMotionSequenceBuilder AppendParallel<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, MotionSequenceItemBuilder> factoryDelegate)
+        public static IMotionSequenceBuilder AppendParallel<TState>(this IMotionSequenceBuilder builder, TState state, Action<TState, SequenceItemBuilder> factoryDelegate)
         {
             builder.Items.Add(new _AppendParallelWithState<TState>(state, factoryDelegate));
             return builder;
@@ -49,7 +49,7 @@ namespace LitMotion.Sequences
 
             readonly Func<MotionHandle> factoryDelegate;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 builder.Add(factoryDelegate());
             }
@@ -66,7 +66,7 @@ namespace LitMotion.Sequences
             readonly T state;
             readonly Func<T, MotionHandle> factoryDelegate;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 builder.Add(factoryDelegate(state));
             }
@@ -82,7 +82,7 @@ namespace LitMotion.Sequences
 
             readonly Action callback;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 callback.Invoke();
             }
@@ -99,7 +99,7 @@ namespace LitMotion.Sequences
             readonly T state;
             readonly Action<T> callback;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 callback.Invoke(state);
             }
@@ -107,14 +107,14 @@ namespace LitMotion.Sequences
 
         sealed class _AppendParallel : IMotionSequenceItem
         {
-            public _AppendParallel(Action<MotionSequenceItemBuilder> Delegate)
+            public _AppendParallel(Action<SequenceItemBuilder> Delegate)
             {
                 this.factoryDelegate = Delegate;
             }
 
-            readonly Action<MotionSequenceItemBuilder> factoryDelegate;
+            readonly Action<SequenceItemBuilder> factoryDelegate;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 factoryDelegate(builder);
             }
@@ -122,16 +122,16 @@ namespace LitMotion.Sequences
 
         sealed class _AppendParallelWithState<T> : IMotionSequenceItem
         {
-            public _AppendParallelWithState(T state, Action<T, MotionSequenceItemBuilder> Delegate)
+            public _AppendParallelWithState(T state, Action<T, SequenceItemBuilder> Delegate)
             {
                 this.state = state;
                 this.factoryDelegate = Delegate;
             }
 
             readonly T state;
-            readonly Action<T, MotionSequenceItemBuilder> factoryDelegate;
+            readonly Action<T, SequenceItemBuilder> factoryDelegate;
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 factoryDelegate(state, builder);
             }

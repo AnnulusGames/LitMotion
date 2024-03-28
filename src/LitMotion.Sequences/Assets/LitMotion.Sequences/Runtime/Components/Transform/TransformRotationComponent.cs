@@ -21,7 +21,7 @@ namespace LitMotion.Sequences.Components
             useEulerAngles = default;
         }
 
-        public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
+        public override void Configure(ISequencePropertyTable sequencePropertyTable, SequenceItemBuilder builder)
         {
             var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;

@@ -15,11 +15,11 @@ namespace LitMotion.Sequences.Components
             displayName = "Scale";
         }
 
-        public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
+        public override void Configure(ISequencePropertyTable sequencePropertyTable, SequenceItemBuilder builder)
         {
             var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
-            
+
             if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type), Vector3>((target, componentType), out var initialLocalScale))
             {
                 initialLocalScale = target.localScale;

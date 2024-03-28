@@ -67,7 +67,7 @@ namespace LitMotion.Sequences
             while (itemQueue.TryDequeue(out var item))
             {
                 buffer.Clear();
-                item.Configure(new MotionSequenceItemBuilder(buffer));
+                item.Configure(new SequenceItemBuilder(buffer));
                 var bufferSpan = buffer.AsSpan();
                 for (int i = 0; i < bufferSpan.Length; i++) bufferSpan[i].Complete();
             }
@@ -125,7 +125,7 @@ namespace LitMotion.Sequences
             }
 
             buffer.Clear();
-            item.Configure(new MotionSequenceItemBuilder(buffer));
+            item.Configure(new SequenceItemBuilder(buffer));
 
             if (buffer.Length > 0)
             {

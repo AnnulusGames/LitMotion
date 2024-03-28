@@ -17,7 +17,7 @@ namespace LitMotion.Sequences
             public SequenceAsset Asset { get; set; }
             public ISequencePropertyTable SequencePropertyTable { get; set; }
 
-            public void Configure(MotionSequenceItemBuilder builder)
+            public void Configure(SequenceItemBuilder builder)
             {
                 foreach (var component in Asset.components)
                 {

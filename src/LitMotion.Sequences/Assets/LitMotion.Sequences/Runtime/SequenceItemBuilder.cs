@@ -2,9 +2,9 @@ using System.Runtime.CompilerServices;
 
 namespace LitMotion.Sequences
 {
-    public readonly struct MotionSequenceItemBuilder
+    public readonly struct SequenceItemBuilder
     {
-        internal MotionSequenceItemBuilder(FastList<MotionHandle> buffer)
+        internal SequenceItemBuilder(FastList<MotionHandle> buffer)
         {
             this.buffer = buffer;
         }

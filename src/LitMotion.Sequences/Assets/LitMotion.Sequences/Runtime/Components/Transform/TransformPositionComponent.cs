@@ -19,11 +19,11 @@ namespace LitMotion.Sequences.Components
             scalingMode = default;
         }
 
-        public override void Configure(ISequencePropertyTable sequencePropertyTable, MotionSequenceItemBuilder builder)
+        public override void Configure(ISequencePropertyTable sequencePropertyTable, SequenceItemBuilder builder)
         {
             var target = ResolveTarget(sequencePropertyTable);
             if (target == null) return;
-            
+
             if (!sequencePropertyTable.TryGetInitialValue<(Transform, Type, TransformScalingMode), Vector3>((target, componentType, TransformScalingMode.Local), out var initialLocalPosition))
             {
                 initialLocalPosition = target.localPosition;
