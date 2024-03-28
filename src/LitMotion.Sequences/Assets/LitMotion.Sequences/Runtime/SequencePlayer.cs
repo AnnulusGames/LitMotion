@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+using LitMotion.Collections;
 
 namespace LitMotion.Sequences
 {
@@ -78,6 +79,7 @@ namespace LitMotion.Sequences
         }
 
         readonly Dictionary<Type, IDictionary> dictionaries = new();
+        readonly HashSet<UnityObject> tmpObjects = new();
 
         Dictionary<TKey, TValue> GetDictionary<TKey, TValue>()
         {
@@ -101,6 +103,21 @@ namespace LitMotion.Sequences
         void ISequencePropertyTable.ClearInitialValues()
         {
             dictionaries.Clear();
+        }
+
+        void ISequencePropertyTable.RegisterTemporaryObject(UnityObject obj)
+        {
+            tmpObjects.Add(obj);
+        }
+
+        void OnDestroy()
+        {
+            foreach (var obj in tmpObjects)
+            {
+                if (obj == null) continue;
+                Destroy(obj);
+            }
+            tmpObjects.Clear();
         }
     }
 }
