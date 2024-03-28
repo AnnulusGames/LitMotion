@@ -14,6 +14,7 @@ namespace LitMotion.Sequences
         [SerializeField] MotionMode motionMode;
         [SerializeField] float duration = 1f;
         [SerializeField] Ease ease;
+        [SerializeField] AnimationCurve easeAnimationCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
         [Header("Delay Settings")]
         [SerializeField] float delay;
@@ -55,8 +56,16 @@ namespace LitMotion.Sequences
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<T, TOptions>
         {
-            motionBuilder.WithEase(ease)
-                .WithDelay(delay, delayType, skipValuesDuringDelay)
+            if (ease == Ease.CustomAnimationCurve)
+            {
+                motionBuilder.WithEase(easeAnimationCurve);
+            }
+            else
+            {
+                motionBuilder.WithEase(ease);
+            }
+            
+            motionBuilder.WithDelay(delay, delayType, skipValuesDuringDelay)
                 .WithLoops(loops, loopType);
         }
 
