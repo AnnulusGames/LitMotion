@@ -32,7 +32,7 @@ namespace LitMotion.Sequences
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                sequence.Cancel();
+                OnCanceledTokenReceived(sequence, cancelBehaviour);
                 return FromCanceled(out token);
             }
 
@@ -73,7 +73,7 @@ namespace LitMotion.Sequences
         bool TryReturn()
         {
             core.Reset();
-            
+
             DisposeRegistration();
             RestoreOriginalCallback();
             ResetFields();

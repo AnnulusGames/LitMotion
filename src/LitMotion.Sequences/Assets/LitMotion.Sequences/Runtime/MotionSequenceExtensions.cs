@@ -8,7 +8,6 @@ namespace LitMotion.Sequences
     {
         public static ValueTask ToValueTask(this MotionSequence sequence, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken.IsCancellationRequested) return default;
             var source = SequenceValueTaskSource.Create(sequence, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
@@ -16,7 +15,6 @@ namespace LitMotion.Sequences
 #if UNITY_2023_1_OR_NEWER
         public static Awaitable ToAwaitable(this MotionSequence sequence, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken.IsCancellationRequested) return default;
             var source = SequenceAwaitableSource.Create(sequence, CancelBehaviour.CancelAndCancelAwait, cancellationToken);
             return source.Awaitable;
         }

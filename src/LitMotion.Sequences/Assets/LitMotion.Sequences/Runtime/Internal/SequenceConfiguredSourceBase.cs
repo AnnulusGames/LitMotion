@@ -62,17 +62,17 @@ namespace LitMotion.Sequences
             }
         }
 
-        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, CancelBehaviour cancelBehaviour)
+        protected static void OnCanceledTokenReceived(MotionSequence sequence, CancelBehaviour cancelBehaviour)
         {
             switch (cancelBehaviour)
             {
                 case CancelBehaviour.Cancel:
                 case CancelBehaviour.CancelAndCancelAwait:
-                    motionHandle.Cancel();
+                    sequence.Cancel();
                     break;
                 case CancelBehaviour.Complete:
                 case CancelBehaviour.CompleteAndCancelAwait:
-                    motionHandle.Complete();
+                    sequence.Complete();
                     break;
             }
         }
@@ -138,8 +138,6 @@ namespace LitMotion.Sequences
 
         protected void RestoreOriginalCallback()
         {
-            if (!motionSequence.IsActive()) return;
-
             motionSequence.OnCanceled -= onCancelCallbackDelegate;
             motionSequence.OnCompleted -= onCompleteCallbackDelegate;
         }
