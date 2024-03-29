@@ -6,12 +6,11 @@ namespace LitMotion.Sequences
     [SequenceComponentMenu("Material/Material Property (Color)")]
     public sealed class MaterialColorPropertyComponent : MaterialPropertyComponentBase<Color>
     {
-        public override void ResetComponent()
+        protected override string GetDefaultDisplayName()
         {
-            base.ResetComponent();
-            displayName = "Material Property (Color)";
+            return "Material Property (Color)";
         }
-
+        
         protected override MotionHandle CreateMotion(Material material, string propertyName, Color current)
         {
             var motionBuilder = LMotion.Create(current + StartValue, current + EndValue, Duration);

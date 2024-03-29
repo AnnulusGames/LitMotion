@@ -6,14 +6,13 @@ namespace LitMotion.Sequences.Components
     [SequenceComponentMenu("Sprite Renderer/Color")]
     public sealed class SpriteRendererColorComponent : PropertyComponentBase<Color, NoOptions, ColorMotionAdapter, SpriteRenderer>
     {
-        public override void ResetComponent()
+        protected override string GetDefaultDisplayName()
         {
-            base.ResetComponent();
-            displayName = "Color";
+            return "Color";
         }
 
         protected override Color GetRelativeValue(Color start, Color end) => start + end;
-        protected override Color GetValue(SpriteRenderer obj) => obj.color;
-        protected override void SetValue(SpriteRenderer obj, Color value) => obj.color = value;
+        protected override Color GetValue(Object obj) => ((SpriteRenderer)obj).color;
+        protected override void SetValue(Object obj, Color value) => ((SpriteRenderer)obj).color = value;
     }
 }

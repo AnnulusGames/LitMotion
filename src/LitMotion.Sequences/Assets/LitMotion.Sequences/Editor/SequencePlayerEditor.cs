@@ -157,7 +157,7 @@ namespace LitMotion.Sequences.Editor
                     if (iterator.propertyType == SerializedPropertyType.ExposedReference)
                     {
                         var property = iterator;
-                        var label = component.displayName + " / " + property.displayName;
+                        var label = component.DisplayName + " / " + property.displayName;
 
                         var obj = EditorGUILayout.ObjectField(label, property.exposedReferenceValue, property.GetPropertyType().GenericTypeArguments[0], true);
                         if (obj != property.exposedReferenceValue)

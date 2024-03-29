@@ -6,10 +6,9 @@ namespace LitMotion.Sequences
     [SequenceComponentMenu("Material/Material Property (float)")]
     public sealed class MaterialFloatPropertyComponent : MaterialPropertyComponentBase<float>
     {
-        public override void ResetComponent()
+        protected override string GetDefaultDisplayName()
         {
-            base.ResetComponent();
-            displayName = "Material Property (float)";
+            return "Material Property (float)";
         }
 
         protected override MotionHandle CreateMotion(Material material, string propertyName, float current)

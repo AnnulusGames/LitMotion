@@ -15,8 +15,12 @@ namespace LitMotion.Sequences.Components
         public override void ResetComponent()
         {
             base.ResetComponent();
-            displayName = "Position";
             scalingMode = default;
+        }
+
+        protected override string GetDefaultDisplayName()
+        {
+            return "Position";
         }
 
         public override void Configure(ISequencePropertyTable sequencePropertyTable, SequenceItemBuilder builder)

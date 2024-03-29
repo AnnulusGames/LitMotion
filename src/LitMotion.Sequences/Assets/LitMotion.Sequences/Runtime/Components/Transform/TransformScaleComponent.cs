@@ -9,10 +9,9 @@ namespace LitMotion.Sequences.Components
     {
         static readonly Type componentType = typeof(TransformScaleComponent);
 
-        public override void ResetComponent()
+        protected override string GetDefaultDisplayName()
         {
-            base.ResetComponent();
-            displayName = "Scale";
+            return "Scale";
         }
 
         public override void Configure(ISequencePropertyTable sequencePropertyTable, SequenceItemBuilder builder)

@@ -13,10 +13,14 @@ namespace LitMotion.Sequences.Components
         [SerializeField] TransformScalingMode scalingMode;
         [SerializeField] bool useEulerAngles;
 
+        protected override string GetDefaultDisplayName()
+        {
+            return "Rotation";
+        }
+
         public override void ResetComponent()
         {
             base.ResetComponent();
-            displayName = "Rotation";
             scalingMode = default;
             useEulerAngles = default;
         }

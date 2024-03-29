@@ -17,9 +17,11 @@ namespace LitMotion.Sequences
             }
         }
 
-        public bool enabled;
-        public string displayName;
+        [SerializeField] bool enabled;
+        [SerializeField] string displayName;
         [SerializeField] bool expanded;
+
+        public string DisplayName => displayName;
 
         protected void Reset()
         {

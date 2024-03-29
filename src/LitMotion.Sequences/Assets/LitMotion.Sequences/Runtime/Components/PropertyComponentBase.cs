@@ -47,8 +47,8 @@ namespace LitMotion.Sequences.Components
             }
         }
 
-        protected abstract TValue GetValue(TObject obj);
-        protected abstract void SetValue(TObject obj, TValue value);
+        protected abstract TValue GetValue(UnityEngine.Object obj);
+        protected abstract void SetValue(UnityEngine.Object obj, TValue value);
         protected abstract TValue GetRelativeValue(TValue start, TValue end);
     }
 }
