@@ -29,7 +29,12 @@ namespace LitMotion.Sequences
         public virtual void ResetComponent()
         {
             enabled = true;
-            displayName = GetType().Name;
+            displayName = GetDefaultDisplayName();
+        }
+
+        protected virtual string GetDefaultDisplayName()
+        {
+            return GetType().Name;
         }
 
         internal void InternalConfigure(ISequencePropertyTable propertyTable, SequenceItemBuilder builder)
