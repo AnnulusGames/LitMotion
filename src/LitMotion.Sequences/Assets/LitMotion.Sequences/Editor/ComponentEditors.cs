@@ -29,4 +29,13 @@ namespace LitMotion.Sequences.Editor
             return EditorGUIUtility.IconContent("Material Icon");
         }
     }
+
+    [CustomEditor(typeof(SpriteRendererColorComponent))]
+    internal sealed class SpriteRendererColorComponentEditor : SequenceComponentBaseEditor
+    {
+        protected override GUIContent GetIconContent()
+        {
+            return EditorGUIUtility.IconContent("SpriteRenderer Icon");
+        }
+    }
 }
