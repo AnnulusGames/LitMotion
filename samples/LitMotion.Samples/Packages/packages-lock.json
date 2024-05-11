@@ -9,7 +9,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.0"
       },
-      "hash": "da0555ceddaa60449917658e21358d9a9ca45433"
+      "hash": "b2bcc26e4d8a708fa24c493253785363424fd291"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
