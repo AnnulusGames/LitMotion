@@ -18,6 +18,8 @@ LMotion.Create(0f, 10f, 2f)
 
 Specifies the easing function to apply to the motion.
 
+You can also specify AnimtaionCurve for this. (`Ease.CustomAnimationCurve` is automatically set when using `WithEase(AnimationCurve)`. Do not specify this option with `WithEase(Ease)`.)
+
 #### WithDelay
 
 Delay the start of a motion by a specified number of seconds. You can adjust the behavior by specifying `DelayType` and `SkipValuesDuringDelay`.
@@ -86,6 +88,14 @@ Specifies the Scheduler used for motion playback.
 | MotionScheduler.TimeUpdateRealtime | Updates at the TimeUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
 | MotionScheduler.Manual | Updates manually. For details, see [Updating Motion Manually](updating-motion-manually.md).  |
 | EditorMotionScheduler.Update (LitMotion.Editor) | Updates at the EditorApplication.update timing. This Scheduler is limited to the editor. |
+
+#### WithCancelOnError
+
+Cancels the motion when an uncaught exception occurs within the motion's `Bind` function. It is set to false by default.
+
+#### WithBindOnSchedule
+
+Execute Bind processing at the timing of scheduling the motion. It is set to false by default.
 
 #### WithRoundingMode (int)
 
