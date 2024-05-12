@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-    "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
-    "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
+    "com.cysharp.r3": "1.1.11",
+    "com.cysharp.unitask": "2.5.4",
+    "com.cysharp.zstring": "2.6.0",
+    "com.neuecc.unirx": "7.1.0",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.feature.development": "1.0.2",
     "com.unity.ide.visualstudio": "2.0.22",
@@ -14,7 +14,7 @@
     "com.unity.visualeffectgraph": "16.0.4",
     "com.unity.visualscripting": "1.8.0",
     "org.nuget.microsoft.bcl.timeprovider": "8.0.1",
-    "org.nuget.r3": "1.1.10",
+    "org.nuget.r3": "1.1.11",
     "org.nuget.system.componentmodel.annotations": "5.0.0",
     "org.nuget.system.threading.channels": "8.0.0",
     "com.unity.modules.accessibility": "1.0.0",
@@ -56,6 +56,14 @@
       "url": "https://unitynuget-registry.azurewebsites.net",
       "scopes": [
         "org.nuget"
+      ]
+    },
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.cysharp",
+        "com.neuecc"
       ]
     }
   ]
