@@ -36,6 +36,7 @@ namespace LitMotion
             buffer.AnimationCurve = default;
             buffer.Scheduler = default;
             buffer.IsPreserved = default;
+            buffer.BindOnSchedule = default;
 
             if (buffer.Version != ushort.MaxValue)
             {
@@ -47,6 +48,7 @@ namespace LitMotion
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
         public bool IsPreserved;
+        public bool BindOnSchedule;
 
         public MotionData<TValue, TOptions> Data = MotionData<TValue, TOptions>.Default;
         public MotionCallbackData CallbackData = MotionCallbackData.Default;
@@ -188,6 +190,19 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Bind values when scheduling the motion.
+        /// </summary>
+        /// <param name="bindOnSchedule">Whether to bind on sheduling</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithBindOnSchedule(bool bindOnSchedule = true)
+        {
+            CheckBuffer();
+            buffer.BindOnSchedule = bindOnSchedule;
+            return this;
+        }
+
+        /// <summary>
         /// Specifies the scheduler that schedule the motion.
         /// </summary>
         /// <param name="scheduler">Scheduler</param>
@@ -299,6 +314,22 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal MotionHandle Schedule(IMotionScheduler scheduler, ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
         {
+            if (buffer.BindOnSchedule && callbackData.UpdateAction != null)
+            {
+                callbackData.InvokeUnsafe(
+                    default(TAdapter).Evaluate(
+                        ref data.StartValue,
+                        ref data.EndValue,
+                        ref data.Options,
+                        new() { Progress = data.Core.Ease switch
+                            {
+                                Ease.CustomAnimationCurve => data.Core.AnimationCurve.Evaluate(0f),
+                                _ => EaseUtility.Evaluate(0f, data.Core.Ease)
+                            }
+                        }
+                ));
+            }
+
             MotionHandle handle;
 
             if (scheduler == null)
