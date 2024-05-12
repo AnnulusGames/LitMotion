@@ -9,6 +9,8 @@ namespace LitMotionSamples
         [SerializeField] Transform target1;
         [SerializeField] Transform target2;
         [SerializeField] Transform target3;
+        [SerializeField] Transform target4;
+        [SerializeField] AnimationCurve target4Curve;
 
         void Start()
         {
@@ -23,6 +25,10 @@ namespace LitMotionSamples
             LMotion.Create(-5f, 5f, 3f)
                 .WithEase(Ease.OutBounce)
                 .BindToPositionX(target3);
+
+            LMotion.Create(-5f, 5f, 3f)
+                .WithEase(target4Curve)
+                .BindToPositionX(target4);
         }
     }
 }
