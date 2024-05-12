@@ -1,34 +1,34 @@
 {
   "dependencies": {
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
+      "version": "1.1.11",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "f0d7a6ee7f8a31dfeef3e25f120d4e2e55ecbdbe"
+      "url": "https://package.openupm.com"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "version": "2.5.4",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
+      "url": "https://package.openupm.com"
     },
     "com.cysharp.zstring": {
-      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
+      "version": "2.6.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "05a181d7aa516e5fd8b6b877b8bc0891c190a4ae"
+      "url": "https://package.openupm.com"
     },
     "com.neuecc.unirx": {
-      "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
+      "version": "7.1.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "284d5c50d3f1ddd9fa7df3d382ea904732a9c2ff"
+      "url": "https://package.openupm.com"
     },
     "com.unity.burst": {
       "version": "1.8.11",
@@ -285,7 +285,7 @@
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.r3": {
-      "version": "1.1.10",
+      "version": "1.1.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {
