@@ -1,0 +1,20 @@
+{
+    "name": "com.annulusgames.lit-motion.sequences",
+    "version": "1.0.0",
+    "displayName": "LitMotion.Sequences",
+    "description": "An extension package that adds the sequence function to synthesize multiple motions to LitMotion.",
+    "keywords": [
+        "dots",
+        "tween",
+        "sequence"
+    ],
+    "dependencies": {
+        "com.unity.burst": "1.6.0",
+        "com.unity.collections": "1.5.1",
+        "com.unity.mathematics": "1.0.0",
+        "com.annulusgames.lit-motion": "1.8.0"
+    },
+    "author": {
+        "name": "Annulus Games"
+    }
+}
