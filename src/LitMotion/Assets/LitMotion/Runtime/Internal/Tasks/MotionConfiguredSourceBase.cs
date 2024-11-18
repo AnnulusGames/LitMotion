@@ -16,7 +16,7 @@ namespace LitMotion
 
         MotionHandle motionHandle;
         CancelBehaviour cancelBehaviour;
-        bool linkToMotionCancellation;
+        bool cancelAwaitOnMotionCanceled;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
 
@@ -32,7 +32,7 @@ namespace LitMotion
         {
             originalCancelAction?.Invoke();
 
-            if ((cancellationToken.IsCancellationRequested && CancelAwait) || linkToMotionCancellation)
+            if ((cancellationToken.IsCancellationRequested && CancelAwait) || cancelAwaitOnMotionCanceled)
             {
                 SetTaskCanceled(cancellationToken);
             }
@@ -71,11 +71,11 @@ namespace LitMotion
             }
         }
 
-        protected void Initialize(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken)
+        protected void Initialize(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             this.motionHandle = motionHandle;
             this.cancelBehaviour = cancelBehaviour;
-            this.linkToMotionCancellation = linkToMotionCancellation;
+            this.cancelAwaitOnMotionCanceled = cancelAwaitOnMotionCanceled;
             this.cancellationToken = cancellationToken;
 
             ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
@@ -132,7 +132,7 @@ namespace LitMotion
         {
             motionHandle = default;
             cancelBehaviour = default;
-            linkToMotionCancellation = default;
+            cancelAwaitOnMotionCanceled = default;
             cancellationToken = default;
             originalCompleteAction = default;
             originalCancelAction = default;

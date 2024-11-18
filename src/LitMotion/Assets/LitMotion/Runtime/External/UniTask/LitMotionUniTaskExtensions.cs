@@ -39,13 +39,13 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <param name="cancelBehaviour">Behavior when canceling</param>
-        /// <param name="linkToMotionCancellation">Whether to link MotionHandle.Cancel() to task cancellation</param>
+        /// <param name="cancelAwaitOnMotionCanceled">Whether to link MotionHandle.Cancel() to task cancellation</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken = default)
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, linkToMotionCancellation, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancelAwaitOnMotionCanceled, cancellationToken, out var token), token);
         }
 
         /// <summary>
