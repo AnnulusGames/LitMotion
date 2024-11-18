@@ -15,15 +15,13 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
-        CancelBehaviour cancelBehaviour;
+        MotionCanceledBehavior cancelBehavior;
         bool cancelAwaitOnMotionCanceled;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
 
         Action originalCompleteAction;
         Action originalCancelAction;
-
-        bool CancelAwait => cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait;
 
         protected abstract void SetTaskCanceled(CancellationToken cancellationToken);
         protected abstract void SetTaskCompleted();
@@ -32,7 +30,7 @@ namespace LitMotion
         {
             originalCancelAction?.Invoke();
 
-            if ((cancellationToken.IsCancellationRequested && CancelAwait) || cancelAwaitOnMotionCanceled)
+            if (cancellationToken.IsCancellationRequested || cancelAwaitOnMotionCanceled)
             {
                 SetTaskCanceled(cancellationToken);
             }
@@ -46,7 +44,7 @@ namespace LitMotion
         {
             originalCompleteAction?.Invoke();
 
-            if (cancellationToken.IsCancellationRequested && CancelAwait)
+            if (cancellationToken.IsCancellationRequested)
             {
                 SetTaskCanceled(cancellationToken);
             }
@@ -56,25 +54,23 @@ namespace LitMotion
             }
         }
 
-        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, CancelBehaviour cancelBehaviour)
+        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior)
         {
-            switch (cancelBehaviour)
+            switch (cancelBehavior)
             {
-                case CancelBehaviour.Cancel:
-                case CancelBehaviour.CancelAndCancelAwait:
+                case MotionCanceledBehavior.Cancel:
                     motionHandle.Cancel();
                     break;
-                case CancelBehaviour.Complete:
-                case CancelBehaviour.CompleteAndCancelAwait:
+                case MotionCanceledBehavior.Complete:
                     motionHandle.Complete();
                     break;
             }
         }
 
-        protected void Initialize(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
+        protected void Initialize(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             this.motionHandle = motionHandle;
-            this.cancelBehaviour = cancelBehaviour;
+            this.cancelBehavior = cancelBehavior;
             this.cancelAwaitOnMotionCanceled = cancelAwaitOnMotionCanceled;
             this.cancellationToken = cancellationToken;
 
@@ -102,28 +98,19 @@ namespace LitMotion
 
                     source.RestoreOriginalCallback();
 
-                    switch (source.cancelBehaviour)
+                    switch (source.cancelBehavior)
                     {
                         default:
                             break;
-                        case CancelBehaviour.CancelAndCancelAwait:
-                        case CancelBehaviour.Cancel:
+                        case MotionCanceledBehavior.Cancel:
                             source.motionHandle.Cancel();
                             break;
-                        case CancelBehaviour.CompleteAndCancelAwait:
-                        case CancelBehaviour.Complete:
+                        case MotionCanceledBehavior.Complete:
                             source.motionHandle.Complete();
                             break;
                     }
 
-                    if (source.CancelAwait)
-                    {
-                        source.SetTaskCanceled(source.cancellationToken);
-                    }
-                    else
-                    {
-                        source.SetTaskCompleted();
-                    }
+                    source.SetTaskCanceled(source.cancellationToken);
                 }, this);
             }
         }
@@ -131,7 +118,7 @@ namespace LitMotion
         protected void ResetFields()
         {
             motionHandle = default;
-            cancelBehaviour = default;
+            cancelBehavior = default;
             cancelAwaitOnMotionCanceled = default;
             cancellationToken = default;
             originalCompleteAction = default;

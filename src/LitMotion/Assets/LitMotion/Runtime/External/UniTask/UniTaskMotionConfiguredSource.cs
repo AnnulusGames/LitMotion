@@ -20,11 +20,11 @@ namespace LitMotion
 
         UniTaskCompletionSourceCore<AsyncUnit> core;
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
+                OnCanceledTokenReceived(motionHandle, cancelBehavior);
                 return AutoResetUniTaskCompletionSource.CreateFromCanceled(cancellationToken, out token);
             }
 
@@ -33,7 +33,7 @@ namespace LitMotion
                 result = new UniTaskMotionConfiguredSource();
             }
 
-            result.Initialize(motionHandle, cancelBehaviour, cancelAwaitOnMotionCanceled, cancellationToken);
+            result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);
 
             TaskTracker.TrackActiveTask(result, 3);
 

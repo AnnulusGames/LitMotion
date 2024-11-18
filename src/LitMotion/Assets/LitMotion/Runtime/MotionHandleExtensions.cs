@@ -158,7 +158,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, true, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, MotionCanceledBehavior.Cancel, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -166,13 +166,13 @@ namespace LitMotion
         /// Convert motion handle to ValueTask.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        public static ValueTask ToValueTask(this MotionHandle handle, MotionCanceledBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, true, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -180,14 +180,14 @@ namespace LitMotion
         /// Convert motion handle to ValueTask.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
         /// <param name="cancelAwaitOnMotionCanceled">Whether to link MotionHandle.Cancel() to task cancellation</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
+        public static ValueTask ToValueTask(this MotionHandle handle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -201,34 +201,34 @@ namespace LitMotion
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, true, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, MotionCanceledBehavior.Cancel, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
         /// Convert motion handle to Awaitable.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        public static Awaitable ToAwaitable(this MotionHandle handle, MotionCanceledBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, true, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
         /// Convert motion handle to Awaitable.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
         /// <param name="cancelAwaitOnMotionCanceled">Whether to link MotionHandle.Cancel() to task cancellation</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
+        public static Awaitable ToAwaitable(this MotionHandle handle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
         }
 #endif
 
