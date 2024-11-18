@@ -96,7 +96,7 @@ namespace LitMotion
                     var source = (MotionConfiguredSourceBase)x;
                     if (!source.motionHandle.IsActive()) return;
 
-                    source.RestoreOriginalCallback();
+                    source.RestoreOriginalCallback(false);
 
                     switch (source.cancelBehavior)
                     {
@@ -125,8 +125,10 @@ namespace LitMotion
             originalCancelAction = default;
         }
 
-        protected void RestoreOriginalCallback()
+        protected void RestoreOriginalCallback(bool checkIsActive = true)
         {
+            if (checkIsActive && !motionHandle.IsActive()) return;
+
             ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
             callbackData.OnCancelAction = originalCancelAction;
             callbackData.OnCompleteAction = originalCompleteAction;
