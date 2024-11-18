@@ -41,7 +41,7 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle.ToUniTask(CancelBehaviour.CompleteAndCancelAwait, source.Token);
+                await handle.ToUniTask(MotionCancelBehavior.Complete, source.Token);
             }
             catch (OperationCanceledException)
             {
@@ -68,19 +68,13 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle.ToUniTask(CancelBehaviour.CancelAwait, source.Token);
+                await handle.ToUniTask(MotionCancelBehavior.Cancel, source.Token);
             }
             catch (OperationCanceledException)
             {
-                Assert.IsTrue(handle.IsActive());
-                Assert.IsFalse(canceled);
-                Assert.IsFalse(completed);
-
-                await UniTask.WaitForSeconds(1f);
-
                 Assert.IsFalse(handle.IsActive());
-                Assert.IsFalse(canceled);
-                Assert.IsTrue(completed);
+                Assert.IsTrue(canceled);
+                Assert.IsFalse(completed);
 
                 return;
             }
@@ -132,6 +126,22 @@ namespace LitMotion.Tests.Runtime
                 return;
             }
             Assert.Fail();
+        });
+
+        [UnityTest]
+        public IEnumerator Test_CancelWhileAwait_WithoutCancelAwaitOnMotionCanceled() => UniTask.ToCoroutine(async () =>
+        {
+            var handle = LMotion.Create(0f, 10f, 1f).BindToUnityLogger();
+            DelayedCall(0.2f, () => handle.Cancel()).Forget();
+            try
+            {
+                await handle.ToUniTask(MotionCancelBehavior.Cancel, false);
+            }
+            catch (OperationCanceledException)
+            {
+                Assert.Fail();
+                return;
+            }
         });
 
         [UnityTest]

@@ -3,11 +3,9 @@ namespace LitMotion
     /// <summary>
     /// Specifies the behavior when await is canceled.
     /// </summary>
-    public enum CancelBehaviour
+    public enum MotionCancelBehavior : byte
     {
-        CancelAndCancelAwait,
-        CompleteAndCancelAwait,
-        CancelAwait,
+        None,
         Cancel,
         Complete
     }
