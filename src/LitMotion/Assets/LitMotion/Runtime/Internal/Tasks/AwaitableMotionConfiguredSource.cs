@@ -44,7 +44,7 @@ namespace LitMotion
 
         AwaitableMotionConfiguredSource() : base() { }
 
-        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken)
+        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -53,7 +53,7 @@ namespace LitMotion
             }
 
             var result = new AwaitableMotionConfiguredSource();
-            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
+            result.Initialize(motionHandle, cancelBehaviour, linkToMotionCancellation, cancellationToken);
             return result;
         }
 

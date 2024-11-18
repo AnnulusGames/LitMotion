@@ -158,7 +158,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -172,7 +172,22 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token);
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, true, cancellationToken, out var token);
+            return new ValueTask(source, token);
+        }
+
+        /// <summary>
+        /// Convert motion handle to ValueTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="linkToMotionCancellation">Whether to link MotionHandle.Cancel() to task cancellation</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static ValueTask ToValueTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return default;
+            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehaviour, linkToMotionCancellation, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -186,7 +201,7 @@ namespace LitMotion
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
@@ -199,7 +214,21 @@ namespace LitMotion
         public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken).Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, true, cancellationToken).Awaitable;
+        }
+
+        /// <summary>
+        /// Convert motion handle to Awaitable.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="linkToMotionCancellation">Whether to link MotionHandle.Cancel() to task cancellation</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static Awaitable ToAwaitable(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
+            return AwaitableMotionConfiguredSource.Create(handle, cancelBehaviour, linkToMotionCancellation, cancellationToken).Awaitable;
         }
 #endif
 

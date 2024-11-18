@@ -18,7 +18,7 @@ namespace LitMotion
         public static UniTask ToUniTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, true, cancellationToken, out var token), token);
         }
 
         /// <summary>
@@ -31,7 +31,21 @@ namespace LitMotion
         public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, true, cancellationToken, out var token), token);
+        }
+
+        /// <summary>
+        /// Convert motion handle to UniTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="linkToMotionCancellation">Whether to link MotionHandle.Cancel() to task cancellation</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, bool linkToMotionCancellation, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return UniTask.CompletedTask;
+            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, linkToMotionCancellation, cancellationToken, out var token), token);
         }
 
         /// <summary>
