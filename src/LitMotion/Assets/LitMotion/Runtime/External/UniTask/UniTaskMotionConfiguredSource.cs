@@ -20,7 +20,7 @@ namespace LitMotion
 
         UniTaskCompletionSourceCore<AsyncUnit> core;
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {

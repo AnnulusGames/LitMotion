@@ -31,7 +31,7 @@ namespace LitMotion
 
         ValueTaskMotionConfiguredSource() : base() { }
 
-        public static IValueTaskSource Create(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
+        public static IValueTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {

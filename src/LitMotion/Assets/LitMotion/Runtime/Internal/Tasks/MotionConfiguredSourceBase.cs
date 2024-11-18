@@ -15,7 +15,7 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
-        MotionCanceledBehavior cancelBehavior;
+        MotionCancelBehavior cancelBehavior;
         bool cancelAwaitOnMotionCanceled;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
@@ -54,20 +54,20 @@ namespace LitMotion
             }
         }
 
-        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior)
+        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior)
         {
             switch (cancelBehavior)
             {
-                case MotionCanceledBehavior.Cancel:
+                case MotionCancelBehavior.Cancel:
                     motionHandle.Cancel();
                     break;
-                case MotionCanceledBehavior.Complete:
+                case MotionCancelBehavior.Complete:
                     motionHandle.Complete();
                     break;
             }
         }
 
-        protected void Initialize(MotionHandle motionHandle, MotionCanceledBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
+        protected void Initialize(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             this.motionHandle = motionHandle;
             this.cancelBehavior = cancelBehavior;
@@ -102,10 +102,10 @@ namespace LitMotion
                     {
                         default:
                             break;
-                        case MotionCanceledBehavior.Cancel:
+                        case MotionCancelBehavior.Cancel:
                             source.motionHandle.Cancel();
                             break;
-                        case MotionCanceledBehavior.Complete:
+                        case MotionCancelBehavior.Complete:
                             source.motionHandle.Complete();
                             break;
                     }
