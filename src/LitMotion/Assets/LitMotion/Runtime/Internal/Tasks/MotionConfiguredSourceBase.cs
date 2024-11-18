@@ -19,45 +19,34 @@ namespace LitMotion
         bool linkToMotionCancellation;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
-        bool cancelAwait;
 
         Action originalCompleteAction;
         Action originalCancelAction;
+
+        bool CancelAwait => cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait;
 
         protected abstract void SetTaskCanceled(CancellationToken cancellationToken);
         protected abstract void SetTaskCompleted();
 
         protected void OnCancelCallbackDelegate()
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                if (cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait)
-                {
-                    cancelAwait = true;
-                }
-            }
-
             originalCancelAction?.Invoke();
 
-            if (linkToMotionCancellation)
+            if ((cancellationToken.IsCancellationRequested && CancelAwait) || linkToMotionCancellation)
             {
                 SetTaskCanceled(cancellationToken);
+            }
+            else
+            {
+                SetTaskCompleted();
             }
         }
 
         protected void OnCompleteCallbackDelegate()
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                if (cancelBehaviour is CancelBehaviour.CancelAndCancelAwait or CancelBehaviour.CompleteAndCancelAwait or CancelBehaviour.CancelAwait)
-                {
-                    cancelAwait = true;
-                }
-            }
-
             originalCompleteAction?.Invoke();
 
-            if (cancelAwait)
+            if (cancellationToken.IsCancellationRequested && CancelAwait)
             {
                 SetTaskCanceled(cancellationToken);
             }
@@ -109,27 +98,31 @@ namespace LitMotion
                 cancellationRegistration = RegisterWithoutCaptureExecutionContext(cancellationToken, static x =>
                 {
                     var source = (MotionConfiguredSourceBase)x;
+                    if (!source.motionHandle.IsActive()) return;
+
+                    source.RestoreOriginalCallback();
+
                     switch (source.cancelBehaviour)
                     {
                         default:
-                        case CancelBehaviour.CancelAndCancelAwait:
-                            source.cancelAwait = true;
-                            source.motionHandle.Cancel();
                             break;
+                        case CancelBehaviour.CancelAndCancelAwait:
                         case CancelBehaviour.Cancel:
                             source.motionHandle.Cancel();
                             break;
                         case CancelBehaviour.CompleteAndCancelAwait:
-                            source.cancelAwait = true;
-                            source.motionHandle.Complete();
-                            break;
                         case CancelBehaviour.Complete:
                             source.motionHandle.Complete();
                             break;
-                        case CancelBehaviour.CancelAwait:
-                            source.RestoreOriginalCallback();
-                            source.SetTaskCanceled(source.cancellationToken);
-                            break;
+                    }
+
+                    if (source.CancelAwait)
+                    {
+                        source.SetTaskCanceled(source.cancellationToken);
+                    }
+                    else
+                    {
+                        source.SetTaskCompleted();
                     }
                 }, this);
             }
@@ -143,12 +136,10 @@ namespace LitMotion
             cancellationToken = default;
             originalCompleteAction = default;
             originalCancelAction = default;
-            cancelAwait = default;
         }
 
         protected void RestoreOriginalCallback()
         {
-            if (!motionHandle.IsActive()) return;
             ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
             callbackData.OnCancelAction = originalCancelAction;
             callbackData.OnCompleteAction = originalCompleteAction;
