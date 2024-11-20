@@ -31,7 +31,7 @@ namespace LitMotion
             buffer.Version++;
             buffer.IsPreserved = false;
             buffer.BindOnSchedule = false;
-            
+
             buffer.StartValue = default;
             buffer.EndValue = default;
             buffer.Options = default;
@@ -44,10 +44,7 @@ namespace LitMotion
             buffer.Loops = 1;
             buffer.LoopType = default;
 
-            buffer.StateCount = 0;
-            buffer.State1 = default;
-            buffer.State2 = default;
-            buffer.State3 = default;
+            buffer.State = default;
             buffer.UpdateAction = default;
             buffer.OnCompleteAction = default;
             buffer.OnCancelAction = default;
@@ -79,12 +76,9 @@ namespace LitMotion
         public int Loops = 1;
         public DelayType DelayType;
         public LoopType LoopType;
-        public byte StateCount;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
-        public object State1;
-        public object State2;
-        public object State3;
+        public object State;
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
@@ -287,43 +281,6 @@ namespace LitMotion
         }
 
         /// <summary>
-        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
-        /// </summary>
-        /// <typeparam name="TState1">Type of state</typeparam>
-        /// <typeparam name="TState2">Type of state</typeparam>
-        /// <param name="state">Motion state</param>
-        /// <param name="action">Action that handles binding</param>
-        /// <returns>Handle of the created motion data.</returns>
-        public MotionHandle BindWithState<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
-            where TState1 : class
-            where TState2 : class
-        {
-            CheckBuffer();
-            SetCallbackData(state1, state2, action);
-            return ScheduleCore();
-        }
-
-
-        /// <summary>
-        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
-        /// </summary>
-        /// <typeparam name="TState1">Type of state</typeparam>
-        /// <typeparam name="TState2">Type of state</typeparam>
-        /// <typeparam name="TState3">Type of state</typeparam>
-        /// <param name="state">Motion state</param>
-        /// <param name="action">Action that handles binding</param>
-        /// <returns>Handle of the created motion data.</returns>
-        public MotionHandle BindWithState<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
-            where TState1 : class
-            where TState2 : class
-            where TState3 : class
-        {
-            CheckBuffer();
-            SetCallbackData(state1, state2, state3, action);
-            return ScheduleCore();
-        }
-
-        /// <summary>
         /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
         /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
         /// </summary>
@@ -402,32 +359,7 @@ namespace LitMotion
         internal readonly void SetCallbackData<TState>(TState state, Action<TValue, TState> action)
             where TState : class
         {
-            buffer.StateCount = 1;
-            buffer.State1 = state;
-            buffer.UpdateAction = action;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly void SetCallbackData<TState1, TState2>(TState1 state1, TState2 state2, Action<TValue, TState1, TState2> action)
-            where TState1 : class
-            where TState2 : class
-        {
-            buffer.StateCount = 2;
-            buffer.State1 = state1;
-            buffer.State2 = state2;
-            buffer.UpdateAction = action;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly void SetCallbackData<TState1, TState2, TState3>(TState1 state1, TState2 state2, TState3 state3, Action<TValue, TState1, TState2, TState3> action)
-            where TState1 : class
-            where TState2 : class
-            where TState3 : class
-        {
-            buffer.StateCount = 3;
-            buffer.State1 = state1;
-            buffer.State2 = state2;
-            buffer.State3 = state3;
+            buffer.State = state;
             buffer.UpdateAction = action;
         }
 

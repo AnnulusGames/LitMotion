@@ -11,13 +11,10 @@ namespace LitMotion
     [StructLayout(LayoutKind.Auto)]
     public struct ManagedMotionData
     {
-        public byte StateCount;
         public bool IsCallbackRunning;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
-        public object State1;
-        public object State2;
-        public object State3;
+        public object State;
 
         public object UpdateAction;
         public Action OnCompleteAction;
@@ -26,20 +23,13 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void InvokeUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
-            switch (StateCount)
+            if (State != null)
             {
-                case 0:
-                    UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
-                    break;
-                case 1:
-                    UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State1);
-                    break;
-                case 2:
-                    UnsafeUtility.As<object, Action<TValue, object, object>>(ref UpdateAction)?.Invoke(value, State1, State2);
-                    break;
-                case 3:
-                    UnsafeUtility.As<object, Action<TValue, object, object, object>>(ref UpdateAction)?.Invoke(value, State1, State2, State3);
-                    break;
+                UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
+            }
+            else
+            {
+                UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State);
             }
         }
 
