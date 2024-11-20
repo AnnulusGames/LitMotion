@@ -23,7 +23,7 @@ namespace LitMotion.Tests.Runtime
         {
             var target = new TestClass();
             var endValue = 10f;
-            LMotion.Create(0f, endValue, 0.5f).BindWithState(target, (x, target) => 
+            LMotion.Create(0f, endValue, 0.5f).Bind(target, (x, target) =>
             {
                 target.Value = x;
             });
@@ -38,7 +38,7 @@ namespace LitMotion.Tests.Runtime
             var target2 = new TestClass();
             var target3 = new TestClass();
             var endValue = 10f;
-            LMotion.Create(0f, endValue, 0.5f).BindWithState((target1, target2, target3), (x, state) =>
+            LMotion.Create(0f, endValue, 0.5f).Bind((target1, target2, target3), (x, state) =>
             {
                 state.target1.Value = x;
                 state.target2.Value = x;

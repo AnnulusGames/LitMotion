@@ -273,7 +273,8 @@ namespace LitMotion
         /// <param name="state">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
-        public MotionHandle BindWithState<TState>(TState state, Action<TValue, TState> action) where TState : class
+        public MotionHandle Bind<TState>(TState state, Action<TValue, TState> action)
+            where TState : class
         {
             CheckBuffer();
             SetCallbackData(state, action);

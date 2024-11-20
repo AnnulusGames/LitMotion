@@ -22,7 +22,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(audioSource);
-            return builder.BindWithState(audioSource, static (x, target) =>
+            return builder.Bind(audioSource, static (x, target) =>
             {
                 target.volume = x;
             });
@@ -41,7 +41,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(audioSource);
-            return builder.BindWithState(audioSource, static (x, target) =>
+            return builder.Bind(audioSource, static (x, target) =>
             {
                 target.pitch = x;
             });
@@ -60,7 +60,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(audioMixer);
-            return builder.BindWithState((audioMixer, name), static (x, state) =>
+            return builder.Bind((audioMixer, name), static (x, state) =>
             {
                 state.audioMixer.SetFloat(state.name, x);
             });

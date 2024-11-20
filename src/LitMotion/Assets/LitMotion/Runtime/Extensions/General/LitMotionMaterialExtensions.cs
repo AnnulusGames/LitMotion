@@ -20,7 +20,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState((material, name), static (x, state) =>
+            return builder.Bind((material, name), static (x, state) =>
             {
                 state.material.SetFloat(state.name, x);
             });
@@ -39,7 +39,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, (x, m) =>
             {
                 m.SetFloat(nameID, x);
             });
@@ -58,7 +58,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState((material, name), static (x, state) =>
+            return builder.Bind((material, name), static (x, state) =>
             {
                 state.material.SetInteger(state.name, x);
             });
@@ -77,7 +77,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, (x, m) =>
             {
                 m.SetInteger(nameID, x);
             });
@@ -96,7 +96,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState((material, name), static (x, state) =>
+            return builder.Bind((material, name), static (x, state) =>
             {
                 state.material.SetColor(state.name, x);
             });
@@ -115,7 +115,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, (x, m) =>
             {
                 m.SetColor(nameID, x);
             });

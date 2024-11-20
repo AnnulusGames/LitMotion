@@ -41,7 +41,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(reactiveProperty);
-            return builder.BindWithState(reactiveProperty, static (x, target) =>
+            return builder.Bind(reactiveProperty, static (x, target) =>
             {
                 target.Value = x;
             });
