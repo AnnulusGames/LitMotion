@@ -26,7 +26,7 @@ namespace LitMotion
             builder.SetCallbackData(subject, static (x, subject) => subject.OnNext(x));
             builder.buffer.OnCompleteAction += () => subject.OnCompleted();
             builder.buffer.OnCancelAction += () => subject.OnCompleted();
-            builder.ScheduleCore();
+            builder.ScheduleMotion();
             return subject;
         }
 

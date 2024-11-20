@@ -251,7 +251,7 @@ namespace LitMotion
         public MotionHandle RunWithoutBinding()
         {
             CheckBuffer();
-            return ScheduleCore();
+            return ScheduleMotion();
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace LitMotion
         {
             CheckBuffer();
             SetCallbackData(action);
-            return ScheduleCore();
+            return ScheduleMotion();
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace LitMotion
         {
             CheckBuffer();
             SetCallbackData(state, action);
-            return ScheduleCore();
+            return ScheduleMotion();
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MotionHandle ScheduleCore()
+        internal MotionHandle ScheduleMotion()
         {
             MotionHandle handle;
 
