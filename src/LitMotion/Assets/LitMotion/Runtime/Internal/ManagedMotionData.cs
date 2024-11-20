@@ -23,7 +23,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
-            if (State != null)
+            if (State == null)
             {
                 UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
             }
