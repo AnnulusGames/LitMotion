@@ -74,11 +74,11 @@ namespace LitMotion
             this.cancelAwaitOnMotionCanceled = cancelAwaitOnMotionCanceled;
             this.cancellationToken = cancellationToken;
 
-            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
-            originalCancelAction = callbackData.OnCancelAction;
-            originalCompleteAction = callbackData.OnCompleteAction;
-            callbackData.OnCancelAction = onCancelCallbackDelegate;
-            callbackData.OnCompleteAction = onCompleteCallbackDelegate;
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle);
+            originalCancelAction = managedData.OnCancelAction;
+            originalCompleteAction = managedData.OnCompleteAction;
+            managedData.OnCancelAction = onCancelCallbackDelegate;
+            managedData.OnCompleteAction = onCompleteCallbackDelegate;
 
             if (originalCancelAction == onCancelCallbackDelegate)
             {
@@ -129,9 +129,9 @@ namespace LitMotion
         {
             if (checkIsActive && !motionHandle.IsActive()) return;
 
-            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
-            callbackData.OnCancelAction = originalCancelAction;
-            callbackData.OnCompleteAction = originalCompleteAction;
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle);
+            managedData.OnCancelAction = originalCancelAction;
+            managedData.OnCompleteAction = originalCompleteAction;
         }
 
         protected void DisposeRegistration()

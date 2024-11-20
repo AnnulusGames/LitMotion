@@ -1,13 +1,15 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 
 namespace LitMotion
 {
     /// <summary>
-    /// A structure that holds motion callbacks.
+    /// A structure that holds motion managed data.
     /// </summary>
-    public struct MotionCallbackData
+    [StructLayout(LayoutKind.Auto)]
+    public struct ManagedMotionData
     {
         public byte StateCount;
         public bool IsCallbackRunning;
@@ -41,7 +43,7 @@ namespace LitMotion
             }
         }
 
-        public readonly static MotionCallbackData Default = new()
+        public readonly static ManagedMotionData Default = new()
         {
             SkipValuesDuringDelay = true,
         };

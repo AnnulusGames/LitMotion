@@ -18,7 +18,7 @@ namespace LitMotion
         public static void AddTracking(MotionHandle motionHandle, IMotionScheduler scheduler, int skipFrames = 3)
         {
             var state = TrackingState.Create();
-            (state.ValueType, state.OptionsType, state.AdapterType) = MotionStorageManager.GetMotionType(motionHandle);
+            (state.ValueType, state.OptionsType, state.AdapterType) = MotionManager.GetMotionType(motionHandle);
             state.Scheduler = scheduler;
             state.CreationTime = DateTime.UtcNow;
 #if UNITY_EDITOR
@@ -27,11 +27,11 @@ namespace LitMotion
 
             if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
-            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(motionHandle);
-            state.OriginalOnCompleteCallback = callbackData.OnCompleteAction;
-            callbackData.OnCompleteAction = state.OnCompleteDelegate;
-            state.OriginalOnCancelCallback = callbackData.OnCancelAction;
-            callbackData.OnCancelAction = state.OnCancelDelegate;
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle);
+            state.OriginalOnCompleteCallback = managedData.OnCompleteAction;
+            managedData.OnCompleteAction = state.OnCompleteDelegate;
+            state.OriginalOnCancelCallback = managedData.OnCancelAction;
+            managedData.OnCancelAction = state.OnCancelDelegate;
 
             trackings.Add(state);
         }

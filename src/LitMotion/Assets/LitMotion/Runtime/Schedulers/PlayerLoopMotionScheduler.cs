@@ -42,23 +42,24 @@ namespace LitMotion
             }
         }
 
-        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
+        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            data.Core.TimeKind = timeKind;
+            builder.buffer.TimeKind = timeKind;
+
 #if UNITY_EDITOR
             if (EditorApplication.isPlaying)
             {
-                return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, playerLoopTiming);
+                return MotionDispatcher.Schedule(ref builder, playerLoopTiming);
             }
             else
             {
-                return EditorMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
+                return EditorMotionDispatcher.Schedule(ref builder);
             }
 #else
-            return MotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData, playerLoopTiming);
+            return MotionDispatcher.Schedule(ref builder, playerLoopTiming);
 #endif
         }
     }
