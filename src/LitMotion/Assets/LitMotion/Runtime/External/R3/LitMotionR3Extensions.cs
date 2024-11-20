@@ -20,12 +20,9 @@ namespace LitMotion
         {
             var subject = new Subject<TValue>();
             builder.SetCallbackData(subject, static (x, subject) => subject.OnNext(x));
-            builder.buffer.CallbackData.OnCompleteAction += () => subject.OnCompleted();
-            builder.buffer.CallbackData.OnCancelAction += () => subject.OnCompleted();
-            var scheduler = builder.buffer.Scheduler;
-            builder.SetMotionData();
-
-            builder.Schedule(scheduler, ref builder.buffer.Data, ref builder.buffer.CallbackData);
+            builder.buffer.OnCompleteAction += () => subject.OnCompleted();
+            builder.buffer.OnCancelAction += () => subject.OnCompleted();
+            builder.ScheduleCore();
             return subject;
         }
 

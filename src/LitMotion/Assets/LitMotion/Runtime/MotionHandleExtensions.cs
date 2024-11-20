@@ -18,7 +18,7 @@ namespace LitMotion
         /// <returns>True if motion is active, otherwise false.</returns>
         public static bool IsActive(this MotionHandle handle)
         {
-            return MotionStorageManager.IsActive(handle);
+            return MotionManager.IsActive(handle);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace LitMotion
         /// <param name="handle">This motion handle</param>
         public static void Complete(this MotionHandle handle)
         {
-            MotionStorageManager.CompleteMotion(handle);
+            MotionManager.Complete(handle);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace LitMotion
         /// <param name="handle">This motion handle</param>
         public static void Cancel(this MotionHandle handle)
         {
-            MotionStorageManager.CancelMotion(handle);
+            MotionManager.Cancel(handle);
         }
 
         /// <summary>

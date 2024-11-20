@@ -29,12 +29,12 @@ namespace LitMotion
         {
             get
             {
-                return MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed;
+                return MotionManager.GetDataRef(this).PlaybackSpeed;
             }
             set
             {
                 if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
-                MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed = value;
+                MotionManager.GetDataRef(this).PlaybackSpeed = value;
             }
         }
 

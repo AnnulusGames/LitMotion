@@ -4,12 +4,12 @@ namespace LitMotion
     {
         public double Time => ManualMotionDispatcher.Time;
 
-        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
+        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            return ManualMotionDispatcher.Schedule<TValue, TOptions, TAdapter>(data, callbackData);
+            return ManualMotionDispatcher.Schedule(ref builder);
         }
     }
 }
