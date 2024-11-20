@@ -22,7 +22,7 @@ namespace LitMotion
             builder.SetCallbackData(subject, static (x, subject) => subject.OnNext(x));
             builder.buffer.OnCompleteAction += () => subject.OnCompleted();
             builder.buffer.OnCancelAction += () => subject.OnCompleted();
-            builder.ScheduleCore();
+            builder.ScheduleMotion();
             return subject;
         }
 
@@ -41,7 +41,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(reactiveProperty);
-            return builder.BindWithState(reactiveProperty, static (x, target) =>
+            return builder.Bind(reactiveProperty, static (x, target) =>
             {
                 target.Value = x;
             });

@@ -10,6 +10,22 @@ namespace LitMotion
     public static class MotionBuilderExtensions
     {
         /// <summary>
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
+        /// </summary>
+        /// <typeparam name="TState">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle Bind<TValue, TOptions, TAdapter, TState>(this MotionBuilder<TValue, TOptions, TAdapter> builder, TState state, Action<TValue, TState> action)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+            where TState : struct
+        {
+            return builder.Bind(new ActionWithState<TValue, TState>(state, action), (x, state) => state.Invoke(x));
+        }
+
+        /// <summary>
         /// Create a motion data and bind it to IProgress
         /// </summary>
         /// <typeparam name="TValue">The type of value to animate</typeparam>
@@ -24,7 +40,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(progress);
-            return builder.BindWithState(progress, static (x, progress) => progress.Report(x));
+            return builder.Bind(progress, static (x, progress) => progress.Report(x));
         }
 
         /// <summary>
@@ -57,7 +73,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(logger);
-            return builder.BindWithState(logger, static (x, logger) => logger.Log(x));
+            return builder.Bind(logger, static (x, logger) => logger.Log(x));
         }
 
         /// <summary>

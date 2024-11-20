@@ -27,7 +27,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.fontSize = x;
             });
@@ -46,7 +46,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.maxVisibleCharacters = x;
             });
@@ -65,7 +65,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.maxVisibleLines = x;
             });
@@ -84,7 +84,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.maxVisibleWords = x;
             });
@@ -103,7 +103,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.color = x;
             });
@@ -122,7 +122,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var c = target.color;
                 c.r = x;
@@ -143,7 +143,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var c = target.color;
                 c.g = x;
@@ -164,7 +164,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var c = target.color;
                 c.b = x;
@@ -185,7 +185,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var c = target.color;
                 c.a = x;
@@ -209,7 +209,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var enumerator = x.GetEnumerator();
                 var length = 0;
@@ -239,7 +239,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var enumerator = x.GetEnumerator();
                 var length = 0;
@@ -269,7 +269,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var enumerator = x.GetEnumerator();
                 var length = 0;
@@ -299,7 +299,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var enumerator = x.GetEnumerator();
                 var length = 0;
@@ -329,7 +329,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 var enumerator = x.GetEnumerator();
                 var length = 0;
@@ -358,7 +358,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
 
                 var buffer = ArrayPool<char>.Shared.Rent(128);
@@ -383,12 +383,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }
@@ -408,7 +408,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
 
                 var buffer = ArrayPool<char>.Shared.Rent(128);
@@ -433,12 +433,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }
@@ -459,7 +459,7 @@ namespace LitMotion.Extensions
         {
             const string format = "{0}";
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
                 target.SetTextFormat(format, x);
@@ -483,12 +483,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }
@@ -510,7 +510,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].color = x;
             });
@@ -536,7 +536,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].color.r = x;
             });
@@ -562,7 +562,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].color.g = x;
             });
@@ -588,7 +588,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].color.b = x;
             });
@@ -614,7 +614,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].color.a = x;
             });
@@ -640,7 +640,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].position = x;
             });
@@ -666,7 +666,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].position.x = x;
             });
@@ -692,7 +692,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].position.y = x;
             });
@@ -718,7 +718,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].position.z = x;
             });
@@ -744,7 +744,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].rotation = x;
             });
@@ -770,7 +770,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].rotation = Quaternion.Euler(x);
             });
@@ -796,7 +796,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.x = x;
@@ -824,7 +824,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.y = x;
@@ -852,7 +852,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
                 eulerAngles.z = x;
@@ -880,7 +880,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].scale = x;
             });
@@ -906,7 +906,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].scale.x = x;
             });
@@ -932,7 +932,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].scale.y = x;
             });
@@ -958,7 +958,7 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.BindWithState(animator, (x, target) =>
+            var handle = builder.Bind(animator, (x, target) =>
             {
                 animator.charInfoArray[charIndex].scale.z = x;
             });

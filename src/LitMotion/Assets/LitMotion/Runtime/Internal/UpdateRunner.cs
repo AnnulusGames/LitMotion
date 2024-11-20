@@ -68,7 +68,7 @@ namespace LitMotion
                     {
                         try
                         {
-                            managedData.InvokeUnsafe(outputPtr[i]);
+                            managedData.UpdateUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
@@ -84,7 +84,7 @@ namespace LitMotion
                     {
                         try
                         {
-                            managedData.InvokeUnsafe(outputPtr[i]);
+                            managedData.UpdateUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
