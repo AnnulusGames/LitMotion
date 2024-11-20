@@ -21,7 +21,7 @@ namespace LitMotion
         public Action OnCancelAction;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void InvokeUnsafe<TValue>(in TValue value) where TValue : unmanaged
+        public void UpdateUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
             if (State != null)
             {
@@ -30,6 +30,19 @@ namespace LitMotion
             else
             {
                 UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void InvokeCancel()
+        {
+            try
+            {
+                OnCancelAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
         }
 

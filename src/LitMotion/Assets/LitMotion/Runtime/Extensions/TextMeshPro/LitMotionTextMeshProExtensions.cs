@@ -383,12 +383,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.BindWithState((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }
@@ -433,12 +433,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.BindWithState((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }
@@ -483,12 +483,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.BindWithState((text, format), static (x, state) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.SetTextFormat(format, x);
+                state.text.SetTextFormat(state.format, x);
 #else
-                target.text = string.Format(format, x);
+                state.text.text = string.Format(state.format, x);
 #endif
             });
         }

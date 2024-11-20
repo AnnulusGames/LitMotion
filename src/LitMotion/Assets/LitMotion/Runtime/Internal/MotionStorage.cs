@@ -110,7 +110,7 @@ namespace LitMotion
 
             if (buffer.BindOnSchedule && buffer.UpdateAction != null)
             {
-                managedDataRef.InvokeUnsafe(
+                managedDataRef.UpdateUnsafe(
                     default(TAdapter).Evaluate(
                         ref dataRef.StartValue,
                         ref dataRef.EndValue,
@@ -285,7 +285,7 @@ namespace LitMotion
                     new() { Progress = easedEndProgress }
                 );
 
-                managedData.InvokeUnsafe(endValue);
+                managedData.UpdateUnsafe(endValue);
             }
             catch (Exception ex)
             {

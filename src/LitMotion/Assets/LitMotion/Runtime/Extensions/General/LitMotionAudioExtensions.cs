@@ -60,9 +60,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(audioMixer);
-            return builder.BindWithState(audioMixer, name, static (x, target, n) =>
+            return builder.BindWithState((audioMixer, name), static (x, state) =>
             {
-                target.SetFloat(n, x);
+                state.audioMixer.SetFloat(state.name, x);
             });
         }
     }
