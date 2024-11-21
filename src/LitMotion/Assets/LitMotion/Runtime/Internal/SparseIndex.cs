@@ -2,12 +2,12 @@ using System;
 
 namespace LitMotion
 {
-    internal readonly struct Entity : IEquatable<Entity>
+    internal readonly struct SparseIndex : IEquatable<SparseIndex>
     {
         public int Index { get; }
         public int Version { get; }
 
-        public Entity(int index, int version)
+        public SparseIndex(int index, int version)
         {
             Index = index;
             Version = version;
@@ -15,10 +15,10 @@ namespace LitMotion
 
         public override bool Equals(object obj)
         {
-            return obj is Entity other && Equals(other);
+            return obj is SparseIndex other && Equals(other);
         }
 
-        public bool Equals(Entity other)
+        public bool Equals(SparseIndex other)
         {
             return Index == other.Index && Version == other.Version;
         }
