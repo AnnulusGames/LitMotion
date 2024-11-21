@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using LitMotion.Extensions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

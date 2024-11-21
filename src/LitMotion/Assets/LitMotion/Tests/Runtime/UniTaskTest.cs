@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using LitMotion.Extensions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
