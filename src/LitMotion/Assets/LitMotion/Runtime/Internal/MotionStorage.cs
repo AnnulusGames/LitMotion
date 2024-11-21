@@ -27,8 +27,8 @@ namespace LitMotion
         public int Id { get; }
         public int Count => tail;
 
-        EntityManager entityManager = new(InitialCapacity);
-        Entity[] entityLookup = new Entity[InitialCapacity];
+        SparseSetCore sparseSetCore = new(InitialCapacity);
+        SparseIndex[] sparseIndexLookup = new SparseIndex[InitialCapacity];
         MotionData<TValue, TOptions>[] unmanagedDataArray = new MotionData<TValue, TOptions>[InitialCapacity];
         ManagedMotionData[] managedDataArray = new ManagedMotionData[InitialCapacity];
         AllocatorHelper<RewindableAllocator> allocator;
@@ -55,8 +55,8 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnsureCapacity(int minimumCapacity)
         {
-            entityManager.EnsureCapacity(minimumCapacity);
-            ArrayHelper.EnsureCapacity(ref entityLookup, minimumCapacity);
+            sparseSetCore.EnsureCapacity(minimumCapacity);
+            ArrayHelper.EnsureCapacity(ref sparseIndexLookup, minimumCapacity);
             ArrayHelper.EnsureCapacity(ref unmanagedDataArray, minimumCapacity);
             ArrayHelper.EnsureCapacity(ref managedDataArray, minimumCapacity);
         }
@@ -126,15 +126,15 @@ namespace LitMotion
                 ));
             }
 
-            var entity = entityManager.Create(tail);
-            entityLookup[tail] = entity;
+            var sparseIndex = sparseSetCore.Alloc(tail);
+            sparseIndexLookup[tail] = sparseIndex;
 
             tail++;
 
             return new MotionHandle()
             {
-                Index = entity.Index,
-                Version = entity.Version,
+                Index = sparseIndex.Index,
+                Version = sparseIndex.Version,
                 StorageId = Id
             };
         }
@@ -151,43 +151,43 @@ namespace LitMotion
             managedDataArray[denseIndex] = managedDataArray[tail];
             managedDataArray[tail] = default;
 
-            // swap entity 
-            var prevEntity = entityLookup[denseIndex];
-            var currentEntity = entityLookup[denseIndex] = entityLookup[tail];
-            entityLookup[tail] = default;
+            // swap sparse index
+            var prevSparseIndex = sparseIndexLookup[denseIndex];
+            var currentSparseIndex = sparseIndexLookup[denseIndex] = sparseIndexLookup[tail];
+            sparseIndexLookup[tail] = default;
 
             // update slot
-            if (currentEntity.Version != 0)
+            if (currentSparseIndex.Version != 0)
             {
-                ref var slot = ref entityManager.GetSlotRefUnchecked(currentEntity.Index);
+                ref var slot = ref sparseSetCore.GetSlotRefUnchecked(currentSparseIndex.Index);
                 slot.DenseIndex = denseIndex;
             }
 
             // free slot
-            if (prevEntity.Version != 0)
+            if (prevSparseIndex.Version != 0)
             {
-                entityManager.Destroy(prevEntity);
+                sparseSetCore.Free(prevSparseIndex);
             }
         }
 
         public void RemoveAll(NativeList<int> denseIndexList)
         {
-            var entities = new NativeArray<Entity>(denseIndexList.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-            for (int i = 0; i < entities.Length; i++)
+            var list = new NativeArray<SparseIndex>(denseIndexList.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+            for (int i = 0; i < list.Length; i++)
             {
-                entities[i] = entityLookup[denseIndexList[i]];
+                list[i] = sparseIndexLookup[denseIndexList[i]];
             }
 
-            for (int i = 0; i < entities.Length; i++)
+            for (int i = 0; i < list.Length; i++)
             {
-                RemoveAt(entityManager.GetSlotRefUnchecked(entities[i].Index).DenseIndex);
+                RemoveAt(sparseSetCore.GetSlotRefUnchecked(list[i].Index).DenseIndex);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsActive(MotionHandle handle)
         {
-            ref var slot = ref entityManager.GetSlotRefUnchecked(handle.Index);
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail) return false;
@@ -201,7 +201,7 @@ namespace LitMotion
 
         public void Cancel(MotionHandle handle)
         {
-            ref var slot = ref entityManager.GetSlotRefUnchecked(handle.Index);
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
@@ -230,7 +230,7 @@ namespace LitMotion
 
         public void Complete(MotionHandle handle)
         {
-            ref var slot = ref entityManager.GetSlotRefUnchecked(handle.Index);
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
@@ -317,9 +317,9 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        ref EntityManager.Slot GetSlotWithVarify(MotionHandle handle)
+        ref SparseSetCore.Slot GetSlotWithVarify(MotionHandle handle)
         {
-            ref var slot = ref entityManager.GetSlotRefUnchecked(handle.Index);
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= unmanagedDataArray.Length)
             {
@@ -337,8 +337,8 @@ namespace LitMotion
 
         public void Reset()
         {
-            entityManager.Reset();
-            entityLookup.AsSpan().Clear();
+            sparseSetCore.Reset();
+            sparseIndexLookup.AsSpan().Clear();
             unmanagedDataArray.AsSpan().Clear();
             managedDataArray.AsSpan().Clear();
             tail = 0;

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LitMotion
 {
-    internal sealed class EntityManager
+    internal sealed class SparseSetCore
     {
         public struct Slot : IEquatable<Slot>
         {
@@ -32,7 +32,7 @@ namespace LitMotion
 
         public int Capacity => slots.Length;
 
-        public EntityManager(int initialCapacity = 32)
+        public SparseSetCore(int initialCapacity = 32)
         {
             EnsureCapacity(initialCapacity);
         }
@@ -77,7 +77,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Entity Create(int denseIndex)
+        public SparseIndex Alloc(int denseIndex)
         {
             if (freeSlot == -1)
             {
@@ -87,6 +87,7 @@ namespace LitMotion
             var slotIndex = freeSlot;
 
             ref var slot = ref slots[slotIndex];
+            freeSlot = slot.Next;
             slot.Next = -1;
             slot.DenseIndex = denseIndex;
             if (slot.Version == 0)
@@ -94,19 +95,17 @@ namespace LitMotion
                 slot.Version = 1;
             }
 
-            freeSlot = slot.Next;
-
-            return new Entity(slotIndex, slot.Version);
+            return new SparseIndex(slotIndex, slot.Version);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Destroy(Entity entity)
+        public void Free(SparseIndex sparseIndex)
         {
-            ref var slot = ref slots[entity.Index];
+            ref var slot = ref slots[sparseIndex.Index];
 
             slot.Next = freeSlot;
             slot.Version++;
-            freeSlot = entity.Index;
+            freeSlot = sparseIndex.Index;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
