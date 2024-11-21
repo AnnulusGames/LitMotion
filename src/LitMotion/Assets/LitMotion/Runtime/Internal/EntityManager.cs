@@ -87,14 +87,13 @@ namespace LitMotion
             var slotIndex = freeSlot;
 
             ref var slot = ref slots[slotIndex];
+            freeSlot = slot.Next;
             slot.Next = -1;
             slot.DenseIndex = denseIndex;
             if (slot.Version == 0)
             {
                 slot.Version = 1;
             }
-
-            freeSlot = slot.Next;
 
             return new Entity(slotIndex, slot.Version);
         }
