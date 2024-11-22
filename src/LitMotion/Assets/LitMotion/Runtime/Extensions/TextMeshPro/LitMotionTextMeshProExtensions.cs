@@ -3,6 +3,7 @@ using System.Buffers;
 using UnityEngine;
 using Unity.Collections;
 using TMPro;
+
 #if LITMOTION_SUPPORT_ZSTRING
 using Cysharp.Text;
 #endif
@@ -383,12 +384,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.Bind((text, format), static (x, state) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.text.SetTextFormat(state.format, x);
+                text.SetTextFormat(format, x);
 #else
-                state.text.text = string.Format(state.format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }
@@ -433,12 +434,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.Bind((text, format), static (x, state) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.text.SetTextFormat(state.format, x);
+                text.SetTextFormat(format, x);
 #else
-                state.text.text = string.Format(state.format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }
@@ -483,12 +484,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.Bind((text, format), static (x, state) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.text.SetTextFormat(state.format, x);
+                text.SetTextFormat(format, x);
 #else
-                state.text.text = string.Format(state.format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }
@@ -510,9 +511,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].color = x;
+                animator.charInfoArray[charIndex.Value].color = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -536,9 +537,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].color.r = x;
+                animator.charInfoArray[charIndex.Value].color.r = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -562,9 +563,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].color.g = x;
+                animator.charInfoArray[charIndex.Value].color.g = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -588,9 +589,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].color.b = x;
+                animator.charInfoArray[charIndex.Value].color.b = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -614,9 +615,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].color.a = x;
+                animator.charInfoArray[charIndex.Value].color.a = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -640,9 +641,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].position = x;
+                animator.charInfoArray[charIndex.Value].position = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -666,9 +667,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].position.x = x;
+                animator.charInfoArray[charIndex.Value].position.x = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -692,9 +693,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].position.y = x;
+                animator.charInfoArray[charIndex.Value].position.y = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -718,9 +719,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].position.z = x;
+                animator.charInfoArray[charIndex.Value].position.z = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -744,9 +745,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].rotation = x;
+                animator.charInfoArray[charIndex.Value].rotation = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -770,9 +771,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(x);
+                animator.charInfoArray[charIndex.Value].rotation = Quaternion.Euler(x);
             });
             animator.motionHandleList.Add(handle);
 
@@ -796,11 +797,11 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
+                var eulerAngles = animator.charInfoArray[charIndex.Value].rotation.eulerAngles;
                 eulerAngles.x = x;
-                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
+                animator.charInfoArray[charIndex.Value].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 
@@ -824,11 +825,11 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
+                var eulerAngles = animator.charInfoArray[charIndex.Value].rotation.eulerAngles;
                 eulerAngles.y = x;
-                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
+                animator.charInfoArray[charIndex.Value].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 
@@ -852,11 +853,11 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                var eulerAngles = animator.charInfoArray[charIndex].rotation.eulerAngles;
+                var eulerAngles = animator.charInfoArray[charIndex.Value].rotation.eulerAngles;
                 eulerAngles.z = x;
-                animator.charInfoArray[charIndex].rotation = Quaternion.Euler(eulerAngles);
+                animator.charInfoArray[charIndex.Value].rotation = Quaternion.Euler(eulerAngles);
             });
             animator.motionHandleList.Add(handle);
 
@@ -880,9 +881,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].scale = x;
+                animator.charInfoArray[charIndex.Value].scale = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -906,9 +907,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].scale.x = x;
+                animator.charInfoArray[charIndex.Value].scale.x = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -932,9 +933,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].scale.y = x;
+                animator.charInfoArray[charIndex.Value].scale.y = x;
             });
             animator.motionHandleList.Add(handle);
 
@@ -958,9 +959,9 @@ namespace LitMotion.Extensions
 
             var animator = TextMeshProMotionAnimator.Get(text);
             animator.EnsureCapacity(charIndex + 1);
-            var handle = builder.Bind(animator, (x, target) =>
+            var handle = builder.Bind(animator, Box.Create(charIndex), static (x, animator, charIndex) =>
             {
-                animator.charInfoArray[charIndex].scale.z = x;
+                animator.charInfoArray[charIndex.Value].scale.z = x;
             });
             animator.motionHandleList.Add(handle);
 

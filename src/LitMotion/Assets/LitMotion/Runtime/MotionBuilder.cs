@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LitMotion
 {
-    internal sealed class MotionBuilderBuffer<TValue, TOptions>
+    internal unsafe sealed class MotionBuilderBuffer<TValue, TOptions>
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
@@ -44,8 +44,13 @@ namespace LitMotion
             buffer.Loops = 1;
             buffer.LoopType = default;
 
-            buffer.State = default;
+            buffer.State0 = default;
+            buffer.State1 = default;
+            buffer.State2 = default;
+            buffer.StateCount = default;
+
             buffer.UpdateAction = default;
+            buffer.UpdateActionPtr = default;
             buffer.OnCompleteAction = default;
             buffer.OnCancelAction = default;
 
@@ -78,7 +83,11 @@ namespace LitMotion
         public LoopType LoopType;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
-        public object State;
+        public object State0;
+        public object State1;
+        public object State2;
+        public byte StateCount;
+        public void* UpdateActionPtr;
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
@@ -248,6 +257,7 @@ namespace LitMotion
         /// Create motion and play it without binding it to a specific object.
         /// </summary>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle RunWithoutBinding()
         {
             CheckBuffer();
@@ -259,6 +269,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind(Action<TValue> action)
         {
             CheckBuffer();
@@ -273,11 +284,123 @@ namespace LitMotion
         /// <param name="state">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind<TState>(TState state, Action<TValue, TState> action)
             where TState : class
         {
             CheckBuffer();
             SetCallbackData(state, action);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MotionHandle Bind<TState0, TState1>(TState0 state0, TState1 state1, Action<TValue, TState0, TState1> action)
+            where TState0 : class
+            where TState1 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, action);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <typeparam name="TState2">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="state2">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MotionHandle Bind<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, Action<TValue, TState0, TState1, TState2> action)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, state2, action);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object, property, etc.
+        /// </summary>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe MotionHandle Bind(delegate* managed<TValue, void> ptr)
+        {
+            CheckBuffer();
+            SetCallbackData(ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe MotionHandle Bind<TState>(TState state, delegate* managed<TValue, TState, void> ptr)
+            where TState : class
+        {
+            CheckBuffer();
+            SetCallbackData(state, ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe MotionHandle Bind<TState0, TState1>(TState0 state0, TState1 state1, delegate* managed<TValue, TState0, TState1, void> ptr)
+            where TState0 : class
+            where TState1 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <typeparam name="TState2">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="state2">Motion state</param>
+        /// <param name="ptr">Funciton pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe MotionHandle Bind<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, delegate* managed<TValue, TState0, TState1, TState2, void> ptr)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, state2, ptr);
             return ScheduleMotion();
         }
 
@@ -353,6 +476,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal readonly void SetCallbackData(Action<TValue> action)
         {
+            buffer.StateCount = 0;
             buffer.UpdateAction = action;
         }
 
@@ -360,8 +484,73 @@ namespace LitMotion
         internal readonly void SetCallbackData<TState>(TState state, Action<TValue, TState> action)
             where TState : class
         {
-            buffer.State = state;
+            buffer.StateCount = 1;
+            buffer.State0 = state;
             buffer.UpdateAction = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal readonly void SetCallbackData<TState0, TState1>(TState0 state0, TState1 state1, Action<TValue, TState0, TState1> action)
+            where TState0 : class
+            where TState1 : class
+        {
+            buffer.StateCount = 2;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.UpdateAction = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal readonly void SetCallbackData<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, Action<TValue, TState0, TState1, TState2> action)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            buffer.StateCount = 3;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.State2 = state2;
+            buffer.UpdateAction = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData(delegate* managed<TValue, void> action)
+        {
+            buffer.StateCount = 0;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState>(TState state, delegate* managed<TValue, TState, void> action)
+            where TState : class
+        {
+            buffer.StateCount = 1;
+            buffer.State0 = state;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState0, TState1>(TState0 state0, TState1 state1, delegate* managed<TValue, TState0, TState1, void> action)
+            where TState0 : class
+            where TState1 : class
+        {
+            buffer.StateCount = 2;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, delegate* managed<TValue, TState0, TState1, TState2, void> action)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            buffer.StateCount = 3;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.State2 = state2;
+            buffer.UpdateActionPtr = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

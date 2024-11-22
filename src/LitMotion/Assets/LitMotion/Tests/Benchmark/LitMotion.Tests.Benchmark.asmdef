@@ -1,6 +1,6 @@
 {
-    "name": "LitMotion.Tests.Runtime",
-    "rootNamespace": "LitMotion.Tests.Runtime",
+    "name": "LitMotion.Tests.Benchmark",
+    "rootNamespace": "LitMotion.Tests.Benchmark",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
@@ -9,7 +9,8 @@
         "LitMotion",
         "LitMotion.Extensions",
         "UniTask",
-        "UniRx"
+        "UniRx",
+        "Unity.PerformanceTesting"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
