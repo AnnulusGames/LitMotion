@@ -25,7 +25,7 @@ namespace LitMotion.Tests.Benchmark
 
             return Measure.Frames()
                 .WarmupCount(5)
-                .MeasurementCount(50)
+                .MeasurementCount(200)
                 .Run();
         }
 
