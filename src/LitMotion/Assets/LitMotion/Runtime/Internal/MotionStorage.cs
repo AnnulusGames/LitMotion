@@ -11,6 +11,8 @@ namespace LitMotion
         bool IsActive(MotionHandle handle);
         bool TryCancel(MotionHandle handle);
         bool TryComplete(MotionHandle handle);
+        void Cancel(MotionHandle handle);
+        void Complete(MotionHandle handle);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         void Reset();
@@ -205,6 +207,19 @@ namespace LitMotion
 
         public bool TryCancel(MotionHandle handle)
         {
+            return TryCancelCore(handle);
+        }
+
+        public void Cancel(MotionHandle handle)
+        {
+            if (!TryCancelCore(handle))
+            {
+                Error.MotionNotExists();
+            }
+        }
+
+        bool TryCancelCore(MotionHandle handle)
+        {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
@@ -214,7 +229,7 @@ namespace LitMotion
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
             {
                 return false;
             }
@@ -236,26 +251,44 @@ namespace LitMotion
 
         public bool TryComplete(MotionHandle handle)
         {
+            return TryCompleteCore(handle) == 0;
+        }
+
+        public void Complete(MotionHandle handle)
+        {
+            switch (TryCompleteCore(handle))
+            {
+                default:
+                    return;
+                case 1:
+                    Error.MotionNotExists();
+                    return;
+                case 2:
+                    throw new InvalidOperationException("Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
+            }
+        }
+
+        int TryCompleteCore(MotionHandle handle)
+        {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                return false;
+                return 1;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
 
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
             {
-                return false;
+                return 1;
             }
 
             if (unmanagedData.Core.Loops < 0)
             {
-                UnityEngine.Debug.LogWarning("[LitMotion] Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
-                return false;
+                return 2;
             }
 
             ref var managedData = ref managedDataArray[denseIndex];
@@ -309,7 +342,7 @@ namespace LitMotion
 
             managedData.IsCallbackRunning = false;
 
-            return true;
+            return 0;
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)

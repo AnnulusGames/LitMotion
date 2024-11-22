@@ -37,16 +37,13 @@ namespace LitMotion
         public static void Complete(MotionHandle handle)
         {
             CheckTypeId(handle);
-            if (!list[handle.StorageId].TryComplete(handle))
-            {
-                Error.MotionNotExists();
-            }
+            list[handle.StorageId].Complete(handle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryComplete(MotionHandle handle)
         {
-            if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
+            CheckTypeId(handle);
             return list[handle.StorageId].TryComplete(handle);
         }
 
@@ -54,16 +51,13 @@ namespace LitMotion
         public static void Cancel(MotionHandle handle)
         {
             CheckTypeId(handle);
-            if (!list[handle.StorageId].TryCancel(handle))
-            {
-                Error.MotionNotExists();
-            }
+            list[handle.StorageId].Cancel(handle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryCancel(MotionHandle handle)
         {
-            if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
+            CheckTypeId(handle);
             return list[handle.StorageId].TryCancel(handle);
         }
 
