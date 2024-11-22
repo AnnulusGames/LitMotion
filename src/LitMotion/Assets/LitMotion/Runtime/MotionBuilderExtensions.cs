@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using LitMotion;
 using Unity.Collections;
 
@@ -16,13 +17,20 @@ namespace LitMotion
         /// <param name="state">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
-        public static MotionHandle Bind<TValue, TOptions, TAdapter, TState>(this MotionBuilder<TValue, TOptions, TAdapter> builder, TState state, Action<TValue, TState> action)
+        public unsafe static MotionHandle Bind<TValue, TOptions, TAdapter, TState>(this MotionBuilder<TValue, TOptions, TAdapter> builder, TState state, Action<TValue, TState> action)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
             where TState : struct
         {
-            return builder.Bind(Box.Create(state), action, (x, box, action) => action(x, box.Value));
+            return builder.Bind(Box.Create(state), action, &BindAction);
+        }
+
+        static void BindAction<TValue, TState>(TValue value, Box<TState> state, Action<TValue, TState> action)
+            where TValue : unmanaged
+            where TState : struct
+        {
+            action(value, state.Value);
         }
 
         /// <summary>

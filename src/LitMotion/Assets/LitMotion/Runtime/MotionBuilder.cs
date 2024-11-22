@@ -257,6 +257,7 @@ namespace LitMotion
         /// Create motion and play it without binding it to a specific object.
         /// </summary>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle RunWithoutBinding()
         {
             CheckBuffer();
@@ -268,6 +269,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind(Action<TValue> action)
         {
             CheckBuffer();
@@ -282,6 +284,7 @@ namespace LitMotion
         /// <param name="state">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind<TState>(TState state, Action<TValue, TState> action)
             where TState : class
         {
@@ -299,6 +302,7 @@ namespace LitMotion
         /// <param name="state1">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind<TState0, TState1>(TState0 state0, TState1 state1, Action<TValue, TState0, TState1> action)
             where TState0 : class
             where TState1 : class
@@ -319,6 +323,7 @@ namespace LitMotion
         /// <param name="state2">Motion state</param>
         /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Bind<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, Action<TValue, TState0, TState1, TState2> action)
             where TState0 : class
             where TState1 : class
@@ -334,6 +339,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="ptr">Function pointer that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe MotionHandle Bind(delegate* managed<TValue, void> ptr)
         {
             CheckBuffer();
@@ -348,6 +354,7 @@ namespace LitMotion
         /// <param name="state">Motion state</param>
         /// <param name="ptr">Function pointer that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe MotionHandle Bind<TState>(TState state, delegate* managed<TValue, TState, void> ptr)
             where TState : class
         {
@@ -365,6 +372,7 @@ namespace LitMotion
         /// <param name="state1">Motion state</param>
         /// <param name="ptr">Function pointer that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe MotionHandle Bind<TState0, TState1>(TState0 state0, TState1 state1, delegate* managed<TValue, TState0, TState1, void> ptr)
             where TState0 : class
             where TState1 : class
@@ -385,6 +393,7 @@ namespace LitMotion
         /// <param name="state2">Motion state</param>
         /// <param name="ptr">Funciton pointer that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe MotionHandle Bind<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, delegate* managed<TValue, TState0, TState1, TState2, void> ptr)
             where TState0 : class
             where TState1 : class
