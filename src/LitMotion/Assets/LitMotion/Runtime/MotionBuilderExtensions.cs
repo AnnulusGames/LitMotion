@@ -1,6 +1,6 @@
 using System;
+using LitMotion;
 using Unity.Collections;
-using UnityEngine;
 
 namespace LitMotion
 {
@@ -22,7 +22,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
             where TState : struct
         {
-            return builder.Bind(new ActionWithState<TValue, TState>(state, action), (x, state) => state.Invoke(x));
+            return builder.Bind(Box.Create(state), action, (x, box, action) => action(x, box.Value));
         }
 
         /// <summary>

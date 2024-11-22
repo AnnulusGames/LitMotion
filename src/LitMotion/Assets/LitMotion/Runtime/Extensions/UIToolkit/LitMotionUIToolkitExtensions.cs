@@ -661,12 +661,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(textElement);
-            return builder.Bind((textElement, format), static (x, state) =>
+            return builder.Bind(textElement, format, static (x, textElement, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.textElement.text = ZString.Format(state.format, x);
+                textElement.text = ZString.Format(format, x);
 #else
-                state.textElement.text = string.Format(state.format, x);
+                textElement.text = string.Format(format, x);
 #endif
             });
         }
@@ -704,12 +704,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(textElement);
-            return builder.Bind((textElement, format), static (x, state) =>
+            return builder.Bind(textElement, format, static (x, textElement, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.textElement.text = ZString.Format(state.format, x);
+                textElement.text = ZString.Format(format, x);
 #else
-                state.textElement.text = string.Format(state.format, x);
+                textElement.text = string.Format(format, x);
 #endif
             });
         }
@@ -747,12 +747,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(textElement);
-            return builder.Bind((textElement, format), static (x, state) =>
+            return builder.Bind(textElement, format, static (x, textElement, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                state.textElement.text = ZString.Format(state.format, x);
+                textElement.text = ZString.Format(format, x);
 #else
-                state.textElement.text = string.Format(state.format, x);
+                textElement.text = string.Format(format, x);
 #endif
             });
         }
