@@ -31,12 +31,32 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Attempt to complete the motion.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <returns>Returns true if the operation was successful.</returns>
+        public static bool TryComplete(this MotionHandle handle)
+        {
+            return MotionManager.TryComplete(handle);
+        }
+
+        /// <summary>
         /// Cancel motion.
         /// </summary>
         /// <param name="handle">This motion handle</param>
         public static void Cancel(this MotionHandle handle)
         {
             MotionManager.Cancel(handle);
+        }
+
+        /// <summary>
+        /// Attempt to cancel the motion.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <returns>Returns true if the operation was successful.</returns>
+        public static bool TryCancel(this MotionHandle handle)
+        {
+            return MotionManager.TryCancel(handle);
         }
 
         /// <summary>

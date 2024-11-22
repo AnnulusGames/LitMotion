@@ -9,8 +9,8 @@ namespace LitMotion
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
-        void Cancel(MotionHandle handle);
-        void Complete(MotionHandle handle);
+        bool TryCancel(MotionHandle handle);
+        bool TryComplete(MotionHandle handle);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         void Reset();
@@ -203,20 +203,20 @@ namespace LitMotion
             return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
-        public void Cancel(MotionHandle handle)
+        public bool TryCancel(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return false;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
             var version = slot.Version;
             if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return false;
             }
 
             unmanagedData.Core.Status = MotionStatus.Canceled;
@@ -230,16 +230,18 @@ namespace LitMotion
             {
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
+
+            return true;
         }
 
-        public void Complete(MotionHandle handle)
+        public bool TryComplete(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return false;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
@@ -247,13 +249,13 @@ namespace LitMotion
             var version = slot.Version;
             if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return false;
             }
 
             if (unmanagedData.Core.Loops < 0)
             {
                 UnityEngine.Debug.LogWarning("[LitMotion] Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
-                return;
+                return false;
             }
 
             ref var managedData = ref managedDataArray[denseIndex];
@@ -306,6 +308,8 @@ namespace LitMotion
             }
 
             managedData.IsCallbackRunning = false;
+
+            return true;
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)
@@ -327,13 +331,13 @@ namespace LitMotion
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= unmanagedDataArray.Length)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                Error.MotionNotExists();
             }
 
             var version = slot.Version;
             if (version <= 0 || version != handle.Version || unmanagedDataArray[denseIndex].Core.Status == MotionStatus.None)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                Error.MotionNotExists();
             }
 
             return ref slot;
