@@ -28,20 +28,20 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public unsafe void Benchmark_Bind_Pointer_Startup()
         {
-            MeasureStartUp(() =>
+            BenchmarkHelper.MeasureStartUp(() =>
                 {
                     int state = 0;
                     LMotion.Create(0f, 1f, 3f)
                         .Bind(Box.Create(state), (Action<float, int>)(static (x, state) => DoNothing(x, state)), &BindAction)
                         .AddTo(handles);
-                });
+                }, () => handles.Cancel());
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_Box_StartUp()
         {
-            MeasureStartUp(() =>
+            BenchmarkHelper.MeasureStartUp(() =>
                 {
                     int state = 0;
                     LMotion.Create(0f, 1f, 3f)
@@ -50,40 +50,40 @@ namespace LitMotion.Tests.Benchmark
                             DoNothing(x, box.Value);
                         })
                         .AddTo(handles);
-                });
+                }, () => handles.Cancel());
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_ActionWithState_StartUp()
         {
-            MeasureStartUp(() =>
+            BenchmarkHelper.MeasureStartUp(() =>
                 {
                     int state = 0;
                     LMotion.Create(0f, 1f, 3f)
                         .Bind(new ActionWithState<float, int>(state, static (x, state) => DoNothing(x, state)), (x, state) => state.Invoke(x))
                         .AddTo(handles);
-                });
+                }, () => handles.Cancel());
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_WrappedAction_StartUp()
         {
-            MeasureStartUp(() =>
+            BenchmarkHelper.MeasureStartUp(() =>
                 {
                     int state = 0;
                     LMotion.Create(0f, 1f, 3f)
                         .Bind(Box.Create(state), static (x, state) => DoNothing(x, state), (float x, Box<int> box, Action<float, int> action) => action(x, box.Value))
                         .AddTo(handles);
-                });
+                }, () => handles.Cancel());
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_Closure_Startup()
         {
-            MeasureStartUp(() =>
+            BenchmarkHelper.MeasureStartUp(() =>
             {
                 int state = 0;
                 LMotion.Create(0f, 1f, 3f)
@@ -92,14 +92,14 @@ namespace LitMotion.Tests.Benchmark
                         DoNothing(x, state);
                     })
                     .AddTo(handles);
-            });
+            }, () => handles.Cancel());
         }
 
         [UnityTest]
         [Performance]
         public unsafe IEnumerator Benchmark_Bind_Pointer_Update()
         {
-            return MeasureUpdate(() =>
+            return BenchmarkHelper.MeasureUpdate(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -114,7 +114,7 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public IEnumerator Benchmark_Bind_Box_Update()
         {
-            return MeasureUpdate(() =>
+            return BenchmarkHelper.MeasureUpdate(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -132,7 +132,7 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public IEnumerator Benchmark_Bind_ActionWithState_Update()
         {
-            return MeasureUpdate(() =>
+            return BenchmarkHelper.MeasureUpdate(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -147,7 +147,7 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public IEnumerator Benchmark_Bind_WrappedAction_Update()
         {
-            return MeasureUpdate(() =>
+            return BenchmarkHelper.MeasureUpdate(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -162,7 +162,7 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public IEnumerator Benchmark_Bind_Closure_Update()
         {
-            return MeasureUpdate(() =>
+            return BenchmarkHelper.MeasureUpdate(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -180,7 +180,7 @@ namespace LitMotion.Tests.Benchmark
         [Performance]
         public unsafe void Benchmark_Bind_Pointer_GC()
         {
-            MeasureGC(() =>
+            BenchmarkHelper.MeasureGC(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -189,13 +189,15 @@ namespace LitMotion.Tests.Benchmark
                         .AddTo(handles);
                 }
             });
+
+            handles.Cancel();
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_Box_GC()
         {
-            MeasureGC(() =>
+            BenchmarkHelper.MeasureGC(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -207,13 +209,15 @@ namespace LitMotion.Tests.Benchmark
                         .AddTo(handles);
                 }
             });
+
+            handles.Cancel();
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_WrappedAction_GC()
         {
-            MeasureGC(() =>
+            BenchmarkHelper.MeasureGC(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -222,13 +226,15 @@ namespace LitMotion.Tests.Benchmark
                         .AddTo(handles);
                 }
             });
+
+            handles.Cancel();
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_ActionWithState_GC()
         {
-            MeasureGC(() =>
+            BenchmarkHelper.MeasureGC(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -237,13 +243,15 @@ namespace LitMotion.Tests.Benchmark
                         .AddTo(handles);
                 }
             });
+
+            handles.Cancel();
         }
 
         [Test]
         [Performance]
         public void Benchmark_Bind_Closure_GC()
         {
-            MeasureGC(() =>
+            BenchmarkHelper.MeasureGC(() =>
             {
                 for (int i = 0; i < 10000; i++)
                 {
@@ -255,38 +263,7 @@ namespace LitMotion.Tests.Benchmark
                         .AddTo(handles);
                 }
             });
-        }
 
-        void MeasureStartUp(Action action)
-        {
-            Measure.Method(action)
-                .WarmupCount(10)
-                .IterationsPerMeasurement(10000)
-                .MeasurementCount(10)
-                .CleanUp(() =>
-                {
-                    handles.Cancel();
-                })
-                .Run();
-        }
-
-        IEnumerator MeasureUpdate(Action setUp)
-        {
-            setUp();
-
-            return Measure.Frames()
-                .WarmupCount(5)
-                .MeasurementCount(50)
-                .Run();
-        }
-
-        void MeasureGC(Action action)
-        {
-            GC.Collect();
-            var prev = GC.GetTotalMemory(true);
-            action();
-            var current = GC.GetTotalMemory(true);
-            Measure.Custom(new SampleGroup("GC.Alloc", SampleUnit.Byte), current - prev);
             handles.Cancel();
         }
 
