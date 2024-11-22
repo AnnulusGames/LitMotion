@@ -61,7 +61,7 @@ namespace LitMotion
             ArrayHelper.EnsureCapacity(ref managedDataArray, minimumCapacity);
         }
 
-        public MotionHandle Create(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
+        public unsafe MotionHandle Create(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
         {
             EnsureCapacity(tail + 1);
             var buffer = builder.buffer;
@@ -103,6 +103,7 @@ namespace LitMotion
             managedDataRef.IsCallbackRunning = false;
             managedDataRef.CancelOnError = buffer.CancelOnError;
             managedDataRef.UpdateAction = buffer.UpdateAction;
+            managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
             managedDataRef.OnCancelAction = buffer.OnCancelAction;
             managedDataRef.OnCompleteAction = buffer.OnCompleteAction;
             managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;

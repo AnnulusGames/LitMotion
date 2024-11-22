@@ -9,7 +9,7 @@ namespace LitMotion
     /// A structure that holds motion managed data.
     /// </summary>
     [StructLayout(LayoutKind.Auto)]
-    public struct ManagedMotionData
+    public unsafe struct ManagedMotionData
     {
         public bool IsCallbackRunning;
         public bool CancelOnError;
@@ -18,6 +18,7 @@ namespace LitMotion
         public object State0;
         public object State1;
         public object State2;
+        public void* UpdateActionPtr;
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
@@ -25,20 +26,41 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
-            switch (StateCount)
+            if (UpdateActionPtr == null)
             {
-                case 0:
-                    UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
-                    break;
-                case 1:
-                    UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State0);
-                    break;
-                case 2:
-                    UnsafeUtility.As<object, Action<TValue, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1);
-                    break;
-                case 3:
-                    UnsafeUtility.As<object, Action<TValue, object, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1, State2);
-                    break;
+                switch (StateCount)
+                {
+                    case 0:
+                        UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
+                        break;
+                    case 1:
+                        UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State0);
+                        break;
+                    case 2:
+                        UnsafeUtility.As<object, Action<TValue, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1);
+                        break;
+                    case 3:
+                        UnsafeUtility.As<object, Action<TValue, object, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1, State2);
+                        break;
+                }
+            }
+            else
+            {
+                switch (StateCount)
+                {
+                    case 0:
+                        ((delegate* managed<TValue, void>)UpdateActionPtr)(value);
+                        break;
+                    case 1:
+                        ((delegate* managed<TValue, object, void>)UpdateActionPtr)(value, State0);
+                        break;
+                    case 2:
+                        ((delegate* managed<TValue, object, object, void>)UpdateActionPtr)(value, State0, State1);
+                        break;
+                    case 3:
+                        ((delegate* managed<TValue, object, object, object, void>)UpdateActionPtr)(value, State0, State1, State2);
+                        break;
+                }
             }
         }
 

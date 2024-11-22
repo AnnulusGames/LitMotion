@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LitMotion
 {
-    internal sealed class MotionBuilderBuffer<TValue, TOptions>
+    internal unsafe sealed class MotionBuilderBuffer<TValue, TOptions>
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
@@ -50,6 +50,7 @@ namespace LitMotion
             buffer.StateCount = default;
 
             buffer.UpdateAction = default;
+            buffer.UpdateActionPtr = default;
             buffer.OnCompleteAction = default;
             buffer.OnCancelAction = default;
 
@@ -86,6 +87,7 @@ namespace LitMotion
         public object State1;
         public object State2;
         public byte StateCount;
+        public void* UpdateActionPtr;
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
@@ -328,6 +330,72 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Create motion and bind it to a specific object, property, etc.
+        /// </summary>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe MotionHandle Bind(delegate* managed<TValue, void> ptr)
+        {
+            CheckBuffer();
+            SetCallbackData(ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe MotionHandle Bind<TState>(TState state, delegate* managed<TValue, TState, void> ptr)
+            where TState : class
+        {
+            CheckBuffer();
+            SetCallbackData(state, ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="ptr">Function pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe MotionHandle Bind<TState0, TState1>(TState0 state0, TState1 state1, delegate* managed<TValue, TState0, TState1, void> ptr)
+            where TState0 : class
+            where TState1 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
+        /// Create motion and bind it to a specific object.
+        /// </summary>
+        /// <typeparam name="TState0">Type of state</typeparam>
+        /// <typeparam name="TState1">Type of state</typeparam>
+        /// <typeparam name="TState2">Type of state</typeparam>
+        /// <param name="state0">Motion state</param>
+        /// <param name="state1">Motion state</param>
+        /// <param name="state2">Motion state</param>
+        /// <param name="ptr">Funciton pointer that handles binding</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public unsafe MotionHandle Bind<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, delegate* managed<TValue, TState0, TState1, TState2, void> ptr)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            CheckBuffer();
+            SetCallbackData(state0, state1, state2, ptr);
+            return ScheduleMotion();
+        }
+
+        /// <summary>
         /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
         /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
         /// </summary>
@@ -434,6 +502,46 @@ namespace LitMotion
             buffer.State1 = state1;
             buffer.State2 = state2;
             buffer.UpdateAction = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData(delegate* managed<TValue, void> action)
+        {
+            buffer.StateCount = 0;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState>(TState state, delegate* managed<TValue, TState, void> action)
+            where TState : class
+        {
+            buffer.StateCount = 1;
+            buffer.State0 = state;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState0, TState1>(TState0 state0, TState1 state1, delegate* managed<TValue, TState0, TState1, void> action)
+            where TState0 : class
+            where TState1 : class
+        {
+            buffer.StateCount = 2;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.UpdateActionPtr = action;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal unsafe readonly void SetCallbackData<TState0, TState1, TState2>(TState0 state0, TState1 state1, TState2 state2, delegate* managed<TValue, TState0, TState1, TState2, void> action)
+            where TState0 : class
+            where TState1 : class
+            where TState2 : class
+        {
+            buffer.StateCount = 3;
+            buffer.State0 = state0;
+            buffer.State1 = state1;
+            buffer.State2 = state2;
+            buffer.UpdateActionPtr = action;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
