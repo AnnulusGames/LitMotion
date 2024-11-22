@@ -14,8 +14,10 @@ namespace LitMotion
         public bool IsCallbackRunning;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
-        public object State;
-
+        public byte StateCount;
+        public object State0;
+        public object State1;
+        public object State2;
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
@@ -23,13 +25,20 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateUnsafe<TValue>(in TValue value) where TValue : unmanaged
         {
-            if (State == null)
+            switch (StateCount)
             {
-                UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
-            }
-            else
-            {
-                UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State);
+                case 0:
+                    UnsafeUtility.As<object, Action<TValue>>(ref UpdateAction)?.Invoke(value);
+                    break;
+                case 1:
+                    UnsafeUtility.As<object, Action<TValue, object>>(ref UpdateAction)?.Invoke(value, State0);
+                    break;
+                case 2:
+                    UnsafeUtility.As<object, Action<TValue, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1);
+                    break;
+                case 3:
+                    UnsafeUtility.As<object, Action<TValue, object, object, object>>(ref UpdateAction)?.Invoke(value, State0, State1, State2);
+                    break;
             }
         }
 

@@ -33,6 +33,41 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_BindWithState_2()
+        {
+            var target1 = new TestClass();
+            var target2 = new TestClass();
+            var endValue = 10f;
+            LMotion.Create(0f, endValue, 0.5f).Bind(target1, target2, (x, state0, state1) =>
+            {
+                state0.Value = x;
+                state1.Value = x;
+            });
+            yield return new WaitForSeconds(0.6f);
+            Assert.AreApproximatelyEqual(target1.Value, endValue);
+            Assert.AreApproximatelyEqual(target2.Value, endValue);
+        }
+
+        [UnityTest]
+        public IEnumerator Test_BindWithState_3()
+        {
+            var target1 = new TestClass();
+            var target2 = new TestClass();
+            var target3 = new TestClass();
+            var endValue = 10f;
+            LMotion.Create(0f, endValue, 0.5f).Bind(target1, target2, target3, (x, state0, state1, state2) =>
+            {
+                state0.Value = x;
+                state1.Value = x;
+                state2.Value = x;
+            });
+            yield return new WaitForSeconds(0.6f);
+            Assert.AreApproximatelyEqual(target1.Value, endValue);
+            Assert.AreApproximatelyEqual(target2.Value, endValue);
+            Assert.AreApproximatelyEqual(target3.Value, endValue);
+        }
+
+        [UnityTest]
         public IEnumerator Test_BindWithState_Struct()
         {
             var target1 = new TestClass();
