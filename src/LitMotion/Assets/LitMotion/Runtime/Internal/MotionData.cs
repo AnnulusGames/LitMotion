@@ -11,6 +11,7 @@ namespace LitMotion
         public double Time;
         public float PlaybackSpeed;
         public bool IsPreserved;
+        public bool WasStatusChanged;
 
         // parameters
         public float Duration;

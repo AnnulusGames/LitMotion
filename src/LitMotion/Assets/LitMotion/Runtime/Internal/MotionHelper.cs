@@ -14,6 +14,10 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var corePtr = (MotionDataCore*)ptr;
+            var prevStatus = corePtr->Status;
+
+            // reset flag(s)
+            corePtr->WasStatusChanged = false;
 
             corePtr->Time = time;
             time = math.max(time, 0.0);
@@ -136,6 +140,8 @@ namespace LitMotion
             {
                 corePtr->Status = MotionStatus.Playing;
             }
+
+            corePtr->WasStatusChanged = prevStatus != corePtr->Status;
 
             var context = new MotionEvaluationContext()
             {

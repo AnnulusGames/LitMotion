@@ -62,7 +62,8 @@ namespace LitMotion
                 var outputPtr = (TValue*)output.GetUnsafePtr();
                 for (int i = 0; i < managedDataSpan.Length; i++)
                 {
-                    var status = (dataPtr + i)->Core.Status;
+                    var currentDataPtr = dataPtr + i;
+                    var status = currentDataPtr->Core.Status;
                     ref var managedData = ref managedDataSpan[i];
                     if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                     {
@@ -75,7 +76,7 @@ namespace LitMotion
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (managedData.CancelOnError)
                             {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
+                                currentDataPtr->Core.Status = MotionStatus.Canceled;
                                 managedData.OnCancelAction?.Invoke();
                             }
                         }
@@ -91,19 +92,22 @@ namespace LitMotion
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (managedData.CancelOnError)
                             {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
+                                currentDataPtr->Core.Status = MotionStatus.Canceled;
                                 managedData.OnCancelAction?.Invoke();
                                 continue;
                             }
                         }
 
-                        try
+                        if (currentDataPtr->Core.WasStatusChanged)
                         {
-                            managedData.OnCompleteAction?.Invoke();
-                        }
-                        catch (Exception ex)
-                        {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                            try
+                            {
+                                managedData.OnCompleteAction?.Invoke();
+                            }
+                            catch (Exception ex)
+                            {
+                                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                            }
                         }
                     }
                 }
