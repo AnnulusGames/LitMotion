@@ -23,6 +23,12 @@ namespace LitMotion
             return MotionManager.IsActive(handle);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Preserve(this MotionHandle handle)
+        {
+            MotionManager.GetDataRef(handle).IsPreserved = true;
+        }
+
         /// <summary>
         /// Complete motion.
         /// </summary>

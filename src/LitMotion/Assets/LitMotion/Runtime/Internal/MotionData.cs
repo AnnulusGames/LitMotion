@@ -10,6 +10,7 @@ namespace LitMotion
         public MotionStatus Status;
         public double Time;
         public float PlaybackSpeed;
+        public bool IsPreserved;
 
         // parameters
         public float Duration;

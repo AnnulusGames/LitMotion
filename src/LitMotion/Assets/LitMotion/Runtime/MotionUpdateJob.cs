@@ -48,7 +48,7 @@ namespace LitMotion
 
                 Output[index] = result;
             }
-            else if (corePtr->Status is MotionStatus.Completed or MotionStatus.Canceled)
+            else if ((!corePtr->IsPreserved && corePtr->Status is MotionStatus.Completed) || corePtr->Status is MotionStatus.Canceled)
             {
                 CompletedIndexList.AddNoResize(index);
                 corePtr->Status = MotionStatus.Disposed;
