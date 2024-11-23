@@ -118,6 +118,9 @@ namespace LitMotion
 
         public void Reset()
         {
+            prevTime = 0;
+            prevUnscaledTime = 0;
+            prevRealtime = 0;
             storage.Reset();
         }
     }
