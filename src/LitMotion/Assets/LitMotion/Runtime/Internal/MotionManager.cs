@@ -41,10 +41,24 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool TryComplete(MotionHandle handle)
+        {
+            CheckTypeId(handle);
+            return list[handle.StorageId].TryComplete(handle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cancel(MotionHandle handle)
         {
             CheckTypeId(handle);
             list[handle.StorageId].Cancel(handle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool TryCancel(MotionHandle handle)
+        {
+            CheckTypeId(handle);
+            return list[handle.StorageId].TryCancel(handle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

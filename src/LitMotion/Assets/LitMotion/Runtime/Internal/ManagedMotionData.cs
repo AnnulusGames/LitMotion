@@ -11,7 +11,6 @@ namespace LitMotion
     [StructLayout(LayoutKind.Auto)]
     public unsafe struct ManagedMotionData
     {
-        public bool IsCallbackRunning;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
         public byte StateCount;

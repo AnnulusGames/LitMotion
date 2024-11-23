@@ -9,6 +9,8 @@ namespace LitMotion
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
+        bool TryCancel(MotionHandle handle);
+        bool TryComplete(MotionHandle handle);
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
         ref MotionDataCore GetDataRef(MotionHandle handle);
@@ -100,7 +102,6 @@ namespace LitMotion
                 }
             }
 
-            managedDataRef.IsCallbackRunning = false;
             managedDataRef.CancelOnError = buffer.CancelOnError;
             managedDataRef.UpdateAction = buffer.UpdateAction;
             managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
@@ -203,20 +204,43 @@ namespace LitMotion
             return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
+        public bool TryCancel(MotionHandle handle)
+        {
+            return TryCancelCore(handle) == 0;
+        }
+
         public void Cancel(MotionHandle handle)
+        {
+            switch (TryCancelCore(handle))
+            {
+                case 1:
+                    Error.MotionNotExists();
+                    return;
+                case 2:
+                    Error.MotionHasBeenCanceledOrCompleted();
+                    return;
+            }
+        }
+
+        int TryCancelCore(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return 1;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return 1;
+            }
+
+            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            {
+                return 2;
             }
 
             unmanagedData.Core.Status = MotionStatus.Canceled;
@@ -230,38 +254,59 @@ namespace LitMotion
             {
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
+
+            return 0;
+        }
+
+        public bool TryComplete(MotionHandle handle)
+        {
+            return TryCompleteCore(handle) == 0;
         }
 
         public void Complete(MotionHandle handle)
+        {
+            switch (TryCompleteCore(handle))
+            {
+                case 1:
+                    Error.MotionNotExists();
+                    return;
+                case 2:
+                    Error.MotionHasBeenCanceledOrCompleted();
+                    return;
+                case 3:
+                    throw new InvalidOperationException("Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
+            }
+        }
+
+        int TryCompleteCore(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return 1;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
 
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status == MotionStatus.None)
+            if (version <= 0 || version != handle.Version)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                return 1;
+            }
+
+            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            {
+                return 2;
             }
 
             if (unmanagedData.Core.Loops < 0)
             {
-                UnityEngine.Debug.LogWarning("[LitMotion] Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
-                return;
+                return 3;
             }
 
             ref var managedData = ref managedDataArray[denseIndex];
-            if (managedData.IsCallbackRunning)
-            {
-                throw new InvalidOperationException("Recursion of Complete call was detected.");
-            }
-            managedData.IsCallbackRunning = true;
 
             // To avoid duplication of Complete processing, it is treated as canceled internally.
             unmanagedData.Core.Status = MotionStatus.Canceled;
@@ -305,7 +350,7 @@ namespace LitMotion
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
 
-            managedData.IsCallbackRunning = false;
+            return 0;
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)
@@ -327,13 +372,13 @@ namespace LitMotion
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= unmanagedDataArray.Length)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                Error.MotionNotExists();
             }
 
             var version = slot.Version;
             if (version <= 0 || version != handle.Version || unmanagedDataArray[denseIndex].Core.Status == MotionStatus.None)
             {
-                throw new ArgumentException("Motion has been destroyed or no longer exists.");
+                Error.MotionNotExists();
             }
 
             return ref slot;
