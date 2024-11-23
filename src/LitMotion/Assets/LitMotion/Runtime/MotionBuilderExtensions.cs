@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
-using LitMotion;
 using Unity.Collections;
 
 namespace LitMotion
@@ -45,7 +43,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, IntegerOptions>
         {
-            builder.buffer.Options.RoundingMode = roundingMode;
+            var options = builder.buffer.Settings.Options;
+            options.RoundingMode = roundingMode;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -61,7 +61,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, PunchOptions>
         {
-            builder.buffer.Options.Frequency = frequency;
+            var options = builder.buffer.Settings.Options;
+            options.Frequency = frequency;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -77,7 +79,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, PunchOptions>
         {
-            builder.buffer.Options.DampingRatio = dampingRatio;
+            var options = builder.buffer.Settings.Options;
+            options.DampingRatio = dampingRatio;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -93,7 +97,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Options.Frequency = frequency;
+            var options = builder.buffer.Settings.Options;
+            options.Frequency = frequency;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -109,7 +115,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Options.DampingRatio = dampingRatio;
+            var options = builder.buffer.Settings.Options;
+            options.DampingRatio = dampingRatio;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -125,7 +133,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Options.RandomState = new Unity.Mathematics.Random(seed);
+            var options = builder.buffer.Settings.Options;
+            options.RandomState = new Unity.Mathematics.Random(seed);
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -141,7 +151,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Options.RichTextEnabled = richTextEnabled;
+            var options = builder.buffer.Settings.Options;
+            options.RichTextEnabled = richTextEnabled;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -157,7 +169,9 @@ namespace LitMotion
            where TValue : unmanaged
            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Options.RandomState = new Unity.Mathematics.Random(seed);
+            var options = builder.buffer.Settings.Options;
+            options.RandomState = new Unity.Mathematics.Random(seed);
+            builder.buffer.Settings.Options = options;
             return builder;
         }
 
@@ -174,7 +188,11 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
             if (scrambleMode == ScrambleMode.Custom) throw new ArgumentException("ScrambleMode.Custom cannot be specified explicitly. Use WithScrambleMode(FixedString64Bytes) instead.");
-            builder.buffer.Options.ScrambleMode = scrambleMode;
+
+            var options = builder.buffer.Settings.Options;
+            options.ScrambleMode = scrambleMode;
+            builder.buffer.Settings.Options = options;
+
             return builder;
         }
 
@@ -190,8 +208,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Options.ScrambleMode = ScrambleMode.Custom;
-            builder.buffer.Options.CustomScrambleChars = customScrambleChars;
+            var options = builder.buffer.Settings.Options;
+            options.CustomScrambleChars = customScrambleChars;
+            builder.buffer.Settings.Options = options;
             return builder;
         }
     }
