@@ -8,14 +8,14 @@ namespace LitMotion
     internal unsafe static class MotionHelper
     {
         [BurstCompile]
-        public static void Update<TValue, TOptions, TAdapter>(MotionData<TValue, TOptions>* ptr, double deltaTime, out TValue result)
+        public static void SetTime<TValue, TOptions, TAdapter>(MotionData<TValue, TOptions>* ptr, double time, out TValue result)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var corePtr = (MotionDataCore*)ptr;
 
-            corePtr->Time = math.max(corePtr->Time + deltaTime * corePtr->PlaybackSpeed, 0.0);
+            corePtr->Time = math.max(time, 0.0);
             var motionTime = corePtr->Time;
 
             double t;
@@ -28,8 +28,8 @@ namespace LitMotion
             {
                 if (corePtr->DelayType == DelayType.FirstLoop || corePtr->Delay == 0f)
                 {
-                    var time = motionTime - corePtr->Delay;
-                    isCompleted = corePtr->Loops >= 0 && time > 0f;
+                    var timeSinceStart = motionTime - corePtr->Delay;
+                    isCompleted = corePtr->Loops >= 0 && timeSinceStart > 0f;
                     if (isCompleted)
                     {
                         t = 1f;
@@ -38,10 +38,10 @@ namespace LitMotion
                     else
                     {
                         t = 0f;
-                        completedLoops = time < 0f ? -1 : 0;
+                        completedLoops = timeSinceStart < 0f ? -1 : 0;
                     }
                     clampedCompletedLoops = corePtr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, corePtr->Loops);
-                    isDelayed = time < 0;
+                    isDelayed = timeSinceStart < 0;
                 }
                 else
                 {
@@ -56,11 +56,11 @@ namespace LitMotion
             {
                 if (corePtr->DelayType == DelayType.FirstLoop)
                 {
-                    var time = motionTime - corePtr->Delay;
-                    completedLoops = (int)math.floor(time / corePtr->Duration);
+                    var timeSinceStart = motionTime - corePtr->Delay;
+                    completedLoops = (int)math.floor(timeSinceStart / corePtr->Duration);
                     clampedCompletedLoops = corePtr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, corePtr->Loops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
-                    isDelayed = time < 0f;
+                    isDelayed = timeSinceStart < 0f;
 
                     if (isCompleted)
                     {
@@ -68,7 +68,7 @@ namespace LitMotion
                     }
                     else
                     {
-                        var currentLoopTime = time - corePtr->Duration * clampedCompletedLoops;
+                        var currentLoopTime = timeSinceStart - corePtr->Duration * clampedCompletedLoops;
                         t = math.clamp(currentLoopTime / corePtr->Duration, 0f, 1f);
                     }
                 }

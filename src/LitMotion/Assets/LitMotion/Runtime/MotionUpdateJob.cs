@@ -42,7 +42,9 @@ namespace LitMotion
                     _ => default
                 };
 
-                MotionHelper.Update<TValue, TOptions, TAdapter>(ptr, deltaTime, out var result);
+                var time = corePtr->Time + deltaTime * corePtr->PlaybackSpeed;
+
+                MotionHelper.SetTime<TValue, TOptions, TAdapter>(ptr, time, out var result);
 
                 Output[index] = result;
             }
