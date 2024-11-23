@@ -310,8 +310,7 @@ namespace LitMotion
 
             ref var managedData = ref managedDataArray[denseIndex];
 
-            // To avoid duplication of Complete processing, it is treated as canceled internally.
-            unmanagedData.Core.Status = MotionStatus.Canceled;
+            unmanagedData.Core.Status = MotionStatus.Completed;
 
             var endProgress = unmanagedData.Core.LoopType switch
             {
