@@ -49,7 +49,6 @@ namespace LitMotion
             }
             set
             {
-                if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
                 MotionManager.GetDataRef(this).PlaybackSpeed = value;
             }
         }
