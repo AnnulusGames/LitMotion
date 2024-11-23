@@ -72,9 +72,10 @@ namespace LitMotion
             ref var dataRef = ref unmanagedDataArray[tail];
             ref var managedDataRef = ref managedDataArray[tail];
 
+            dataRef.Core.Status = MotionStatus.Scheduled;
             dataRef.Core.Time = 0;
             dataRef.Core.PlaybackSpeed = 1f;
-            dataRef.Core.Status = MotionStatus.Scheduled;
+            dataRef.Core.IsPreserved = false;
 
             dataRef.Core.Duration = buffer.Duration;
             dataRef.Core.Delay = buffer.Delay;
