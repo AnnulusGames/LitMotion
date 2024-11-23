@@ -6,20 +6,21 @@ namespace LitMotion
     [StructLayout(LayoutKind.Sequential)]
     public struct MotionDataCore
     {
+        // state
         public MotionStatus Status;
-
         public double Time;
         public float PlaybackSpeed;
+        public bool IsPreserved;
+        public bool WasStatusChanged;
+
+        // parameters
         public float Duration;
-
         public Ease Ease;
-
 #if LITMOTION_COLLECTIONS_2_0_OR_NEWER
         public NativeAnimationCurve AnimationCurve;
 #else
         public UnsafeAnimationCurve AnimationCurve;
 #endif
-
         public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;

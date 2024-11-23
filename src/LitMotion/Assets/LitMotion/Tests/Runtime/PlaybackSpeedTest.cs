@@ -51,16 +51,5 @@ namespace LitMotion.Tests.Runtime
             yield return handle.ToYieldInteraction();
             Assert.That(Time.time - time, Is.EqualTo(0.5f).Using(new FloatEqualityComparer(0.05f)));
         }
-
-        [Test]
-        public void Test_PlaybackSpeed_Minus()
-        {
-            var handle = LMotion.Create(0f, 10f, 1f).RunWithoutBinding();
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-            {
-                handle.PlaybackSpeed = -1f;
-            });
-        }
-
     }
 }

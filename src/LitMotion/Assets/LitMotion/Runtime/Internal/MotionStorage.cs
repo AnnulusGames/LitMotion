@@ -13,6 +13,7 @@ namespace LitMotion
         bool TryComplete(MotionHandle handle);
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
+        void SetTime(MotionHandle handle, double time);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         void Reset();
@@ -71,9 +72,10 @@ namespace LitMotion
             ref var dataRef = ref unmanagedDataArray[tail];
             ref var managedDataRef = ref managedDataArray[tail];
 
+            dataRef.Core.Status = MotionStatus.Scheduled;
             dataRef.Core.Time = 0;
             dataRef.Core.PlaybackSpeed = 1f;
-            dataRef.Core.Status = MotionStatus.Scheduled;
+            dataRef.Core.IsPreserved = false;
 
             dataRef.Core.Duration = buffer.Duration;
             dataRef.Core.Delay = buffer.Delay;
@@ -308,8 +310,7 @@ namespace LitMotion
 
             ref var managedData = ref managedDataArray[denseIndex];
 
-            // To avoid duplication of Complete processing, it is treated as canceled internally.
-            unmanagedData.Core.Status = MotionStatus.Canceled;
+            unmanagedData.Core.Status = MotionStatus.Completed;
 
             var endProgress = unmanagedData.Core.LoopType switch
             {
@@ -351,6 +352,33 @@ namespace LitMotion
             }
 
             return 0;
+        }
+
+        public unsafe void SetTime(MotionHandle handle, double time)
+        {
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
+
+            var denseIndex = slot.DenseIndex;
+            if (denseIndex < 0 || denseIndex >= tail) Error.MotionNotExists();
+
+            fixed (MotionData<TValue, TOptions>* ptr = unmanagedDataArray)
+            {
+                var dataPtr = ptr + denseIndex;
+
+                var version = slot.Version;
+                if (version <= 0 || version != handle.Version) Error.MotionNotExists();
+
+                MotionHelper.SetTime<TValue, TOptions, TAdapter>(dataPtr + denseIndex, time, out var result);
+
+                try
+                {
+                    managedDataArray[denseIndex].UpdateUnsafe(result);
+                }
+                catch (Exception ex)
+                {
+                    MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                }
+            }
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)

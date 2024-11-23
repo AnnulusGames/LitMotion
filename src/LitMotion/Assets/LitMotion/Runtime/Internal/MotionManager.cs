@@ -68,6 +68,13 @@ namespace LitMotion
             return list[handle.StorageId].IsActive(handle);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetTime(MotionHandle handle, double time)
+        {
+            CheckTypeId(handle);
+            list[handle.StorageId].SetTime(handle, time);
+        }
+
         // For MotionTracker
         public static (Type ValueType, Type OptionsType, Type AdapterType) GetMotionType(MotionHandle handle)
         {
