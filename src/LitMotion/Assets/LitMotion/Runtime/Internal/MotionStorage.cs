@@ -13,6 +13,7 @@ namespace LitMotion
         bool TryComplete(MotionHandle handle);
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
+        void SetTime(MotionHandle handle, double time);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         void Reset();
@@ -351,6 +352,36 @@ namespace LitMotion
             }
 
             return 0;
+        }
+
+        public unsafe void SetTime(MotionHandle handle, double time)
+        {
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
+
+            var denseIndex = slot.DenseIndex;
+            if (denseIndex < 0 || denseIndex >= tail) Error.MotionNotExists();
+
+            fixed (MotionData<TValue, TOptions>* ptr = unmanagedDataArray)
+            {
+                var dataPtr = ptr + denseIndex;
+
+                var version = slot.Version;
+                if (version <= 0 || version != handle.Version) Error.MotionNotExists();
+
+                var prevTime = dataPtr->Core.Time;
+                var deltaTime = time - prevTime;
+
+                MotionHelper.Update<TValue, TOptions, TAdapter>(dataPtr + denseIndex, deltaTime, out var result);
+
+                try
+                {
+                    managedDataArray[denseIndex].UpdateUnsafe(result);
+                }
+                catch (Exception ex)
+                {
+                    MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                }
+            }
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)

@@ -23,6 +23,22 @@ namespace LitMotion
         public int Version;
 
         /// <summary>
+        /// Motion time
+        /// </summary>
+        public readonly double Time
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this).Time;
+            }
+            set
+            {
+                if (value < 0f) Error.TimeMustBeZeroOrGreater();
+                MotionManager.SetTime(this, value);
+            }
+        }
+
+        /// <summary>
         /// Motion playback speed.
         /// </summary>
         public readonly float PlaybackSpeed
