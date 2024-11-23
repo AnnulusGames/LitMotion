@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <returns>True if motion is active, otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsActive(this MotionHandle handle)
         {
             return MotionManager.IsActive(handle);
@@ -25,6 +27,7 @@ namespace LitMotion
         /// Complete motion.
         /// </summary>
         /// <param name="handle">This motion handle</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Complete(this MotionHandle handle)
         {
             MotionManager.Complete(handle);
@@ -35,6 +38,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <returns>Returns true if the operation was successful.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryComplete(this MotionHandle handle)
         {
             return MotionManager.TryComplete(handle);
@@ -44,6 +48,7 @@ namespace LitMotion
         /// Cancel motion.
         /// </summary>
         /// <param name="handle">This motion handle</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cancel(this MotionHandle handle)
         {
             MotionManager.Cancel(handle);
@@ -54,6 +59,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <returns>Returns true if the operation was successful.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryCancel(this MotionHandle handle)
         {
             return MotionManager.TryCancel(handle);

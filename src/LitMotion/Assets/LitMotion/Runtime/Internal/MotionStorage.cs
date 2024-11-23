@@ -207,31 +207,41 @@ namespace LitMotion
 
         public bool TryCancel(MotionHandle handle)
         {
-            return TryCancelCore(handle);
+            return TryCancelCore(handle) == 0;
         }
 
         public void Cancel(MotionHandle handle)
         {
-            if (!TryCancelCore(handle))
+            switch (TryCancelCore(handle))
             {
-                Error.MotionNotExists();
+                case 1:
+                    Error.MotionNotExists();
+                    return;
+                case 2:
+                    Error.MotionHasBeenCanceledOrCompleted();
+                    return;
             }
         }
 
-        bool TryCancelCore(MotionHandle handle)
+        int TryCancelCore(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
             if (denseIndex < 0 || denseIndex >= tail)
             {
-                return false;
+                return 1;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            if (version <= 0 || version != handle.Version)
             {
-                return false;
+                return 1;
+            }
+
+            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            {
+                return 2;
             }
 
             unmanagedData.Core.Status = MotionStatus.Canceled;
@@ -246,7 +256,7 @@ namespace LitMotion
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
 
-            return true;
+            return 0;
         }
 
         public bool TryComplete(MotionHandle handle)
@@ -258,12 +268,13 @@ namespace LitMotion
         {
             switch (TryCompleteCore(handle))
             {
-                default:
-                    return;
                 case 1:
                     Error.MotionNotExists();
                     return;
                 case 2:
+                    Error.MotionHasBeenCanceledOrCompleted();
+                    return;
+                case 3:
                     throw new InvalidOperationException("Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
             }
         }
@@ -281,22 +292,22 @@ namespace LitMotion
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
 
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            if (version <= 0 || version != handle.Version)
             {
                 return 1;
             }
 
-            if (unmanagedData.Core.Loops < 0)
+            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
             {
                 return 2;
             }
 
-            ref var managedData = ref managedDataArray[denseIndex];
-            if (managedData.IsCallbackRunning)
+            if (unmanagedData.Core.Loops < 0)
             {
-                throw new InvalidOperationException("Recursion of Complete call was detected.");
+                return 3;
             }
-            managedData.IsCallbackRunning = true;
+
+            ref var managedData = ref managedDataArray[denseIndex];
 
             // To avoid duplication of Complete processing, it is treated as canceled internally.
             unmanagedData.Core.Status = MotionStatus.Canceled;
@@ -339,8 +350,6 @@ namespace LitMotion
             {
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
-
-            managedData.IsCallbackRunning = false;
 
             return 0;
         }

@@ -33,7 +33,12 @@ namespace LitMotion
 
         public static void MotionNotExists()
         {
-            throw new ArgumentException("Motion has been destroyed or no longer exists.");
+            throw new InvalidOperationException("Motion has been destroyed or no longer exists.");
+        }
+
+        public static void MotionHasBeenCanceledOrCompleted()
+        {
+            throw new InvalidOperationException("Motion has already been canceled or completed.");
         }
     }
 }
