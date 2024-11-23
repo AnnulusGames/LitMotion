@@ -125,12 +125,17 @@ namespace LitMotion
                     case LoopType.Restart:
                         progress = GetEasedValue(corePtr, (float)t);
                         break;
-                    case LoopType.Yoyo:
+                    case LoopType.Flip:
                         progress = GetEasedValue(corePtr, (float)t);
                         if ((clampedCompletedLoops + (int)t) % 2 == 1) progress = 1f - progress;
                         break;
                     case LoopType.Incremental:
                         progress = GetEasedValue(corePtr, 1f) * clampedCompletedLoops + GetEasedValue(corePtr, (float)math.fmod(t, 1f));
+                        break;
+                    case LoopType.Yoyo:
+                        progress = (clampedCompletedLoops + (int)t) % 2 == 1
+                            ? GetEasedValue(corePtr, (float)(1f - t))
+                            : GetEasedValue(corePtr, (float)t);
                         break;
                 }
 

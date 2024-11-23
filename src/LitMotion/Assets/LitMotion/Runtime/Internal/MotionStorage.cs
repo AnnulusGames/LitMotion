@@ -314,7 +314,7 @@ namespace LitMotion
             var endProgress = unmanagedData.Core.LoopType switch
             {
                 LoopType.Restart => 1f,
-                LoopType.Yoyo => unmanagedData.Core.Loops % 2 == 0 ? 0f : 1f,
+                LoopType.Flip or LoopType.Yoyo => unmanagedData.Core.Loops % 2 == 0 ? 0f : 1f,
                 LoopType.Incremental => unmanagedData.Core.Loops,
                 _ => 1f
             };
