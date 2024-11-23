@@ -102,7 +102,6 @@ namespace LitMotion
                 }
             }
 
-            managedDataRef.IsCallbackRunning = false;
             managedDataRef.CancelOnError = buffer.CancelOnError;
             managedDataRef.UpdateAction = buffer.UpdateAction;
             managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
