@@ -26,6 +26,11 @@ namespace LitMotion
             throw new ArgumentNullException(message);
         }
 
+        public static void PlaybackSpeedMustBeZeroOrGreater()
+        {
+            throw new ArgumentOutOfRangeException("Playback speed must be 0 or greater.");
+        }
+
         public static void TimeMustBeZeroOrGreater()
         {
             throw new ArgumentOutOfRangeException("Time must be 0 or greater.");
