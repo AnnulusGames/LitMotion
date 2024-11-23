@@ -15,7 +15,8 @@ namespace LitMotion
         {
             var corePtr = (MotionDataCore*)ptr;
 
-            corePtr->Time = math.max(time, 0.0);
+            corePtr->Time = time;
+            time = math.max(time, 0.0);
 
             double t;
             bool isCompleted;
@@ -39,13 +40,17 @@ namespace LitMotion
                         t = 0f;
                         completedLoops = timeSinceStart < 0f ? -1 : 0;
                     }
-                    clampedCompletedLoops = corePtr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = corePtr->Loops < 0
+                        ? math.max(0, completedLoops)
+                        : math.clamp(completedLoops, 0, corePtr->Loops);
                     isDelayed = timeSinceStart < 0;
                 }
                 else
                 {
                     completedLoops = (int)math.floor(time / corePtr->Delay);
-                    clampedCompletedLoops = corePtr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = corePtr->Loops < 0
+                        ? math.max(0, completedLoops)
+                        : math.clamp(completedLoops, 0, corePtr->Loops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
                     isDelayed = !isCompleted;
                     t = isCompleted ? 1f : 0f;
@@ -57,7 +62,9 @@ namespace LitMotion
                 {
                     var timeSinceStart = time - corePtr->Delay;
                     completedLoops = (int)math.floor(timeSinceStart / corePtr->Duration);
-                    clampedCompletedLoops = corePtr->Loops < 0 ? math.max(0, completedLoops) : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = corePtr->Loops < 0
+                        ? math.max(0, completedLoops)
+                        : math.clamp(completedLoops, 0, corePtr->Loops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
                     isDelayed = timeSinceStart < 0f;
 
