@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace LitMotion
 {
+    /// <summary>
+    /// Serializable(editable from the Inspector) MotionSettings.
+    /// </summary>
+    /// <typeparam name="TValue">The type of value to animate</typeparam>
+    /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
     [Serializable]
     public record SerializableMotionSettings<TValue, TOptions>
         where TValue : unmanaged
@@ -209,6 +214,9 @@ namespace LitMotion
             Scheduler = source.Scheduler;
         }
 
+        /// <summary>
+        /// Convert settings to MotionSettings
+        /// </summary>
         public MotionSettings<TValue, TOptions> AsMotionSettings()
         {
             return new MotionSettings<TValue, TOptions>()
