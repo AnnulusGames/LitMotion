@@ -8,6 +8,34 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
+        enum SchedulerType : byte
+        {
+            Default,
+            Initialization,
+            InitializationIgnoreTimeScale,
+            InitializationRealtime,
+            EarlyUpdate,
+            EarlyUpdateIgnoreTimeScale,
+            EarlyUpdateRealtime,
+            FixedUpdate,
+            PreUpdate,
+            PreUpdateIgnoreTimeScale,
+            PreUpdateRealtime,
+            Update,
+            UpdateIgnoreTimeScale,
+            UpdateRealtime,
+            PreLateUpdate,
+            PreLateUpdateIgnoreTimeScale,
+            PreLateUpdateRealtime,
+            PostLateUpdate,
+            PostLateUpdateIgnoreTimeScale,
+            PostLateUpdateRealtime,
+            TimeUpdate,
+            TimeUpdateIgnoreTimeScale,
+            TimeUpdateRealtime,
+            Manual,
+        }
+
         [SerializeField] TValue startValue;
         [SerializeField] TValue endValue;
         [SerializeField] float duration;
@@ -21,47 +49,48 @@ namespace LitMotion
         [SerializeField] bool cancelOnError;
         [SerializeField] bool skipValuesDuringDelay;
         [SerializeField] bool bindOnSchedule;
+        [SerializeField] SchedulerType scheduler;
 
         public TValue StartValue
         {
             get => startValue;
-            set => startValue = value;
+            init => startValue = value;
         }
 
         public TValue EndValue
         {
             get => endValue;
-            set => endValue = value;
+            init => endValue = value;
         }
 
         public float Duration
         {
             get => duration;
-            set => duration = value;
+            init => duration = value;
         }
 
         public TOptions Options
         {
             get => options;
-            set => options = value;
+            init => options = value;
         }
 
         public Ease Ease
         {
             get => ease;
-            set => ease = value;
+            init => ease = value;
         }
 
         public AnimationCurve CustomEaseCurve
         {
             get => customEaseCurve;
-            set => customEaseCurve = value;
+            init => customEaseCurve = value;
         }
 
         public float Delay
         {
             get => delay;
-            set => delay = value;
+            init => delay = value;
         }
 
         public DelayType DelayType
@@ -73,31 +102,114 @@ namespace LitMotion
         public int Loops
         {
             get => loops;
-            set => loops = value;
+            init => loops = value;
         }
 
         public LoopType LoopType
         {
             get => loopType;
-            set => loopType = value;
+            init => loopType = value;
         }
 
         public bool CancelOnError
         {
             get => cancelOnError;
-            set => cancelOnError = value;
+            init => cancelOnError = value;
         }
 
         public bool SkipValuesDuringDelay
         {
             get => skipValuesDuringDelay;
-            set => skipValuesDuringDelay = value;
+            init => skipValuesDuringDelay = value;
         }
 
         public bool BindOnSchedule
         {
             get => bindOnSchedule;
-            set => bindOnSchedule = value;
+            init => bindOnSchedule = value;
+        }
+
+        public IMotionScheduler Scheduler
+        {
+            get
+            {
+                return scheduler switch
+                {
+                    SchedulerType.Initialization => MotionScheduler.Initialization,
+                    SchedulerType.InitializationIgnoreTimeScale => MotionScheduler.InitializationIgnoreTimeScale,
+                    SchedulerType.InitializationRealtime => MotionScheduler.InitializationRealtime,
+                    SchedulerType.EarlyUpdate => MotionScheduler.EarlyUpdate,
+                    SchedulerType.EarlyUpdateIgnoreTimeScale => MotionScheduler.EarlyUpdateIgnoreTimeScale,
+                    SchedulerType.EarlyUpdateRealtime => MotionScheduler.EarlyUpdateRealtime,
+                    SchedulerType.FixedUpdate => MotionScheduler.FixedUpdate,
+                    SchedulerType.PreUpdate => MotionScheduler.PreUpdate,
+                    SchedulerType.PreUpdateIgnoreTimeScale => MotionScheduler.PreUpdateIgnoreTimeScale,
+                    SchedulerType.PreUpdateRealtime => MotionScheduler.PreUpdateRealtime,
+                    SchedulerType.Update => MotionScheduler.Update,
+                    SchedulerType.UpdateIgnoreTimeScale => MotionScheduler.UpdateIgnoreTimeScale,
+                    SchedulerType.UpdateRealtime => MotionScheduler.UpdateRealtime,
+                    SchedulerType.PreLateUpdate => MotionScheduler.PreLateUpdate,
+                    SchedulerType.PreLateUpdateIgnoreTimeScale => MotionScheduler.PreLateUpdateIgnoreTimeScale,
+                    SchedulerType.PreLateUpdateRealtime => MotionScheduler.PreLateUpdateRealtime,
+                    SchedulerType.PostLateUpdate => MotionScheduler.PostLateUpdate,
+                    SchedulerType.PostLateUpdateIgnoreTimeScale => MotionScheduler.PostLateUpdateIgnoreTimeScale,
+                    SchedulerType.PostLateUpdateRealtime => MotionScheduler.PostLateUpdateRealtime,
+                    SchedulerType.TimeUpdate => MotionScheduler.TimeUpdate,
+                    SchedulerType.TimeUpdateIgnoreTimeScale => MotionScheduler.TimeUpdateIgnoreTimeScale,
+                    SchedulerType.TimeUpdateRealtime => MotionScheduler.TimeUpdateRealtime,
+                    SchedulerType.Manual => MotionScheduler.Manual,
+                    _ => null,
+                };
+            }
+            init
+            {
+                if (value == null) scheduler = SchedulerType.Default;
+                else if (value == MotionScheduler.Update) scheduler = SchedulerType.Update;
+                else if (value == MotionScheduler.UpdateIgnoreTimeScale) scheduler = SchedulerType.UpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.UpdateRealtime) scheduler = SchedulerType.UpdateRealtime;
+                else if (value == MotionScheduler.FixedUpdate) scheduler = SchedulerType.FixedUpdate;
+                else if (value == MotionScheduler.Manual) scheduler = SchedulerType.Manual;
+                else if (value == MotionScheduler.Initialization) scheduler = SchedulerType.Initialization;
+                else if (value == MotionScheduler.InitializationIgnoreTimeScale) scheduler = SchedulerType.InitializationIgnoreTimeScale;
+                else if (value == MotionScheduler.InitializationRealtime) scheduler = SchedulerType.InitializationRealtime;
+                else if (value == MotionScheduler.EarlyUpdate) scheduler = SchedulerType.EarlyUpdate;
+                else if (value == MotionScheduler.EarlyUpdateIgnoreTimeScale) scheduler = SchedulerType.EarlyUpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.EarlyUpdateRealtime) scheduler = SchedulerType.EarlyUpdateRealtime;
+                else if (value == MotionScheduler.PreUpdate) scheduler = SchedulerType.PreUpdate;
+                else if (value == MotionScheduler.PreUpdateIgnoreTimeScale) scheduler = SchedulerType.PreUpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.PreUpdateRealtime) scheduler = SchedulerType.PreUpdateRealtime;
+                else if (value == MotionScheduler.PreLateUpdate) scheduler = SchedulerType.PreLateUpdate;
+                else if (value == MotionScheduler.PreLateUpdateIgnoreTimeScale) scheduler = SchedulerType.PreLateUpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.PreLateUpdateRealtime) scheduler = SchedulerType.PreLateUpdateRealtime;
+                else if (value == MotionScheduler.PostLateUpdate) scheduler = SchedulerType.PostLateUpdate;
+                else if (value == MotionScheduler.PostLateUpdateIgnoreTimeScale) scheduler = SchedulerType.PostLateUpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.PostLateUpdateRealtime) scheduler = SchedulerType.PostLateUpdateRealtime;
+                else if (value == MotionScheduler.TimeUpdate) scheduler = SchedulerType.TimeUpdate;
+                else if (value == MotionScheduler.TimeUpdateIgnoreTimeScale) scheduler = SchedulerType.TimeUpdateIgnoreTimeScale;
+                else if (value == MotionScheduler.TimeUpdateRealtime) scheduler = SchedulerType.TimeUpdateRealtime;
+                else throw new ArgumentOutOfRangeException("SerializableMotionSettings does not support custom scheduler");
+            }
+        }
+
+        public MotionSettings<TValue, TOptions> AsMotionSettings()
+        {
+            return new MotionSettings<TValue, TOptions>()
+            {
+                StartValue = StartValue,
+                EndValue = EndValue,
+                Duration = Duration,
+                Options = Options,
+                Ease = Ease,
+                CustomEaseCurve = CustomEaseCurve,
+                Delay = Delay,
+                DelayType = DelayType,
+                Loops = Loops,
+                LoopType = LoopType,
+                CancelOnError = CancelOnError,
+                SkipValuesDuringDelay = SkipValuesDuringDelay,
+                BindOnSchedule = BindOnSchedule,
+                Scheduler = Scheduler,
+            };
         }
     }
 }

@@ -78,34 +78,34 @@ namespace LitMotion
             dataRef.Core.IsPreserved = false;
             dataRef.Core.TimeKind = buffer.TimeKind;
 
-            dataRef.Core.Duration = buffer.Settings.Duration;
-            dataRef.Core.Delay = buffer.Settings.Delay;
-            dataRef.Core.DelayType = buffer.Settings.DelayType;
-            dataRef.Core.Ease = buffer.Settings.Ease;
-            dataRef.Core.Loops = buffer.Settings.Loops;
-            dataRef.Core.LoopType = buffer.Settings.LoopType;
-            dataRef.StartValue = buffer.Settings.StartValue;
-            dataRef.EndValue = buffer.Settings.EndValue;
-            dataRef.Options = buffer.Settings.Options;
+            dataRef.Core.Duration = buffer.Duration;
+            dataRef.Core.Delay = buffer.Delay;
+            dataRef.Core.DelayType = buffer.DelayType;
+            dataRef.Core.Ease = buffer.Ease;
+            dataRef.Core.Loops = buffer.Loops;
+            dataRef.Core.LoopType = buffer.LoopType;
+            dataRef.StartValue = buffer.StartValue;
+            dataRef.EndValue = buffer.EndValue;
+            dataRef.Options = buffer.Options;
 
-            if (buffer.Settings.Ease == Ease.CustomAnimationCurve)
+            if (buffer.Ease == Ease.CustomAnimationCurve)
             {
                 if (dataRef.Core.AnimationCurve.IsCreated)
                 {
-                    dataRef.Core.AnimationCurve.CopyFrom(buffer.Settings.CustomEaseCurve);
+                    dataRef.Core.AnimationCurve.CopyFrom(buffer.AnimationCurve);
                 }
                 else
                 {
 #if LITMOTION_COLLECTIONS_2_0_OR_NEWER
-                    dataRef.Core.AnimationCurve = new NativeAnimationCurve(buffer.Settings.CustomEaseCurve, allocator.Allocator.Handle);
+                    dataRef.Core.AnimationCurve = new NativeAnimationCurve(buffer.AnimationCurve, allocator.Allocator.Handle);
 #else
-                    dataRef.Core.AnimationCurve = new UnsafeAnimationCurve(buffer.Settings.CustomEaseCurve, allocator.Allocator.Handle);
+                    dataRef.Core.AnimationCurve = new UnsafeAnimationCurve(buffer.AnimationCurve, allocator.Allocator.Handle);
 #endif
                 }
             }
 
-            managedDataRef.CancelOnError = buffer.Settings.CancelOnError;
-            managedDataRef.SkipValuesDuringDelay = buffer.Settings.SkipValuesDuringDelay;
+            managedDataRef.CancelOnError = buffer.CancelOnError;
+            managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;
             managedDataRef.UpdateAction = buffer.UpdateAction;
             managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
             managedDataRef.OnCancelAction = buffer.OnCancelAction;
@@ -115,7 +115,7 @@ namespace LitMotion
             managedDataRef.State1 = buffer.State1;
             managedDataRef.State2 = buffer.State2;
 
-            if (buffer.Settings.BindOnSchedule && buffer.UpdateAction != null)
+            if (buffer.BindOnSchedule && buffer.UpdateAction != null)
             {
                 managedDataRef.UpdateUnsafe(
                     default(TAdapter).Evaluate(
@@ -126,7 +126,7 @@ namespace LitMotion
                         {
                             Progress = dataRef.Core.Ease switch
                             {
-                                Ease.CustomAnimationCurve => buffer.Settings.CustomEaseCurve.Evaluate(0f),
+                                Ease.CustomAnimationCurve => buffer.AnimationCurve.Evaluate(0f),
                                 _ => EaseUtility.Evaluate(0f, dataRef.Core.Ease)
                             }
                         }

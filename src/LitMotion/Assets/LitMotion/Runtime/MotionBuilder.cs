@@ -30,8 +30,19 @@ namespace LitMotion
         {
             buffer.Version++;
             buffer.IsPreserved = false;
+            buffer.BindOnSchedule = false;
 
-            buffer.Settings.Reset();
+            buffer.StartValue = default;
+            buffer.EndValue = default;
+            buffer.Options = default;
+
+            buffer.Duration = default;
+            buffer.Ease = default;
+            buffer.AnimationCurve = default;
+            buffer.TimeKind = default;
+            buffer.Delay = default;
+            buffer.Loops = 1;
+            buffer.LoopType = default;
 
             buffer.State0 = default;
             buffer.State1 = default;
@@ -43,6 +54,11 @@ namespace LitMotion
             buffer.OnCompleteAction = default;
             buffer.OnCancelAction = default;
 
+            buffer.CancelOnError = default;
+            buffer.SkipValuesDuringDelay = default;
+
+            buffer.Scheduler = default;
+
             if (buffer.Version != ushort.MaxValue)
             {
                 buffer.NextNode = PoolRoot;
@@ -53,10 +69,20 @@ namespace LitMotion
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
         public bool IsPreserved;
-        public MotionSettings<TValue, TOptions> Settings = new();
+        public bool BindOnSchedule;
 
+        public TValue StartValue;
+        public TValue EndValue;
+        public TOptions Options;
+        public float Duration;
+        public Ease Ease;
         public MotionTimeKind TimeKind;
-
+        public float Delay;
+        public int Loops = 1;
+        public DelayType DelayType;
+        public LoopType LoopType;
+        public bool CancelOnError;
+        public bool SkipValuesDuringDelay;
         public object State0;
         public object State1;
         public object State2;
@@ -65,6 +91,8 @@ namespace LitMotion
         public object UpdateAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
+        public AnimationCurve AnimationCurve;
+        public IMotionScheduler Scheduler;
     }
 
     /// <summary>
@@ -97,7 +125,7 @@ namespace LitMotion
         {
             CheckEaseType(ease);
             CheckBuffer();
-            buffer.Settings.Ease = ease;
+            buffer.Ease = ease;
             return this;
         }
 
@@ -110,8 +138,8 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithEase(AnimationCurve animationCurve)
         {
             CheckBuffer();
-            buffer.Settings.CustomEaseCurve = animationCurve;
-            buffer.Settings.Ease = Ease.CustomAnimationCurve;
+            buffer.AnimationCurve = animationCurve;
+            buffer.Ease = Ease.CustomAnimationCurve;
             return this;
         }
 
@@ -126,9 +154,9 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDelay(float delay, DelayType delayType = DelayType.FirstLoop, bool skipValuesDuringDelay = true)
         {
             CheckBuffer();
-            buffer.Settings.Delay = delay;
-            buffer.Settings.DelayType = delayType;
-            buffer.Settings.SkipValuesDuringDelay = skipValuesDuringDelay;
+            buffer.Delay = delay;
+            buffer.DelayType = delayType;
+            buffer.SkipValuesDuringDelay = skipValuesDuringDelay;
             return this;
         }
 
@@ -142,8 +170,8 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithLoops(int loops, LoopType loopType = LoopType.Restart)
         {
             CheckBuffer();
-            buffer.Settings.Loops = loops;
-            buffer.Settings.LoopType = loopType;
+            buffer.Loops = loops;
+            buffer.LoopType = loopType;
             return this;
         }
 
@@ -156,7 +184,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOptions(TOptions options)
         {
             CheckBuffer();
-            buffer.Settings.Options = options;
+            buffer.Options = options;
             return this;
         }
 
@@ -195,7 +223,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithCancelOnError(bool cancelOnError = true)
         {
             CheckBuffer();
-            buffer.Settings.CancelOnError = cancelOnError;
+            buffer.CancelOnError = cancelOnError;
             return this;
         }
 
@@ -208,7 +236,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithBindOnSchedule(bool bindOnSchedule = true)
         {
             CheckBuffer();
-            buffer.Settings.BindOnSchedule = bindOnSchedule;
+            buffer.BindOnSchedule = bindOnSchedule;
             return this;
         }
 
@@ -221,7 +249,7 @@ namespace LitMotion
         public readonly MotionBuilder<TValue, TOptions, TAdapter> WithScheduler(IMotionScheduler scheduler)
         {
             CheckBuffer();
-            buffer.Settings.Scheduler = scheduler;
+            buffer.Scheduler = scheduler;
             return this;
         }
 
@@ -394,7 +422,7 @@ namespace LitMotion
         {
             MotionHandle handle;
 
-            if (buffer.Settings.Scheduler == null)
+            if (buffer.Scheduler == null)
             {
 #if UNITY_EDITOR
                 if (!UnityEditor.EditorApplication.isPlaying)
@@ -422,12 +450,12 @@ namespace LitMotion
             }
             else
             {
-                handle = buffer.Settings.Scheduler.Schedule(ref this);
+                handle = buffer.Scheduler.Schedule(ref this);
             }
 
             if (MotionTracker.EnableTracking)
             {
-                MotionTracker.AddTracking(handle, buffer.Settings.Scheduler);
+                MotionTracker.AddTracking(handle, buffer.Scheduler);
             }
 
             if (!buffer.IsPreserved) Dispose();
