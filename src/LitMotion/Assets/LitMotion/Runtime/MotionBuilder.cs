@@ -29,7 +29,6 @@ namespace LitMotion
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             buffer.Version++;
-            buffer.IsPreserved = false;
             buffer.BindOnSchedule = false;
 
             buffer.StartValue = default;
@@ -68,9 +67,6 @@ namespace LitMotion
 
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
-        public bool IsPreserved;
-        public bool BindOnSchedule;
-
         public TValue StartValue;
         public TValue EndValue;
         public TOptions Options;
@@ -83,6 +79,8 @@ namespace LitMotion
         public LoopType LoopType;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
+        public bool BindOnSchedule;
+
         public object State0;
         public object State1;
         public object State2;
@@ -405,16 +403,30 @@ namespace LitMotion
         }
 
         /// <summary>
-        /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
-        /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
+        /// Creates a MotionSettings from the values ​​set in the builder.
         /// </summary>
-        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        /// <returns>Configured MotionSettings</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> Preserve()
+        public readonly MotionSettings<TValue, TOptions> ToMotionSettings()
         {
             CheckBuffer();
-            buffer.IsPreserved = true;
-            return this;
+            return new MotionSettings<TValue, TOptions>()
+            {
+                StartValue = buffer.StartValue,
+                EndValue = buffer.EndValue,
+                Duration = buffer.Duration,
+                Options = buffer.Options,
+                Ease = buffer.Ease,
+                CustomEaseCurve = buffer.AnimationCurve,
+                Delay = buffer.Delay,
+                DelayType = buffer.DelayType,
+                Loops = buffer.Loops,
+                LoopType = buffer.LoopType,
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay,
+                BindOnSchedule = buffer.BindOnSchedule,
+                Scheduler = buffer.Scheduler,
+            };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -458,7 +470,7 @@ namespace LitMotion
                 MotionTracker.AddTracking(handle, buffer.Scheduler);
             }
 
-            if (!buffer.IsPreserved) Dispose();
+            Dispose();
 
             return handle;
         }

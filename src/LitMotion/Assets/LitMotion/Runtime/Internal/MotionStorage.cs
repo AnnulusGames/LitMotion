@@ -76,6 +76,7 @@ namespace LitMotion
             dataRef.Core.Time = 0;
             dataRef.Core.PlaybackSpeed = 1f;
             dataRef.Core.IsPreserved = false;
+            dataRef.Core.TimeKind = buffer.TimeKind;
 
             dataRef.Core.Duration = buffer.Duration;
             dataRef.Core.Delay = buffer.Delay;
@@ -83,7 +84,6 @@ namespace LitMotion
             dataRef.Core.Ease = buffer.Ease;
             dataRef.Core.Loops = buffer.Loops;
             dataRef.Core.LoopType = buffer.LoopType;
-            dataRef.Core.TimeKind = buffer.TimeKind;
             dataRef.StartValue = buffer.StartValue;
             dataRef.EndValue = buffer.EndValue;
             dataRef.Options = buffer.Options;
@@ -105,11 +105,11 @@ namespace LitMotion
             }
 
             managedDataRef.CancelOnError = buffer.CancelOnError;
+            managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;
             managedDataRef.UpdateAction = buffer.UpdateAction;
             managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
             managedDataRef.OnCancelAction = buffer.OnCancelAction;
             managedDataRef.OnCompleteAction = buffer.OnCompleteAction;
-            managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;
             managedDataRef.StateCount = buffer.StateCount;
             managedDataRef.State0 = buffer.State0;
             managedDataRef.State1 = buffer.State1;

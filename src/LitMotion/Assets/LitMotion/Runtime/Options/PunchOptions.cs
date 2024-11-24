@@ -5,6 +5,7 @@ namespace LitMotion
     /// <summary>
     /// Options for punch motion.
     /// </summary>
+    [Serializable]
     public struct PunchOptions : IEquatable<PunchOptions>, IMotionOptions
     {
         public int Frequency;
