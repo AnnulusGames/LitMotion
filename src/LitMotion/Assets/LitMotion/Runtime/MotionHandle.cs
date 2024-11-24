@@ -39,6 +39,20 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// The total duration of the motion
+        /// </summary>
+        public readonly double Duration
+        {
+            get
+            {
+                ref var dataRef = ref MotionManager.GetDataRef(this);
+                if (dataRef.Loops < 0) return double.PositiveInfinity;
+                return dataRef.Delay * (dataRef.DelayType == DelayType.EveryLoop ? dataRef.Loops : 1) +
+                    dataRef.Duration * dataRef.Loops;
+            }
+        }
+
+        /// <summary>
         /// Motion playback speed.
         /// </summary>
         public readonly float PlaybackSpeed
