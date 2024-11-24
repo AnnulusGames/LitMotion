@@ -190,6 +190,24 @@ namespace LitMotion
                 else throw new ArgumentOutOfRangeException("SerializableMotionSettings does not support custom scheduler");
             }
         }
+        
+        public SerializableMotionSettings(MotionSettings<TValue, TOptions> source)
+        {
+            StartValue = source.StartValue;
+            EndValue = source.EndValue;
+            Duration = source.Duration;
+            Options = source.Options;
+            Ease = source.Ease;
+            CustomEaseCurve = source.CustomEaseCurve;
+            Delay = source.Delay;
+            DelayType = source.DelayType;
+            Loops = source.Loops;
+            LoopType = source.LoopType;
+            CancelOnError = source.CancelOnError;
+            SkipValuesDuringDelay = source.SkipValuesDuringDelay;
+            BindOnSchedule = source.BindOnSchedule;
+            Scheduler = source.Scheduler;
+        }
 
         public MotionSettings<TValue, TOptions> AsMotionSettings()
         {

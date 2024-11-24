@@ -405,6 +405,33 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Creates a MotionSettings from the values ​​set in the builder.
+        /// </summary>
+        /// <returns>Configured MotionSettings</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionSettings<TValue, TOptions> ToMotionSettings()
+        {
+            CheckBuffer();
+            return new MotionSettings<TValue, TOptions>()
+            {
+                StartValue = buffer.StartValue,
+                EndValue = buffer.EndValue,
+                Duration = buffer.Duration,
+                Options = buffer.Options,
+                Ease = buffer.Ease,
+                CustomEaseCurve = buffer.AnimationCurve,
+                Delay = buffer.Delay,
+                DelayType = buffer.DelayType,
+                Loops = buffer.Loops,
+                LoopType = buffer.LoopType,
+                CancelOnError = buffer.CancelOnError,
+                SkipValuesDuringDelay = buffer.SkipValuesDuringDelay,
+                BindOnSchedule = buffer.BindOnSchedule,
+                Scheduler = buffer.Scheduler,
+            };
+        }
+
+        /// <summary>
         /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
         /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
         /// </summary>
