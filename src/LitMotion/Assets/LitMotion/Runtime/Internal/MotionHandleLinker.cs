@@ -13,17 +13,17 @@ namespace LitMotion
         FastListCore<MotionHandle> completeOnDisableList;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Register(MotionHandle handle, LinkBehaviour linkBehaviour)
+        public void Register(MotionHandle handle, LinkBehavior linkBehaviour)
         {
             switch (linkBehaviour)
             {
-                case LinkBehaviour.CancelOnDestroy:
+                case LinkBehavior.CancelOnDestroy:
                     cancelOnDestroyList.Add(handle);
                     break;
-                case LinkBehaviour.CancelOnDisable:
+                case LinkBehavior.CancelOnDisable:
                     cancelOnDisableList.Add(handle);
                     break;
-                case LinkBehaviour.CompleteOnDisable:
+                case LinkBehavior.CompleteOnDisable:
                     completeOnDisableList.Add(handle);
                     break;
             }

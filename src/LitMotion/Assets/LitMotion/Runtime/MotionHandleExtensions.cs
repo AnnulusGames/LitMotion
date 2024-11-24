@@ -89,7 +89,7 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, GameObject target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, LinkBehaviour.CancelOnDestroy);
+            GetOrAddComponent<MotionHandleLinker>(target).Register(handle, LinkBehavior.CancelOnDestroy);
             return handle;
         }
 
@@ -99,7 +99,7 @@ namespace LitMotion
         /// <param name="handle">This motion handle</param>
         /// <param name="target">Target object</param>
         /// <param name="linkBehaviour">Link behaviour</param>
-        public static MotionHandle AddTo(this MotionHandle handle, GameObject target, LinkBehaviour linkBehaviour)
+        public static MotionHandle AddTo(this MotionHandle handle, GameObject target, LinkBehavior linkBehaviour)
         {
             GetOrAddComponent<MotionHandleLinker>(target).Register(handle, linkBehaviour);
             return handle;
@@ -112,7 +112,7 @@ namespace LitMotion
         /// <param name="target">Target object</param>
         public static MotionHandle AddTo(this MotionHandle handle, Component target)
         {
-            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, LinkBehaviour.CancelOnDestroy);
+            GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, LinkBehavior.CancelOnDestroy);
             return handle;
         }
 
@@ -122,7 +122,7 @@ namespace LitMotion
         /// <param name="handle">This motion handle</param>
         /// <param name="target">Target object</param>
         /// <param name="linkBehaviour">Link behaviour</param>
-        public static MotionHandle AddTo(this MotionHandle handle, Component target, LinkBehaviour linkBehaviour)
+        public static MotionHandle AddTo(this MotionHandle handle, Component target, LinkBehavior linkBehaviour)
         {
             GetOrAddComponent<MotionHandleLinker>(target.gameObject).Register(handle, linkBehaviour);
             return handle;
