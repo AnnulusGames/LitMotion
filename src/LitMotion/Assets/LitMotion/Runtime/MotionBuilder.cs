@@ -29,7 +29,6 @@ namespace LitMotion
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             buffer.Version++;
-            buffer.IsPreserved = false;
             buffer.BindOnSchedule = false;
 
             buffer.StartValue = default;
@@ -68,9 +67,6 @@ namespace LitMotion
 
         public ushort Version;
         public MotionBuilderBuffer<TValue, TOptions> NextNode;
-        public bool IsPreserved;
-        public bool BindOnSchedule;
-
         public TValue StartValue;
         public TValue EndValue;
         public TOptions Options;
@@ -83,6 +79,8 @@ namespace LitMotion
         public LoopType LoopType;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
+        public bool BindOnSchedule;
+
         public object State0;
         public object State1;
         public object State2;
@@ -431,19 +429,6 @@ namespace LitMotion
             };
         }
 
-        /// <summary>
-        /// Preserves the internal buffer and prevents the builder from being automatically destroyed after creating the motion data.
-        /// Calling this allows you to create the motion multiple times, but you must call the Dispose method to destroy the builder after use.
-        /// </summary>
-        /// <returns>This builder to allow chaining multiple method calls.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> Preserve()
-        {
-            CheckBuffer();
-            buffer.IsPreserved = true;
-            return this;
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal MotionHandle ScheduleMotion()
         {
@@ -485,7 +470,7 @@ namespace LitMotion
                 MotionTracker.AddTracking(handle, buffer.Scheduler);
             }
 
-            if (!buffer.IsPreserved) Dispose();
+            Dispose();
 
             return handle;
         }
