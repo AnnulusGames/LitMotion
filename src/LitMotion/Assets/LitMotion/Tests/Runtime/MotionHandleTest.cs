@@ -26,6 +26,28 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_TryCancel()
+        {
+            var value = 0f;
+            var endValue = 10f;
+            var handle = LMotion.Create(0f, endValue, 2f)
+                .Bind(x =>
+                {
+                    value = x;
+                    Debug.Log(x);
+                });
+            yield return new WaitForSeconds(1f);
+            var tryResult = handle.TryCancel();
+            Assert.IsTrue(tryResult);
+            yield return new WaitForSeconds(1f);
+            Assert.IsTrue(value < endValue);
+            Assert.IsTrue(!handle.IsActive());
+
+            tryResult = handle.TryCancel();
+            Assert.IsFalse(tryResult);
+        }
+
+        [UnityTest]
         public IEnumerator Test_Complete()
         {
             var value = 0f;
@@ -40,6 +62,27 @@ namespace LitMotion.Tests.Runtime
             handle.Complete();
             Assert.AreApproximatelyEqual(value, endValue);
             Assert.IsTrue(!handle.IsActive());
+        }
+
+        [UnityTest]
+        public IEnumerator Test_TryComplete()
+        {
+            var value = 0f;
+            var endValue = 10f;
+            var handle = LMotion.Create(0f, endValue, 2f)
+                .Bind(x =>
+                {
+                    value = x;
+                    Debug.Log(x);
+                });
+            yield return new WaitForSeconds(1f);
+            var tryResult = handle.TryComplete();
+            Assert.IsTrue(tryResult);
+            Assert.AreApproximatelyEqual(value, endValue);
+            Assert.IsTrue(!handle.IsActive());
+
+            tryResult = handle.TryComplete();
+            Assert.IsFalse(tryResult);
         }
 
         [UnityTest]
@@ -73,9 +116,9 @@ namespace LitMotion.Tests.Runtime
                     Debug.Log(x);
                 });
             yield return new WaitForSeconds(1f);
-            handle.Complete();
+            handle.TryComplete();
             Assert.IsTrue(handle.IsActive());
-            handle.Cancel();
+            handle.TryCancel();
             Assert.IsTrue(!handle.IsActive());
         }
 

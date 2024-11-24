@@ -44,16 +44,16 @@ namespace LitMotion
 
         AwaitableMotionConfiguredSource() : base() { }
 
-        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken)
+        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
+                OnCanceledTokenReceived(motionHandle, cancelBehavior);
                 return CanceledSource;
             }
 
             var result = new AwaitableMotionConfiguredSource();
-            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
+            result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);
             return result;
         }
 

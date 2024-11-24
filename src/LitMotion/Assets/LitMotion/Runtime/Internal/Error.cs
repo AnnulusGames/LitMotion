@@ -26,9 +26,19 @@ namespace LitMotion
             throw new ArgumentNullException(message);
         }
 
-        public static void PlaybackSpeedMustBeZeroOrGreater()
+        public static void TimeMustBeZeroOrGreater()
         {
-            throw new ArgumentOutOfRangeException("Playback speed must be 0 or greater.");
+            throw new ArgumentOutOfRangeException("Time must be 0 or greater.");
+        }
+
+        public static void MotionNotExists()
+        {
+            throw new InvalidOperationException("Motion has been destroyed or no longer exists.");
+        }
+
+        public static void MotionHasBeenCanceledOrCompleted()
+        {
+            throw new InvalidOperationException("Motion has already been canceled or completed.");
         }
     }
 }

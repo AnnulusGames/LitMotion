@@ -55,19 +55,20 @@ namespace LitMotion.Tests.Runtime
         [Test]
         public void Test_CompleteOnCallback_Self()
         {
-            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Motion has already been canceled or completed.");
 
             MotionHandle handle = default;
             handle = LMotion.Create(0f, 10f, 1f)
                 .WithOnComplete(() => handle.Complete())
                 .RunWithoutBinding();
+                
             handle.Complete();
         }
 
         [Test]
         public void Test_CompleteOnCallback_CircularReference()
         {
-            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Motion has already been canceled or completed.");
 
             MotionHandle handle1 = default;
             MotionHandle handle2 = default;
