@@ -11,19 +11,19 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
-        public TValue StartValue { get; init; }
-        public TValue EndValue { get; init; }
-        public float Duration { get; init; }
-        public TOptions Options { get; init; }
-        public Ease Ease { get; init; }
-        public AnimationCurve CustomEaseCurve { get; init; }
-        public float Delay { get; init; }
-        public DelayType DelayType { get; init; }
-        public int Loops { get; init; } = 1;
-        public LoopType LoopType { get; init; }
-        public bool CancelOnError { get; init; }
-        public bool SkipValuesDuringDelay { get; init; }
-        public bool BindOnSchedule { get; init; }
-        public IMotionScheduler Scheduler { get; init; }
+        public TValue StartValue { get; set; }
+        public TValue EndValue { get; set; }
+        public float Duration { get; set; }
+        public TOptions Options { get; set; }
+        public Ease Ease { get; set; }
+        public AnimationCurve CustomEaseCurve { get; set; }
+        public float Delay { get; set; }
+        public DelayType DelayType { get; set; }
+        public int Loops { get; set; } = 1;
+        public LoopType LoopType { get; set; }
+        public bool CancelOnError { get; set; }
+        public bool SkipValuesDuringDelay { get; set; }
+        public bool BindOnSchedule { get; set; }
+        public IMotionScheduler Scheduler { get; set; }
     }
 }
