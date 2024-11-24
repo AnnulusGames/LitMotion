@@ -107,7 +107,6 @@ namespace LitMotion
             managedDataRef.CancelOnError = buffer.CancelOnError;
             managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;
             managedDataRef.UpdateAction = buffer.UpdateAction;
-            managedDataRef.UpdateActionPtr = buffer.UpdateActionPtr;
             managedDataRef.OnCancelAction = buffer.OnCancelAction;
             managedDataRef.OnCompleteAction = buffer.OnCompleteAction;
             managedDataRef.StateCount = buffer.StateCount;

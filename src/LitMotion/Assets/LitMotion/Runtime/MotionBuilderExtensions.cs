@@ -21,14 +21,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
             where TState : struct
         {
-            return builder.Bind(Box.Create(state), action, &BindAction);
-        }
-
-        static void BindAction<TValue, TState>(TValue value, Box<TState> state, Action<TValue, TState> action)
-            where TValue : unmanaged
-            where TState : struct
-        {
-            action(value, state.Value);
+            return builder.Bind(Box.Create(state), action, (value, state, action) => action(value, state.Value));
         }
 
         /// <summary>

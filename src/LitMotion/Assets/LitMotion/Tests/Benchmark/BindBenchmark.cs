@@ -26,19 +26,6 @@ namespace LitMotion.Tests.Benchmark
 
         [Test]
         [Performance]
-        public unsafe void Benchmark_Bind_Pointer_Startup()
-        {
-            BenchmarkHelper.MeasureStartUp(() =>
-                {
-                    int state = 0;
-                    LMotion.Create(0f, 1f, 3f)
-                        .Bind(Box.Create(state), (Action<float, int>)(static (x, state) => DoNothing(x, state)), &BindAction)
-                        .AddTo(handles);
-                }, () => handles.Cancel());
-        }
-
-        [Test]
-        [Performance]
         public void Benchmark_Bind_Box_StartUp()
         {
             BenchmarkHelper.MeasureStartUp(() =>
@@ -93,21 +80,6 @@ namespace LitMotion.Tests.Benchmark
                     })
                     .AddTo(handles);
             }, () => handles.Cancel());
-        }
-
-        [UnityTest]
-        [Performance]
-        public unsafe IEnumerator Benchmark_Bind_Pointer_Update()
-        {
-            return BenchmarkHelper.MeasureUpdate(() =>
-            {
-                for (int i = 0; i < 10000; i++)
-                {
-                    LMotion.Create(0f, 1f, 3f)
-                        .Bind(Box.Create(i), (Action<float, int>)(static (x, state) => DoNothing(x, state)), &BindAction)
-                        .AddTo(handles);
-                }
-            });
         }
 
         [UnityTest]
@@ -175,24 +147,7 @@ namespace LitMotion.Tests.Benchmark
                 }
             });
         }
-
-        [Test]
-        [Performance]
-        public unsafe void Benchmark_Bind_Pointer_GC()
-        {
-            BenchmarkHelper.MeasureGC(() =>
-            {
-                for (int i = 0; i < 10000; i++)
-                {
-                    LMotion.Create(0f, 1f, 3f)
-                        .Bind(Box.Create(i), (Action<float, int>)(static (x, state) => DoNothing(x, state)), &BindAction)
-                        .AddTo(handles);
-                }
-            });
-
-            handles.Cancel();
-        }
-
+        
         [Test]
         [Performance]
         public void Benchmark_Bind_Box_GC()
