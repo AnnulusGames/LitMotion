@@ -56,6 +56,11 @@ namespace LitMotion
         [SerializeField] bool bindOnSchedule;
         [SerializeField] SchedulerType scheduler;
 
+#if UNITY_EDITOR
+        [SerializeField] bool motionSettings;
+        [SerializeField] bool additionalSettings;
+#endif
+
         public void OnBeforeSerialize()
         {
             startValue = StartValue;

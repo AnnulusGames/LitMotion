@@ -5,6 +5,7 @@ namespace LitMotion
     /// <summary>
     /// Options for shake motion.
     /// </summary>
+    [Serializable]
     public struct ShakeOptions : IEquatable<ShakeOptions>, IMotionOptions
     {
         public int Frequency;
