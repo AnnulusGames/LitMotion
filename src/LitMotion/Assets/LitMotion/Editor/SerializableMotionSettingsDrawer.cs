@@ -30,12 +30,15 @@ namespace LitMotion.Editor
 
             Group(foldout, group =>
             {
-                AddPropertyField(group, property, "ease");
+                var ease = property.FindPropertyRelative("ease");
+                group.Add(new PropertyField(ease));
 
                 var customEaseCurve = new PropertyField(property.FindPropertyRelative("customEaseCurve"));
+                customEaseCurve.style.display = ease.enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None;
+
                 group.Add(customEaseCurve);
                 customEaseCurve.schedule
-                    .Execute(() => customEaseCurve.style.display = property.FindPropertyRelative("ease").enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None)
+                    .Execute(() => customEaseCurve.style.display = ease.enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None)
                     .Every(10);
             });
 
