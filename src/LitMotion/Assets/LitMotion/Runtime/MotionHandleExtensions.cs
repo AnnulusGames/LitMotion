@@ -169,7 +169,7 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <returns></returns>
-        public static IEnumerator ToYieldInteraction(this MotionHandle handle)
+        public static IEnumerator ToYieldInstruction(this MotionHandle handle)
         {
             while (handle.IsActive())
             {
