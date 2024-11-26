@@ -157,10 +157,11 @@ namespace LitMotion
         /// Convert MotionHandle to IDisposable.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <returns></returns>
-        public static IDisposable ToDisposable(this MotionHandle handle)
+        /// <param name="disposeBehavior">Behavior when disposing</param>
+        /// <returns>Disposable motion</returns>
+        public static IDisposable ToDisposable(this MotionHandle handle, MotionDisposeBehavior disposeBehavior = MotionDisposeBehavior.Cancel)
         {
-            return new MotionHandleDisposable(handle);
+            return new MotionHandleDisposable(handle, disposeBehavior);
         }
 
         /// <summary>
@@ -266,14 +267,37 @@ namespace LitMotion
 
     }
 
+    /// <summary>
+    /// Specifies the behavior when the motion converted to IDisposable is disposed.
+    /// </summary>
+    public enum MotionDisposeBehavior
+    {
+        Cancel,
+        Complete,
+    }
+
     internal sealed class MotionHandleDisposable : IDisposable
     {
-        public MotionHandleDisposable(MotionHandle handle) => this.handle = handle;
+        public MotionHandleDisposable(MotionHandle handle, MotionDisposeBehavior disposeBehavior)
+        {
+            this.handle = handle;
+            this.disposeBehavior = disposeBehavior;
+        }
+
         public readonly MotionHandle handle;
+        public readonly MotionDisposeBehavior disposeBehavior;
 
         public void Dispose()
         {
-            if (handle.IsActive()) handle.Cancel();
+            switch (disposeBehavior)
+            {
+                case MotionDisposeBehavior.Cancel:
+                    handle.TryCancel();
+                    break;
+                case MotionDisposeBehavior.Complete:
+                    handle.TryComplete();
+                    break;
+            }
         }
     }
 }
