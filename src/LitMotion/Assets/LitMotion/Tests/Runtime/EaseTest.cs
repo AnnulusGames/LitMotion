@@ -16,7 +16,7 @@ namespace LitMotion.Tests.Runtime
                 yield return LMotion.Create(0f, 10f, 0.2f)
                     .WithEase(curve)
                     .RunWithoutBinding()
-                    .ToYieldInteraction();
+                    .ToYieldInstruction();
             }
         }
     }

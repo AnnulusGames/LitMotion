@@ -2,7 +2,6 @@ using System;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
-using UnityEngine;
 
 namespace LitMotion
 {
@@ -44,7 +43,7 @@ namespace LitMotion
             prevUnscaledTime = unscaledTime;
             prevRealtime = realtime;
 
-            fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
+            fixed (MotionData<TValue, TOptions>* dataPtr = storage.GetDataSpan())
             {
                 // update data
                 var job = new MotionUpdateJob<TValue, TOptions, TAdapter>()
@@ -59,25 +58,26 @@ namespace LitMotion
                 job.Schedule(count, 16).Complete();
 
                 // invoke delegates
-                var callbackSpan = storage.GetCallbacksSpan();
+                var managedDataSpan = storage.GetManagedDataSpan();
                 var outputPtr = (TValue*)output.GetUnsafePtr();
-                for (int i = 0; i < callbackSpan.Length; i++)
+                for (int i = 0; i < managedDataSpan.Length; i++)
                 {
-                    var status = (dataPtr + i)->Core.Status;
-                    ref var callbackData = ref callbackSpan[i];
-                    if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !callbackData.SkipValuesDuringDelay))
+                    var currentDataPtr = dataPtr + i;
+                    var status = currentDataPtr->Core.Status;
+                    ref var managedData = ref managedDataSpan[i];
+                    if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                     {
                         try
                         {
-                            callbackData.InvokeUnsafe(outputPtr[i]);
+                            managedData.UpdateUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbackData.CancelOnError)
+                            if (managedData.CancelOnError)
                             {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
-                                callbackData.OnCancelAction?.Invoke();
+                                currentDataPtr->Core.Status = MotionStatus.Canceled;
+                                managedData.OnCancelAction?.Invoke();
                             }
                         }
                     }
@@ -85,26 +85,29 @@ namespace LitMotion
                     {
                         try
                         {
-                            callbackData.InvokeUnsafe(outputPtr[i]);
+                            managedData.UpdateUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbackData.CancelOnError)
+                            if (managedData.CancelOnError)
                             {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
-                                callbackData.OnCancelAction?.Invoke();
+                                currentDataPtr->Core.Status = MotionStatus.Canceled;
+                                managedData.OnCancelAction?.Invoke();
                                 continue;
                             }
                         }
 
-                        try
+                        if (currentDataPtr->Core.WasStatusChanged)
                         {
-                            callbackData.OnCompleteAction?.Invoke();
-                        }
-                        catch (Exception ex)
-                        {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                            try
+                            {
+                                managedData.OnCompleteAction?.Invoke();
+                            }
+                            catch (Exception ex)
+                            {
+                                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                            }
                         }
                     }
                 }
@@ -115,6 +118,9 @@ namespace LitMotion
 
         public void Reset()
         {
+            prevTime = 0;
+            prevUnscaledTime = 0;
+            prevRealtime = 0;
             storage.Reset();
         }
     }

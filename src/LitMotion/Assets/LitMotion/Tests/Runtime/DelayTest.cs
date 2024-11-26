@@ -1,4 +1,5 @@
 using System.Collections;
+using LitMotion.Extensions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -14,7 +15,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 1f, 0.5f)
                 .WithDelay(0.5f)
                 .BindToUnityLogger()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             Assert.That(Time.timeAsDouble - t, Is.GreaterThan(0.95).And.LessThan(1.1));
         }
 
@@ -25,7 +26,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 1f, 0f)
                 .WithDelay(1f)
                 .BindToUnityLogger()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             Assert.That(Time.timeAsDouble - t, Is.GreaterThan(0.95).And.LessThan(1.1));
         }
 
@@ -37,7 +38,7 @@ namespace LitMotion.Tests.Runtime
                 .WithLoops(2)
                 .WithDelay(0.5f, DelayType.EveryLoop)
                 .BindToUnityLogger()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             Assert.That(Time.timeAsDouble - t, Is.GreaterThan(1.95).And.LessThan(2.1));
         }
 
@@ -49,7 +50,7 @@ namespace LitMotion.Tests.Runtime
                 .WithLoops(3)
                 .WithDelay(0.5f, DelayType.EveryLoop)
                 .BindToUnityLogger()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             Assert.That(Time.timeAsDouble - t, Is.GreaterThan(1.45).And.LessThan(1.6));
         }
 

@@ -20,8 +20,8 @@ namespace LitMotion
             {
                 if (updateStorage == null)
                 {
-                    var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                    MotionStorageManager.AddStorage(storage);
+                    var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionManager.MotionTypeCount);
+                    MotionManager.Register(storage);
                     updateStorage = storage;
                 }
                 return updateStorage;
@@ -82,7 +82,7 @@ namespace LitMotion
             }
         }
 
-        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
            where TValue : unmanaged
            where TOptions : unmanaged, IMotionOptions
            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
@@ -95,13 +95,7 @@ namespace LitMotion
                 Cache<TValue, TOptions, TAdapter>.updateRunner = runner;
             }
 
-            var (EntryIndex, Version) = storage.Append(data, callbackData);
-            return new MotionHandle()
-            {
-                StorageId = storage.StorageId,
-                Index = EntryIndex,
-                Version = Version
-            };
+            return storage.Create(ref builder);
         }
     }
 }
