@@ -194,14 +194,10 @@ namespace LitMotion
         public bool IsActive(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
+            if (IsDenseIndexOutOfRange(slot.DenseIndex)) return false;
+            if (IsInvalidVersion(slot.Version, handle)) return false;
 
-            var denseIndex = slot.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= tail) return false;
-
-            var version = slot.Version;
-            if (version <= 0 || version != handle.Version) return false;
-
-            ref var motion = ref unmanagedDataArray[denseIndex];
+            ref var motion = ref unmanagedDataArray[slot.DenseIndex];
             return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
@@ -227,14 +223,13 @@ namespace LitMotion
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= tail)
+            if (IsDenseIndexOutOfRange(denseIndex))
             {
                 return 1;
             }
 
             ref var unmanagedData = ref unmanagedDataArray[denseIndex];
-            var version = slot.Version;
-            if (version <= 0 || version != handle.Version)
+            if (IsInvalidVersion(slot.Version, handle))
             {
                 return 1;
             }
@@ -283,16 +278,15 @@ namespace LitMotion
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
-            var denseIndex = slot.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= tail)
+            if (IsDenseIndexOutOfRange(slot.DenseIndex))
             {
                 return 1;
             }
 
-            ref var unmanagedData = ref unmanagedDataArray[denseIndex];
+            ref var unmanagedData = ref unmanagedDataArray[slot.DenseIndex];
 
             var version = slot.Version;
-            if (version <= 0 || version != handle.Version)
+            if (IsInvalidVersion(version, handle))
             {
                 return 1;
             }
@@ -307,7 +301,7 @@ namespace LitMotion
                 return 3;
             }
 
-            ref var managedData = ref managedDataArray[denseIndex];
+            ref var managedData = ref managedDataArray[slot.DenseIndex];
 
             unmanagedData.Core.Status = MotionStatus.Completed;
 
@@ -358,7 +352,7 @@ namespace LitMotion
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= tail) Error.MotionNotExists();
+            if (IsDenseIndexOutOfRange(denseIndex)) Error.MotionNotExists();
 
             fixed (MotionData<TValue, TOptions>* ptr = unmanagedDataArray)
             {
@@ -396,14 +390,10 @@ namespace LitMotion
         ref SparseSetCore.Slot GetSlotWithVarify(MotionHandle handle)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
-            var denseIndex = slot.DenseIndex;
-            if (denseIndex < 0 || denseIndex >= unmanagedDataArray.Length)
-            {
-                Error.MotionNotExists();
-            }
+            if (IsDenseIndexOutOfRange(slot.DenseIndex)) Error.MotionNotExists();
 
-            var version = slot.Version;
-            if (version <= 0 || version != handle.Version || unmanagedDataArray[denseIndex].Core.Status == MotionStatus.None)
+            if (IsInvalidVersion(slot.Version, handle) ||
+                unmanagedDataArray[slot.DenseIndex].Core.Status == MotionStatus.None)
             {
                 Error.MotionNotExists();
             }
@@ -419,6 +409,18 @@ namespace LitMotion
             managedDataArray.AsSpan().Clear();
             tail = 0;
             allocator.Allocator.Rewind();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool IsDenseIndexOutOfRange(int denseIndex)
+        {
+            return denseIndex < 0 || denseIndex >= tail;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool IsInvalidVersion(int version, MotionHandle handle)
+        {
+            return version <= 0 || version != handle.Version;
         }
     }
 }
