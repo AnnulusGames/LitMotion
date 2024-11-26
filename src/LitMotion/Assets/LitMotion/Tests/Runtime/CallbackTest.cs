@@ -61,7 +61,7 @@ namespace LitMotion.Tests.Runtime
             handle = LMotion.Create(0f, 10f, 1f)
                 .WithOnComplete(() => handle.Complete())
                 .RunWithoutBinding();
-                
+
             handle.Complete();
         }
 
@@ -89,7 +89,7 @@ namespace LitMotion.Tests.Runtime
             LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => otherHandle.Complete())
                 .RunWithoutBinding();
-            yield return otherHandle.ToYieldInteraction();
+            yield return otherHandle.ToYieldInstruction();
         }
 
         [UnityTest]
@@ -99,7 +99,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => throw new Exception("Test"))
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => throw new Exception("Test"))
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             MotionDispatcher.RegisterUnhandledExceptionHandler(defaultHandler);
         }
     }
