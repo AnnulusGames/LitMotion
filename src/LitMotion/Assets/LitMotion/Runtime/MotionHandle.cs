@@ -33,7 +33,6 @@ namespace LitMotion
             }
             set
             {
-                if (value < 0f) Error.TimeMustBeZeroOrGreater();
                 MotionManager.SetTime(this, value);
             }
         }
@@ -45,10 +44,7 @@ namespace LitMotion
         {
             get
             {
-                ref var dataRef = ref MotionManager.GetDataRef(this);
-                if (dataRef.Loops < 0) return double.PositiveInfinity;
-                return dataRef.Delay * (dataRef.DelayType == DelayType.EveryLoop ? dataRef.Loops : 1) +
-                    dataRef.Duration * dataRef.Loops;
+                return MotionHelper.GetTotalDuration(ref MotionManager.GetDataRef(this));
             }
         }
 
