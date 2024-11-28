@@ -361,7 +361,7 @@ namespace LitMotion
                 var version = slot.Version;
                 if (version <= 0 || version != handle.Version) Error.MotionNotExists();
 
-                MotionHelper.SetTime<TValue, TOptions, TAdapter>(dataPtr + denseIndex, time, out var result);
+                MotionHelper.SetTime<TValue, TOptions, TAdapter>(dataPtr, time, out var result);
 
                 try
                 {
