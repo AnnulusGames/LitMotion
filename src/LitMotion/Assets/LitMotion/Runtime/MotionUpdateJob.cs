@@ -32,7 +32,7 @@ namespace LitMotion
             var ptr = DataPtr + index;
             var corePtr = (MotionDataCore*)ptr;
 
-            if (Hint.Likely(corePtr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing) || 
+            if (Hint.Likely(corePtr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing) ||
                 Hint.Unlikely(corePtr->IsPreserved && corePtr->Status is MotionStatus.Completed))
             {
                 var deltaTime = corePtr->TimeKind switch
@@ -45,7 +45,7 @@ namespace LitMotion
 
                 var time = corePtr->Time + deltaTime * corePtr->PlaybackSpeed;
 
-                MotionHelper.SetTime<TValue, TOptions, TAdapter>(ptr, time, out var result);
+                MotionHelper.Update<TValue, TOptions, TAdapter>(ptr, time, out var result);
 
                 Output[index] = result;
             }

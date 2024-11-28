@@ -8,7 +8,7 @@ namespace LitMotion
     internal unsafe static class MotionHelper
     {
         [BurstCompile]
-        public static void SetTime<TValue, TOptions, TAdapter>(MotionData<TValue, TOptions>* ptr, double time, out TValue result)
+        public static void Update<TValue, TOptions, TAdapter>(MotionData<TValue, TOptions>* ptr, double time, out TValue result)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
@@ -44,17 +44,13 @@ namespace LitMotion
                         t = 0f;
                         completedLoops = timeSinceStart < 0f ? -1 : 0;
                     }
-                    clampedCompletedLoops = corePtr->Loops < 0
-                        ? math.max(0, completedLoops)
-                        : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = GetClampedCompletedLoops(corePtr, completedLoops);
                     isDelayed = timeSinceStart < 0;
                 }
                 else
                 {
                     completedLoops = (int)math.floor(time / corePtr->Delay);
-                    clampedCompletedLoops = corePtr->Loops < 0
-                        ? math.max(0, completedLoops)
-                        : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = GetClampedCompletedLoops(corePtr, completedLoops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
                     isDelayed = !isCompleted;
                     t = isCompleted ? 1f : 0f;
@@ -66,9 +62,7 @@ namespace LitMotion
                 {
                     var timeSinceStart = time - corePtr->Delay;
                     completedLoops = (int)math.floor(timeSinceStart / corePtr->Duration);
-                    clampedCompletedLoops = corePtr->Loops < 0
-                        ? math.max(0, completedLoops)
-                        : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = GetClampedCompletedLoops(corePtr, completedLoops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
                     isDelayed = timeSinceStart < 0f;
 
@@ -86,9 +80,7 @@ namespace LitMotion
                 {
                     var currentLoopTime = math.fmod(time, corePtr->Duration + corePtr->Delay) - corePtr->Delay;
                     completedLoops = (int)math.floor(time / (corePtr->Duration + corePtr->Delay));
-                    clampedCompletedLoops = corePtr->Loops < 0
-                        ? math.max(0, completedLoops)
-                        : math.clamp(completedLoops, 0, corePtr->Loops);
+                    clampedCompletedLoops = GetClampedCompletedLoops(corePtr, completedLoops);
                     isCompleted = corePtr->Loops >= 0 && clampedCompletedLoops > corePtr->Loops - 1;
                     isDelayed = currentLoopTime < 0;
 
@@ -145,6 +137,13 @@ namespace LitMotion
             };
 
             result = default(TAdapter).Evaluate(ref ptr->StartValue, ref ptr->EndValue, ref ptr->Options, context);
+        }
+
+        static int GetClampedCompletedLoops(MotionDataCore* corePtr, int completedLoops)
+        {
+            return corePtr->Loops < 0
+                ? math.max(0, completedLoops)
+                : math.clamp(completedLoops, 0, corePtr->Loops);
         }
 
         static float GetEasedValue(MotionDataCore* data, float value)
