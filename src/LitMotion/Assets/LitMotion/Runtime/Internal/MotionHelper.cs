@@ -124,15 +124,11 @@ namespace LitMotion
                     break;
             }
 
-            var totalDuration = corePtr->DelayType == DelayType.FirstLoop
-                ? corePtr->Delay + corePtr->Duration * corePtr->Loops
-                : (corePtr->Delay + corePtr->Duration) * corePtr->Loops;
-
             if (isCompleted)
             {
                 corePtr->Status = MotionStatus.Completed;
             }
-            else if (isDelayed)
+            else if (isDelayed || corePtr->Time < 0)
             {
                 corePtr->Status = MotionStatus.Delayed;
             }

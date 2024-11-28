@@ -33,7 +33,6 @@ namespace LitMotion
             }
             set
             {
-                if (value < 0f) Error.TimeMustBeZeroOrGreater();
                 MotionManager.SetTime(this, value);
             }
         }
