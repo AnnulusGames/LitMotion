@@ -20,7 +20,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.anchoredPosition = x;
             });
@@ -39,7 +39,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var p = target.anchoredPosition;
                 p.x = x;
@@ -60,7 +60,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var p = target.anchoredPosition;
                 p.y = x;
@@ -81,7 +81,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.anchoredPosition3D = x;
             });
@@ -100,7 +100,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var p = target.anchoredPosition3D;
                 p.x = x;
@@ -121,7 +121,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var p = target.anchoredPosition3D;
                 p.y = x;
@@ -142,7 +142,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var p = target.anchoredPosition3D;
                 p.z = x;
@@ -163,7 +163,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.anchorMin = x;
             });
@@ -182,7 +182,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.anchorMax = x;
             });
@@ -202,7 +202,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.sizeDelta = x;
             });
@@ -221,7 +221,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var s = target.sizeDelta;
                 s.x = x;
@@ -242,7 +242,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var s = target.sizeDelta;
                 s.y = x;
@@ -263,7 +263,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 target.pivot = x;
             });
@@ -282,7 +282,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var s = target.pivot;
                 s.x = x;
@@ -303,7 +303,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(rectTransform);
-            return builder.BindWithState(rectTransform, static (x, target) =>
+            return builder.Bind(rectTransform, static (x, target) =>
             {
                 var s = target.pivot;
                 s.y = x;

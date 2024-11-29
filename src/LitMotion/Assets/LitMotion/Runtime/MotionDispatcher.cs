@@ -49,8 +49,8 @@ namespace LitMotion
             {
                 if (storage == null)
                 {
-                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                    MotionStorageManager.AddStorage(storage);
+                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionManager.MotionTypeCount);
+                    MotionManager.Register(storage);
                 }
                 return storage;
             }
@@ -207,21 +207,14 @@ namespace LitMotion
 #endif
         }
 
-        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData, PlayerLoopTiming playerLoopTiming)
+        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder, PlayerLoopTiming playerLoopTiming)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var storage = StorageCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming);
             RunnerCache<TValue, TOptions, TAdapter>.GetOrCreate(playerLoopTiming, storage);
-
-            var (EntryIndex, Version) = storage.Append(data, callbackData);
-            return new MotionHandle()
-            {
-                StorageId = storage.StorageId,
-                Index = EntryIndex,
-                Version = Version
-            };
+            return storage.Create(ref builder);
         }
 
         internal static void Update(PlayerLoopTiming playerLoopTiming)
@@ -256,8 +249,8 @@ namespace LitMotion
             {
                 if (storage == null)
                 {
-                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                    MotionStorageManager.AddStorage(storage);
+                    storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionManager.MotionTypeCount);
+                    MotionManager.Register(storage);
                 }
                 return storage;
             }
@@ -272,24 +265,17 @@ namespace LitMotion
                 }
             }
         }
-        
+
         static FastListCore<IUpdateRunner> updateRunners;
 
-        public static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
+        public static MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var storage = Cache<TValue, TOptions, TAdapter>.GetOrCreateStorage();
             Cache<TValue, TOptions, TAdapter>.InitUpdateRunner();
-
-            var (EntryIndex, Version) = storage.Append(data, callbackData);
-            return new MotionHandle()
-            {
-                StorageId = storage.StorageId,
-                Index = EntryIndex,
-                Version = Version
-            };
+            return storage.Create(ref builder);
         }
 
         public static void EnsureStorageCapacity<TValue, TOptions, TAdapter>(int capacity)

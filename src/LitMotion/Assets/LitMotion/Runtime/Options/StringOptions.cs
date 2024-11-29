@@ -37,6 +37,7 @@ namespace LitMotion
     /// <summary>
     /// Options for string type motion.
     /// </summary>
+    [Serializable]
     public struct StringOptions : IMotionOptions, IEquatable<StringOptions>
     {
         public ScrambleMode ScrambleMode;

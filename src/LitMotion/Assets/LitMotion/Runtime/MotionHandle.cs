@@ -23,18 +23,43 @@ namespace LitMotion
         public int Version;
 
         /// <summary>
+        /// Motion time
+        /// </summary>
+        public readonly double Time
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this).Time;
+            }
+            set
+            {
+                MotionManager.SetTime(this, value);
+            }
+        }
+
+        /// <summary>
+        /// The total duration of the motion
+        /// </summary>
+        public readonly double Duration
+        {
+            get
+            {
+                return MotionHelper.GetTotalDuration(ref MotionManager.GetDataRef(this));
+            }
+        }
+
+        /// <summary>
         /// Motion playback speed.
         /// </summary>
         public readonly float PlaybackSpeed
         {
             get
             {
-                return MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed;
+                return MotionManager.GetDataRef(this).PlaybackSpeed;
             }
             set
             {
-                if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
-                MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed = value;
+                MotionManager.GetDataRef(this).PlaybackSpeed = value;
             }
         }
 

@@ -20,7 +20,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.position = x;
             });
@@ -39,7 +39,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.x = x;
@@ -60,7 +60,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.y = x;
@@ -81,14 +81,14 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.z = x;
                 t.position = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.position.xy
         /// </summary>
@@ -102,7 +102,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.x = x.x;
@@ -110,7 +110,7 @@ namespace LitMotion.Extensions
                 t.position = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.position.xz
         /// </summary>
@@ -124,7 +124,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.x = x.x;
@@ -132,7 +132,7 @@ namespace LitMotion.Extensions
                 t.position = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.position.yz
         /// </summary>
@@ -146,7 +146,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.position;
                 p.y = x.x;
@@ -168,7 +168,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.localPosition = x;
             });
@@ -187,7 +187,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.x = x;
@@ -209,7 +209,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.y = x;
@@ -230,14 +230,14 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.z = x;
                 t.localPosition = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localPosition.xy
         /// </summary>
@@ -251,7 +251,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.x = x.x;
@@ -259,7 +259,7 @@ namespace LitMotion.Extensions
                 t.localPosition = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localPosition.xz
         /// </summary>
@@ -273,7 +273,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.x = x.x;
@@ -281,7 +281,7 @@ namespace LitMotion.Extensions
                 t.localPosition = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localPosition.yz
         /// </summary>
@@ -295,7 +295,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localPosition;
                 p.y = x.x;
@@ -317,7 +317,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.rotation = x;
             });
@@ -336,7 +336,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Quaternion, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.localRotation = x;
             });
@@ -355,7 +355,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.eulerAngles = x;
             });
@@ -374,7 +374,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.x = x;
@@ -395,7 +395,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.y = x;
@@ -416,14 +416,14 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.z = x;
                 t.eulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.eulerAngles.xy
         /// </summary>
@@ -437,7 +437,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.x = x.x;
@@ -445,7 +445,7 @@ namespace LitMotion.Extensions
                 t.eulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.eulerAngles.xz
         /// </summary>
@@ -459,7 +459,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.x = x.x;
@@ -467,7 +467,7 @@ namespace LitMotion.Extensions
                 t.eulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.eulerAngles.yz
         /// </summary>
@@ -481,7 +481,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.eulerAngles;
                 p.y = x.x;
@@ -503,7 +503,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.localEulerAngles = x;
             });
@@ -522,7 +522,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.x = x;
@@ -543,7 +543,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.y = x;
@@ -564,14 +564,14 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.z = x;
                 t.localEulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localEulerAngles.xy
         /// </summary>
@@ -585,7 +585,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.x = x.x;
@@ -593,7 +593,7 @@ namespace LitMotion.Extensions
                 t.localEulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localEulerAngles.xz
         /// </summary>
@@ -607,7 +607,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.x = x.x;
@@ -615,7 +615,7 @@ namespace LitMotion.Extensions
                 t.localEulerAngles = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localEulerAngles.yz
         /// </summary>
@@ -629,7 +629,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localEulerAngles;
                 p.y = x.x;
@@ -651,7 +651,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 t.localScale = x;
             });
@@ -670,7 +670,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.x = x;
@@ -691,7 +691,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.y = x;
@@ -712,14 +712,14 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.z = x;
                 t.localScale = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localScale.xy
         /// </summary>
@@ -733,7 +733,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.x = x.x;
@@ -741,7 +741,7 @@ namespace LitMotion.Extensions
                 t.localScale = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localScale.xz
         /// </summary>
@@ -755,7 +755,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.x = x.x;
@@ -763,7 +763,7 @@ namespace LitMotion.Extensions
                 t.localScale = p;
             });
         }
-        
+
         /// <summary>
         /// Create a motion data and bind it to Transform.localScale.yz
         /// </summary>
@@ -777,7 +777,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(transform);
-            return builder.BindWithState(transform, static (x, t) =>
+            return builder.Bind(transform, static (x, t) =>
             {
                 var p = t.localScale;
                 p.y = x.x;
