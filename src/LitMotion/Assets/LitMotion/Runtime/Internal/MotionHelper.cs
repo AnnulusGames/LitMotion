@@ -139,12 +139,19 @@ namespace LitMotion
             result = default(TAdapter).Evaluate(ref ptr->StartValue, ref ptr->EndValue, ref ptr->Options, context);
         }
 
-        [BurstCompile]
         public static double GetTotalDuration(ref MotionDataCore dataRef)
         {
             if (dataRef.Loops < 0) return double.PositiveInfinity;
             return dataRef.Delay * (dataRef.DelayType == DelayType.EveryLoop ? dataRef.Loops : 1) +
                 dataRef.Duration * dataRef.Loops;
+        }
+
+        [BurstCompile]
+        public static double GetTotalDuration(MotionDataCore* dataPtr)
+        {
+            if (dataPtr->Loops < 0) return double.PositiveInfinity;
+            return dataPtr->Delay * (dataPtr->DelayType == DelayType.EveryLoop ? dataPtr->Loops : 1) +
+                dataPtr->Duration * dataPtr->Loops;
         }
 
         static int GetClampedCompletedLoops(MotionDataCore* corePtr, int completedLoops)
