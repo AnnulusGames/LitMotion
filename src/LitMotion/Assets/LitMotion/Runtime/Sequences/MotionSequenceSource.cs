@@ -78,7 +78,7 @@ namespace LitMotion.Sequences
 
                 foreach (var item in itemsBuffer.AsSpan(0, itemCount))
                 {
-                    item.Handle.Time = time;
+                    item.Handle.Time = time - item.Position;
                 }
             }
         }
