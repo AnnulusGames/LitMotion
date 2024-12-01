@@ -4,7 +4,8 @@ namespace LitMotion.Sequences
     {
         public static MotionSequenceBuilder Create()
         {
-            return new MotionSequenceBuilder();
+            var source = MotionSequenceBuilderSource.Rent();
+            return new MotionSequenceBuilder(source);
         }
     }
 }
