@@ -48,10 +48,7 @@ namespace LitMotion.Sequences
             MotionManager.GetManagedDataRef(handle).SkipValuesDuringDelay = true;
 
             var motionDuration = handle.Duration;
-            if (double.IsInfinity(motionDuration))
-            {
-                throw new ArgumentException(); // TODO:
-            }
+            ThrowIfDurationIsInfinity(motionDuration);
 
             AddItem(new MotionSequenceItem(tail, handle));
             tail += motionDuration;
@@ -65,10 +62,7 @@ namespace LitMotion.Sequences
             MotionManager.GetManagedDataRef(handle).SkipValuesDuringDelay = true;
 
             var motionDuration = handle.Duration;
-            if (double.IsInfinity(motionDuration))
-            {
-                throw new ArgumentException(); // TODO:
-            }
+            ThrowIfDurationIsInfinity(motionDuration);
 
             AddItem(new MotionSequenceItem(position, handle));
             duration = Math.Max(duration, position + motionDuration);
@@ -103,6 +97,14 @@ namespace LitMotion.Sequences
 
             buffer[count] = item;
             count++;
+        }
+
+        void ThrowIfDurationIsInfinity(double duration)
+        {
+            if (double.IsInfinity(duration))
+            {
+                throw new ArgumentException("Cannot add an infinitely looping motion to a sequence.");
+            }
         }
     }
 
