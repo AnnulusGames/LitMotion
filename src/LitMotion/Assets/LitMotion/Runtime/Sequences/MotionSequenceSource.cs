@@ -1,3 +1,7 @@
+using System;
+using System.Buffers;
+using LitMotion.Collections;
+
 namespace LitMotion.Sequences
 {
     internal struct MotionSequenceItem
@@ -12,17 +16,58 @@ namespace LitMotion.Sequences
         public MotionHandle Handle;
     }
 
-    internal sealed class MotionSequenceSource
+    internal sealed class MotionSequenceSource : ILinkedPoolNode<MotionSequenceSource>
     {
-        internal MotionSequenceSource(MotionSequenceItem[] items, double duration)
+        static LinkedPool<MotionSequenceSource> pool;
+
+        public static MotionSequenceSource Rent()
         {
-            this.items = items;
+            if (!pool.TryPop(out var result)) result = new();
+            return result;
+        }
+
+        public static void Return(MotionSequenceSource source)
+        {
+            ArrayPool<MotionSequenceItem>.Shared.Return(source.itemsBuffer);
+            source.itemsBuffer = null;
+            pool.TryPush(source);
+        }
+
+        public void Initialize(MotionHandle handle, ReadOnlySpan<MotionSequenceItem> items, double duration)
+        {
+            this.handle = handle;
+            this.itemCount = items.Length;
+            this.itemsBuffer = ArrayPool<MotionSequenceItem>.Shared.Rent(itemCount);
+            items.CopyTo(this.itemsBuffer);
             this.duration = duration;
         }
 
-        readonly MotionSequenceItem[] items;
+        MotionSequenceSource()
+        {
+            onCompleteDelegate = () =>
+            {
+                if (!MotionManager.GetDataRef(handle).IsPreserved)
+                {
+                    Return(this);
+                }
+            };
+            onCancelDelegate = () => Return(this);
+        }
+
+        readonly Action onCompleteDelegate;
+        readonly Action onCancelDelegate;
+        MotionSequenceSource next;
+
+        MotionHandle handle;
+        MotionSequenceItem[] itemsBuffer;
+        int itemCount;
         double duration;
         double time;
+
+        public ref MotionSequenceSource NextNode => ref next;
+
+        public Action OnCompleteDelegate => onCompleteDelegate;
+        public Action OnCancelDelegate => onCancelDelegate;
 
         public double Time
         {
@@ -31,7 +76,7 @@ namespace LitMotion.Sequences
             {
                 time = value;
 
-                foreach (var item in items)
+                foreach (var item in itemsBuffer.AsSpan(0, itemCount))
                 {
                     item.Handle.Time = time;
                 }

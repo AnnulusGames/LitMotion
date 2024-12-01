@@ -65,10 +65,15 @@ namespace LitMotion.Sequences
 
         public MotionHandle Run()
         {
-            var sequence = new MotionSequenceSource(buffer.AsSpan(0, count).ToArray(), duration);
+            var source = MotionSequenceSource.Rent();
+            var handle = LMotion.Create(0.0, duration, (float)duration)
+                .WithOnComplete(source.OnCompleteDelegate)
+                .WithOnCancel(source.OnCancelDelegate)
+                .Bind(source, (x, source) => source.Time = x);
+
+            source.Initialize(handle, buffer.AsSpan(0, count), duration);
             Dispose();
-            return LMotion.Create(0.0, sequence.Duration, (float)sequence.Duration)
-                .Bind(sequence, (x, sequence) => sequence.Time = x);
+            return handle;
         }
 
         public void Dispose()
