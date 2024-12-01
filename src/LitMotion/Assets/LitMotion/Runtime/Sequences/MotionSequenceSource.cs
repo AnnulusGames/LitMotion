@@ -4,7 +4,7 @@ using LitMotion.Collections;
 
 namespace LitMotion.Sequences
 {
-    internal struct MotionSequenceItem
+    internal struct MotionSequenceItem : IComparable<MotionSequenceItem>
     {
         public MotionSequenceItem(double position, MotionHandle handle)
         {
@@ -14,6 +14,11 @@ namespace LitMotion.Sequences
 
         public double Position;
         public MotionHandle Handle;
+
+        public int CompareTo(MotionSequenceItem other)
+        {
+            return Position.CompareTo(other.Position);
+        }
     }
 
     internal sealed class MotionSequenceSource : ILinkedPoolNode<MotionSequenceSource>

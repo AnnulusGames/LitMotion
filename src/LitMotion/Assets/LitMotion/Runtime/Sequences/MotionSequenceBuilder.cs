@@ -82,6 +82,7 @@ namespace LitMotion.Sequences
                 .WithOnCancel(source.OnCancelDelegate)
                 .Bind(source, (x, source) => source.Time = x);
 
+            Array.Sort(buffer, 0, count);
             source.Initialize(handle, buffer.AsSpan(0, count), duration);
             return handle;
         }
@@ -116,20 +117,23 @@ namespace LitMotion.Sequences
             this.version = source.Version;
         }
 
-        public MotionSequenceBuilder Append(MotionHandle handle)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionSequenceBuilder Append(MotionHandle handle)
         {
             CheckIsDisposed();
             source.Append(handle);
             return this;
         }
 
-        public MotionSequenceBuilder Insert(double position, MotionHandle handle)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionSequenceBuilder Insert(float position, MotionHandle handle)
         {
             CheckIsDisposed();
             source.Insert(position, handle);
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Run()
         {
             CheckIsDisposed();
@@ -138,6 +142,7 @@ namespace LitMotion.Sequences
             return handle;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose()
         {
             CheckIsDisposed();
