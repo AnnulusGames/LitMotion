@@ -14,11 +14,11 @@ namespace LitMotion
         void Cancel(MotionHandle handle);
         void Complete(MotionHandle handle);
         void SetTime(MotionHandle handle, double time);
+        void AddToSequence(ref MotionHandle handle, out double motionDuration);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         void Reset();
     }
-
 
     internal sealed class MotionStorage<TValue, TOptions, TAdapter> : IMotionStorage
         where TValue : unmanaged
@@ -412,6 +412,33 @@ namespace LitMotion
                     }
                 }
             }
+        }
+
+        public void AddToSequence(ref MotionHandle handle, out double motionDuration)
+        {
+            ref var slot = ref GetSlotWithVarify(handle);
+            ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
+
+            if (dataRef.Core.Status is not MotionStatus.Scheduled)
+            {
+                throw new ArgumentException("Cannot add a running motion to a sequence.");
+            }
+
+            motionDuration = handle.Duration;
+            if (double.IsInfinity(motionDuration))
+            {
+                throw new ArgumentException("Cannot add an infinitely looping motion to a sequence.");
+            }
+
+            dataRef.Core.IsPreserved = true;
+            dataRef.Core.SkipUpdate = true;
+
+            ref var managedDataRef = ref managedDataArray[slot.DenseIndex];
+            managedDataRef.SkipValuesDuringDelay = true;
+
+            // increment version
+            slot.Version++;
+            handle.Version++;
         }
 
         public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)

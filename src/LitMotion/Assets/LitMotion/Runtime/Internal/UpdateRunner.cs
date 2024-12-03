@@ -63,6 +63,9 @@ namespace LitMotion
                 for (int i = 0; i < managedDataSpan.Length; i++)
                 {
                     var currentDataPtr = dataPtr + i;
+
+                    if (currentDataPtr->Core.SkipUpdate) continue;
+
                     var status = currentDataPtr->Core.Status;
                     ref var managedData = ref managedDataSpan[i];
                     if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))

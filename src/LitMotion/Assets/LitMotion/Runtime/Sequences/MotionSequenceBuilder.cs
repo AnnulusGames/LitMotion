@@ -43,12 +43,7 @@ namespace LitMotion.Sequences
 
         public void Append(MotionHandle handle)
         {
-            CheckHandle(handle, out var motionDuration);
-
-            handle.Preserve();
-            handle.PlaybackSpeed = 0;
-            MotionManager.GetManagedDataRef(handle).SkipValuesDuringDelay = true;
-
+            MotionManager.AddToSequence(ref handle, out var motionDuration);
             AddItem(new MotionSequenceItem(tail, handle));
             tail += motionDuration;
             duration += motionDuration;
@@ -56,12 +51,7 @@ namespace LitMotion.Sequences
 
         public void Insert(double position, MotionHandle handle)
         {
-            CheckHandle(handle, out var motionDuration);
-
-            handle.Preserve();
-            handle.PlaybackSpeed = 0;
-            MotionManager.GetManagedDataRef(handle).SkipValuesDuringDelay = true;
-
+            MotionManager.AddToSequence(ref handle, out var motionDuration);
             AddItem(new MotionSequenceItem(position, handle));
             duration = Math.Max(duration, position + motionDuration);
         }
@@ -95,21 +85,6 @@ namespace LitMotion.Sequences
 
             buffer[count] = item;
             count++;
-        }
-
-        void CheckHandle(MotionHandle handle, out double motionDuration)
-        {
-            ref var data = ref MotionManager.GetDataRef(handle);
-            if (data.Status is not MotionStatus.Scheduled)
-            {
-                throw new ArgumentException("Cannot add a running motion to a sequence.");
-            }
-
-            motionDuration = handle.Duration;
-            if (double.IsInfinity(motionDuration))
-            {
-                throw new ArgumentException("Cannot add an infinitely looping motion to a sequence.");
-            }
         }
     }
 
