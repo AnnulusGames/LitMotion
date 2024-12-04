@@ -51,7 +51,7 @@ namespace LitMotion.Sequences
         {
             onCompleteDelegate = () =>
             {
-                if (!MotionManager.GetDataRef(handle).IsPreserved)
+                if (MotionManager.IsActive(handle) && !MotionManager.GetDataRef(handle).IsPreserved)
                 {
                     Return(this);
                 }
