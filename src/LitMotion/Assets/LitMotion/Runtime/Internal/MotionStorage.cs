@@ -433,8 +433,8 @@ namespace LitMotion
             dataRef.Core.IsPreserved = true;
             dataRef.Core.SkipUpdate = true;
 
-            ref var managedDataRef = ref managedDataArray[slot.DenseIndex];
-            managedDataRef.SkipValuesDuringDelay = true;
+            // ref var managedDataRef = ref managedDataArray[slot.DenseIndex];
+            // managedDataRef.SkipValuesDuringDelay = true;
 
             // increment version
             slot.Version++;
