@@ -45,6 +45,7 @@ namespace LitMotion.Sequences
             this.itemsBuffer = ArrayPool<MotionSequenceItem>.Shared.Rent(itemCount);
             items.CopyTo(this.itemsBuffer);
             this.duration = duration;
+            this.time = 0;
         }
 
         MotionSequenceSource()
