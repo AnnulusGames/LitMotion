@@ -69,7 +69,7 @@ namespace LitMotion.Sequences
             Insert(lastTail, handle);
         }
 
-        public MotionHandle Run()
+        public MotionHandle Schedule()
         {
             var source = MotionSequenceSource.Rent();
             var handle = LMotion.Create(0.0, duration, (float)duration)
@@ -148,7 +148,7 @@ namespace LitMotion.Sequences
         public MotionHandle Schedule()
         {
             CheckIsDisposed();
-            var handle = source.Run();
+            var handle = source.Schedule();
             Dispose();
             return handle;
         }
