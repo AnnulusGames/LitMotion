@@ -145,7 +145,7 @@ namespace LitMotion.Sequences
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public MotionHandle Run()
+        public MotionHandle Schedule()
         {
             CheckIsDisposed();
             var handle = source.Run();
