@@ -25,6 +25,7 @@ namespace LitMotion.Sequences
             source.version++;
             source.buffer = null;
             source.tail = 0;
+            source.lastTail = 0;
             source.count = 0;
             source.duration = 0;
 
@@ -39,14 +40,21 @@ namespace LitMotion.Sequences
         MotionSequenceItem[] buffer;
         int count;
         double tail;
+        double lastTail;
         double duration;
 
         public void Append(MotionHandle handle)
         {
             MotionManager.AddToSequence(ref handle, out var motionDuration);
             AddItem(new MotionSequenceItem(tail, handle));
-            tail += motionDuration;
-            duration += motionDuration;
+            AppendInterval(motionDuration);
+        }
+
+        public void AppendInterval(double interval)
+        {
+            lastTail = tail;
+            tail += interval;
+            duration = Math.Max(duration, tail + interval);
         }
 
         public void Insert(double position, MotionHandle handle)
@@ -54,6 +62,11 @@ namespace LitMotion.Sequences
             MotionManager.AddToSequence(ref handle, out var motionDuration);
             AddItem(new MotionSequenceItem(position, handle));
             duration = Math.Max(duration, position + motionDuration);
+        }
+
+        public void Join(MotionHandle handle)
+        {
+            Insert(lastTail, handle);
         }
 
         public MotionHandle Run()
@@ -108,10 +121,26 @@ namespace LitMotion.Sequences
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionSequenceBuilder AppendInterval(float interval)
+        {
+            CheckIsDisposed();
+            source.AppendInterval(interval);
+            return this;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly MotionSequenceBuilder Insert(float position, MotionHandle handle)
         {
             CheckIsDisposed();
             source.Insert(position, handle);
+            return this;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionSequenceBuilder Join(MotionHandle handle)
+        {
+            CheckIsDisposed();
+            source.Join(handle);
             return this;
         }
 
