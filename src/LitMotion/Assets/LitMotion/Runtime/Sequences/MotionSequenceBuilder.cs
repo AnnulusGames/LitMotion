@@ -54,7 +54,7 @@ namespace LitMotion.Sequences
         {
             lastTail = tail;
             tail += interval;
-            duration = Math.Max(duration, tail + interval);
+            duration = Math.Max(duration, tail);
         }
 
         public void Insert(double position, MotionHandle handle)
