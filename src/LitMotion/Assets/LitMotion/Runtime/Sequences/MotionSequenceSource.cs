@@ -33,19 +33,20 @@ namespace LitMotion.Sequences
 
         public static void Return(MotionSequenceSource source)
         {
-            ArrayPool<MotionSequenceItem>.Shared.Return(source.itemsBuffer);
-            source.itemsBuffer = null;
+            ArrayPool<MotionSequenceItem>.Shared.Return(source.itemBuffer);
+            source.itemBuffer = null;
             pool.TryPush(source);
         }
 
-        public void Initialize(MotionHandle handle, ReadOnlySpan<MotionSequenceItem> sortedItems, double duration)
+        public void Initialize(MotionHandle handle, MotionSequenceItem[] itemBuffer, int itemCount, double duration)
         {
             this.handle = handle;
-            this.itemCount = sortedItems.Length;
-            this.itemsBuffer = ArrayPool<MotionSequenceItem>.Shared.Rent(itemCount);
-            sortedItems.CopyTo(this.itemsBuffer);
+            this.itemCount = itemCount;
+            this.itemBuffer = itemBuffer;
             this.duration = duration;
             this.time = 0;
+
+            Array.Sort(itemBuffer, 0, itemCount);
         }
 
         MotionSequenceSource()
@@ -65,7 +66,7 @@ namespace LitMotion.Sequences
         MotionSequenceSource next;
 
         MotionHandle handle;
-        MotionSequenceItem[] itemsBuffer;
+        MotionSequenceItem[] itemBuffer;
         int itemCount;
         double duration;
         double time;
@@ -82,7 +83,7 @@ namespace LitMotion.Sequences
             {
                 time = value;
 
-                var span = itemsBuffer.AsSpan(0, itemCount);
+                var span = itemBuffer.AsSpan(0, itemCount);
 
                 var index = span.Length - 1;
                 while (index >= 0)

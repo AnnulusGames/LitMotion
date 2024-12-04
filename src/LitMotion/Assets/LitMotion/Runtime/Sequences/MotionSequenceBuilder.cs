@@ -77,8 +77,8 @@ namespace LitMotion.Sequences
                 .WithOnCancel(source.OnCancelDelegate)
                 .Bind(source, (x, source) => source.Time = x);
 
-            Array.Sort(buffer, 0, count);
-            source.Initialize(handle, buffer.AsSpan(0, count), duration);
+            source.Initialize(handle, buffer, count, duration);
+            buffer = null;
             return handle;
         }
 
