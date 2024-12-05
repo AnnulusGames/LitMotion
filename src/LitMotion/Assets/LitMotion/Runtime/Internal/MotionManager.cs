@@ -75,6 +75,13 @@ namespace LitMotion
             list[handle.StorageId].SetTime(handle, time);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void AddToSequence(ref MotionHandle handle, out double motionDuration)
+        {
+            CheckTypeId(handle);
+            list[handle.StorageId].AddToSequence(ref handle, out motionDuration);
+        }
+
         // For MotionTracker
         public static (Type ValueType, Type OptionsType, Type AdapterType) GetMotionType(MotionHandle handle)
         {

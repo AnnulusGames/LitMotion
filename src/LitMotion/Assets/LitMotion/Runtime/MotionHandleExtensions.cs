@@ -28,7 +28,7 @@ namespace LitMotion
         {
             MotionManager.GetDataRef(handle).IsPreserved = true;
         }
-
+    
         /// <summary>
         /// Complete motion.
         /// </summary>
