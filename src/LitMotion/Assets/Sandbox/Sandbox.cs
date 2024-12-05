@@ -17,7 +17,7 @@ public class Sandbox : MonoBehaviour
             .Append(LMotion.Create(-5f, 5f, 0.5f).BindToPositionX(target))
             .Append(LMotion.Create(0f, 5f, 0.5f).BindToPositionY(target))
             .Append(LMotion.Create(-2f, 2f, 1f).BindToPositionZ(target))
-            .Run();
+            .Schedule();
     }
 
     void Update()
