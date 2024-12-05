@@ -59,14 +59,17 @@ namespace LitMotion
             if (initialized) return;
 #endif
 
-            OnInitialization += static () => MotionDispatcher.Update(PlayerLoopTiming.Initialization);
-            OnEarlyUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate);
-            OnFixedUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate);
-            OnPreUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate);
-            OnUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.Update);
-            OnPreLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate);
-            OnPostLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate);
-            OnTimeUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate);
+            if (!initialized)
+            {
+                OnInitialization += static () => MotionDispatcher.Update(PlayerLoopTiming.Initialization);
+                OnEarlyUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.EarlyUpdate);
+                OnFixedUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.FixedUpdate);
+                OnPreUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreUpdate);
+                OnUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.Update);
+                OnPreLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PreLateUpdate);
+                OnPostLateUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.PostLateUpdate);
+                OnTimeUpdate += static () => MotionDispatcher.Update(PlayerLoopTiming.TimeUpdate);
+            }
 
             var playerLoop = PlayerLoop.GetCurrentPlayerLoop();
             Initialize(ref playerLoop);
