@@ -54,6 +54,11 @@
             "name": "com.unity.modules.physics",
             "expression": "",
             "define": "LITMOTION_SUPPORT_PHYSICS"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_PHYSICS_2D"
         }
     ],
     "noEngineReferences": false
