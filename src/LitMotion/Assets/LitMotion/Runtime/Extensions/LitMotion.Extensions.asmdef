@@ -5,7 +5,9 @@
         "GUID:3b570a5146f9d4f0fa107ed4559471a3",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
-        "GUID:33661e06c33d31b4c9223810bf503247"
+        "GUID:33661e06c33d31b4c9223810bf503247",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -59,6 +61,16 @@
             "name": "com.unity.modules.physics2d",
             "expression": "",
             "define": "LITMOTION_SUPPORT_PHYSICS_2D"
+        },
+        {
+            "name": "com.unity.render-pipelines.core",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_RENDER_PIPELINES"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_URP"
         }
     ],
     "noEngineReferences": false
