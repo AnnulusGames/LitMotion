@@ -49,6 +49,11 @@
             "name": "com.unity.modules.audio",
             "expression": "",
             "define": "LITMOTION_SUPPORT_UNITY_AUDIO"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "LITMOTION_SUPPORT_PHYSICS"
         }
     ],
     "noEngineReferences": false
