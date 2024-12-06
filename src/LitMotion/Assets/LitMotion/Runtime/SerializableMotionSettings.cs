@@ -41,60 +41,20 @@ namespace LitMotion
             Manual,
         }
 
-        [SerializeField] TValue startValue;
-        [SerializeField] TValue endValue;
-        [SerializeField] float duration;
-        [SerializeField] TOptions options;
-        [SerializeField] Ease ease;
-        [SerializeField] AnimationCurve customEaseCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        [SerializeField] float delay;
-        [SerializeField] DelayType delayType;
-        [SerializeField] int loops = 1;
-        [SerializeField] LoopType loopType;
-        [SerializeField] bool cancelOnError;
-        [SerializeField] bool skipValuesDuringDelay;
-        [SerializeField] bool bindOnSchedule;
-        [SerializeField] SchedulerType scheduler;
+        [SerializeField] SchedulerType schedulerType;
 
 #if UNITY_EDITOR
-        [SerializeField] bool motionSettings;
         [SerializeField] bool additionalSettings;
 #endif
 
         public void OnBeforeSerialize()
         {
-            startValue = StartValue;
-            endValue = EndValue;
-            duration = Duration;
-            options = Options;
-            ease = Ease;
-            customEaseCurve = CustomEaseCurve;
-            delay = Delay;
-            delayType = DelayType;
-            loops = Loops;
-            loopType = LoopType;
-            cancelOnError = CancelOnError;
-            skipValuesDuringDelay = SkipValuesDuringDelay;
-            bindOnSchedule = BindOnSchedule;
             SetScheduler(Scheduler);
         }
 
         public void OnAfterDeserialize()
         {
-            StartValue = startValue;
-            EndValue = endValue;
-            Duration = duration;
-            Options = options;
-            Ease = ease;
-            CustomEaseCurve = customEaseCurve;
-            Delay = delay;
-            DelayType = delayType;
-            Loops = loops;
-            LoopType = loopType;
-            CancelOnError = cancelOnError;
-            SkipValuesDuringDelay = skipValuesDuringDelay;
-            BindOnSchedule = bindOnSchedule;
-            Scheduler = scheduler switch
+            scheduler = schedulerType switch
             {
                 SchedulerType.Initialization => MotionScheduler.Initialization,
                 SchedulerType.InitializationIgnoreTimeScale => MotionScheduler.InitializationIgnoreTimeScale,
@@ -125,30 +85,30 @@ namespace LitMotion
 
         void SetScheduler(IMotionScheduler value)
         {
-            if (value == null) scheduler = SchedulerType.Default;
-            else if (value == MotionScheduler.Update) scheduler = SchedulerType.Update;
-            else if (value == MotionScheduler.UpdateIgnoreTimeScale) scheduler = SchedulerType.UpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.UpdateRealtime) scheduler = SchedulerType.UpdateRealtime;
-            else if (value == MotionScheduler.FixedUpdate) scheduler = SchedulerType.FixedUpdate;
-            else if (value == MotionScheduler.Manual) scheduler = SchedulerType.Manual;
-            else if (value == MotionScheduler.Initialization) scheduler = SchedulerType.Initialization;
-            else if (value == MotionScheduler.InitializationIgnoreTimeScale) scheduler = SchedulerType.InitializationIgnoreTimeScale;
-            else if (value == MotionScheduler.InitializationRealtime) scheduler = SchedulerType.InitializationRealtime;
-            else if (value == MotionScheduler.EarlyUpdate) scheduler = SchedulerType.EarlyUpdate;
-            else if (value == MotionScheduler.EarlyUpdateIgnoreTimeScale) scheduler = SchedulerType.EarlyUpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.EarlyUpdateRealtime) scheduler = SchedulerType.EarlyUpdateRealtime;
-            else if (value == MotionScheduler.PreUpdate) scheduler = SchedulerType.PreUpdate;
-            else if (value == MotionScheduler.PreUpdateIgnoreTimeScale) scheduler = SchedulerType.PreUpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.PreUpdateRealtime) scheduler = SchedulerType.PreUpdateRealtime;
-            else if (value == MotionScheduler.PreLateUpdate) scheduler = SchedulerType.PreLateUpdate;
-            else if (value == MotionScheduler.PreLateUpdateIgnoreTimeScale) scheduler = SchedulerType.PreLateUpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.PreLateUpdateRealtime) scheduler = SchedulerType.PreLateUpdateRealtime;
-            else if (value == MotionScheduler.PostLateUpdate) scheduler = SchedulerType.PostLateUpdate;
-            else if (value == MotionScheduler.PostLateUpdateIgnoreTimeScale) scheduler = SchedulerType.PostLateUpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.PostLateUpdateRealtime) scheduler = SchedulerType.PostLateUpdateRealtime;
-            else if (value == MotionScheduler.TimeUpdate) scheduler = SchedulerType.TimeUpdate;
-            else if (value == MotionScheduler.TimeUpdateIgnoreTimeScale) scheduler = SchedulerType.TimeUpdateIgnoreTimeScale;
-            else if (value == MotionScheduler.TimeUpdateRealtime) scheduler = SchedulerType.TimeUpdateRealtime;
+            if (value == null) schedulerType = SchedulerType.Default;
+            else if (value == MotionScheduler.Update) schedulerType = SchedulerType.Update;
+            else if (value == MotionScheduler.UpdateIgnoreTimeScale) schedulerType = SchedulerType.UpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.UpdateRealtime) schedulerType = SchedulerType.UpdateRealtime;
+            else if (value == MotionScheduler.FixedUpdate) schedulerType = SchedulerType.FixedUpdate;
+            else if (value == MotionScheduler.Manual) schedulerType = SchedulerType.Manual;
+            else if (value == MotionScheduler.Initialization) schedulerType = SchedulerType.Initialization;
+            else if (value == MotionScheduler.InitializationIgnoreTimeScale) schedulerType = SchedulerType.InitializationIgnoreTimeScale;
+            else if (value == MotionScheduler.InitializationRealtime) schedulerType = SchedulerType.InitializationRealtime;
+            else if (value == MotionScheduler.EarlyUpdate) schedulerType = SchedulerType.EarlyUpdate;
+            else if (value == MotionScheduler.EarlyUpdateIgnoreTimeScale) schedulerType = SchedulerType.EarlyUpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.EarlyUpdateRealtime) schedulerType = SchedulerType.EarlyUpdateRealtime;
+            else if (value == MotionScheduler.PreUpdate) schedulerType = SchedulerType.PreUpdate;
+            else if (value == MotionScheduler.PreUpdateIgnoreTimeScale) schedulerType = SchedulerType.PreUpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.PreUpdateRealtime) schedulerType = SchedulerType.PreUpdateRealtime;
+            else if (value == MotionScheduler.PreLateUpdate) schedulerType = SchedulerType.PreLateUpdate;
+            else if (value == MotionScheduler.PreLateUpdateIgnoreTimeScale) schedulerType = SchedulerType.PreLateUpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.PreLateUpdateRealtime) schedulerType = SchedulerType.PreLateUpdateRealtime;
+            else if (value == MotionScheduler.PostLateUpdate) schedulerType = SchedulerType.PostLateUpdate;
+            else if (value == MotionScheduler.PostLateUpdateIgnoreTimeScale) schedulerType = SchedulerType.PostLateUpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.PostLateUpdateRealtime) schedulerType = SchedulerType.PostLateUpdateRealtime;
+            else if (value == MotionScheduler.TimeUpdate) schedulerType = SchedulerType.TimeUpdate;
+            else if (value == MotionScheduler.TimeUpdateIgnoreTimeScale) schedulerType = SchedulerType.TimeUpdateIgnoreTimeScale;
+            else if (value == MotionScheduler.TimeUpdateRealtime) schedulerType = SchedulerType.TimeUpdateRealtime;
             // else throw new ArgumentOutOfRangeException("SerializableMotionSettings does not support custom scheduler");
         }
     }

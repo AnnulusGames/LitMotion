@@ -11,19 +11,104 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
-        public TValue StartValue { get; set; }
-        public TValue EndValue { get; set; }
-        public float Duration { get; set; }
-        public TOptions Options { get; set; }
-        public Ease Ease { get; set; }
-        public AnimationCurve CustomEaseCurve { get; set; }
-        public float Delay { get; set; }
-        public DelayType DelayType { get; set; }
-        public int Loops { get; set; } = 1;
-        public LoopType LoopType { get; set; }
-        public bool CancelOnError { get; set; }
-        public bool SkipValuesDuringDelay { get; set; }
-        public bool BindOnSchedule { get; set; }
-        public IMotionScheduler Scheduler { get; set; }
+        public TValue StartValue
+        {
+            get => startValue;
+            init => startValue = value;
+        }
+
+        public TValue EndValue
+        {
+            get => endValue;
+            init => endValue = value;
+        }
+
+        public float Duration
+        {
+            get => duration;
+            init => duration = value;
+        }
+
+        public TOptions Options
+        {
+            get => options;
+            init => options = value;
+        }
+
+        public Ease Ease
+        {
+            get => ease;
+            init => ease = value;
+        }
+
+        public AnimationCurve CustomEaseCurve
+        {
+            get => customEaseCurve;
+            init => customEaseCurve = value;
+        }
+
+        public float Delay
+        {
+            get => delay;
+            init => delay = value;
+        }
+
+        public DelayType DelayType
+        {
+            get => delayType;
+            init => delayType = value;
+        }
+
+        public int Loops
+        {
+            get => loops;
+            init => loops = value;
+        }
+
+        public LoopType LoopType
+        {
+            get => loopType;
+            init => loopType = value;
+        }
+
+        public bool CancelOnError
+        {
+            get => cancelOnError;
+            init => cancelOnError = value;
+        }
+
+        public bool SkipValuesDuringDelay
+        {
+            get => skipValuesDuringDelay;
+            init => skipValuesDuringDelay = value;
+        }
+
+        public bool BindOnSchedule
+        {
+            get => bindOnSchedule;
+            init => bindOnSchedule = value;
+        }
+
+        public IMotionScheduler Scheduler
+        {
+            get => scheduler;
+            init => scheduler = value;
+        }
+
+        [SerializeField] TValue startValue;
+        [SerializeField] TValue endValue;
+        [SerializeField] float duration;
+        [SerializeField] TOptions options;
+        [SerializeField] Ease ease;
+        [SerializeField] AnimationCurve customEaseCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [SerializeField] float delay;
+        [SerializeField] DelayType delayType;
+        [SerializeField] int loops = 1;
+        [SerializeField] LoopType loopType;
+        [SerializeField] bool cancelOnError;
+        [SerializeField] bool skipValuesDuringDelay;
+        [SerializeField] bool bindOnSchedule;
+
+        internal IMotionScheduler scheduler;
     }
 }
