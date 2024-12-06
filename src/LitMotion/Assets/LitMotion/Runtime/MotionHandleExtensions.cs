@@ -23,10 +23,16 @@ namespace LitMotion
             return MotionManager.IsActive(handle);
         }
 
+        /// <summary>
+        /// Preserves the MotionHandle so that it is not destroyed until Cancel() is explicitly called.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <returns>Returns itself for method chaining</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Preserve(this MotionHandle handle)
+        public static MotionHandle Preserve(this MotionHandle handle)
         {
             MotionManager.GetDataRef(handle).IsPreserved = true;
+            return handle;
         }
     
         /// <summary>
