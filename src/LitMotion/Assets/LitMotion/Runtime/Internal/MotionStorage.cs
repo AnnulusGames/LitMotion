@@ -127,7 +127,8 @@ namespace LitMotion
                             {
                                 Ease.CustomAnimationCurve => buffer.AnimationCurve.Evaluate(0f),
                                 _ => EaseUtility.Evaluate(0f, dataRef.Core.Ease)
-                            }
+                            },
+                            Time = dataRef.Core.Time,
                         }
                 ));
             }
