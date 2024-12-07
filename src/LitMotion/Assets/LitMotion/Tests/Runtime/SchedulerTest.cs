@@ -21,7 +21,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.Initialization)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -31,7 +31,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.InitializationIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -41,7 +41,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.InitializationRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -50,7 +50,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.EarlyUpdate)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -60,7 +60,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.EarlyUpdateIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -70,7 +70,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.EarlyUpdateRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -82,7 +82,7 @@ namespace LitMotion.Tests.Runtime
                 {
                     Assert.IsTrue(Time.inFixedTimeStep);
                 })
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -91,7 +91,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.Update)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -102,7 +102,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.Update)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             Assert.That(Time.unscaledTimeAsDouble - t, Is.GreaterThan(Duration * 2f));
         }
 
@@ -113,7 +113,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.UpdateIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -123,7 +123,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.UpdateRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -132,7 +132,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PreLateUpdate)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -142,7 +142,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PreLateUpdateIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -152,7 +152,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PreLateUpdateRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -161,7 +161,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PostLateUpdate)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -171,7 +171,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PostLateUpdateIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -181,7 +181,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.PostLateUpdateRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -190,7 +190,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.TimeUpdate)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -200,7 +200,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [UnityTest]
@@ -210,7 +210,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, Duration)
                 .WithScheduler(MotionScheduler.TimeUpdateRealtime)
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
     }
 }
