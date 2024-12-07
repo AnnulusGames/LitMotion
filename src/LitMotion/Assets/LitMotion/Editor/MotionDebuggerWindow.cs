@@ -141,7 +141,7 @@ namespace LitMotion.Editor
                 var first = selected[0];
                 if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is MotionDebuggerViewItem item)
                 {
-                    message = item.Position;
+                    message = item.StackTrace;
                 }
             }
 

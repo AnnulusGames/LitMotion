@@ -17,20 +17,20 @@ namespace LitMotion.Editor
 
         public string MotionType { get; set; }
         public string SchedulerType { get; set; }
-        public string Elapsed { get; set; }
+        public string Time { get; set; }
 
-        string position;
-        public string Position
+        string stackTrace;
+        public string StackTrace
         {
-            get { return position; }
+            get { return stackTrace; }
             set
             {
-                position = value;
-                PositionFirstLine = value == null ? string.Empty : GetFirstLine(position);
+                stackTrace = value;
+                StackTraceFirstLine = value == null ? string.Empty : GetFirstLine(stackTrace);
             }
         }
 
-        public string PositionFirstLine { get; private set; }
+        public string StackTraceFirstLine { get; private set; }
 
         static string GetFirstLine(string str)
         {
@@ -58,8 +58,7 @@ namespace LitMotion.Editor
             : this(new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[]
             {
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 55},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Scheduler"), width = 25},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Elapsed"), width = 15},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Time"), width = 15},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Stack Trace")},
             })))
         {
@@ -95,12 +94,11 @@ namespace LitMotion.Editor
             var ascending = multiColumnHeader.IsSortedAscending(multiColumnHeader.sortedColumnIndex);
 
             var items = rootItem.children.Cast<MotionDebuggerViewItem>();
-            IOrderedEnumerable<MotionDebuggerViewItem> orderedEnumerable = index switch
+            var orderedEnumerable = index switch
             {
                 0 => ascending ? items.OrderBy(item => item.MotionType) : items.OrderByDescending(item => item.MotionType),
-                1 => ascending ? items.OrderBy(item => item.SchedulerType) : items.OrderByDescending(item => item.SchedulerType),
-                2 => ascending ? items.OrderBy(item => double.Parse(item.Elapsed)) : items.OrderByDescending(item => double.Parse(item.Elapsed)),
-                3 => ascending ? items.OrderBy(item => item.Position) : items.OrderByDescending(item => item.PositionFirstLine),
+                1 => ascending ? items.OrderBy(item => double.Parse(item.Time)) : items.OrderByDescending(item => double.Parse(item.Time)),
+                2 => ascending ? items.OrderBy(item => item.StackTrace) : items.OrderByDescending(item => item.StackTraceFirstLine),
                 _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
             };
             CurrentBindingItems = rootItem.children = orderedEnumerable.Cast<TreeViewItem>().ToList();
@@ -148,12 +146,14 @@ namespace LitMotion.Editor
             var id = 0;
             foreach (var tracking in MotionDebugger.Items)
             {
+                if (!tracking.Handle.IsActive()) continue;
+
                 children.Add(new MotionDebuggerViewItem(id)
                 {
                     MotionType = $"[{tracking.ValueType.Name}, {tracking.OptionsType.Name}, {tracking.AdapterType.Name}]",
                     SchedulerType = GetSchedulerName(tracking.Scheduler, tracking.CreatedOnEditor),
-                    Elapsed = (DateTime.UtcNow - tracking.CreationTime).TotalSeconds.ToString("00.00"),
-                    Position = tracking.StackTrace?.AddHyperLink()
+                    Time = MotionManager.GetDataRef(tracking.Handle).Time.ToString("00.00"),
+                    StackTrace = tracking.StackTrace?.AddHyperLink()
                 });
                 id++;
             }
@@ -185,13 +185,10 @@ namespace LitMotion.Editor
                         EditorGUI.LabelField(rect, item.MotionType, labelStyle);
                         break;
                     case 1:
-                        EditorGUI.LabelField(rect, item.SchedulerType, labelStyle);
+                        EditorGUI.LabelField(rect, item.Time, labelStyle);
                         break;
                     case 2:
-                        EditorGUI.LabelField(rect, item.Elapsed, labelStyle);
-                        break;
-                    case 3:
-                        EditorGUI.LabelField(rect, item.PositionFirstLine, labelStyle);
+                        EditorGUI.LabelField(rect, item.StackTraceFirstLine, labelStyle);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, null);

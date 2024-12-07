@@ -200,7 +200,8 @@ namespace LitMotion
             if (IsInvalidVersion(slot.Version, handle)) return false;
 
             ref var motion = ref unmanagedDataArray[slot.DenseIndex];
-            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
+            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing ||
+                (motion.Core.Status is MotionStatus.Completed && motion.Core.IsPreserved);
         }
 
         public bool TryCancel(MotionHandle handle)
