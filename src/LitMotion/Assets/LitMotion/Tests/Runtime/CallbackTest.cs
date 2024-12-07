@@ -47,7 +47,6 @@ namespace LitMotion.Tests.Runtime
             Assert.That(loopCount, Is.EqualTo(3));
         }
 
-
         [UnityTest]
         public IEnumerator Test_CreateOnCallback()
         {
