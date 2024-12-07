@@ -21,8 +21,6 @@ namespace LitMotion
             }
         }
 
-        public double Time { get; }
-
         public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
@@ -30,18 +28,6 @@ namespace LitMotion
         {
             var storage = Cache<TValue, TOptions, TAdapter>.GetOrCreate();
             return storage.Create(ref builder);
-        }
-
-        /// <summary>
-        /// Ensures the storage capacity until it reaches at least `capacity`.
-        /// </summary>
-        /// <param name="capacity">The minimum capacity to ensure.</param>
-        public static void EnsureStorageCapacity<TValue, TOptions, TAdapter>(int capacity)
-            where TValue : unmanaged
-            where TOptions : unmanaged, IMotionOptions
-            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
-        {
-            Cache<TValue, TOptions, TAdapter>.GetOrCreate().EnsureCapacity(capacity);
         }
     }
 }
