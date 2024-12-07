@@ -133,7 +133,8 @@ namespace LitMotion
 
             var context = new MotionEvaluationContext()
             {
-                Progress = progress
+                Progress = progress,
+                Time = time,
             };
 
             result = default(TAdapter).Evaluate(ref ptr->StartValue, ref ptr->EndValue, ref ptr->Options, context);

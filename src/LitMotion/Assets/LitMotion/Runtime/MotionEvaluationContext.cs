@@ -9,5 +9,10 @@ namespace LitMotion
         /// Progress (0-1)
         /// </summary>
         public float Progress;
+
+        /// <summary>
+        /// Current motion time
+        /// </summary>
+        public double Time;
     }
 }

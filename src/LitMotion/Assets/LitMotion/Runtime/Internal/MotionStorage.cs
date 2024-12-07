@@ -127,7 +127,8 @@ namespace LitMotion
                             {
                                 Ease.CustomAnimationCurve => buffer.AnimationCurve.Evaluate(0f),
                                 _ => EaseUtility.Evaluate(0f, dataRef.Core.Ease)
-                            }
+                            },
+                            Time = dataRef.Core.Time,
                         }
                 ));
             }
@@ -327,7 +328,11 @@ namespace LitMotion
                     ref unmanagedData.StartValue,
                     ref unmanagedData.EndValue,
                     ref unmanagedData.Options,
-                    new() { Progress = easedEndProgress }
+                    new()
+                    { 
+                        Progress = easedEndProgress,
+                        Time = unmanagedData.Core.Time,
+                    }
                 );
 
                 managedData.UpdateUnsafe(endValue);
