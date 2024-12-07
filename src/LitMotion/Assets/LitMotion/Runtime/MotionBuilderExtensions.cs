@@ -127,7 +127,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
             var options = builder.buffer.Options;
-            options.RandomState = new Unity.Mathematics.Random(seed);
+            options.RandomSeed = seed;
             builder.buffer.Options = options;
             return builder;
         }
@@ -163,7 +163,7 @@ namespace LitMotion
            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
             var options = builder.buffer.Options;
-            options.RandomState = new Unity.Mathematics.Random(seed);
+            options.RandomSeed = seed;
             builder.buffer.Options = options;
             return builder;
         }

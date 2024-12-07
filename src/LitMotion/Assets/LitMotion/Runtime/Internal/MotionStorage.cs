@@ -327,7 +327,11 @@ namespace LitMotion
                     ref unmanagedData.StartValue,
                     ref unmanagedData.EndValue,
                     ref unmanagedData.Options,
-                    new() { Progress = easedEndProgress }
+                    new()
+                    { 
+                        Progress = easedEndProgress,
+                        Time = unmanagedData.Core.Time,
+                    }
                 );
 
                 managedData.UpdateUnsafe(endValue);

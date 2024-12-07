@@ -10,7 +10,7 @@ namespace LitMotion
     {
         public int Frequency;
         public float DampingRatio;
-        public Unity.Mathematics.Random RandomState;
+        public uint RandomSeed;
 
         public static ShakeOptions Default
         {
@@ -28,7 +28,7 @@ namespace LitMotion
         {
             return other.Frequency == Frequency &&
                 other.DampingRatio == DampingRatio &&
-                other.RandomState.state == RandomState.state;
+                other.RandomSeed == RandomSeed;
         }
 
         public override readonly bool Equals(object obj)
@@ -39,7 +39,7 @@ namespace LitMotion
 
         public override readonly int GetHashCode()
         {
-            return HashCode.Combine(Frequency, DampingRatio, RandomState);
+            return HashCode.Combine(Frequency, DampingRatio, RandomSeed);
         }
     }
 }
