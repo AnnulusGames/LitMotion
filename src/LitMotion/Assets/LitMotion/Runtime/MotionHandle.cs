@@ -49,6 +49,17 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// The number of loops completed
+        /// </summary>
+        public readonly int ComplatedLoops
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this).ComplpetedLoops;
+            }
+        }
+
+        /// <summary>
         /// Motion playback speed.
         /// </summary>
         public readonly float PlaybackSpeed

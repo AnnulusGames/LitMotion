@@ -32,6 +32,22 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_OnLoopComplete()
+        {
+            var loopCount = 0;
+            LMotion.Create(0f, 10f, 1f)
+                .WithLoops(3)
+                .WithOnLoopComplete(x => loopCount = x)
+                .RunWithoutBinding();
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(1));
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(2));
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(3));
+        }
+
+        [UnityTest]
         public IEnumerator Test_CreateOnCallback()
         {
             var created = false;

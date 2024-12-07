@@ -68,7 +68,7 @@ namespace LitMotion
 
                     var status = currentDataPtr->Core.Status;
                     ref var managedData = ref managedDataSpan[i];
-                    if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
+                    if (status is MotionStatus.Playing or MotionStatus.Completed || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                     {
                         try
                         {
@@ -81,36 +81,17 @@ namespace LitMotion
                             {
                                 currentDataPtr->Core.Status = MotionStatus.Canceled;
                                 managedData.OnCancelAction?.Invoke();
-                            }
-                        }
-                    }
-                    else if (status == MotionStatus.Completed)
-                    {
-                        try
-                        {
-                            managedData.UpdateUnsafe(outputPtr[i]);
-                        }
-                        catch (Exception ex)
-                        {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (managedData.CancelOnError)
-                            {
-                                currentDataPtr->Core.Status = MotionStatus.Canceled;
-                                managedData.OnCancelAction?.Invoke();
-                                continue;
                             }
                         }
 
-                        if (currentDataPtr->Core.WasStatusChanged)
+                        if (dataPtr->Core.WasLoopCompleted)
                         {
-                            try
-                            {
-                                managedData.OnCompleteAction?.Invoke();
-                            }
-                            catch (Exception ex)
-                            {
-                                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            }
+                            managedData.InvokeOnLoopComplete(dataPtr->Core.ComplpetedLoops);
+                        }
+
+                        if (status is MotionStatus.Completed && currentDataPtr->Core.WasStatusChanged)
+                        {
+                            managedData.InvokeOnComplete();
                         }
                     }
                 }

@@ -1,7 +1,9 @@
 using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Assertions;
+using UnityEngine.Assertions.Comparers;
 using UnityEngine.TestTools;
+using UnityEngine.TestTools.Utils;
 
 namespace LitMotion.Tests.Runtime
 {
@@ -60,7 +62,7 @@ namespace LitMotion.Tests.Runtime
                 });
             yield return new WaitForSeconds(1f);
             handle.Complete();
-            Assert.AreApproximatelyEqual(value, endValue);
+            Assert.That(value, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
             Assert.IsTrue(!handle.IsActive());
         }
 
@@ -78,7 +80,7 @@ namespace LitMotion.Tests.Runtime
             yield return new WaitForSeconds(1f);
             var tryResult = handle.TryComplete();
             Assert.IsTrue(tryResult);
-            Assert.AreApproximatelyEqual(value, endValue);
+            Assert.That(value, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
             Assert.IsTrue(!handle.IsActive());
 
             tryResult = handle.TryComplete();
@@ -99,7 +101,7 @@ namespace LitMotion.Tests.Runtime
                 });
             yield return new WaitForSeconds(1f);
             handle.Complete();
-            Assert.AreApproximatelyEqual(value, startValue);
+            Assert.That(value, Is.EqualTo(startValue).Using(FloatEqualityComparer.Instance));
             Assert.IsTrue(!handle.IsActive());
         }
 
@@ -147,6 +149,22 @@ namespace LitMotion.Tests.Runtime
             Assert.IsTrue(handle.IsActive());
             yield return new WaitForSeconds(2.5f);
             Assert.IsFalse(handle.IsActive());
+        }
+
+        [UnityTest]
+        public IEnumerator Test_CompletedLoops()
+        {
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithLoops(3)
+                .RunWithoutBinding();
+
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(0));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(1));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(2));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(3));
         }
     }
 }

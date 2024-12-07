@@ -8,11 +8,15 @@ namespace LitMotion
     {
         // state
         public MotionStatus Status;
+        public MotionStatus PrevStatus;
+        public bool IsPreserved;
+        public bool SkipUpdate;
+
+        public ushort ComplpetedLoops;
+        public ushort PrevCompletedLoops;
+
         public double Time;
         public float PlaybackSpeed;
-        public bool IsPreserved;
-        public bool WasStatusChanged;
-        public bool SkipUpdate;
 
         // parameters
         public float Duration;
@@ -27,8 +31,11 @@ namespace LitMotion
         public int Loops;
         public DelayType DelayType;
         public LoopType LoopType;
+
+        public readonly bool WasStatusChanged => Status != PrevStatus;
+        public readonly bool WasLoopCompleted => ComplpetedLoops > PrevCompletedLoops;
     }
-    
+
     /// <summary>
     /// A structure representing motion data.
     /// </summary>
