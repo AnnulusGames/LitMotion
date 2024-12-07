@@ -5,7 +5,7 @@ namespace LitMotion
 {
     internal static class Box
     {
-        static readonly Box<int> BoxMinus1 = new(0);
+        static readonly Box<int> BoxMinus1 = new(-1);
         static readonly Box<int> Box0 = new(0);
         static readonly Box<int> Box1 = new(1);
         static readonly Box<int> Box2 = new(2);
