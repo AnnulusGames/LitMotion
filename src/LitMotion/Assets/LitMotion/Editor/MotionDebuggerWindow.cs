@@ -7,20 +7,20 @@ namespace LitMotion.Editor
     /// <summary>
     /// Editor window that displays a list of motions being tracked.
     /// </summary>
-    public class MotionTrackerWindow : EditorWindow
+    public class MotionDebuggerWindow : EditorWindow
     {
-        static MotionTrackerWindow instance;
+        static MotionDebuggerWindow instance;
 
-        [MenuItem("Window/LitMotion/Motion Tracker")]
+        [MenuItem("Window/LitMotion Debugger")]
         public static void OpenWindow()
         {
             if (instance != null) instance.Close();
-            GetWindow<MotionTrackerWindow>("Motion Tracker").Show();
+            GetWindow<MotionDebuggerWindow>("LitMotion Debugger").Show();
         }
 
         static readonly GUILayoutOption[] EmptyLayoutOption = new GUILayoutOption[0];
 
-        MotionTrackerTreeView treeView;
+        MotionDebuggerTreeView treeView;
         object splitterState;
 
         const string EnableTrackingPrefsKey = "LitMotion-MotionTracker-EnableTracking";
@@ -30,9 +30,9 @@ namespace LitMotion.Editor
         {
             instance = this;
             splitterState = SplitterGUILayout.CreateSplitterState(new float[] { 75f, 25f }, new int[] { 32, 32 }, null);
-            treeView = new MotionTrackerTreeView();
-            MotionTracker.EnableTracking = EditorPrefs.GetBool(EnableTrackingPrefsKey, false);
-            MotionTracker.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
+            treeView = new MotionDebuggerTreeView();
+            MotionDebugger.EnableTracking = EditorPrefs.GetBool(EnableTrackingPrefsKey, false);
+            MotionDebugger.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
         }
 
         void OnGUI()
@@ -53,23 +53,23 @@ namespace LitMotion.Editor
             EditorGUILayout.BeginVertical(EmptyLayoutOption);
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, EmptyLayoutOption);
 
-            if (GUILayout.Toggle(MotionTracker.EnableTracking, EnableTrackingHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionTracker.EnableTracking)
+            if (GUILayout.Toggle(MotionDebugger.EnableTracking, EnableTrackingHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionDebugger.EnableTracking)
             {
-                MotionTracker.EnableTracking = !MotionTracker.EnableTracking;
-                EditorPrefs.SetBool(EnableTrackingPrefsKey, MotionTracker.EnableTracking);
+                MotionDebugger.EnableTracking = !MotionDebugger.EnableTracking;
+                EditorPrefs.SetBool(EnableTrackingPrefsKey, MotionDebugger.EnableTracking);
             }
 
-            if (GUILayout.Toggle(MotionTracker.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionTracker.EnableStackTrace)
+            if (GUILayout.Toggle(MotionDebugger.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionDebugger.EnableStackTrace)
             {
-                MotionTracker.EnableStackTrace = !MotionTracker.EnableStackTrace;
-                EditorPrefs.SetBool(EnableStackTracePrefsKey, MotionTracker.EnableStackTrace);
+                MotionDebugger.EnableStackTrace = !MotionDebugger.EnableStackTrace;
+                EditorPrefs.SetBool(EnableStackTracePrefsKey, MotionDebugger.EnableStackTrace);
             }
 
             GUILayout.FlexibleSpace();
 
             if (GUILayout.Button(ClearHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption))
             {
-                MotionTracker.Clear();
+                MotionDebugger.Clear();
                 treeView.ReloadAndSort();
                 Repaint();
             }
@@ -139,7 +139,7 @@ namespace LitMotion.Editor
             if (selected.Count > 0)
             {
                 var first = selected[0];
-                if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is MotionTrackerViewItem item)
+                if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is MotionDebuggerViewItem item)
                 {
                     message = item.Position;
                 }

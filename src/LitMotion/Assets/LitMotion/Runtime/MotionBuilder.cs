@@ -408,9 +408,9 @@ namespace LitMotion
                 handle = buffer.Scheduler.Schedule(ref this);
             }
 
-            if (MotionTracker.EnableTracking)
+            if (MotionDebugger.EnableTracking)
             {
-                MotionTracker.AddTracking(handle, buffer.Scheduler);
+                MotionDebugger.AddTracking(handle, buffer.Scheduler);
             }
 
             Dispose();
