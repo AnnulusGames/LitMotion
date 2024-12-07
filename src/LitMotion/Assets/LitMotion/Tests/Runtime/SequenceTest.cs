@@ -110,6 +110,53 @@ namespace LitMotion.Tests.Runtime
             Assert.That(y, Is.EqualTo(0f));
         }
 
+        [Test]
+        public void Test_Complete()
+        {
+            var flag1 = false;
+            var flag2 = false;
+            var x = 0f;
+            var y = 0f;
+
+            var handle = LSequence.Create()
+                .Append(LMotion.Create(0f, 1f, 1f)
+                    .WithOnComplete(() => flag1 = true)
+                    .Bind(v => x = v))
+                .Append(LMotion.Create(0f, 1f, 1f)
+                    .WithOnComplete(() => flag2 = true)
+                    .Bind(v => y = v))
+                .Schedule();
+
+            handle.Complete();
+
+            Assert.IsTrue(flag1);
+            Assert.IsTrue(flag2);
+            Assert.That(x, Is.EqualTo(1f));
+            Assert.That(y, Is.EqualTo(1f));
+        }
+
+        [Test]
+        public void Test_Cancel()
+        {
+            var flag1 = false;
+            var flag2 = false;
+
+            var handle = LSequence.Create()
+                .Append(LMotion.Create(0f, 1f, 1f)
+                    .WithOnCancel(() => flag1 = true)
+                    .RunWithoutBinding())
+                .Append(LMotion.Create(0f, 1f, 1f)
+                    .WithOnCancel(() => flag2 = true)
+                    .RunWithoutBinding())
+                .Schedule();
+
+            handle.Cancel();
+
+            Assert.IsTrue(flag1);
+            Assert.IsTrue(flag2);
+        }
+
+
         [UnityTest]
         public IEnumerator Test_Error_AppendRunningMotion()
         {
