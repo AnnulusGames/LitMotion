@@ -51,14 +51,8 @@ namespace LitMotion.Sequences
 
         MotionSequenceSource()
         {
-            onCompleteDelegate = () =>
-            {
-                if (MotionManager.IsActive(handle) && !MotionManager.GetDataRef(handle).IsPreserved)
-                {
-                    Return(this);
-                }
-            };
-            onCancelDelegate = () => Return(this);
+            onCompleteDelegate = OnComplete;
+            onCancelDelegate = OnCancel;
         }
 
         readonly Action onCompleteDelegate;
@@ -76,6 +70,8 @@ namespace LitMotion.Sequences
         public Action OnCompleteDelegate => onCompleteDelegate;
         public Action OnCancelDelegate => onCancelDelegate;
 
+        public ReadOnlySpan<MotionSequenceItem> Items => itemBuffer.AsSpan(0, itemCount);
+
         public double Time
         {
             get => time;
@@ -83,8 +79,7 @@ namespace LitMotion.Sequences
             {
                 time = value;
 
-                var span = itemBuffer.AsSpan(0, itemCount);
-
+                var span = Items;
                 var index = span.Length - 1;
                 while (index >= 0)
                 {
@@ -102,5 +97,23 @@ namespace LitMotion.Sequences
         }
 
         public double Duration => duration;
+
+        void OnComplete()
+        {
+            if (!handle.IsActive()) return;
+            if (MotionManager.GetDataRef(handle).IsPreserved) return;
+
+            Return(this);
+        }
+
+        void OnCancel()
+        {
+            foreach (var item in Items)
+            {
+                item.Handle.Cancel();
+            }
+
+            Return(this);
+        }
     }
 }

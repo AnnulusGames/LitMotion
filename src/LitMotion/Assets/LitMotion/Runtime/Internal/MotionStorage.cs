@@ -234,7 +234,8 @@ namespace LitMotion
                 return 1;
             }
 
-            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled or MotionStatus.Completed)
+            if (unmanagedData.Core.Status is MotionStatus.None or MotionStatus.Canceled ||
+                (unmanagedData.Core.Status is MotionStatus.Completed && !unmanagedData.Core.IsPreserved))
             {
                 return 2;
             }
@@ -304,6 +305,7 @@ namespace LitMotion
             ref var managedData = ref managedDataArray[slot.DenseIndex];
 
             unmanagedData.Core.Status = MotionStatus.Completed;
+            unmanagedData.Core.Time = MotionHelper.GetTotalDuration(ref unmanagedData.Core);
 
             var endProgress = unmanagedData.Core.LoopType switch
             {
