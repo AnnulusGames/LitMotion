@@ -17,31 +17,6 @@ namespace LitMotion
             this.timeKind = timeKind;
         }
 
-        public double Time
-        {
-            get
-            {
-                if (playerLoopTiming == PlayerLoopTiming.FixedUpdate)
-                {
-                    return timeKind switch
-                    {
-                        MotionTimeKind.Time => UnityTime.fixedTimeAsDouble,
-                        MotionTimeKind.UnscaledTime => UnityTime.fixedUnscaledTimeAsDouble,
-                        MotionTimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
-                        _ => throw new NotSupportedException("Invalid TimeKind")
-                    };
-                }
-
-                return timeKind switch
-                {
-                    MotionTimeKind.Time => UnityTime.timeAsDouble,
-                    MotionTimeKind.UnscaledTime => UnityTime.unscaledTimeAsDouble,
-                    MotionTimeKind.Realtime => UnityTime.realtimeSinceStartupAsDouble,
-                    _ => throw new NotSupportedException("Invalid TimeKind")
-                };
-            }
-        }
-
         public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
