@@ -107,6 +107,7 @@ namespace LitMotion
             managedDataRef.CancelOnError = buffer.CancelOnError;
             managedDataRef.SkipValuesDuringDelay = buffer.SkipValuesDuringDelay;
             managedDataRef.UpdateAction = buffer.UpdateAction;
+            managedDataRef.OnLoopCompleteAction = buffer.OnLoopCompleteAction;
             managedDataRef.OnCancelAction = buffer.OnCancelAction;
             managedDataRef.OnCompleteAction = buffer.OnCompleteAction;
             managedDataRef.StateCount = buffer.StateCount;
@@ -244,14 +245,7 @@ namespace LitMotion
             unmanagedData.Core.Status = MotionStatus.Canceled;
 
             ref var managedData = ref managedDataArray[denseIndex];
-            try
-            {
-                managedData.OnCancelAction?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-            }
+            managedData.InvokeOnCancel();
 
             return 0;
         }
@@ -307,6 +301,7 @@ namespace LitMotion
 
             unmanagedData.Core.Status = MotionStatus.Completed;
             unmanagedData.Core.Time = MotionHelper.GetTotalDuration(ref unmanagedData.Core);
+            unmanagedData.Core.ComplpetedLoops = (ushort)unmanagedData.Core.Loops;
 
             var endProgress = unmanagedData.Core.LoopType switch
             {
@@ -329,7 +324,7 @@ namespace LitMotion
                     ref unmanagedData.EndValue,
                     ref unmanagedData.Options,
                     new()
-                    { 
+                    {
                         Progress = easedEndProgress,
                         Time = unmanagedData.Core.Time,
                     }
@@ -342,14 +337,12 @@ namespace LitMotion
                 MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
             }
 
-            try
+            if (unmanagedData.Core.WasLoopCompleted)
             {
-                managedData.OnCompleteAction?.Invoke();
+                managedData.InvokeOnLoopComplete(unmanagedData.Core.ComplpetedLoops);
             }
-            catch (Exception ex)
-            {
-                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-            }
+
+            managedData.InvokeOnComplete();
 
             return 0;
         }
@@ -373,23 +366,7 @@ namespace LitMotion
                 var status = dataPtr->Core.Status;
                 ref var managedData = ref managedDataArray[denseIndex];
 
-                if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
-                {
-                    try
-                    {
-                        managedData.UpdateUnsafe(result);
-                    }
-                    catch (Exception ex)
-                    {
-                        MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                        if (managedData.CancelOnError)
-                        {
-                            dataPtr->Core.Status = MotionStatus.Canceled;
-                            managedData.OnCancelAction?.Invoke();
-                        }
-                    }
-                }
-                else if (status == MotionStatus.Completed)
+                if (status is MotionStatus.Playing or MotionStatus.Completed || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                 {
                     try
                     {
@@ -406,16 +383,14 @@ namespace LitMotion
                         }
                     }
 
-                    if (dataPtr->Core.WasStatusChanged)
+                    if (dataPtr->Core.WasLoopCompleted)
                     {
-                        try
-                        {
-                            managedData.OnCompleteAction?.Invoke();
-                        }
-                        catch (Exception ex)
-                        {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                        }
+                        managedData.InvokeOnLoopComplete(dataPtr->Core.ComplpetedLoops);
+                    }
+
+                    if (status is MotionStatus.Completed && dataPtr->Core.WasStatusChanged)
+                    {
+                        managedData.InvokeOnComplete();
                     }
                 }
             }

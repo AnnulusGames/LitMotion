@@ -49,6 +49,7 @@ namespace LitMotion
             buffer.StateCount = default;
 
             buffer.UpdateAction = default;
+            buffer.OnLoopCompleteAction = default;
             buffer.OnCompleteAction = default;
             buffer.OnCancelAction = default;
 
@@ -85,6 +86,7 @@ namespace LitMotion
         public object State2;
         public byte StateCount;
         public object UpdateAction;
+        public Action<int> OnLoopCompleteAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
         public AnimationCurve AnimationCurve;
@@ -207,6 +209,19 @@ namespace LitMotion
         {
             CheckBuffer();
             buffer.OnCompleteAction += callback;
+            return this;
+        }
+
+        /// <summary>
+        /// Specify a callback to be performed when each loop finishes.
+        /// </summary>
+        /// <param name="callback">Callback to be performed when each loop finishes.</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithOnLoopComplete(Action<int> callback)
+        {
+            CheckBuffer();
+            buffer.OnLoopCompleteAction += callback;
             return this;
         }
 
@@ -456,7 +471,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         readonly void CheckBuffer()
         {
-            if (buffer == null || buffer.Version != version) throw new InvalidOperationException("MotionBuilder is either not initialized or has already run a Build (or Bind). If you want to build or bind multiple times, call Preseve() for MotionBuilder.");
+            if (buffer == null || buffer.Version != version) throw new InvalidOperationException("MotionBuilder is either not initialized or has already run a Build (or Bind).");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

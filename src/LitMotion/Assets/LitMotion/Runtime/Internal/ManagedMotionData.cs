@@ -18,6 +18,7 @@ namespace LitMotion
         public object State1;
         public object State2;
         public object UpdateAction;
+        public Action<int> OnLoopCompleteAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
 
@@ -42,7 +43,7 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void InvokeCancel()
+        public readonly void InvokeOnCancel()
         {
             try
             {
@@ -54,9 +55,30 @@ namespace LitMotion
             }
         }
 
-        public readonly static ManagedMotionData Default = new()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly void InvokeOnComplete()
         {
-            SkipValuesDuringDelay = true,
-        };
+            try
+            {
+                OnCompleteAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly void InvokeOnLoopComplete(int completedLoops)
+        {
+            try
+            {
+                OnLoopCompleteAction?.Invoke(completedLoops);
+            }
+            catch (Exception ex)
+            {
+                MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+            }
+        }
     }
 }
