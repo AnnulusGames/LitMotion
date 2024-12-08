@@ -21,7 +21,8 @@ namespace LitMotion.Editor
         static readonly GUILayoutOption[] EmptyLayoutOption = new GUILayoutOption[0];
 
         MotionDebuggerTreeView treeView;
-        object splitterState;
+        object horizontalSplitterState;
+        object verticalSplitterState;
 
         const string EnableTrackingPrefsKey = "LitMotion-MotionTracker-EnableTracking";
         const string EnableStackTracePrefsKey = "LitMotion-MotionTracker-EnableStackTrace";
@@ -29,7 +30,8 @@ namespace LitMotion.Editor
         void OnEnable()
         {
             instance = this;
-            splitterState = SplitterGUILayout.CreateSplitterState(new float[] { 75f, 25f }, new int[] { 32, 32 }, null);
+            horizontalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 50f }, new int[] { 32, 32 }, null);
+            verticalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 15f }, new int[] { 32, 32 }, null);
             treeView = new MotionDebuggerTreeView();
             MotionDebugger.EnableTracking = EditorPrefs.GetBool(EnableTrackingPrefsKey, false);
             MotionDebugger.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
@@ -38,10 +40,10 @@ namespace LitMotion.Editor
         void OnGUI()
         {
             RenderHeadPanel();
-            SplitterGUILayout.BeginVerticalSplit(this.splitterState, EmptyLayoutOption);
+            SplitterGUILayout.BeginHorizontalSplit(horizontalSplitterState, EmptyLayoutOption);
             RenderTable();
             RenderDetailsPanel();
-            SplitterGUILayout.EndVerticalSplit();
+            SplitterGUILayout.EndHorizontalSplit();
         }
 
         static readonly GUIContent ClearHeadContent = EditorGUIUtility.TrTextContent(" Clear ");
@@ -78,21 +80,21 @@ namespace LitMotion.Editor
             EditorGUILayout.EndVertical();
         }
 
+        static GUIStyle windowStyle;
         Vector2 tableScroll;
-        GUIStyle tableListStyle;
 
         void RenderTable()
         {
-            if (tableListStyle == null)
+            if (windowStyle == null)
             {
-                tableListStyle = new GUIStyle("CN Box");
-                tableListStyle.margin.top = 0;
-                tableListStyle.padding.left = 3;
+                windowStyle = new GUIStyle("GroupBox")
+                {
+                    margin = new RectOffset(0, 0, 0, 0),
+                    padding = new RectOffset(0, 0, 0, 0)
+                };
             }
 
-            EditorGUILayout.BeginVertical(tableListStyle, EmptyLayoutOption);
-
-            tableScroll = EditorGUILayout.BeginScrollView(this.tableScroll, new GUILayoutOption[]
+            tableScroll = EditorGUILayout.BeginScrollView(tableScroll, windowStyle, new GUILayoutOption[]
             {
                 GUILayout.ExpandWidth(true),
                 GUILayout.MaxWidth(2000f)
@@ -106,7 +108,6 @@ namespace LitMotion.Editor
             treeView?.OnGUI(controlRect);
 
             EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
         }
 
         static int interval;
@@ -119,8 +120,10 @@ namespace LitMotion.Editor
             }
         }
 
+
         static GUIStyle detailsStyle;
         Vector2 detailsScroll;
+        Vector2 stackTraceScroll;
 
         void RenderDetailsPanel()
         {
@@ -134,74 +137,85 @@ namespace LitMotion.Editor
                 detailsStyle.margin.right = 15;
             }
 
-            var selected = treeView.state.selectedIDs;
+            SplitterGUILayout.BeginVerticalSplit(verticalSplitterState, EmptyLayoutOption);
 
-            if (selected.Count <= 0) return;
-            var first = selected[0];
-
-            if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is not MotionDebuggerViewItem item) return;
-
-            detailsScroll = EditorGUILayout.BeginScrollView(this.detailsScroll, tableListStyle, EmptyLayoutOption);
+            detailsScroll = EditorGUILayout.BeginScrollView(detailsScroll, windowStyle, EmptyLayoutOption);
             {
-                ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle);
-                ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle);
-                var debugInfo = MotionManager.GetDebugInfo(item.Handle);
-
-                GenericField("Name", managedData.DebugName);
-                EditorGUILayout.Space(2);
-
-                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+                var selected = treeView.state.selectedIDs;
+                if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)
                 {
-                    EditorGUILayout.LabelField("Motion Data", EditorStyles.boldLabel);
+                    ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle);
+                    ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle);
+                    var debugInfo = MotionManager.GetDebugInfo(item.Handle);
 
-                    GenericField("Start Value", debugInfo.StartValue);
-                    GenericField("End Value", debugInfo.EndValue);
-
-                    EditorGUILayout.Space(2);
-                    GenericField("Duration", unmanagedData.Duration);
-                    GenericField("Delay", unmanagedData.Delay);
-                    GenericField("Delay Type", unmanagedData.DelayType);
-                    GenericField("Loops", unmanagedData.Loops);
-                    GenericField("Loop Type", unmanagedData.LoopType);
-
-                    EditorGUILayout.Space(2);
-                    GenericField("Ease", unmanagedData.Ease);
-                    if (unmanagedData.Ease is Ease.CustomAnimationCurve)
+                    using (new EditorGUILayout.VerticalScope(GUI.skin.box))
                     {
-                        GenericField("Custom Ease Curve", unmanagedData.AnimationCurve);
+                        EditorGUILayout.LabelField("Motion Handle", EditorStyles.boldLabel);
+                        EditorGUILayout.Space(1);
+
+                        GenericField("Name", item.Handle.GetDebugName());
+                        GenericField("Index", item.Handle.Index);
+                        GenericField("Version", item.Handle.Version);
+
+                        EditorGUILayout.Space(4);
+                        GenericField("Type", item.MotionType);
+                        GenericField("Scheduler", item.SchedulerType);
                     }
 
-                    EditorGUILayout.Space(2);
-                    GenericField("Type", item.MotionType);
-                    GenericField("Scheduler", item.SchedulerType);
-                    GenericField("Cancel On Error", managedData.CancelOnError);
-                    GenericField("Skip Values During Delay", managedData.SkipValuesDuringDelay);
+                    using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+                    {
+                        EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
+                        EditorGUILayout.Space(1);
 
-                    EditorGUILayout.Space(2);
-                    GenericField("State[0]", managedData.State0);
-                    GenericField("State[1]", managedData.State1);
-                    GenericField("State[2]", managedData.State2);
+                        GenericField("Start Value", debugInfo.StartValue);
+                        GenericField("End Value", debugInfo.EndValue);
+
+                        EditorGUILayout.Space(4);
+                        GenericField("Duration", unmanagedData.Duration);
+                        GenericField("Delay", unmanagedData.Delay);
+                        GenericField("Delay Type", unmanagedData.DelayType);
+                        GenericField("Loops", unmanagedData.Loops);
+                        GenericField("Loop Type", unmanagedData.LoopType);
+
+                        EditorGUILayout.Space(4);
+                        GenericField("Ease", unmanagedData.Ease);
+                        if (unmanagedData.Ease is Ease.CustomAnimationCurve)
+                        {
+                            GenericField("Custom Ease Curve", unmanagedData.AnimationCurve);
+                        }
+
+                        EditorGUILayout.Space(4);
+                        GenericField("Cancel On Error", managedData.CancelOnError);
+                        GenericField("Skip Values During Delay", managedData.SkipValuesDuringDelay);
+
+                        EditorGUILayout.Space(4);
+                        GenericField("State[0]", managedData.State0);
+                        GenericField("State[1]", managedData.State1);
+                        GenericField("State[2]", managedData.State2);
+                    }
+
+                    using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+                    {
+                        EditorGUILayout.LabelField("Status", EditorStyles.boldLabel);
+                        EditorGUILayout.Space(1);
+
+                        EditorGUILayout.LabelField("Status", unmanagedData.Status.ToString());
+                        GenericField("Time", unmanagedData.Time);
+                        GenericField("Completed Loops", unmanagedData.ComplpetedLoops);
+                        EditorGUILayout.Space(4);
+                        GenericField("Playback Speed", unmanagedData.PlaybackSpeed);
+                        GenericField("Is Preserved", unmanagedData.IsPreserved);
+                    }
                 }
+            }
+            EditorGUILayout.EndScrollView();
 
-                EditorGUILayout.Space(2);
-
-                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+            stackTraceScroll = EditorGUILayout.BeginScrollView(stackTraceScroll, windowStyle, EmptyLayoutOption);
+            {
+                var selected = treeView.state.selectedIDs;
+                if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)
                 {
-                    EditorGUILayout.LabelField("Status", EditorStyles.boldLabel);
-                    EditorGUILayout.LabelField("Status", unmanagedData.Status.ToString());
-                    GenericField("Time", unmanagedData.Time);
-                    GenericField("Completed Loops", unmanagedData.ComplpetedLoops);
-                    EditorGUILayout.Space(2);
-                    GenericField("Playback Speed", unmanagedData.PlaybackSpeed);
-                    GenericField("Is Preserved", unmanagedData.IsPreserved);
-                }
-
-                EditorGUILayout.Space(2);
-
-                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-                {
-                    EditorGUILayout.LabelField("Stack Trace", EditorStyles.boldLabel);
-
+                    EditorGUILayout.LabelField("Stack Trace");
                     var vector = detailsStyle.CalcSize(new GUIContent(item.StackTrace));
                     EditorGUILayout.SelectableLabel(item.StackTrace, detailsStyle, new GUILayoutOption[]
                     {
@@ -212,6 +226,8 @@ namespace LitMotion.Editor
                 }
             }
             EditorGUILayout.EndScrollView();
+
+            SplitterGUILayout.EndVerticalSplit();
         }
 
         static void GenericField<T>(string label, T value)

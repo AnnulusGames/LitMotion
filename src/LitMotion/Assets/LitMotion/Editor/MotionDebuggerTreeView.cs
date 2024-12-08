@@ -57,10 +57,9 @@ namespace LitMotion.Editor
         public MotionDebuggerTreeView()
             : this(new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[]
             {
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Name"), width = 40},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 75},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Time"), width = 15},
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Stack Trace")},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Name"), width = 50},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 80},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Time"), width = 30},
             })))
         {
 
@@ -70,8 +69,8 @@ namespace LitMotion.Editor
             : base(state, header)
         {
             rowHeight = 20;
-            showAlternatingRowBackgrounds = true;
-            showBorder = true;
+            showAlternatingRowBackgrounds = false;
+            showBorder = false;
             header.sortingChanged += HeaderSortingChanged;
 
             header.ResizeToFit();
@@ -100,7 +99,6 @@ namespace LitMotion.Editor
                 0 => ascending ? items.OrderBy(item => item.Handle.GetDebugName()) : items.OrderByDescending(item => item.Handle.GetDebugName()),
                 1 => ascending ? items.OrderBy(item => item.MotionType) : items.OrderByDescending(item => item.MotionType),
                 2 => ascending ? items.OrderBy(item => item.Handle.Time) : items.OrderByDescending(item => item.Handle.Time),
-                3 => ascending ? items.OrderBy(item => item.StackTrace) : items.OrderByDescending(item => item.StackTraceFirstLine),
                 _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
             };
             CurrentBindingItems = rootItem.children = orderedEnumerable.Cast<TreeViewItem>().ToList();
@@ -191,9 +189,6 @@ namespace LitMotion.Editor
                         break;
                     case 2:
                         EditorGUI.LabelField(rect, item.Handle.Time.ToString("00.00"), labelStyle);
-                        break;
-                    case 3:
-                        EditorGUI.LabelField(rect, item.StackTraceFirstLine, labelStyle);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, null);
