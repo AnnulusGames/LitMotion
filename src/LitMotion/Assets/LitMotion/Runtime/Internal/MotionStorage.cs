@@ -1,3 +1,7 @@
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#define LITMOTION_DEBUG
+#endif
+
 using System;
 using System.Runtime.CompilerServices;
 using LitMotion.Collections;
@@ -114,6 +118,10 @@ namespace LitMotion
             managedDataRef.State0 = buffer.State0;
             managedDataRef.State1 = buffer.State1;
             managedDataRef.State2 = buffer.State2;
+
+#if LITMOTION_DEBUG
+            managedDataRef.DebugName = buffer.DebugName;
+#endif
 
             if (buffer.BindOnSchedule && buffer.UpdateAction != null)
             {

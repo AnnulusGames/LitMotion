@@ -15,6 +15,7 @@ namespace LitMotion.Editor
 
         static readonly Regex removeHref = new("<a href.+>(.+)</a>", RegexOptions.Compiled);
 
+        public string DebugName { get; set; }
         public string MotionType { get; set; }
         public string SchedulerType { get; set; }
         public string Time { get; set; }
@@ -57,7 +58,8 @@ namespace LitMotion.Editor
         public MotionDebuggerTreeView()
             : this(new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[]
             {
-                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 55},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Name"), width = 40},
+                new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Motion Type"), width = 75},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Time"), width = 15},
                 new MultiColumnHeaderState.Column() { headerContent = new GUIContent("Stack Trace")},
             })))
@@ -96,9 +98,10 @@ namespace LitMotion.Editor
             var items = rootItem.children.Cast<MotionDebuggerViewItem>();
             var orderedEnumerable = index switch
             {
-                0 => ascending ? items.OrderBy(item => item.MotionType) : items.OrderByDescending(item => item.MotionType),
-                1 => ascending ? items.OrderBy(item => double.Parse(item.Time)) : items.OrderByDescending(item => double.Parse(item.Time)),
-                2 => ascending ? items.OrderBy(item => item.StackTrace) : items.OrderByDescending(item => item.StackTraceFirstLine),
+                0 => ascending ? items.OrderBy(item => item.DebugName) : items.OrderByDescending(item => item.DebugName),
+                1 => ascending ? items.OrderBy(item => item.MotionType) : items.OrderByDescending(item => item.MotionType),
+                2 => ascending ? items.OrderBy(item => double.Parse(item.Time)) : items.OrderByDescending(item => double.Parse(item.Time)),
+                3 => ascending ? items.OrderBy(item => item.StackTrace) : items.OrderByDescending(item => item.StackTraceFirstLine),
                 _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
             };
             CurrentBindingItems = rootItem.children = orderedEnumerable.Cast<TreeViewItem>().ToList();
@@ -150,6 +153,7 @@ namespace LitMotion.Editor
 
                 children.Add(new MotionDebuggerViewItem(id)
                 {
+                    DebugName = tracking.Handle.GetDebugName(),
                     MotionType = $"[{tracking.ValueType.Name}, {tracking.OptionsType.Name}, {tracking.AdapterType.Name}]",
                     SchedulerType = GetSchedulerName(tracking.Scheduler, tracking.CreatedOnEditor),
                     Time = MotionManager.GetDataRef(tracking.Handle).Time.ToString("00.00"),
@@ -182,12 +186,15 @@ namespace LitMotion.Editor
                 switch (columnIndex)
                 {
                     case 0:
-                        EditorGUI.LabelField(rect, item.MotionType, labelStyle);
+                        EditorGUI.LabelField(rect, item.DebugName, labelStyle);
                         break;
                     case 1:
-                        EditorGUI.LabelField(rect, item.Time, labelStyle);
+                        EditorGUI.LabelField(rect, item.MotionType, labelStyle);
                         break;
                     case 2:
+                        EditorGUI.LabelField(rect, item.Time, labelStyle);
+                        break;
+                    case 3:
                         EditorGUI.LabelField(rect, item.StackTraceFirstLine, labelStyle);
                         break;
                     default:

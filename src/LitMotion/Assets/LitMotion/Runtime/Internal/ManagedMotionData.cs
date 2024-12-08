@@ -1,3 +1,7 @@
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#define LITMOTION_DEBUG
+#endif
+
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -21,6 +25,10 @@ namespace LitMotion
         public Action<int> OnLoopCompleteAction;
         public Action OnCompleteAction;
         public Action OnCancelAction;
+
+#if LITMOTION_DEBUG
+        public string DebugName;
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateUnsafe<TValue>(in TValue value) where TValue : unmanaged
