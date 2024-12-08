@@ -74,6 +74,11 @@ namespace LitMotion
             }
         }
 
+        public override readonly string ToString()
+        {
+            return $"MotionHandle`{StorageId} ({Index}:{Version})";
+        }
+
         public readonly bool Equals(MotionHandle other)
         {
             return Index == other.Index && Version == other.Version && StorageId == other.StorageId;
