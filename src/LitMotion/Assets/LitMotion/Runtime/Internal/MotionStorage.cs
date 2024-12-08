@@ -17,17 +17,32 @@ namespace LitMotion
         public object Options;
     }
 
+    /// <summary>
+    /// Represents the permissions for a motion in MotionStorage.
+    /// </summary>
+    internal enum MotionStoragePermission : byte
+    {
+        /// <summary>
+        /// Only root motions can be accessed, motions inside a sequence cannot be accessed.
+        /// </summary>
+        User,
+        /// <summary>
+        /// Allows access to motions within a sequence.
+        /// </summary>
+        Admin,
+    }
+
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
-        bool TryCancel(MotionHandle handle);
-        bool TryComplete(MotionHandle handle);
-        void Cancel(MotionHandle handle);
-        void Complete(MotionHandle handle);
-        void SetTime(MotionHandle handle, double time);
+        bool TryCancel(MotionHandle handle, MotionStoragePermission permission);
+        bool TryComplete(MotionHandle handle, MotionStoragePermission permission);
+        void Cancel(MotionHandle handle, MotionStoragePermission permission);
+        void Complete(MotionHandle handle, MotionStoragePermission permission);
+        void SetTime(MotionHandle handle, double time, MotionStoragePermission permission);
+        ref MotionDataCore GetDataRef(MotionHandle handle, MotionStoragePermission permission);
+        ref ManagedMotionData GetManagedDataRef(MotionHandle handle, MotionStoragePermission permission);
         void AddToSequence(ref MotionHandle handle, out double motionDuration);
-        ref MotionDataCore GetDataRef(MotionHandle handle);
-        ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
         MotionDebugInfo GetDebugInfo(MotionHandle handle);
         void Reset();
     }
@@ -220,14 +235,14 @@ namespace LitMotion
                 (motion.Core.Status is MotionStatus.Completed && motion.Core.IsPreserved);
         }
 
-        public bool TryCancel(MotionHandle handle)
+        public bool TryCancel(MotionHandle handle, MotionStoragePermission permission)
         {
-            return TryCancelCore(handle) == 0;
+            return TryCancelCore(handle, permission) == 0;
         }
 
-        public void Cancel(MotionHandle handle)
+        public void Cancel(MotionHandle handle, MotionStoragePermission permission)
         {
-            switch (TryCancelCore(handle))
+            switch (TryCancelCore(handle, permission))
             {
                 case 1:
                     Error.MotionNotExists();
@@ -235,10 +250,13 @@ namespace LitMotion
                 case 2:
                     Error.MotionHasBeenCanceledOrCompleted();
                     return;
+                case 3:
+                    Error.MotionIsInSequence();
+                    return;
             }
         }
 
-        int TryCancelCore(MotionHandle handle)
+        int TryCancelCore(MotionHandle handle, MotionStoragePermission permission)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             var denseIndex = slot.DenseIndex;
@@ -259,6 +277,11 @@ namespace LitMotion
                 return 2;
             }
 
+            if (permission < MotionStoragePermission.Admin && unmanagedData.Core.IsInSequence)
+            {
+                return 3;
+            }
+
             unmanagedData.Core.Status = MotionStatus.Canceled;
 
             ref var managedData = ref managedDataArray[denseIndex];
@@ -267,14 +290,14 @@ namespace LitMotion
             return 0;
         }
 
-        public bool TryComplete(MotionHandle handle)
+        public bool TryComplete(MotionHandle handle, MotionStoragePermission permission)
         {
-            return TryCompleteCore(handle) == 0;
+            return TryCompleteCore(handle, permission) == 0;
         }
 
-        public void Complete(MotionHandle handle)
+        public void Complete(MotionHandle handle, MotionStoragePermission permission)
         {
-            switch (TryCompleteCore(handle))
+            switch (TryCompleteCore(handle, permission))
             {
                 case 1:
                     Error.MotionNotExists();
@@ -283,11 +306,14 @@ namespace LitMotion
                     Error.MotionHasBeenCanceledOrCompleted();
                     return;
                 case 3:
+                    Error.MotionIsInSequence();
+                    return;
+                case 4:
                     throw new InvalidOperationException("Complete was ignored because it is not possible to complete a motion that loops infinitely. If you want to end the motion, call Cancel() instead.");
             }
         }
 
-        int TryCompleteCore(MotionHandle handle)
+        int TryCompleteCore(MotionHandle handle, MotionStoragePermission permission)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
@@ -309,9 +335,14 @@ namespace LitMotion
                 return 2;
             }
 
-            if (unmanagedData.Core.Loops < 0)
+            if (permission < MotionStoragePermission.Admin && unmanagedData.Core.IsInSequence)
             {
                 return 3;
+            }
+
+            if (unmanagedData.Core.Loops < 0)
+            {
+                return 4;
             }
 
             ref var managedData = ref managedDataArray[slot.DenseIndex];
@@ -364,19 +395,21 @@ namespace LitMotion
             return 0;
         }
 
-        public unsafe void SetTime(MotionHandle handle, double time)
+        public unsafe void SetTime(MotionHandle handle, double time, MotionStoragePermission permission)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
 
             var denseIndex = slot.DenseIndex;
             if (IsDenseIndexOutOfRange(denseIndex)) Error.MotionNotExists();
 
+            var version = slot.Version;
+            if (version <= 0 || version != handle.Version) Error.MotionNotExists();
+
             fixed (MotionData<TValue, TOptions>* ptr = unmanagedDataArray)
             {
                 var dataPtr = ptr + denseIndex;
 
-                var version = slot.Version;
-                if (version <= 0 || version != handle.Version) Error.MotionNotExists();
+                if (permission < MotionStoragePermission.Admin && dataPtr->Core.IsInSequence) Error.MotionIsInSequence();
 
                 MotionHelper.Update<TValue, TOptions, TAdapter>(dataPtr, time, out var result);
 
@@ -415,7 +448,7 @@ namespace LitMotion
 
         public void AddToSequence(ref MotionHandle handle, out double motionDuration)
         {
-            ref var slot = ref GetSlotWithVarify(handle);
+            ref var slot = ref GetSlotWithVarify(handle, MotionStoragePermission.Admin);
             ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
 
             if (dataRef.Core.Status is not MotionStatus.Scheduled)
@@ -431,30 +464,23 @@ namespace LitMotion
 
             dataRef.Core.IsPreserved = true;
             dataRef.Core.IsInSequence = true;
-
-            // ref var managedDataRef = ref managedDataArray[slot.DenseIndex];
-            // managedDataRef.SkipValuesDuringDelay = true;
-
-            // increment version
-            slot.Version++;
-            handle.Version++;
         }
 
-        public ref ManagedMotionData GetManagedDataRef(MotionHandle handle)
+        public ref ManagedMotionData GetManagedDataRef(MotionHandle handle, MotionStoragePermission permission)
         {
-            ref var slot = ref GetSlotWithVarify(handle);
+            ref var slot = ref GetSlotWithVarify(handle, permission);
             return ref managedDataArray[slot.DenseIndex];
         }
 
-        public ref MotionDataCore GetDataRef(MotionHandle handle)
+        public ref MotionDataCore GetDataRef(MotionHandle handle, MotionStoragePermission permission)
         {
-            ref var slot = ref GetSlotWithVarify(handle);
+            ref var slot = ref GetSlotWithVarify(handle, permission);
             return ref UnsafeUtility.As<MotionData<TValue, TOptions>, MotionDataCore>(ref unmanagedDataArray[slot.DenseIndex]);
         }
 
         public MotionDebugInfo GetDebugInfo(MotionHandle handle)
         {
-            ref var slot = ref GetSlotWithVarify(handle);
+            ref var slot = ref GetSlotWithVarify(handle, MotionStoragePermission.Admin);
             ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
 
             return new()
@@ -466,15 +492,21 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        ref SparseSetCore.Slot GetSlotWithVarify(MotionHandle handle)
+        ref SparseSetCore.Slot GetSlotWithVarify(MotionHandle handle, MotionStoragePermission permission)
         {
             ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
             if (IsDenseIndexOutOfRange(slot.DenseIndex)) Error.MotionNotExists();
 
-            if (IsInvalidVersion(slot.Version, handle) ||
-                unmanagedDataArray[slot.DenseIndex].Core.Status == MotionStatus.None)
+            ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
+
+            if (IsInvalidVersion(slot.Version, handle) || dataRef.Core.Status == MotionStatus.None)
             {
                 Error.MotionNotExists();
+            }
+
+            if (permission < MotionStoragePermission.Admin && dataRef.Core.IsInSequence)
+            {
+                Error.MotionIsInSequence();
             }
 
             return ref slot;

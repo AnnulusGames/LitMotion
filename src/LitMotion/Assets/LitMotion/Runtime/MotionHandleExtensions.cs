@@ -36,7 +36,7 @@ namespace LitMotion
         public static string GetDebugName(this MotionHandle handle)
         {
 #if LITMOTION_DEBUG
-            return MotionManager.GetManagedDataRef(handle).DebugName ?? handle.ToString();
+            return MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).DebugName ?? handle.ToString();
 #else
             return handle.ToString();
 #endif
@@ -50,10 +50,10 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MotionHandle Preserve(this MotionHandle handle)
         {
-            MotionManager.GetDataRef(handle).IsPreserved = true;
+            MotionManager.GetDataRef(handle, MotionStoragePermission.User).IsPreserved = true;
             return handle;
         }
-    
+
         /// <summary>
         /// Complete motion.
         /// </summary>
@@ -61,7 +61,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Complete(this MotionHandle handle)
         {
-            MotionManager.Complete(handle);
+            MotionManager.Complete(handle, MotionStoragePermission.User);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryComplete(this MotionHandle handle)
         {
-            return MotionManager.TryComplete(handle);
+            return MotionManager.TryComplete(handle, MotionStoragePermission.User);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cancel(this MotionHandle handle)
         {
-            MotionManager.Cancel(handle);
+            MotionManager.Cancel(handle, MotionStoragePermission.User);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryCancel(this MotionHandle handle)
         {
-            return MotionManager.TryCancel(handle);
+            return MotionManager.TryCancel(handle, MotionStoragePermission.User);
         }
 
         /// <summary>

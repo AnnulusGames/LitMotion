@@ -147,8 +147,8 @@ namespace LitMotion.Editor
                 var selected = treeView.state.selectedIDs;
                 if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)
                 {
-                    ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle);
-                    ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle);
+                    ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle, MotionStoragePermission.Admin);
+                    ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle, MotionStoragePermission.Admin);
                     var debugInfo = MotionManager.GetDebugInfo(item.Handle);
 
                     using (new EditorGUILayout.VerticalScope(GUI.skin.box))

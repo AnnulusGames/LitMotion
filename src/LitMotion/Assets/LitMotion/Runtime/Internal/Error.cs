@@ -35,5 +35,10 @@ namespace LitMotion
         {
             throw new InvalidOperationException("Motion has already been canceled or completed.");
         }
+
+        public static void MotionIsInSequence()
+        {
+            throw new InvalidOperationException("Cannot access the motion in sequence.");
+        }
     }
 }

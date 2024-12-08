@@ -31,7 +31,7 @@ namespace LitMotion
         {
             if (continuation == null) return;
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(handle);
+            ref var managedData = ref MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin);
             managedData.OnCompleteAction += continuation;
             managedData.OnCancelAction += continuation;
         }
