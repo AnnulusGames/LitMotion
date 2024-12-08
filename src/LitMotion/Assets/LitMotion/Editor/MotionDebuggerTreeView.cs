@@ -16,6 +16,9 @@ namespace LitMotion.Editor
         static readonly Regex removeHref = new("<a href.+>(.+)</a>", RegexOptions.Compiled);
 
         public MotionHandle Handle { get; set; }
+        public string DebugName => debugName ??= Handle.GetDebugName();
+        string debugName;
+
         public string MotionType { get; set; }
         public string SchedulerType { get; set; }
 
@@ -96,7 +99,7 @@ namespace LitMotion.Editor
             var items = rootItem.children.Cast<MotionDebuggerViewItem>();
             var orderedEnumerable = index switch
             {
-                0 => ascending ? items.OrderBy(item => item.Handle.GetDebugName()) : items.OrderByDescending(item => item.Handle.GetDebugName()),
+                0 => ascending ? items.OrderBy(item => item.DebugName) : items.OrderByDescending(item => item.DebugName),
                 1 => ascending ? items.OrderBy(item => item.MotionType) : items.OrderByDescending(item => item.MotionType),
                 2 => ascending ? items.OrderBy(item => item.Handle.Time) : items.OrderByDescending(item => item.Handle.Time),
                 _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
@@ -182,7 +185,7 @@ namespace LitMotion.Editor
                 switch (columnIndex)
                 {
                     case 0:
-                        EditorGUI.LabelField(rect, item.Handle.GetDebugName(), labelStyle);
+                        EditorGUI.LabelField(rect, item.DebugName, labelStyle);
                         break;
                     case 1:
                         EditorGUI.LabelField(rect, item.MotionType, labelStyle);
@@ -194,6 +197,12 @@ namespace LitMotion.Editor
                         throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, null);
                 }
             }
+        }
+
+        protected override bool DoesItemMatchSearch(TreeViewItem item, string search)
+        {
+            var viewItem = item as MotionDebuggerViewItem;
+            return viewItem.DebugName.Contains(search, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 

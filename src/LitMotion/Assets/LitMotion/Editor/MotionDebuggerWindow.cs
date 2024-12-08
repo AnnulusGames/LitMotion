@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 
 namespace LitMotion.Editor
 {
@@ -19,6 +20,7 @@ namespace LitMotion.Editor
         }
 
         MotionDebuggerTreeView treeView;
+        SearchField searchField;
         object horizontalSplitterState;
         object verticalSplitterState;
 
@@ -31,6 +33,7 @@ namespace LitMotion.Editor
             horizontalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 50f }, new int[] { 32, 32 }, null);
             verticalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 15f }, new int[] { 32, 32 }, null);
             treeView = new MotionDebuggerTreeView();
+            searchField = new SearchField();
             MotionDebugger.Enabled = EditorPrefs.GetBool(EnabledPrefsKey, false);
             MotionDebugger.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
         }
@@ -66,6 +69,8 @@ namespace LitMotion.Editor
             }
 
             GUILayout.FlexibleSpace();
+
+            treeView.searchString = searchField.OnToolbarGUI(treeView.searchString);
 
             if (GUILayout.Button(ClearHeadContent, EditorStyles.toolbarButton, GUILayout.Width(70f)))
             {
