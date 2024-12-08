@@ -18,14 +18,12 @@ namespace LitMotion.Editor
             GetWindow<MotionDebuggerWindow>("LitMotion Debugger").Show();
         }
 
-        static readonly GUILayoutOption[] EmptyLayoutOption = new GUILayoutOption[0];
-
         MotionDebuggerTreeView treeView;
         object horizontalSplitterState;
         object verticalSplitterState;
 
-        const string EnableTrackingPrefsKey = "LitMotion-MotionTracker-EnableTracking";
-        const string EnableStackTracePrefsKey = "LitMotion-MotionTracker-EnableStackTrace";
+        const string EnabledPrefsKey = "LitMotion-Debugger-Enabled";
+        const string EnableStackTracePrefsKey = "LitMotion-Debugger-EnableStackTrace";
 
         void OnEnable()
         {
@@ -33,35 +31,35 @@ namespace LitMotion.Editor
             horizontalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 50f }, new int[] { 32, 32 }, null);
             verticalSplitterState = SplitterGUILayout.CreateSplitterState(new float[] { 50f, 15f }, new int[] { 32, 32 }, null);
             treeView = new MotionDebuggerTreeView();
-            MotionDebugger.EnableTracking = EditorPrefs.GetBool(EnableTrackingPrefsKey, false);
+            MotionDebugger.Enabled = EditorPrefs.GetBool(EnabledPrefsKey, false);
             MotionDebugger.EnableStackTrace = EditorPrefs.GetBool(EnableStackTracePrefsKey, false);
         }
 
         void OnGUI()
         {
             RenderHeadPanel();
-            SplitterGUILayout.BeginHorizontalSplit(horizontalSplitterState, EmptyLayoutOption);
+            SplitterGUILayout.BeginHorizontalSplit(horizontalSplitterState);
             RenderTable();
             RenderDetailsPanel();
             SplitterGUILayout.EndHorizontalSplit();
         }
 
-        static readonly GUIContent ClearHeadContent = EditorGUIUtility.TrTextContent(" Clear ");
-        static readonly GUIContent EnableTrackingHeadContent = EditorGUIUtility.TrTextContent("Enable Tracking");
-        static readonly GUIContent EnableStackTraceHeadContent = EditorGUIUtility.TrTextContent("Enable Stack Trace");
+        static readonly GUIContent ClearHeadContent = new("Clear");
+        static readonly GUIContent EnabledHeadContent = new("Enable");
+        static readonly GUIContent EnableStackTraceHeadContent = new("Stack Trace");
 
         void RenderHeadPanel()
         {
-            EditorGUILayout.BeginVertical(EmptyLayoutOption);
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, EmptyLayoutOption);
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
 
-            if (GUILayout.Toggle(MotionDebugger.EnableTracking, EnableTrackingHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionDebugger.EnableTracking)
+            if (GUILayout.Toggle(MotionDebugger.Enabled, EnabledHeadContent, EditorStyles.toolbarButton, GUILayout.Width(110f)) != MotionDebugger.Enabled)
             {
-                MotionDebugger.EnableTracking = !MotionDebugger.EnableTracking;
-                EditorPrefs.SetBool(EnableTrackingPrefsKey, MotionDebugger.EnableTracking);
+                MotionDebugger.Enabled = !MotionDebugger.Enabled;
+                EditorPrefs.SetBool(EnabledPrefsKey, MotionDebugger.Enabled);
             }
 
-            if (GUILayout.Toggle(MotionDebugger.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption) != MotionDebugger.EnableStackTrace)
+            if (GUILayout.Toggle(MotionDebugger.EnableStackTrace, EnableStackTraceHeadContent, EditorStyles.toolbarButton, GUILayout.Width(90f)) != MotionDebugger.EnableStackTrace)
             {
                 MotionDebugger.EnableStackTrace = !MotionDebugger.EnableStackTrace;
                 EditorPrefs.SetBool(EnableStackTracePrefsKey, MotionDebugger.EnableStackTrace);
@@ -69,7 +67,7 @@ namespace LitMotion.Editor
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button(ClearHeadContent, EditorStyles.toolbarButton, EmptyLayoutOption))
+            if (GUILayout.Button(ClearHeadContent, EditorStyles.toolbarButton, GUILayout.Width(70f)))
             {
                 MotionDebugger.Clear();
                 treeView.ReloadAndSort();
@@ -137,9 +135,9 @@ namespace LitMotion.Editor
                 detailsStyle.margin.right = 15;
             }
 
-            SplitterGUILayout.BeginVerticalSplit(verticalSplitterState, EmptyLayoutOption);
+            SplitterGUILayout.BeginVerticalSplit(verticalSplitterState);
 
-            detailsScroll = EditorGUILayout.BeginScrollView(detailsScroll, windowStyle, EmptyLayoutOption);
+            detailsScroll = EditorGUILayout.BeginScrollView(detailsScroll, windowStyle);
             {
                 var selected = treeView.state.selectedIDs;
                 if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)
@@ -210,7 +208,7 @@ namespace LitMotion.Editor
             }
             EditorGUILayout.EndScrollView();
 
-            stackTraceScroll = EditorGUILayout.BeginScrollView(stackTraceScroll, windowStyle, EmptyLayoutOption);
+            stackTraceScroll = EditorGUILayout.BeginScrollView(stackTraceScroll, windowStyle);
             {
                 var selected = treeView.state.selectedIDs;
                 if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)

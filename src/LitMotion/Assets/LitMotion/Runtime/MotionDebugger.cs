@@ -9,7 +9,7 @@ namespace LitMotion
     /// </summary>
     public static class MotionDebugger
     {
-        public static bool EnableTracking = false;
+        public static bool Enabled = false;
         public static bool EnableStackTrace = false;
 
         public static IReadOnlyList<TrackingState> Items => trackings;
