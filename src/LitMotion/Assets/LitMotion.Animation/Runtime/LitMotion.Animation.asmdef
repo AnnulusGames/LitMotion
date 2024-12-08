@@ -1,0 +1,17 @@
+{
+    "name": "LitMotion.Animation",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3",
+        "GUID:aa9cad64d4fae43d2a90e595aea6cc7f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
