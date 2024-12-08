@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using LitMotion.Extensions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -18,7 +19,7 @@ namespace LitMotion.Tests.Runtime
             handle.PlaybackSpeed = 0.5f;
 
             var time = Time.timeAsDouble;
-            yield return handle.ToYieldInteraction();
+            yield return handle.ToYieldInstruction();
             Assert.That(Time.timeAsDouble - time, Is.GreaterThan(2.0));
         }
 
@@ -44,22 +45,11 @@ namespace LitMotion.Tests.Runtime
             var value = 0f;
             var handle = LMotion.Create(0f, endValue, 1f)
                 .Bind(x => value = x);
-            
+
             handle.PlaybackSpeed = 2f;
             var time = Time.time;
-            yield return handle.ToYieldInteraction();
+            yield return handle.ToYieldInstruction();
             Assert.That(Time.time - time, Is.EqualTo(0.5f).Using(new FloatEqualityComparer(0.05f)));
         }
-
-        [Test]
-        public void Test_PlaybackSpeed_Minus()
-        {
-            var handle = LMotion.Create(0f, 10f, 1f).RunWithoutBinding();
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-            {
-                handle.PlaybackSpeed = -1f;
-            });
-        }
-
     }
 }

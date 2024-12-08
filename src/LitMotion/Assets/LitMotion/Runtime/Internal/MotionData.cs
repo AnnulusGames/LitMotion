@@ -6,33 +6,36 @@ namespace LitMotion
     [StructLayout(LayoutKind.Sequential)]
     public struct MotionDataCore
     {
+        // state
         public MotionStatus Status;
+        public MotionStatus PrevStatus;
+        public bool IsPreserved;
+        public bool IsInSequence;
+
+        public ushort ComplpetedLoops;
+        public ushort PrevCompletedLoops;
 
         public double Time;
         public float PlaybackSpeed;
+
+        // parameters
         public float Duration;
-
         public Ease Ease;
-
 #if LITMOTION_COLLECTIONS_2_0_OR_NEWER
         public NativeAnimationCurve AnimationCurve;
 #else
         public UnsafeAnimationCurve AnimationCurve;
 #endif
-
         public MotionTimeKind TimeKind;
         public float Delay;
         public int Loops;
         public DelayType DelayType;
         public LoopType LoopType;
 
-        public static readonly MotionDataCore Default = new()
-        {
-            Loops = 1,
-            PlaybackSpeed = 1f,
-        };
+        public readonly bool WasStatusChanged => Status != PrevStatus;
+        public readonly bool WasLoopCompleted => ComplpetedLoops > PrevCompletedLoops;
     }
-    
+
     /// <summary>
     /// A structure representing motion data.
     /// </summary>
@@ -49,10 +52,5 @@ namespace LitMotion
         public TValue StartValue;
         public TValue EndValue;
         public TOptions Options;
-
-        public static readonly MotionData<TValue, TOptions> Default = new()
-        {
-            Core = MotionDataCore.Default,
-        };
     }
 }

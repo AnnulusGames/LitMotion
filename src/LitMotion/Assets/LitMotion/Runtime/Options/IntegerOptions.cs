@@ -5,6 +5,7 @@ namespace LitMotion
     /// <summary>
     /// Options for integer type motion.
     /// </summary>
+    [Serializable]
     public struct IntegerOptions : IMotionOptions, IEquatable<IntegerOptions>
     {
         public RoundingMode RoundingMode;
