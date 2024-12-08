@@ -35,7 +35,7 @@ namespace LitMotion
             if (Hint.Likely(corePtr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing) ||
                 Hint.Unlikely(corePtr->IsPreserved && corePtr->Status is MotionStatus.Completed))
             {
-                if (Hint.Unlikely(corePtr->SkipUpdate)) return;
+                if (Hint.Unlikely(corePtr->IsInSequence)) return;
 
                 var deltaTime = corePtr->TimeKind switch
                 {

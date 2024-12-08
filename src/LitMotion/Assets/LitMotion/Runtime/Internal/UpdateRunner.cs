@@ -64,7 +64,7 @@ namespace LitMotion
                 {
                     var currentDataPtr = dataPtr + i;
 
-                    if (currentDataPtr->Core.SkipUpdate) continue;
+                    if (currentDataPtr->Core.IsInSequence) continue;
 
                     var status = currentDataPtr->Core.Status;
                     ref var managedData = ref managedDataSpan[i];

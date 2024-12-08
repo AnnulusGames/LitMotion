@@ -10,7 +10,7 @@ namespace LitMotion
         public MotionStatus Status;
         public MotionStatus PrevStatus;
         public bool IsPreserved;
-        public bool SkipUpdate;
+        public bool IsInSequence;
 
         public ushort ComplpetedLoops;
         public ushort PrevCompletedLoops;

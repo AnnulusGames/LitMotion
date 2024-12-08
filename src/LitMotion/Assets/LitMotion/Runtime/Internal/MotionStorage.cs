@@ -430,7 +430,7 @@ namespace LitMotion
             }
 
             dataRef.Core.IsPreserved = true;
-            dataRef.Core.SkipUpdate = true;
+            dataRef.Core.IsInSequence = true;
 
             // ref var managedDataRef = ref managedDataArray[slot.DenseIndex];
             // managedDataRef.SkipValuesDuringDelay = true;
