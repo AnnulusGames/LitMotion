@@ -182,7 +182,17 @@ namespace LitMotion.Tests.Runtime
             Assert.Throws<InvalidOperationException>(() =>
             {
                 handle.Complete();
-            });
+            }, "Cannot access the motion in sequence.");
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                handle.Cancel();
+            }, "Cannot access the motion in sequence.");
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                handle.Time = 0;
+            }, "Cannot access the motion in sequence.");
         }
     }
 }
