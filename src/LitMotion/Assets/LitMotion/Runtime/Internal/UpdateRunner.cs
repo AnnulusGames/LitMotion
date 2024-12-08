@@ -84,9 +84,9 @@ namespace LitMotion
                             }
                         }
 
-                        if (dataPtr->Core.WasLoopCompleted)
+                        if (currentDataPtr->Core.WasLoopCompleted)
                         {
-                            managedData.InvokeOnLoopComplete(dataPtr->Core.ComplpetedLoops);
+                            managedData.InvokeOnLoopComplete(currentDataPtr->Core.ComplpetedLoops);
                         }
 
                         if (status is MotionStatus.Completed && currentDataPtr->Core.WasStatusChanged)
