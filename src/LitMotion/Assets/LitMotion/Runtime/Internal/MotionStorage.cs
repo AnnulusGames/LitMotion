@@ -42,7 +42,7 @@ namespace LitMotion
         void SetTime(MotionHandle handle, double time, MotionStoragePermission permission);
         ref MotionDataCore GetDataRef(MotionHandle handle, MotionStoragePermission permission);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle, MotionStoragePermission permission);
-        void AddToSequence(ref MotionHandle handle, out double motionDuration);
+        void AddToSequence(MotionHandle handle, out double motionDuration);
         MotionDebugInfo GetDebugInfo(MotionHandle handle);
         void Reset();
     }
@@ -446,7 +446,7 @@ namespace LitMotion
             }
         }
 
-        public void AddToSequence(ref MotionHandle handle, out double motionDuration)
+        public void AddToSequence(MotionHandle handle, out double motionDuration)
         {
             ref var slot = ref GetSlotWithVarify(handle, MotionStoragePermission.Admin);
             ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];

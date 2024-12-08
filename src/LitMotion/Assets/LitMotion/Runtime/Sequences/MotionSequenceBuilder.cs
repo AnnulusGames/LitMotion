@@ -45,7 +45,7 @@ namespace LitMotion.Sequences
 
         public void Append(MotionHandle handle)
         {
-            MotionManager.AddToSequence(ref handle, out var motionDuration);
+            MotionManager.AddToSequence(handle, out var motionDuration);
             AddItem(new MotionSequenceItem(tail, handle));
             AppendInterval(motionDuration);
         }
@@ -59,7 +59,7 @@ namespace LitMotion.Sequences
 
         public void Insert(double position, MotionHandle handle)
         {
-            MotionManager.AddToSequence(ref handle, out var motionDuration);
+            MotionManager.AddToSequence(handle, out var motionDuration);
             AddItem(new MotionSequenceItem(position, handle));
             duration = Math.Max(duration, position + motionDuration);
         }

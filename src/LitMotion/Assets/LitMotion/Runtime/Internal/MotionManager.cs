@@ -83,10 +83,10 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddToSequence(ref MotionHandle handle, out double motionDuration)
+        public static void AddToSequence(MotionHandle handle, out double motionDuration)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].AddToSequence(ref handle, out motionDuration);
+            list[handle.StorageId].AddToSequence(handle, out motionDuration);
         }
 
         // For MotionTracker
