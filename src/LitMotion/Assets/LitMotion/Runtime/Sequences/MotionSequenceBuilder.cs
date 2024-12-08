@@ -69,13 +69,15 @@ namespace LitMotion.Sequences
             Insert(lastTail, handle);
         }
 
-        public MotionHandle Schedule()
+        public MotionHandle Schedule(Action<MotionBuilder<double, NoOptions, Adapters.DoubleMotionAdapter>> configuration)
         {
             var source = MotionSequenceSource.Rent();
-            var handle = LMotion.Create(0.0, duration, (float)duration)
+            var builder = LMotion.Create(0.0, duration, (float)duration)
                 .WithOnComplete(source.OnCompleteDelegate)
-                .WithOnCancel(source.OnCancelDelegate)
-                .Bind(source, (x, source) => source.Time = x);
+                .WithOnCancel(source.OnCancelDelegate);
+
+            configuration?.Invoke(builder);
+            var handle = builder.Bind(source, (x, source) => source.Time = x);
 
             source.Initialize(handle, buffer, count, duration);
             buffer = null;
@@ -147,8 +149,14 @@ namespace LitMotion.Sequences
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MotionHandle Schedule()
         {
+            return Schedule(null);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MotionHandle Schedule(Action<MotionBuilder<double, NoOptions, Adapters.DoubleMotionAdapter>> configuration)
+        {
             CheckIsDisposed();
-            var handle = source.Schedule();
+            var handle = source.Schedule(configuration);
             Dispose();
             return handle;
         }
