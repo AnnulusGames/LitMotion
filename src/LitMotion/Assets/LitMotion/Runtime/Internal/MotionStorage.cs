@@ -1,3 +1,7 @@
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#define LITMOTION_DEBUG
+#endif
+
 using System;
 using System.Runtime.CompilerServices;
 using LitMotion.Collections;
@@ -6,6 +10,13 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace LitMotion
 {
+    internal record MotionDebugInfo
+    {
+        public object StartValue;
+        public object EndValue;
+        public object Options;
+    }
+
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
@@ -17,6 +28,7 @@ namespace LitMotion
         void AddToSequence(ref MotionHandle handle, out double motionDuration);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
+        MotionDebugInfo GetDebugInfo(MotionHandle handle);
         void Reset();
     }
 
@@ -115,6 +127,10 @@ namespace LitMotion
             managedDataRef.State1 = buffer.State1;
             managedDataRef.State2 = buffer.State2;
 
+#if LITMOTION_DEBUG
+            managedDataRef.DebugName = buffer.DebugName;
+#endif
+
             if (buffer.BindOnSchedule && buffer.UpdateAction != null)
             {
                 managedDataRef.UpdateUnsafe(
@@ -200,7 +216,8 @@ namespace LitMotion
             if (IsInvalidVersion(slot.Version, handle)) return false;
 
             ref var motion = ref unmanagedDataArray[slot.DenseIndex];
-            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
+            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing ||
+                (motion.Core.Status is MotionStatus.Completed && motion.Core.IsPreserved);
         }
 
         public bool TryCancel(MotionHandle handle)
@@ -433,6 +450,19 @@ namespace LitMotion
         {
             ref var slot = ref GetSlotWithVarify(handle);
             return ref UnsafeUtility.As<MotionData<TValue, TOptions>, MotionDataCore>(ref unmanagedDataArray[slot.DenseIndex]);
+        }
+
+        public MotionDebugInfo GetDebugInfo(MotionHandle handle)
+        {
+            ref var slot = ref GetSlotWithVarify(handle);
+            ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
+
+            return new()
+            {
+                StartValue = dataRef.StartValue,
+                EndValue = dataRef.EndValue,
+                Options = dataRef.Options,
+            };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

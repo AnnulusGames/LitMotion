@@ -1,3 +1,7 @@
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#define LITMOTION_DEBUG
+#endif
+
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -58,6 +62,10 @@ namespace LitMotion
 
             buffer.Scheduler = default;
 
+#if LITMOTION_DEBUG
+            buffer.DebugName = default;
+#endif
+
             if (buffer.Version != ushort.MaxValue)
             {
                 buffer.NextNode = PoolRoot;
@@ -91,6 +99,10 @@ namespace LitMotion
         public Action OnCancelAction;
         public AnimationCurve AnimationCurve;
         public IMotionScheduler Scheduler;
+
+#if LITMOTION_DEBUG
+        public string DebugName;
+#endif
     }
 
     /// <summary>
@@ -265,6 +277,21 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Specifies the name that will be displayed in the debugger.
+        /// </summary>
+        /// <param name="debugName">Debug name</param>
+        /// <returns>This builder to allow chaining multiple method calls.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithDebugName(string debugName)
+        {
+#if LITMOTION_DEBUG
+            CheckBuffer();
+            buffer.DebugName = debugName;
+#endif
+            return this;
+        }
+
+        /// <summary>
         /// Create motion and play it without binding it to a specific object.
         /// </summary>
         /// <returns>Handle of the created motion data.</returns>
@@ -408,9 +435,9 @@ namespace LitMotion
                 handle = buffer.Scheduler.Schedule(ref this);
             }
 
-            if (MotionTracker.EnableTracking)
+            if (MotionDebugger.Enabled)
             {
-                MotionTracker.AddTracking(handle, buffer.Scheduler);
+                MotionDebugger.AddTracking(handle, buffer.Scheduler);
             }
 
             Dispose();

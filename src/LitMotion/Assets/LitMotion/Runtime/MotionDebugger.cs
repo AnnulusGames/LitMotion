@@ -7,9 +7,9 @@ namespace LitMotion
     /// <summary>
     /// Provides functionality for tracking active motions.
     /// </summary>
-    public static class MotionTracker
+    public static class MotionDebugger
     {
-        public static bool EnableTracking = false;
+        public static bool Enabled = false;
         public static bool EnableStackTrace = false;
 
         public static IReadOnlyList<TrackingState> Items => trackings;
@@ -20,7 +20,7 @@ namespace LitMotion
             var state = TrackingState.Create();
             (state.ValueType, state.OptionsType, state.AdapterType) = MotionManager.GetMotionType(motionHandle);
             state.Scheduler = scheduler;
-            state.CreationTime = DateTime.UtcNow;
+            state.Handle = motionHandle;
 #if UNITY_EDITOR
             state.CreatedOnEditor = UnityEditor.EditorApplication.isPlaying;
 #endif
@@ -64,7 +64,7 @@ namespace LitMotion
             public Type OptionsType;
             public Type AdapterType;
             public IMotionScheduler Scheduler;
-            public DateTime CreationTime;
+            public MotionHandle Handle;
             public StackTrace StackTrace;
             public bool CreatedOnEditor;
             public Action OriginalOnCompleteCallback;
@@ -83,7 +83,11 @@ namespace LitMotion
                 {
                     MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                 }
-                Release();
+
+                if (Handle.IsActive() && !MotionManager.GetDataRef(Handle).IsPreserved)
+                {
+                    Release();
+                }
             }
 
             void OnCancel()
@@ -106,7 +110,7 @@ namespace LitMotion
                 OptionsType = default;
                 AdapterType = default;
                 Scheduler = default;
-                CreationTime = default;
+                Handle = default;
                 StackTrace = default;
                 CreatedOnEditor = default;
                 OriginalOnCompleteCallback = default;

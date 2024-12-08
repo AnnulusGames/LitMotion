@@ -1,3 +1,7 @@
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#define LITMOTION_DEBUG
+#endif
+
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -21,6 +25,21 @@ namespace LitMotion
         public static bool IsActive(this MotionHandle handle)
         {
             return MotionManager.IsActive(handle);
+        }
+
+        /// <summary>
+        /// Gets the debug name set for the MotionHandle. If not specified, returns the result of ToString().
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <returns>Debug name</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string GetDebugName(this MotionHandle handle)
+        {
+#if LITMOTION_DEBUG
+            return MotionManager.GetManagedDataRef(handle).DebugName ?? handle.ToString();
+#else
+            return handle.ToString();
+#endif
         }
 
         /// <summary>

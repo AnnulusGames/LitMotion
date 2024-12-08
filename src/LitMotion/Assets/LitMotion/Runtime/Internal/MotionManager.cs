@@ -34,6 +34,13 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MotionDebugInfo GetDebugInfo(MotionHandle handle)
+        {
+            CheckTypeId(handle);
+            return list[handle.StorageId].GetDebugInfo(handle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Complete(MotionHandle handle)
         {
             CheckTypeId(handle);
