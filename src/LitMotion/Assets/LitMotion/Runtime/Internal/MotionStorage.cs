@@ -10,6 +10,13 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace LitMotion
 {
+    internal record MotionDebugInfo
+    {
+        public object StartValue;
+        public object EndValue;
+        public object Options;
+    }
+
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
@@ -21,6 +28,7 @@ namespace LitMotion
         void AddToSequence(ref MotionHandle handle, out double motionDuration);
         ref MotionDataCore GetDataRef(MotionHandle handle);
         ref ManagedMotionData GetManagedDataRef(MotionHandle handle);
+        MotionDebugInfo GetDebugInfo(MotionHandle handle);
         void Reset();
     }
 
@@ -442,6 +450,19 @@ namespace LitMotion
         {
             ref var slot = ref GetSlotWithVarify(handle);
             return ref UnsafeUtility.As<MotionData<TValue, TOptions>, MotionDataCore>(ref unmanagedDataArray[slot.DenseIndex]);
+        }
+
+        public MotionDebugInfo GetDebugInfo(MotionHandle handle)
+        {
+            ref var slot = ref GetSlotWithVarify(handle);
+            ref var dataRef = ref unmanagedDataArray[slot.DenseIndex];
+
+            return new()
+            {
+                StartValue = dataRef.StartValue,
+                EndValue = dataRef.EndValue,
+                Options = dataRef.Options,
+            };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

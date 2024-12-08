@@ -134,27 +134,102 @@ namespace LitMotion.Editor
                 detailsStyle.margin.right = 15;
             }
 
-            string message = "";
             var selected = treeView.state.selectedIDs;
-            if (selected.Count > 0)
+
+            if (selected.Count <= 0) return;
+            var first = selected[0];
+
+            if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is not MotionDebuggerViewItem item) return;
+
+            detailsScroll = EditorGUILayout.BeginScrollView(this.detailsScroll, tableListStyle, EmptyLayoutOption);
             {
-                var first = selected[0];
-                if (treeView.CurrentBindingItems.FirstOrDefault(x => x.id == first) is MotionDebuggerViewItem item)
+                ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle);
+                ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle);
+                var debugInfo = MotionManager.GetDebugInfo(item.Handle);
+
+                GenericField("Name", managedData.DebugName);
+                EditorGUILayout.Space(2);
+
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
                 {
-                    message = item.StackTrace;
+                    EditorGUILayout.LabelField("Motion Data", EditorStyles.boldLabel);
+
+                    GenericField("Start Value", debugInfo.StartValue);
+                    GenericField("End Value", debugInfo.EndValue);
+
+                    EditorGUILayout.Space(2);
+                    GenericField("Duration", unmanagedData.Duration);
+                    GenericField("Delay", unmanagedData.Delay);
+                    GenericField("Delay Type", unmanagedData.DelayType);
+                    GenericField("Loops", unmanagedData.Loops);
+                    GenericField("Loop Type", unmanagedData.LoopType);
+
+                    EditorGUILayout.Space(2);
+                    GenericField("Ease", unmanagedData.Ease);
+                    if (unmanagedData.Ease is Ease.CustomAnimationCurve)
+                    {
+                        GenericField("Custom Ease Curve", unmanagedData.AnimationCurve);
+                    }
+
+                    EditorGUILayout.Space(2);
+                    GenericField("Type", item.MotionType);
+                    GenericField("Scheduler", item.SchedulerType);
+                    GenericField("Cancel On Error", managedData.CancelOnError);
+                    GenericField("Skip Values During Delay", managedData.SkipValuesDuringDelay);
+
+                    EditorGUILayout.Space(2);
+                    GenericField("State[0]", managedData.State0);
+                    GenericField("State[1]", managedData.State1);
+                    GenericField("State[2]", managedData.State2);
+                }
+
+                EditorGUILayout.Space(2);
+
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+                {
+                    EditorGUILayout.LabelField("Status", EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField("Status", unmanagedData.Status.ToString());
+                    GenericField("Time", unmanagedData.Time);
+                    GenericField("Completed Loops", unmanagedData.ComplpetedLoops);
+                    EditorGUILayout.Space(2);
+                    GenericField("Playback Speed", unmanagedData.PlaybackSpeed);
+                    GenericField("Is Preserved", unmanagedData.IsPreserved);
+                }
+
+                EditorGUILayout.Space(2);
+
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+                {
+                    EditorGUILayout.LabelField("Stack Trace", EditorStyles.boldLabel);
+
+                    var vector = detailsStyle.CalcSize(new GUIContent(item.StackTrace));
+                    EditorGUILayout.SelectableLabel(item.StackTrace, detailsStyle, new GUILayoutOption[]
+                    {
+                        GUILayout.ExpandWidth(true),
+                        GUILayout.MinWidth(vector.x),
+                        GUILayout.MinHeight(vector.y)
+                    });
                 }
             }
-
-            detailsScroll = EditorGUILayout.BeginScrollView(this.detailsScroll, EmptyLayoutOption);
-            var vector = detailsStyle.CalcSize(new GUIContent(message));
-            EditorGUILayout.SelectableLabel(message, detailsStyle, new GUILayoutOption[]
-            {
-                GUILayout.ExpandHeight(true),
-                GUILayout.ExpandWidth(true),
-                GUILayout.MinWidth(vector.x),
-                GUILayout.MinHeight(vector.y)
-            });
             EditorGUILayout.EndScrollView();
+        }
+
+        static void GenericField<T>(string label, T value)
+        {
+            if (value is null) return;
+
+            switch (value)
+            {
+                default:
+                    EditorGUILayout.LabelField(label, value.ToString());
+                    break;
+                case UnityEngine.AnimationCurve v:
+                    EditorGUILayout.CurveField(label, v);
+                    break;
+                case UnityEngine.Object v:
+                    EditorGUILayout.ObjectField(label, v, v.GetType(), true);
+                    break;
+            }
         }
     }
 }
