@@ -20,17 +20,17 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref MotionDataCore GetDataRef(MotionHandle handle)
+        public static ref MotionDataCore GetDataRef(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            return ref list[handle.StorageId].GetDataRef(handle);
+            return ref list[handle.StorageId].GetDataRef(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref ManagedMotionData GetManagedDataRef(MotionHandle handle)
+        public static ref ManagedMotionData GetManagedDataRef(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            return ref list[handle.StorageId].GetManagedDataRef(handle);
+            return ref list[handle.StorageId].GetManagedDataRef(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,31 +41,31 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Complete(MotionHandle handle)
+        public static void Complete(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].Complete(handle);
+            list[handle.StorageId].Complete(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool TryComplete(MotionHandle handle)
+        public static bool TryComplete(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            return list[handle.StorageId].TryComplete(handle);
+            return list[handle.StorageId].TryComplete(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Cancel(MotionHandle handle)
+        public static void Cancel(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].Cancel(handle);
+            list[handle.StorageId].Cancel(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool TryCancel(MotionHandle handle)
+        public static bool TryCancel(MotionHandle handle, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            return list[handle.StorageId].TryCancel(handle);
+            return list[handle.StorageId].TryCancel(handle, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -76,17 +76,17 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SetTime(MotionHandle handle, double time)
+        public static void SetTime(MotionHandle handle, double time, MotionStoragePermission permission)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].SetTime(handle, time);
+            list[handle.StorageId].SetTime(handle, time, permission);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddToSequence(ref MotionHandle handle, out double motionDuration)
+        public static void AddToSequence(MotionHandle handle, out double motionDuration)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].AddToSequence(ref handle, out motionDuration);
+            list[handle.StorageId].AddToSequence(handle, out motionDuration);
         }
 
         // For MotionTracker

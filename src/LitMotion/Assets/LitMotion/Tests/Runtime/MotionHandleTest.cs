@@ -156,7 +156,8 @@ namespace LitMotion.Tests.Runtime
         {
             var handle = LMotion.Create(0f, 10f, 1f)
                 .WithLoops(3)
-                .RunWithoutBinding();
+                .RunWithoutBinding()
+                .Preserve();
 
             Assert.That(handle.ComplatedLoops, Is.EqualTo(0));
             yield return new WaitForSeconds(1f);
