@@ -1,19 +1,30 @@
+using System.Collections.Generic;
+using LitMotion.Animation.Components;
+using LitMotion.Sequences;
 using UnityEngine;
 
 namespace LitMotion.Animation
 {
-    public class LitMotionAnimation : MonoBehaviour
+    [AddComponentMenu("LitMotion Animation")]
+    public sealed class LitMotionAnimation : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        [SerializeReference]
+        LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
         {
+            new PositionComponent(),
+            new PositionComponent(),
+        };
 
-        }
-
-        // Update is called once per frame
-        void Update()
+        public MotionHandle Play()
         {
+            var builder = LSequence.Create();
 
+            foreach (var component in components)
+            {
+                builder.Join(component.Play());
+            }
+
+            return builder.Schedule();
         }
     }
 }
