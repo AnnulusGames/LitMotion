@@ -1,7 +1,6 @@
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 
 namespace LitMotion.Animation.Editor
 {
@@ -33,18 +32,6 @@ namespace LitMotion.Animation.Editor
             return root;
         }
 
-        ContextualMenuManipulator CreateContextMenuManipulator(SerializedProperty property, int arrayIndex)
-        {
-            return new ContextualMenuManipulator(evt =>
-            {
-                evt.menu.AppendAction("Remove Component", x =>
-                {
-                    property.DeleteArrayElementAtIndex(arrayIndex);
-                    RefleshInspector(true);
-                });
-            });
-        }
-
         void RefleshInspector(bool applyModifiedProperties)
         {
             if (applyModifiedProperties)
@@ -58,9 +45,10 @@ namespace LitMotion.Animation.Editor
             {
                 var property = componentsProperty.GetArrayElementAtIndex(i);
                 var view = CreateComponentGUI(property.Copy());
-                CreateContextMenuManipulator(componentsProperty, i).target = view.Foldout.Q<Toggle>();
+                CreateContextMenuManipulator(componentsProperty, i, false).target = view.Foldout.Q<Toggle>();
                 view.EnabledToggle.BindProperty(property.FindPropertyRelative("enabled"));
                 root.Add(view);
+                CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
             }
 
             var button = new Button()
@@ -103,6 +91,28 @@ namespace LitMotion.Animation.Editor
             }
 
             return view;
+        }
+
+        ContextualMenuManipulator CreateContextMenuManipulator(SerializedProperty property, int arrayIndex, bool activeLeftClick)
+        {
+            var manipulator = new ContextualMenuManipulator(evt =>
+            {
+                evt.menu.AppendAction("Remove Component", x =>
+                {
+                    property.DeleteArrayElementAtIndex(arrayIndex);
+                    RefleshInspector(true);
+                });
+            });
+
+            if (activeLeftClick)
+            {
+                manipulator.activators.Add(new ManipulatorActivationFilter
+                {
+                    button = MouseButton.LeftMouse,
+                });
+            }
+
+            return manipulator;
         }
     }
 }

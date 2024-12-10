@@ -7,6 +7,7 @@ namespace LitMotion.Animation.Editor
     public class AnimationComponentView : VisualElement
     {
         VisualElement container;
+        readonly VisualElement contextMenuButton;
         readonly Foldout foldout;
         readonly VisualElement icon;
         readonly Toggle enabledToggle;
@@ -14,6 +15,7 @@ namespace LitMotion.Animation.Editor
 
         public Foldout Foldout => foldout;
         public Toggle EnabledToggle => enabledToggle;
+        public VisualElement ContextMenuButton => contextMenuButton;
 
         public string Text
         {
@@ -72,7 +74,10 @@ namespace LitMotion.Animation.Editor
             foldoutCheck.parent.Add(icon);
             enabledToggle = new Toggle
             {
-                toggleOnLabelClick = false
+                toggleOnLabelClick = false,
+                style = {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                }
             };
             enabledToggle.Q("unity-checkmark").style.marginRight = 6f;
             foldoutCheck.parent.Add(enabledToggle);
@@ -99,8 +104,20 @@ namespace LitMotion.Animation.Editor
             var progress = progressBar.Q(null, "unity-progress-bar__progress");
             progress.style.backgroundColor = Color.white;
             progress.style.minWidth = 0f;
-
             root.Add(progressBar);
+
+            contextMenuButton = new VisualElement
+            {
+                style = {
+                    height = 15f,
+                    width = 15f,
+                    top = 4f,
+                    right = 4f,
+                    position = Position.Absolute,
+                    backgroundImage = (Texture2D)EditorGUIUtility.IconContent("_Menu").image,
+                }
+            };
+            root.Add(contextMenuButton);
 
             container = foldout.contentContainer;
         }
