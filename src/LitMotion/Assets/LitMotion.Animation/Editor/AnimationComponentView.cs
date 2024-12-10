@@ -12,6 +12,9 @@ namespace LitMotion.Animation.Editor
         readonly Toggle enabledToggle;
         readonly ProgressBar progressBar;
 
+        public Foldout Foldout => foldout;
+        public Toggle EnabledToggle => enabledToggle;
+
         public string Text
         {
             get => enabledToggle.text;
@@ -67,7 +70,10 @@ namespace LitMotion.Animation.Editor
                 }
             };
             foldoutCheck.parent.Add(icon);
-            enabledToggle = new Toggle();
+            enabledToggle = new Toggle
+            {
+                toggleOnLabelClick = false
+            };
             enabledToggle.Q("unity-checkmark").style.marginRight = 6f;
             foldoutCheck.parent.Add(enabledToggle);
 

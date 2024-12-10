@@ -11,8 +11,8 @@ namespace LitMotion.Animation
         [SerializeReference]
         LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
         {
-            new PositionComponent(),
-            new PositionComponent(),
+            new Position(),
+            new Position(),
         };
 
         public MotionHandle Play()

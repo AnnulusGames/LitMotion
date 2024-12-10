@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    public sealed class PositionComponent : LitMotionAnimationComponent
+    public sealed class Position : LitMotionAnimationComponent
     {
         [SerializeField] Transform target;
         [SerializeField] SerializableMotionSettings<Vector3, NoOptions> settings;
