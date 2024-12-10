@@ -1,7 +1,5 @@
-using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
-using System.Collections;
 using UnityEditor.UIElements;
 
 namespace LitMotion.Animation.Editor
@@ -16,8 +14,8 @@ namespace LitMotion.Animation.Editor
             var property = serializedObject.FindProperty("components");
             for (int i = 0; i < property.arraySize; i++)
             {
-                var element = CreateComponentGUI(property.GetArrayElementAtIndex(i));
-                root.Add(element);
+                var field = new PropertyField(property.GetArrayElementAtIndex(i));
+                root.Add(field);
             }
 
             var button = new Button()
@@ -28,26 +26,6 @@ namespace LitMotion.Animation.Editor
             root.Add(button);
 
             return root;
-        }
-
-        VisualElement CreateComponentGUI(SerializedProperty property)
-        {
-            var view = new AnimationComponentView()
-            {
-                Text = property.displayName
-            };
-
-            var endProperty = property.GetEndProperty();
-            var isFirst = true;
-            while (property.NextVisible(isFirst))
-            {
-                if (SerializedProperty.EqualContents(property, endProperty)) break;
-                isFirst = false;
-
-                view.Add(new PropertyField(property));
-            }
-
-            return view;
         }
     }
 }
