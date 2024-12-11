@@ -11,11 +11,24 @@ namespace LitMotion.Animation.Editor
         SerializedProperty componentsProperty;
         int prevArraySize;
 
+        AddAnimationComponentDropdown dropdown;
+        Button button;
+
         public override VisualElement CreateInspectorGUI()
         {
             root = new VisualElement();
             componentsProperty = serializedObject.FindProperty("components");
             prevArraySize = componentsProperty.arraySize;
+
+            dropdown = new AddAnimationComponentDropdown(new());
+            dropdown.OnTypeSelected += type =>
+            {
+                var last = componentsProperty.arraySize;
+                componentsProperty.InsertArrayElementAtIndex(componentsProperty.arraySize);
+                var property = componentsProperty.GetArrayElementAtIndex(last);
+                property.managedReferenceValue = ReflectionHelper.CreateDefaultInstance(type);
+                serializedObject.ApplyModifiedProperties();
+            };
 
             RefleshInspector(false);
 
@@ -51,9 +64,13 @@ namespace LitMotion.Animation.Editor
                 CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
             }
 
-            var button = new Button()
+            button = new Button(() => dropdown.Show(button.worldBound))
             {
-                text = "Add..."
+                text = "Add...",
+                style = {
+                    width = 200f,
+                    alignSelf = Align.Center
+                }
             };
 
             root.Add(button);

@@ -310,5 +310,15 @@ namespace LitMotion.Animation.Editor
 
             return null;
         }
+
+        public static object CreateDefaultInstance(Type type)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            if (type == typeof(string)) return "";
+            if (type.IsSubclassOf(typeof(UnityEngine.Object))) return null;
+            return Activator.CreateInstance(type);
+        }
+
     }
 }
