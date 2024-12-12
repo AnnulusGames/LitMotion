@@ -6,16 +6,16 @@ using UnityEngine;
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Position")]
-    public sealed class Position : LitMotionAnimationComponent
+    [AddAnimationComponentMenu("Transform/Rotation")]
+    public sealed class Rotation : LitMotionAnimationComponent
     {
         [SerializeField] Transform target;
         [SerializeField] SerializableMotionSettings<Vector3, NoOptions> settings;
 
-        Vector3 startPosition;
+        Vector3 startRotation;
         readonly Action revertAction;
 
-        public Position()
+        public Rotation()
         {
             revertAction = Revert;
         }
@@ -23,16 +23,16 @@ namespace LitMotion.Animation.Components
         void Revert()
         {
             if (target != null) return;
-            target.position = startPosition;
+            target.eulerAngles = startRotation;
         }
 
         public override MotionHandle Play()
         {
-            startPosition = target.position;
+            startRotation = target.eulerAngles;
 
             return LMotion.Create(settings)
                 .WithOnCancel(revertAction)
-                .BindToPosition(target);
+                .BindToEulerAngles(target);
         }
     }
 }

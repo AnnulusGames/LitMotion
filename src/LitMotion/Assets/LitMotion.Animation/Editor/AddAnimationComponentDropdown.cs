@@ -31,6 +31,9 @@ namespace LitMotion.Animation.Editor
 
         public AddAnimationComponentDropdown(AdvancedDropdownState state) : base(state)
         {
+            var minimumSize = this.minimumSize;
+            minimumSize.y = 120f;
+            this.minimumSize = minimumSize;
         }
 
         protected override AdvancedDropdownItem BuildRoot()

@@ -15,16 +15,28 @@ namespace LitMotion.Animation
             new Position(),
         };
 
+        MotionHandle handle;
+
+        public IReadOnlyList<LitMotionAnimationComponent> Components => components;
+        public MotionHandle Handle => handle;
+
         public MotionHandle Play()
         {
+            handle.TryCancel();
+
             var builder = LSequence.Create();
 
             foreach (var component in components)
             {
-                builder.Join(component.Play());
+                var handle = component.Play();
+#if UNITY_EDITOR
+                component.TrackedHandle = handle;
+#endif
+                builder.Join(handle);
             }
 
-            return builder.Schedule();
+            handle = builder.Schedule();
+            return handle;
         }
     }
 }

@@ -1,6 +1,9 @@
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
 
 namespace LitMotion.Animation.Editor
 {
@@ -13,6 +16,7 @@ namespace LitMotion.Animation.Editor
 
         AddAnimationComponentDropdown dropdown;
         Button button;
+        List<AnimationComponentView> views = new();
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -37,8 +41,17 @@ namespace LitMotion.Animation.Editor
                 if (componentsProperty.arraySize != prevArraySize)
                 {
                     RefleshInspector(true);
+                    prevArraySize = componentsProperty.arraySize;
                 }
-                prevArraySize = componentsProperty.arraySize;
+
+                var components = ((LitMotionAnimation)target).Components;
+                for (int i = 0; i < components.Count; i++)
+                {
+                    var handle = components[i].TrackedHandle;
+                    views[i].Progress = handle.IsActive()
+                        ? Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time)
+                        : 0;
+                }
             })
             .Every(10);
 
@@ -53,6 +66,7 @@ namespace LitMotion.Animation.Editor
             }
 
             root.Clear();
+            views.Clear();
 
             for (int i = 0; i < componentsProperty.arraySize; i++)
             {
@@ -61,6 +75,7 @@ namespace LitMotion.Animation.Editor
                 CreateContextMenuManipulator(componentsProperty, i, false).target = view.Foldout.Q<Toggle>();
                 view.EnabledToggle.BindProperty(property.FindPropertyRelative("enabled"));
                 root.Add(view);
+                views.Add(view);
                 CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
             }
 
