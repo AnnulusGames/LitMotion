@@ -11,6 +11,7 @@ namespace LitMotion.Animation
     {
         [SerializeField] TObject target;
         [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
+        [SerializeField] bool relative;
 
         readonly Action revertAction;
         TValue startValue;
@@ -30,15 +31,28 @@ namespace LitMotion.Animation
         {
             startValue = GetValue(target);
 
-            return LMotion.Create<TValue, TOptions, TAdapter>(settings)
-                .WithOnCancel(revertAction)
-                .Bind(this, (x, state) =>
-                {
-                    state.SetValue(target, x);
-                });
+            if (relative)
+            {
+                return LMotion.Create<TValue, TOptions, TAdapter>(settings)
+                    .WithOnCancel(revertAction)
+                    .Bind(this, (x, state) =>
+                    {
+                        state.SetRelativeValue(target, state.startValue, x);
+                    });
+            }
+            else
+            {
+                return LMotion.Create<TValue, TOptions, TAdapter>(settings)
+                    .WithOnCancel(revertAction)
+                    .Bind(this, (x, state) =>
+                    {
+                        state.SetValue(target, x);
+                    });
+            }
         }
 
         protected abstract TValue GetValue(TObject target);
         protected abstract void SetValue(TObject target, in TValue value);
+        protected abstract void SetRelativeValue(TObject target, in TValue startValue, in TValue relativeValue);
     }
 }
