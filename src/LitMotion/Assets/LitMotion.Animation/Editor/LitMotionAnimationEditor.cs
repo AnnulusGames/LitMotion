@@ -98,6 +98,7 @@ namespace LitMotion.Animation.Editor
                 {
                     view.SetEnabled(enabled);
                 }
+                addButton.SetEnabled(enabled);
             }).Every(10);
 
             for (int i = 0; i < componentsProperty.arraySize; i++)
