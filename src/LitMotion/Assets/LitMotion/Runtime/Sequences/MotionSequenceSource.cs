@@ -33,8 +33,11 @@ namespace LitMotion.Sequences
 
         public static void Return(MotionSequenceSource source)
         {
-            ArrayPool<MotionSequenceItem>.Shared.Return(source.itemBuffer);
-            source.itemBuffer = null;
+            if (source.itemBuffer != null)
+            {
+                ArrayPool<MotionSequenceItem>.Shared.Return(source.itemBuffer);
+                source.itemBuffer = null;
+            }
             pool.TryPush(source);
         }
 
@@ -46,7 +49,7 @@ namespace LitMotion.Sequences
             this.duration = duration;
             this.time = 0;
 
-            Array.Sort(itemBuffer, 0, itemCount);
+            if (itemBuffer != null) Array.Sort(itemBuffer, 0, itemCount);
         }
 
         MotionSequenceSource()
