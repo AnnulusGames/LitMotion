@@ -124,7 +124,7 @@ namespace LitMotion.Animation.Editor
 
         public new void SetEnabled(bool enabled)
         {
-            Foldout.contentContainer.SetEnabled(enabled);
+            Foldout.contentContainer.SetEnabled(enabled && EnabledToggle.value);
             EnabledToggle.SetEnabled(enabled);
             icon.SetEnabled(enabled);
             contextMenuButton.SetEnabled(enabled);

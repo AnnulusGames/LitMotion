@@ -32,6 +32,8 @@ namespace LitMotion.Animation
 
             foreach (var component in components)
             {
+                if (!component.Enabled) continue;
+
                 var handle = component.Play();
                 component.TrackedHandle = handle;
                 builder.Join(handle);
