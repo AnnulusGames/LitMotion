@@ -21,19 +21,28 @@ namespace LitMotion.Animation
             revertAction = Revert;
         }
 
-        void Revert()
+        protected void Revert()
         {
             if (target == null) return;
             SetValue(target, startValue);
+            OnRevert(target);
         }
+
+        protected virtual void OnBeforePlay(TObject target) { }
+        protected virtual void OnAfterPlay(TObject target) { }
+        protected virtual void OnRevert(TObject target) { }
 
         public override MotionHandle Play()
         {
             startValue = GetValue(target);
 
+            OnBeforePlay(target);
+
+            MotionHandle handle;
+
             if (relative)
             {
-                return LMotion.Create<TValue, TOptions, TAdapter>(settings)
+                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
                     .WithOnCancel(revertAction)
                     .Bind(this, (x, state) =>
                     {
@@ -42,13 +51,17 @@ namespace LitMotion.Animation
             }
             else
             {
-                return LMotion.Create<TValue, TOptions, TAdapter>(settings)
+                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
                     .WithOnCancel(revertAction)
                     .Bind(this, (x, state) =>
                     {
                         state.SetValue(target, x);
                     });
             }
+
+            OnAfterPlay(target);
+
+            return handle;
         }
 
         protected abstract TValue GetValue(TObject target);
