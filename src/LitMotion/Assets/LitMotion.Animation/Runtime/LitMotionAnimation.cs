@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using LitMotion.Animation.Components;
-using LitMotion.Sequences;
+using LitMotion.Collections;
 using UnityEngine;
 
 namespace LitMotion.Animation
@@ -15,47 +15,72 @@ namespace LitMotion.Animation
             new Position(),
         };
 
-        MotionHandle handle;
+        FastListCore<MotionHandle> handles;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
-        public MotionHandle Handle => handle;
 
         public void Play()
         {
-            if (handle.IsActive())
+            var isPlaying = false;
+
+            foreach (var handle in handles.AsSpan())
             {
-                handle.PlaybackSpeed = 1f;
-                return;
+                if (handle.IsActive())
+                {
+                    handle.PlaybackSpeed = 1f;
+                    isPlaying = true;
+                }
             }
 
-            var builder = LSequence.Create();
+            if (isPlaying) return;
+
+            handles.Clear();
 
             foreach (var component in components)
             {
                 if (!component.Enabled) continue;
 
-                var handle = component.Play();
+                var handle = component.Play().Preserve();
                 component.TrackedHandle = handle;
-                builder.Join(handle);
+                handles.Add(handle);
             }
-
-            handle = builder.Schedule().Preserve();
         }
 
         public void Stop()
         {
-            if (!handle.IsActive()) return;
-            handle.PlaybackSpeed = 0f;
+            foreach (var handle in handles.AsSpan())
+            {
+                if (handle.IsActive()) handle.PlaybackSpeed = 0f;
+            }
         }
 
         public void Reset()
         {
-            handle.TryCancel();
+            foreach (var handle in handles.AsSpan())
+            {
+                handle.TryCancel();
+            }
+
+            handles.Clear();
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                foreach (var handle in handles.AsSpan())
+                {
+                    if (handle.IsActive()) return true;
+                }
+
+                handles.Clear();
+                return false;
+            }
         }
 
         void OnDestroy()
         {
-            handle.TryCancel();
+            Reset();
         }
     }
 }

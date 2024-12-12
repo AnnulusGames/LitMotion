@@ -48,9 +48,15 @@ namespace LitMotion.Animation.Editor
                 for (int i = 0; i < components.Count; i++)
                 {
                     var handle = components[i].TrackedHandle;
-                    views[i].Progress = handle.IsActive()
-                        ? Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time)
-                        : 0;
+
+                    if (handle.IsActive() && !double.IsInfinity(handle.Duration))
+                    {
+                        views[i].Progress = Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time);
+                    }
+                    else
+                    {
+                        views[i].Progress = 0f;
+                    }
                 }
             })
             .Every(10);
@@ -249,7 +255,7 @@ namespace LitMotion.Animation.Editor
 
         bool IsHandleActive()
         {
-            return !((LitMotionAnimation)target).Handle.IsActive();
+            return !((LitMotionAnimation)target).IsPlaying;
         }
     }
 }
