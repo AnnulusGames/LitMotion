@@ -20,9 +20,13 @@ namespace LitMotion.Animation
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
         public MotionHandle Handle => handle;
 
-        public MotionHandle Play()
+        public void Play()
         {
-            handle.TryCancel();
+            if (handle.IsActive())
+            {
+                handle.PlaybackSpeed = 1f;
+                return;
+            }
 
             var builder = LSequence.Create();
 
@@ -34,7 +38,22 @@ namespace LitMotion.Animation
             }
 
             handle = builder.Schedule().Preserve();
-            return handle;
+        }
+
+        public void Stop()
+        {
+            if (!handle.IsActive()) return;
+            handle.PlaybackSpeed = 0f;
+        }
+
+        public void Reset()
+        {
+            handle.TryCancel();
+        }
+
+        void OnDestroy()
+        {
+            handle.TryCancel();
         }
     }
 }

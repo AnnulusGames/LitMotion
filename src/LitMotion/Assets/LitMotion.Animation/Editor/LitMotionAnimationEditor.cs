@@ -67,7 +67,7 @@ namespace LitMotion.Animation.Editor
         {
             if (!EditorApplication.isPlayingOrWillChangePlaymode && target != null)
             {
-                ((LitMotionAnimation)target).Handle.TryCancel();
+                ((LitMotionAnimation)target).Reset();
             }
 
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
@@ -77,7 +77,7 @@ namespace LitMotion.Animation.Editor
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
-                ((LitMotionAnimation)target).Handle.TryCancel();
+                ((LitMotionAnimation)target).Reset();
             }
         }
 
@@ -93,7 +93,7 @@ namespace LitMotion.Animation.Editor
 
             root.schedule.Execute(() =>
             {
-                var enabled = !((LitMotionAnimation)target).Handle.IsActive();
+                var enabled = IsHandleActive();
                 foreach (var view in views)
                 {
                     view.SetEnabled(enabled);
@@ -140,27 +140,7 @@ namespace LitMotion.Animation.Editor
                     unityFontStyleAndWeight = FontStyle.Bold
                 }
             });
-            var controlPanel = new VisualElement
-            {
-                style = {
-                    flexDirection = FlexDirection.Row,
-                    flexGrow = 1f,
-                }
-            };
-            controlPanel.Add(new Button(() => ((LitMotionAnimation)target).Play())
-            {
-                text = "Play",
-                style = {
-                    flexGrow = 1f,
-                }
-            });
-            controlPanel.Add(new Button(() => ((LitMotionAnimation)target).Handle.TryCancel())
-            {
-                text = "Stop",
-                style = {
-                    flexGrow = 1f,
-                }
-            });
+            var controlPanel = CreateControlPanel();
             box.Add(controlPanel);
             root.Add(box);
         }
@@ -219,6 +199,57 @@ namespace LitMotion.Animation.Editor
             }
 
             return manipulator;
+        }
+
+        VisualElement CreateControlPanel()
+        {
+            var element = new VisualElement
+            {
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    flexGrow = 1f,
+                }
+            };
+            var playButton = new Button(() => ((LitMotionAnimation)target).Play())
+            {
+                text = "Play",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+            var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
+            {
+                text = "Stop",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+            var resetButton = new Button(() => ((LitMotionAnimation)target).Reset())
+            {
+                text = "Reset",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+
+            element.Add(playButton);
+            element.Add(stopButton);
+            element.Add(resetButton);
+
+            element.schedule.Execute(() =>
+            {
+                var enabled = !IsHandleActive();
+                stopButton.SetEnabled(enabled);
+                resetButton.SetEnabled(enabled);
+            })
+            .Every(10);
+
+            return element;
+        }
+
+        bool IsHandleActive()
+        {
+            return !((LitMotionAnimation)target).Handle.IsActive();
         }
     }
 }
