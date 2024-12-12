@@ -15,7 +15,7 @@ namespace LitMotion.Animation.Editor
         int prevArraySize;
 
         AddAnimationComponentDropdown dropdown;
-        Button button;
+        Button addButton;
         List<AnimationComponentView> views = new();
 
         public override VisualElement CreateInspectorGUI()
@@ -58,6 +58,29 @@ namespace LitMotion.Animation.Editor
             return root;
         }
 
+        void OnEnable()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        void OnDisable()
+        {
+            if (!EditorApplication.isPlayingOrWillChangePlaymode && target != null)
+            {
+                ((LitMotionAnimation)target).Handle.TryCancel();
+            }
+
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+            {
+                ((LitMotionAnimation)target).Handle.TryCancel();
+            }
+        }
+
         void RefleshInspector(bool applyModifiedProperties)
         {
             if (applyModifiedProperties)
@@ -67,6 +90,15 @@ namespace LitMotion.Animation.Editor
 
             root.Clear();
             views.Clear();
+
+            root.schedule.Execute(() =>
+            {
+                var enabled = !((LitMotionAnimation)target).Handle.IsActive();
+                foreach (var view in views)
+                {
+                    view.SetEnabled(enabled);
+                }
+            }).Every(10);
 
             for (int i = 0; i < componentsProperty.arraySize; i++)
             {
@@ -79,7 +111,7 @@ namespace LitMotion.Animation.Editor
                 CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
             }
 
-            button = new Button(() => dropdown.Show(button.worldBound))
+            addButton = new Button(() => dropdown.Show(addButton.worldBound))
             {
                 text = "Add...",
                 style = {
@@ -87,8 +119,49 @@ namespace LitMotion.Animation.Editor
                     alignSelf = Align.Center
                 }
             };
+            root.Add(addButton);
 
-            root.Add(button);
+            var box = new Box
+            {
+                style = {
+                    marginTop = 6f,
+                    marginBottom = 2f,
+                    alignItems = Align.FlexStart,
+                    flexDirection = FlexDirection.Column
+                }
+            };
+            box.Add(new Label("Debug")
+            {
+                style = {
+                    marginTop = 5f,
+                    marginBottom = 2f,
+                    marginLeft = 5f,
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            });
+            var controlPanel = new VisualElement
+            {
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    flexGrow = 1f,
+                }
+            };
+            controlPanel.Add(new Button(() => ((LitMotionAnimation)target).Play())
+            {
+                text = "Play",
+                style = {
+                    flexGrow = 1f,
+                }
+            });
+            controlPanel.Add(new Button(() => ((LitMotionAnimation)target).Handle.TryCancel())
+            {
+                text = "Stop",
+                style = {
+                    flexGrow = 1f,
+                }
+            });
+            box.Add(controlPanel);
+            root.Add(box);
         }
 
         AnimationComponentView CreateComponentGUI(SerializedProperty property)

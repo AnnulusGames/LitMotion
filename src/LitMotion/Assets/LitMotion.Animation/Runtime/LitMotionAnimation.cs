@@ -29,13 +29,11 @@ namespace LitMotion.Animation
             foreach (var component in components)
             {
                 var handle = component.Play();
-#if UNITY_EDITOR
                 component.TrackedHandle = handle;
-#endif
                 builder.Join(handle);
             }
 
-            handle = builder.Schedule();
+            handle = builder.Schedule().Preserve();
             return handle;
         }
     }

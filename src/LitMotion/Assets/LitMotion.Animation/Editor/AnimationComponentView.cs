@@ -121,5 +121,14 @@ namespace LitMotion.Animation.Editor
 
             container = foldout.contentContainer;
         }
+
+        public new void SetEnabled(bool enabled)
+        {
+            Foldout.contentContainer.SetEnabled(enabled);
+            EnabledToggle.SetEnabled(enabled);
+            icon.SetEnabled(enabled);
+            contextMenuButton.SetEnabled(enabled);
+            progressBar.SetEnabled(enabled);
+        }
     }
 }

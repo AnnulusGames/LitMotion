@@ -22,7 +22,7 @@ namespace LitMotion.Animation.Components
 
         void Revert()
         {
-            if (target != null) return;
+            if (target == null) return;
             target.eulerAngles = startRotation;
         }
 
