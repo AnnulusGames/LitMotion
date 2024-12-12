@@ -19,6 +19,8 @@ namespace LitMotion.Animation.Editor
         }
 
         static readonly (Type Type, string MenuName)[] cache = TypeCache.GetTypesDerivedFrom<LitMotionAnimationComponent>()
+            .Where(x => !x.IsAbstract)
+            .Where(x => !x.IsSpecialName)
             .Select(x =>
             {
                 var attribute = x.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
@@ -32,7 +34,7 @@ namespace LitMotion.Animation.Editor
         public AddAnimationComponentDropdown(AdvancedDropdownState state) : base(state)
         {
             var minimumSize = this.minimumSize;
-            minimumSize.y = 120f;
+            minimumSize.y = 200f;
             this.minimumSize = minimumSize;
         }
 
