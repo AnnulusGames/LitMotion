@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace LitMotion.Animation
@@ -8,7 +10,13 @@ namespace LitMotion.Animation
     {
         public LitMotionAnimationComponent()
         {
-            displayName = GetType().Name;
+#if UNITY_EDITOR
+            var type = GetType();
+            var attribute = type.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
+            displayName = attribute != null
+                ? attribute.MenuName.Split('/').Last()
+                : type.Name;
+#endif
         }
 
         [SerializeField] string displayName;
