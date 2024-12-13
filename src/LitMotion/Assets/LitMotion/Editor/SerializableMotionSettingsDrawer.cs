@@ -77,7 +77,7 @@ namespace LitMotion.Editor
                     AddPropertyField(group, property, "cancelOnError");
                     AddPropertyField(group, property, "skipValuesDuringDelay");
                     AddPropertyField(group, property, "bindOnSchedule");
-                    AddPropertyField(group, property, "scheduler");
+                    group.Add(new PropertyField(property.FindPropertyRelative("schedulerType"), "Scheduler"));
                 });
             });
 
