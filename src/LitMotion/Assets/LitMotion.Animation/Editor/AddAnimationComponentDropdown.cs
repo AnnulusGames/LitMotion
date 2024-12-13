@@ -28,6 +28,7 @@ namespace LitMotion.Animation.Editor
                 var menuName = attribute == null ? x.GetType().Name : attribute.MenuName;
                 return (x, menuName);
             })
+            .OrderBy(x => x.menuName)
             .ToArray();
         
         public event Action<Type> OnTypeSelected;
