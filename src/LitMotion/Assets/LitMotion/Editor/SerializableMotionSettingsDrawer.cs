@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -21,8 +22,38 @@ namespace LitMotion.Editor
 
             Group(foldout, group =>
             {
-                AddPropertyField(group, property, "startValue");
-                AddPropertyField(group, property, "endValue");
+                var valueType = fieldInfo.FieldType.GenericTypeArguments[0];
+                if (valueType == typeof(FixedString32Bytes))
+                {
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("startValue"), FixedString32Bytes.UTF8MaxLengthInBytes));
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("endValue"), FixedString32Bytes.UTF8MaxLengthInBytes));
+                }
+                else if (valueType == typeof(FixedString64Bytes))
+                {
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("startValue"), FixedString64Bytes.UTF8MaxLengthInBytes));
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("endValue"), FixedString64Bytes.UTF8MaxLengthInBytes));
+                }
+                else if (valueType == typeof(FixedString128Bytes))
+                {
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("startValue"), FixedString128Bytes.UTF8MaxLengthInBytes));
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("endValue"), FixedString128Bytes.UTF8MaxLengthInBytes));
+                }
+                else if (valueType == typeof(FixedString512Bytes))
+                {
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("startValue"), FixedString512Bytes.UTF8MaxLengthInBytes));
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("endValue"), FixedString512Bytes.UTF8MaxLengthInBytes));
+                }
+                else if (valueType == typeof(FixedString4096Bytes))
+                {
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("startValue"), FixedString4096Bytes.UTF8MaxLengthInBytes));
+                    group.Add(PropertyFieldHelper.CreateFixedStringField(property.FindPropertyRelative("endValue"), FixedString4096Bytes.UTF8MaxLengthInBytes));
+                }
+                else
+                {
+                    AddPropertyField(group, property, "startValue");
+                    AddPropertyField(group, property, "endValue");
+                }
+
                 AddPropertyField(group, property, "duration");
             });
 
@@ -57,15 +88,8 @@ namespace LitMotion.Editor
             {
                 Group(foldout, group =>
                 {
-                    var optionTypeName = ObjectNames.NicifyVariableName(fieldInfo.FieldType.GenericTypeArguments[1].Name);
-                    FoldoutGroup(group, optionTypeName, options, group =>
-                    {
-                        group.style.marginLeft = 15f;
-                        foreach (var child in GetChildren(options))
-                        {
-                            group.Add(new PropertyField(child.Copy()));
-                        }
-                    });
+                    group.style.paddingLeft = 15f;
+                    group.Add(new PropertyField(options));
                 });
             }
 
