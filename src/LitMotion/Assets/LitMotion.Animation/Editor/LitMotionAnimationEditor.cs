@@ -99,7 +99,7 @@ namespace LitMotion.Animation.Editor
 
             root.schedule.Execute(() =>
             {
-                var enabled = IsHandleActive();
+                var enabled = IsPlaying();
                 foreach (var view in views)
                 {
                     view.SetEnabled(enabled);
@@ -223,6 +223,18 @@ namespace LitMotion.Animation.Editor
                     flexGrow = 1f,
                 }
             };
+            var restartButton = new Button(() => 
+            {
+                var animation = (LitMotionAnimation)target;
+                animation.Reset();
+                animation.Play();
+            })
+            {
+                text = "Restart",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
             var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
             {
                 text = "Stop",
@@ -239,12 +251,14 @@ namespace LitMotion.Animation.Editor
             };
 
             element.Add(playButton);
+            element.Add(restartButton);
             element.Add(stopButton);
             element.Add(resetButton);
 
             element.schedule.Execute(() =>
             {
-                var enabled = !IsHandleActive();
+                var enabled = !IsPlaying();
+                restartButton.SetEnabled(enabled);
                 stopButton.SetEnabled(enabled);
                 resetButton.SetEnabled(enabled);
             })
@@ -253,7 +267,7 @@ namespace LitMotion.Animation.Editor
             return element;
         }
 
-        bool IsHandleActive()
+        bool IsPlaying()
         {
             return !((LitMotionAnimation)target).IsPlaying;
         }
