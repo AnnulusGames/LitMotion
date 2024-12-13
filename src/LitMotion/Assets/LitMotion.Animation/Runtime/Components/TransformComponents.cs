@@ -22,10 +22,9 @@ namespace LitMotion.Animation.Components
             else target.localPosition = value;
         }
 
-        protected override void SetRelativeValue(Transform target, in Vector3 startValue, in Vector3 relativeValue)
+        protected override Vector3 GetRelativeValue(in Vector3 startValue, in Vector3 relativeValue)
         {
-            if (useWorldSpace) target.position = startValue + relativeValue;
-            else target.localPosition = startValue + relativeValue;
+            return startValue + relativeValue;
         }
     }
 
@@ -58,10 +57,9 @@ namespace LitMotion.Animation.Components
             else target.localEulerAngles = value;
         }
 
-        protected override void SetRelativeValue(Transform target, in Vector3 startValue, in Vector3 relativeValue)
+        protected override Vector3 GetRelativeValue(in Vector3 startValue, in Vector3 relativeValue)
         {
-            if (useWorldSpace) target.eulerAngles = startValue + relativeValue;
-            else target.localEulerAngles = startValue + relativeValue;
+            return startValue + relativeValue;
         }
     }
 
@@ -91,9 +89,9 @@ namespace LitMotion.Animation.Components
             target.localScale = value;
         }
 
-        protected override void SetRelativeValue(Transform target, in Vector3 startValue, in Vector3 relativeValue)
+        protected override Vector3 GetRelativeValue(in Vector3 startValue, in Vector3 relativeValue)
         {
-            target.localScale = startValue + relativeValue;
+            return startValue + relativeValue;
         }
     }
 
