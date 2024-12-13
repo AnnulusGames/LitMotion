@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace LitMotion.Animation.Components
 {
-    [Serializable]
-    [AddAnimationComponentMenu("Transform/Position")]
-    public sealed class Position : PropertyAnimationComponent<Transform, Vector3, NoOptions, Vector3MotionAdapter>
+    public abstract class PositionBase<TOptions, TAdapter> : PropertyAnimationComponent<Transform, Vector3, TOptions, TAdapter>
+        where TOptions : unmanaged, IMotionOptions
+        where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
     {
         [SerializeField] bool useWorldSpace;
 
@@ -30,8 +30,20 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Rotation")]
-    public sealed class Rotation : PropertyAnimationComponent<Transform, Vector3, NoOptions, Vector3MotionAdapter>
+    [AddAnimationComponentMenu("Transform/Position")]
+    public sealed class Position : PositionBase<NoOptions, Vector3MotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Position (Punch)")]
+    public sealed class PositionPunch : PositionBase<PunchOptions, Vector3PunchMotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Position (Shake)")]
+    public sealed class PositionShake : PositionBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
+
+    public abstract class RotationBase<TOptions, TAdapter> : PropertyAnimationComponent<Transform, Vector3, TOptions, TAdapter>
+        where TOptions : unmanaged, IMotionOptions
+        where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
     {
         [SerializeField] bool useWorldSpace;
 
@@ -54,8 +66,20 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Scale")]
-    public sealed class Scale : PropertyAnimationComponent<Transform, Vector3, NoOptions, Vector3MotionAdapter>
+    [AddAnimationComponentMenu("Transform/Rotation")]
+    public sealed class Rotation : RotationBase<NoOptions, Vector3MotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Rotation (Punch)")]
+    public sealed class RotationPunch : RotationBase<PunchOptions, Vector3PunchMotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Rotation (Shake)")]
+    public sealed class RotationShake : RotationBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
+
+    public abstract class ScaleBase<TOptions, TAdapter> : PropertyAnimationComponent<Transform, Vector3, TOptions, TAdapter>
+        where TOptions : unmanaged, IMotionOptions
+        where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
     {
         protected override Vector3 GetValue(Transform target)
         {
@@ -72,4 +96,16 @@ namespace LitMotion.Animation.Components
             target.localScale = startValue + relativeValue;
         }
     }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Scale")]
+    public sealed class Scale : ScaleBase<NoOptions, Vector3MotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Scale (Punch)")]
+    public sealed class ScalePunch : ScaleBase<PunchOptions, Vector3PunchMotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Transform/Scale (Shake)")]
+    public sealed class ScaleShake : ScaleBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
 }
