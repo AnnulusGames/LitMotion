@@ -21,6 +21,7 @@ namespace LitMotion.Animation.Editor
         static readonly (Type Type, string MenuName)[] cache = TypeCache.GetTypesDerivedFrom<LitMotionAnimationComponent>()
             .Where(x => !x.IsAbstract)
             .Where(x => !x.IsSpecialName)
+            .Where(x => !x.IsGenericType)
             .Select(x =>
             {
                 var attribute = x.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
