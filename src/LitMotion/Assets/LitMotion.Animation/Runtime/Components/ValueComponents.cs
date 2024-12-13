@@ -1,5 +1,6 @@
 using System;
 using LitMotion.Adapters;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -54,4 +55,22 @@ namespace LitMotion.Animation.Components
     [Serializable]
     [AddAnimationComponentMenu("Value/Color")]
     public sealed class ColorValue : ValueComponent<Color, NoOptions, ColorMotionAdapter> { }
+
+    [Serializable]
+    [AddAnimationComponentMenu("Value/String")]
+    public sealed class StringValue : LitMotionAnimationComponent
+    {
+        [SerializeField] SerializableMotionSettings<FixedString512Bytes, StringOptions> settings;
+        [SerializeField] UnityEvent<string> onValueChanged;
+
+        public override MotionHandle Play()
+        {
+            return LMotion.Create<FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter>(settings)
+                .Bind(this, static (x, state) =>
+                {
+                    // TODO: avoid allocation
+                    state.onValueChanged.Invoke(x.ConvertToString());
+                });
+        }
+    }
 }
