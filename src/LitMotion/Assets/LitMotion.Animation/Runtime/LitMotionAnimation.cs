@@ -38,6 +38,7 @@ namespace LitMotion.Animation
 
             foreach (var component in components)
             {
+                if (component == null) continue;
                 if (!component.Enabled) continue;
 
                 var handle = component.Play().Preserve();
