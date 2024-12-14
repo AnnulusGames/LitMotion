@@ -4,6 +4,7 @@ using UnityEditor.UIElements;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 namespace LitMotion.Animation.Editor
 {
@@ -112,7 +113,13 @@ namespace LitMotion.Animation.Editor
                 var property = componentsProperty.GetArrayElementAtIndex(i);
                 var view = CreateComponentGUI(property.Copy());
                 CreateContextMenuManipulator(componentsProperty, i, false).target = view.Foldout.Q<Toggle>();
-                view.EnabledToggle.BindProperty(property.FindPropertyRelative("enabled"));
+
+                var enabledProperty = property.FindPropertyRelative("enabled");
+                if (enabledProperty != null)
+                {
+                    view.EnabledToggle.BindProperty(enabledProperty);
+                }
+
                 root.Add(view);
                 views.Add(view);
                 CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
@@ -153,33 +160,44 @@ namespace LitMotion.Animation.Editor
 
         AnimationComponentView CreateComponentGUI(SerializedProperty property)
         {
-            var view = new AnimationComponentView
-            {
-                Text = property.FindPropertyRelative("displayName").stringValue
-            };
+            var view = new AnimationComponentView();
 
-            var targetProperty = property.FindPropertyRelative("target");
-            if (targetProperty != null)
+            if (string.IsNullOrEmpty(property.managedReferenceFullTypename))
             {
-                view.Icon = AssetPreview.GetMiniTypeThumbnail(targetProperty.GetPropertyType());
+                view.Text = "(Missing)";
+                view.Icon = (Texture2D)EditorGUIUtility.IconContent("Error").image;
+                view.EnabledToggle.value = true;
+                view.SetEnabled(true);
+                view.EnabledToggle.Q("unity-checkmark").style.visibility = Visibility.Hidden;
+                view.Add(new HelpBox("The type referenced in SerializeReference is missing. You may have renamed the type or moved the namespace or assembly of the type.", HelpBoxMessageType.Error));
             }
-
-            view.TrackPropertyValue(property.FindPropertyRelative("displayName"), x =>
+            else
             {
-                view.Text = x.stringValue;
-            });
+                view.Text = property.FindPropertyRelative("displayName").stringValue;
 
-            view.Foldout.BindProperty(property);
+                var targetProperty = property.FindPropertyRelative("target");
+                if (targetProperty != null)
+                {
+                    view.Icon = AssetPreview.GetMiniTypeThumbnail(targetProperty.GetPropertyType());
+                }
 
-            var endProperty = property.GetEndProperty();
-            var isFirst = true;
-            while (property.NextVisible(isFirst))
-            {
-                if (SerializedProperty.EqualContents(property, endProperty)) break;
-                if (property.name == "enabled") continue;
-                isFirst = false;
+                view.TrackPropertyValue(property.FindPropertyRelative("displayName"), x =>
+                {
+                    view.Text = x.stringValue;
+                });
 
-                view.Add(new PropertyField(property));
+                view.Foldout.BindProperty(property);
+
+                var endProperty = property.GetEndProperty();
+                var isFirst = true;
+                while (property.NextVisible(isFirst))
+                {
+                    if (SerializedProperty.EqualContents(property, endProperty)) break;
+                    if (property.name == "enabled") continue;
+                    isFirst = false;
+
+                    view.Add(new PropertyField(property));
+                }
             }
 
             return view;
