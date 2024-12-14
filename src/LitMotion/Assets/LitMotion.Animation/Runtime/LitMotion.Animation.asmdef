@@ -2,8 +2,10 @@
     "name": "LitMotion.Animation",
     "rootNamespace": "",
     "references": [
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
         "GUID:3b570a5146f9d4f0fa107ed4559471a3",
-        "GUID:3aa1866a824b5472da50fe142777d95f"
+        "GUID:3aa1866a824b5472da50fe142777d95f",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,6 +14,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.ugui",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_UGUI"
+        }
+    ],
     "noEngineReferences": false
 }
