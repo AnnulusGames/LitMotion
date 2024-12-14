@@ -25,39 +25,39 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Float")]
+    [LitMotionAnimationComponentMenu("Value/Float")]
     public sealed class FloatValueAnimation : ValueAnimationComponent<float, NoOptions, FloatMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Double")]
+    [LitMotionAnimationComponentMenu("Value/Double")]
     public sealed class DoubleValueAnimation : ValueAnimationComponent<double, NoOptions, DoubleMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Int")]
+    [LitMotionAnimationComponentMenu("Value/Int")]
     public sealed class IntValueAnimation : ValueAnimationComponent<int, IntegerOptions, IntMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Long")]
+    [LitMotionAnimationComponentMenu("Value/Long")]
     public sealed class LongValueAnimation : ValueAnimationComponent<long, IntegerOptions, LongMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Vector2")]
+    [LitMotionAnimationComponentMenu("Value/Vector2")]
     public sealed class Vector2ValueAnimation : ValueAnimationComponent<Vector2, NoOptions, Vector2MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Vector3")]
+    [LitMotionAnimationComponentMenu("Value/Vector3")]
     public sealed class Vector3ValueAnimation : ValueAnimationComponent<Vector3, NoOptions, Vector3MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Vector4")]
+    [LitMotionAnimationComponentMenu("Value/Vector4")]
     public sealed class Vector4ValueAnimation : ValueAnimationComponent<Vector4, NoOptions, Vector4MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/Color")]
+    [LitMotionAnimationComponentMenu("Value/Color")]
     public sealed class ColorValueAnimation : ValueAnimationComponent<Color, NoOptions, ColorMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Value/String")]
+    [LitMotionAnimationComponentMenu("Value/String")]
     public sealed class StringValueAnimation : LitMotionAnimationComponent
     {
         [SerializeField] SerializableMotionSettings<FixedString512Bytes, StringOptions> settings;

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    [AddAnimationComponentMenu("Audio/Audio Source Volume")]
+    [LitMotionAnimationComponentMenu("Audio/Audio Source Volume")]
     public sealed class AudioSourceVolumeAnimation : FloatPropertyAnimationComponent<AudioSource>
     {
         protected override float GetValue(AudioSource target) => target.volume;
@@ -14,7 +14,7 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Audio/Audio Source Pitch")]
+    [LitMotionAnimationComponentMenu("Audio/Audio Source Pitch")]
     public sealed class AudioSourcePitchAnimation : FloatPropertyAnimationComponent<AudioSource>
     {
         protected override float GetValue(AudioSource target) => target.pitch;

@@ -29,15 +29,15 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Position")]
+    [LitMotionAnimationComponentMenu("Transform/Position")]
     public sealed class PositionAnimation : PositionAnimationBase<NoOptions, Vector3MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Position (Punch)")]
+    [LitMotionAnimationComponentMenu("Transform/Position (Punch)")]
     public sealed class PositionPunchAnimation : PositionAnimationBase<PunchOptions, Vector3PunchMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Position (Shake)")]
+    [LitMotionAnimationComponentMenu("Transform/Position (Shake)")]
     public sealed class PositionShakeAnimation : PositionAnimationBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
 
     public abstract class RotationAnimationBase<TOptions, TAdapter> : PropertyAnimationComponent<Transform, Vector3, TOptions, TAdapter>
@@ -64,15 +64,15 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Rotation")]
+    [LitMotionAnimationComponentMenu("Transform/Rotation")]
     public sealed class RotationAnimation : RotationAnimationBase<NoOptions, Vector3MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Rotation (Punch)")]
+    [LitMotionAnimationComponentMenu("Transform/Rotation (Punch)")]
     public sealed class RotationPunchAnimation : RotationAnimationBase<PunchOptions, Vector3PunchMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Rotation (Shake)")]
+    [LitMotionAnimationComponentMenu("Transform/Rotation (Shake)")]
     public sealed class RotationShakeAnimation : RotationAnimationBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
 
     public abstract class ScaleAnimationBase<TOptions, TAdapter> : PropertyAnimationComponent<Transform, Vector3, TOptions, TAdapter>
@@ -96,14 +96,14 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Scale")]
+    [LitMotionAnimationComponentMenu("Transform/Scale")]
     public sealed class ScaleAnimation : ScaleAnimationBase<NoOptions, Vector3MotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Scale (Punch)")]
+    [LitMotionAnimationComponentMenu("Transform/Scale (Punch)")]
     public sealed class ScalePunchAnimation : ScaleAnimationBase<PunchOptions, Vector3PunchMotionAdapter> { }
 
     [Serializable]
-    [AddAnimationComponentMenu("Transform/Scale (Shake)")]
+    [LitMotionAnimationComponentMenu("Transform/Scale (Shake)")]
     public sealed class ScaleShakeAnimation : ScaleAnimationBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
 }

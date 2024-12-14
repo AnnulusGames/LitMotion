@@ -24,13 +24,13 @@ namespace LitMotion.Animation.Editor
             .Where(x => !x.IsGenericType)
             .Select(x =>
             {
-                var attribute = x.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
+                var attribute = x.GetCustomAttribute<LitMotionAnimationComponentMenuAttribute>();
                 var menuName = attribute == null ? x.Name : attribute.MenuName;
                 return (x, menuName);
             })
             .OrderBy(x => x.menuName)
             .ToArray();
-        
+
         public event Action<Type> OnTypeSelected;
 
         public AddAnimationComponentDropdown(AdvancedDropdownState state) : base(state)

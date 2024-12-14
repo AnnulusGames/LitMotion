@@ -3,9 +3,9 @@ using System;
 namespace LitMotion.Animation
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class AddAnimationComponentMenuAttribute : Attribute
+    public sealed class LitMotionAnimationComponentMenuAttribute : Attribute
     {
-        public AddAnimationComponentMenuAttribute(string menuName)
+        public LitMotionAnimationComponentMenuAttribute(string menuName)
         {
             MenuName = menuName;
         }

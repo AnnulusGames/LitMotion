@@ -12,7 +12,7 @@ namespace LitMotion.Animation
         {
 #if UNITY_EDITOR
             var type = GetType();
-            var attribute = type.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
+            var attribute = type.GetCustomAttribute<LitMotionAnimationComponentMenuAttribute>();
             displayName = attribute != null
                 ? attribute.MenuName.Split('/').Last()
                 : type.Name;
@@ -26,7 +26,7 @@ namespace LitMotion.Animation
         public string DisplayName => displayName;
 
         public abstract MotionHandle Play();
-        
+
         public MotionHandle TrackedHandle { get; set; }
     }
 }
