@@ -11,8 +11,8 @@ namespace LitMotion.Animation
         [SerializeReference]
         LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
         {
-            new Position(),
-            new Position(),
+            new PositionAnimation(),
+            new PositionAnimation(),
         };
 
         FastListCore<MotionHandle> handles;

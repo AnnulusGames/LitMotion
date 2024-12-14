@@ -1,12 +1,11 @@
 using System;
-using LitMotion.Adapters;
 using UnityEngine;
 
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    [AddAnimationComponentMenu("Rendering/Material Float")]
-    public sealed class MaterialFloat : FloatPropertyAnimationComponent<Material>
+    [AddAnimationComponentMenu("Rendering/Material Property (Float)")]
+    public sealed class MaterialFloatAnimation : FloatPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
 
@@ -22,8 +21,8 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Rendering/Material Int")]
-    public sealed class MaterialInt : IntPropertyAnimationComponent<Material>
+    [AddAnimationComponentMenu("Rendering/Material Property (Int)")]
+    public sealed class MaterialIntAnimation : IntPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
 
@@ -39,8 +38,8 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Rendering/Material Vector")]
-    public sealed class MaterialVector : Vector4PropertyAnimationComponent<Material>
+    [AddAnimationComponentMenu("Rendering/Material Property (Vector)")]
+    public sealed class MaterialVectorAnimation : Vector4PropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
 
@@ -56,8 +55,8 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [AddAnimationComponentMenu("Rendering/Material Color")]
-    public sealed class MaterialColor : ColorPropertyAnimationComponent<Material>
+    [AddAnimationComponentMenu("Rendering/Material Property (Color)")]
+    public sealed class MaterialColorAnimation : ColorPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "_Color";
 
@@ -74,7 +73,7 @@ namespace LitMotion.Animation.Components
 
     [Serializable]
     [AddAnimationComponentMenu("Rendering/Sprite Renderer Color")]
-    public sealed class SpriteRendererColor : ColorPropertyAnimationComponent<SpriteRenderer>
+    public sealed class SpriteRendererColorAnimation : ColorPropertyAnimationComponent<SpriteRenderer>
     {
         protected override Color GetValue(SpriteRenderer target)
         {

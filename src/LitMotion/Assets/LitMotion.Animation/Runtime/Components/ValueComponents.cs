@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace LitMotion.Animation.Components
 {
-    public abstract class ValueComponent<TValue, TOptions, TAdapter> : LitMotionAnimationComponent
+    public abstract class ValueAnimationComponent<TValue, TOptions, TAdapter> : LitMotionAnimationComponent
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
@@ -26,39 +26,39 @@ namespace LitMotion.Animation.Components
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Float")]
-    public sealed class FloatValue : ValueComponent<float, NoOptions, FloatMotionAdapter> { }
+    public sealed class FloatValueAnimation : ValueAnimationComponent<float, NoOptions, FloatMotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Double")]
-    public sealed class DoubleValue : ValueComponent<double, NoOptions, DoubleMotionAdapter> { }
+    public sealed class DoubleValueAnimation : ValueAnimationComponent<double, NoOptions, DoubleMotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Int")]
-    public sealed class IntValue : ValueComponent<int, IntegerOptions, IntMotionAdapter> { }
+    public sealed class IntValueAnimation : ValueAnimationComponent<int, IntegerOptions, IntMotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Long")]
-    public sealed class LongValue : ValueComponent<long, IntegerOptions, LongMotionAdapter> { }
+    public sealed class LongValueAnimation : ValueAnimationComponent<long, IntegerOptions, LongMotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Vector2")]
-    public sealed class Vector2Value : ValueComponent<Vector2, NoOptions, Vector2MotionAdapter> { }
+    public sealed class Vector2ValueAnimation : ValueAnimationComponent<Vector2, NoOptions, Vector2MotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Vector3")]
-    public sealed class Vector3Value : ValueComponent<Vector3, NoOptions, Vector3MotionAdapter> { }
+    public sealed class Vector3ValueAnimation : ValueAnimationComponent<Vector3, NoOptions, Vector3MotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Vector4")]
-    public sealed class Vector4Value : ValueComponent<Vector4, NoOptions, Vector4MotionAdapter> { }
+    public sealed class Vector4ValueAnimation : ValueAnimationComponent<Vector4, NoOptions, Vector4MotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/Color")]
-    public sealed class ColorValue : ValueComponent<Color, NoOptions, ColorMotionAdapter> { }
+    public sealed class ColorValueAnimation : ValueAnimationComponent<Color, NoOptions, ColorMotionAdapter> { }
 
     [Serializable]
     [AddAnimationComponentMenu("Value/String")]
-    public sealed class StringValue : LitMotionAnimationComponent
+    public sealed class StringValueAnimation : LitMotionAnimationComponent
     {
         [SerializeField] SerializableMotionSettings<FixedString512Bytes, StringOptions> settings;
         [SerializeField] UnityEvent<string> onValueChanged;
