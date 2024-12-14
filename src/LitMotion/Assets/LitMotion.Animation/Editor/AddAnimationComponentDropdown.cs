@@ -25,7 +25,7 @@ namespace LitMotion.Animation.Editor
             .Select(x =>
             {
                 var attribute = x.GetCustomAttribute<AddAnimationComponentMenuAttribute>();
-                var menuName = attribute == null ? x.GetType().Name : attribute.MenuName;
+                var menuName = attribute == null ? x.Name : attribute.MenuName;
                 return (x, menuName);
             })
             .OrderBy(x => x.menuName)
