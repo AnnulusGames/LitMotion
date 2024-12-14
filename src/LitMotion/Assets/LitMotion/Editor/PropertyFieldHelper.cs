@@ -1,3 +1,4 @@
+using System;
 using System.Buffers;
 using System.Text;
 using UnityEditor;
@@ -11,24 +12,21 @@ namespace LitMotion.Editor
         {
             var textField = new TextField(property.displayName)
             {
-                maxLength = maxLength
+                maxLength = maxLength,
             };
 
             // set initial value
-            var byteProperties = new SerializedFixedBytesView(property);
-            textField.SetValueWithoutNotify(Encoding.UTF8.GetString(byteProperties.GetBytes()));
+            var propertyView = new SerializedFixedBytesView(property);
+            textField.SetValueWithoutNotify(Encoding.UTF8.GetString(propertyView.GetBytes()));
 
             textField.RegisterValueChangedCallback(x =>
             {
                 var buffer = ArrayPool<byte>.Shared.Rent(x.newValue.Length * 3);
                 try
                 {
-                    var lengthProperty = property.FindPropertyRelative("utf8LengthInBytes");
-                    Encoding.UTF8.GetBytes(x.newValue, buffer);
-
-                    byteProperties.SetBytes(buffer);
-                    lengthProperty.intValue = buffer.Length;
-
+                    var lengthProperty = propertyView.LengthProperty;
+                    var newLength = Encoding.UTF8.GetBytes(x.newValue, buffer);
+                    propertyView.SetBytes(buffer.AsSpan(0, newLength));
                     property.serializedObject.ApplyModifiedProperties();
                 }
                 finally
