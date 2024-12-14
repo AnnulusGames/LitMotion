@@ -1,5 +1,8 @@
 using System;
 using UnityEngine;
+#if LITMOTION_ANIMATION_RENDER_PIPELINES
+using UnityEngine.Rendering;
+#endif
 
 namespace LitMotion.Animation.Components
 {
@@ -85,4 +88,16 @@ namespace LitMotion.Animation.Components
             target.color = value;
         }
     }
+
+#if LITMOTION_ANIMATION_RENDER_PIPELINES
+
+    [Serializable]
+    [AddAnimationComponentMenu("Rendering/Volume Weight")]
+    public sealed class VolumeWeightAnimation : FloatPropertyAnimationComponent<Volume>
+    {
+        protected override float GetValue(Volume target) => target.weight;
+        protected override void SetValue(Volume target, in float value) => target.weight = value;
+    }
+
+#endif
 }
