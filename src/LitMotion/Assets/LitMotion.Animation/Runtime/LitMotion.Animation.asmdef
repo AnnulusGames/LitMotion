@@ -25,6 +25,11 @@
             "name": "com.unity.render-pipelines.core",
             "expression": "",
             "define": "LITMOTION_ANIMATION_RENDER_PIPELINES"
+        },
+        {
+            "name": "com.unity.modules.audio",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_UNITY_AUDIO"
         }
     ],
     "noEngineReferences": false
