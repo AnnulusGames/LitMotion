@@ -175,6 +175,7 @@ namespace LitMotion.Animation.Editor
                 view.Icon = (Texture2D)EditorGUIUtility.IconContent("Error").image;
                 view.EnabledToggle.value = true;
                 view.SetEnabled(true);
+                view.EnabledToggle.toggleOnLabelClick = false;
                 view.EnabledToggle.Q("unity-checkmark").style.visibility = Visibility.Hidden;
                 view.Add(new HelpBox("The type referenced in SerializeReference is missing. You may have renamed the type or moved it to a different namespace or assembly.", HelpBoxMessageType.Error));
             }
