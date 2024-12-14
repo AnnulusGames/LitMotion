@@ -48,7 +48,14 @@ namespace LitMotion.Animation.Editor
                 var components = ((LitMotionAnimation)target).Components;
                 for (int i = 0; i < components.Count; i++)
                 {
-                    var handle = components[i].TrackedHandle;
+                    var component = components[i];
+                    if (component == null)
+                    {
+                        views[i].Progress = 0f;
+                        continue;
+                    }
+
+                    var handle = component.TrackedHandle;
 
                     if (handle.IsActive() && !double.IsInfinity(handle.Duration))
                     {
@@ -207,6 +214,16 @@ namespace LitMotion.Animation.Editor
         {
             var manipulator = new ContextualMenuManipulator(evt =>
             {
+                evt.menu.AppendAction("Reset", x =>
+                {
+                    Undo.RecordObject(serializedObject.targetObject, "Reset LitMotionAnimation component");
+                    var elementProperty = property.GetArrayElementAtIndex(arrayIndex);
+                    elementProperty.managedReferenceValue = ReflectionHelper.CreateDefaultInstance(elementProperty.managedReferenceValue.GetType());
+                    RefleshInspector(true);
+                }, string.IsNullOrEmpty(property.GetArrayElementAtIndex(arrayIndex).managedReferenceFullTypename) ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
+
+                evt.menu.AppendSeparator();
+
                 evt.menu.AppendAction("Remove Component", x =>
                 {
                     property.DeleteArrayElementAtIndex(arrayIndex);
@@ -241,7 +258,7 @@ namespace LitMotion.Animation.Editor
                     flexGrow = 1f,
                 }
             };
-            var restartButton = new Button(() => 
+            var restartButton = new Button(() =>
             {
                 var animation = (LitMotionAnimation)target;
                 animation.Reset();
