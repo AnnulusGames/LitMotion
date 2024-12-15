@@ -5,7 +5,8 @@
     "description": "Animation component (visual editor) for LitMotion",
     "keywords": [
         "dots",
-        "tween"
+        "tween",
+        "animation"
     ],
     "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
