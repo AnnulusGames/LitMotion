@@ -50,7 +50,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryComplete(MotionHandle handle, MotionStoragePermission permission)
         {
-            CheckTypeId(handle);
+            if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
             return list[handle.StorageId].TryComplete(handle, permission);
         }
 
@@ -64,7 +64,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryCancel(MotionHandle handle, MotionStoragePermission permission)
         {
-            CheckTypeId(handle);
+            if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
             return list[handle.StorageId].TryCancel(handle, permission);
         }
 
@@ -73,6 +73,13 @@ namespace LitMotion
         {
             if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
             return list[handle.StorageId].IsActive(handle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPlaying(MotionHandle handle)
+        {
+            if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
+            return list[handle.StorageId].IsPlaying(handle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
