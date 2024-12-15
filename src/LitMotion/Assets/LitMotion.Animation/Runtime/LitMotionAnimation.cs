@@ -19,11 +19,7 @@ namespace LitMotion.Animation
         [SerializeField] AnimationMode animationMode;
 
         [SerializeReference]
-        LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
-        {
-            new PositionAnimation(),
-            new PositionAnimation(),
-        };
+        LitMotionAnimationComponent[] components;
 
         Queue<LitMotionAnimationComponent> queue = new();
         FastListCore<LitMotionAnimationComponent> playingComponents;
