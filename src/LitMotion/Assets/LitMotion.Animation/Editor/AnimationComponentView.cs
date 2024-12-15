@@ -104,6 +104,7 @@ namespace LitMotion.Animation.Editor
             var progress = progressBar.Q(null, "unity-progress-bar__progress");
             progress.style.backgroundColor = Color.white;
             progress.style.minWidth = 0f;
+            progressBar.schedule.Execute(() => progress.style.display = progressBar.value > progressBar.lowValue ? DisplayStyle.Flex : DisplayStyle.None).Every(10);
             root.Add(progressBar);
 
             contextMenuButton = new VisualElement
