@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+using UnityEngine;
 
 namespace LitMotion.Animation.Editor
 {
@@ -49,10 +50,11 @@ namespace LitMotion.Animation.Editor
                 var parent = root;
                 Item lastItem = null;
 
-                foreach (var str in splitStrings)
+                for (int i = 0; i < splitStrings.Length; i++)
                 {
-                    var foundChildItem = parent.children.FirstOrDefault(item => item.name == str);
+                    var str = splitStrings[i];
 
+                    var foundChildItem = parent.children.FirstOrDefault(item => item.name == str);
                     if (foundChildItem != null)
                     {
                         parent = foundChildItem;
@@ -61,6 +63,20 @@ namespace LitMotion.Animation.Editor
                     }
 
                     var child = new Item(type, str);
+
+                    if (i == splitStrings.Length - 1)
+                    {
+                        var targetField = ReflectionHelper.GetField(type, "target", includingBaseNonPublic: true);
+                        if (targetField != null)
+                        {
+                            child.icon = GUIHelper.GetComponentIcon(targetField.FieldType);
+                        }
+                        else
+                        {
+                            child.icon = (Texture2D)EditorGUIUtility.IconContent("ScriptableObject Icon").image;
+                        }
+                    }
+
                     parent.AddChild(child);
 
                     parent = child;
