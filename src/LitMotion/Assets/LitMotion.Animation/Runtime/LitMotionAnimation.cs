@@ -35,10 +35,17 @@ namespace LitMotion.Animation
         {
             if (queue.TryDequeue(out var queuedComponent))
             {
-                var handle = queuedComponent.Play().Preserve();
-                MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).OnCompleteAction += MoveNextMotion;
-                queuedComponent.TrackedHandle = handle;
-                playingComponents.Add(queuedComponent);
+                try
+                {
+                    var handle = queuedComponent.Play().Preserve();
+                    MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).OnCompleteAction += MoveNextMotion;
+                    queuedComponent.TrackedHandle = handle;
+                    playingComponents.Add(queuedComponent);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                }
             }
         }
 
@@ -78,9 +85,16 @@ namespace LitMotion.Animation
                         if (component == null) continue;
                         if (!component.Enabled) continue;
 
-                        var handle = component.Play().Preserve();
-                        component.TrackedHandle = handle;
-                        playingComponents.Add(component);
+                        try
+                        {
+                            var handle = component.Play().Preserve();
+                            component.TrackedHandle = handle;
+                            playingComponents.Add(component);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogException(ex);
+                        }
                     }
                     break;
             }
