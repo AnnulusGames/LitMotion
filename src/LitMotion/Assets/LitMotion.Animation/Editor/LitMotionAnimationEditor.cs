@@ -2,26 +2,24 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
-using System.Linq;
 
 namespace LitMotion.Animation.Editor
 {
     [CustomEditor(typeof(LitMotionAnimation))]
     public sealed class LitMotionAnimationEditor : UnityEditor.Editor
     {
-        VisualElement root;
         SerializedProperty componentsProperty;
         int prevArraySize;
 
         AddAnimationComponentDropdown dropdown;
-        Button addButton;
-        List<AnimationComponentView> views = new();
+        VisualElement componentRoot;
 
         public override VisualElement CreateInspectorGUI()
         {
-            root = new VisualElement();
+            var root = new VisualElement();
+            componentRoot = new VisualElement();
+
             componentsProperty = serializedObject.FindProperty("components");
             prevArraySize = componentsProperty.arraySize;
 
@@ -35,39 +33,10 @@ namespace LitMotion.Animation.Editor
                 serializedObject.ApplyModifiedProperties();
             };
 
-            RefleshInspector(false);
-
-            root.schedule.Execute(() =>
-            {
-                if (componentsProperty.arraySize != prevArraySize)
-                {
-                    RefleshInspector(true);
-                    prevArraySize = componentsProperty.arraySize;
-                }
-
-                var components = ((LitMotionAnimation)target).Components;
-                for (int i = 0; i < components.Count; i++)
-                {
-                    var component = components[i];
-                    if (component == null)
-                    {
-                        views[i].Progress = 0f;
-                        continue;
-                    }
-
-                    var handle = component.TrackedHandle;
-
-                    if (handle.IsActive() && !double.IsInfinity(handle.Duration))
-                    {
-                        views[i].Progress = Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time);
-                    }
-                    else
-                    {
-                        views[i].Progress = 0f;
-                    }
-                }
-            })
-            .Every(10);
+            root.Add(CreateSettingsPanel());
+            componentRoot.Add(CreateComponentsPanel());
+            root.Add(componentRoot);
+            root.Add(CreateDebugPanel());
 
             return root;
         }
@@ -95,25 +64,46 @@ namespace LitMotion.Animation.Editor
             }
         }
 
-        void RefleshInspector(bool applyModifiedProperties)
+        VisualElement CreateBox(string label = null)
         {
-            if (applyModifiedProperties)
+            var box = new Box
             {
-                serializedObject.ApplyModifiedProperties();
+                style = {
+                    marginTop = 6f,
+                    marginBottom = 2f,
+                    paddingLeft = 4f,
+                    alignItems = Align.Stretch,
+                    flexDirection = FlexDirection.Column,
+                    flexGrow = 1f,
+                }
+            };
+
+            if (label != null)
+            {
+                box.Add(new Label(label)
+                {
+                    style = {
+                        marginTop = 5f,
+                        marginBottom = 2f,
+                        unityFontStyleAndWeight = FontStyle.Bold
+                    }
+                });
             }
 
-            root.Clear();
-            views.Clear();
+            return box;
+        }
 
-            root.schedule.Execute(() =>
-            {
-                var enabled = IsPlaying();
-                foreach (var view in views)
-                {
-                    view.SetEnabled(enabled);
-                }
-                addButton.SetEnabled(enabled);
-            }).Every(10);
+        VisualElement CreateSettingsPanel()
+        {
+            var box = CreateBox("Settings");
+            box.Add(new PropertyField(serializedObject.FindProperty("playOnAwake")));
+            return box;
+        }
+
+        VisualElement CreateComponentsPanel()
+        {
+            var box = CreateBox("Components");
+            var views = new List<AnimationComponentView>();
 
             for (int i = 0; i < componentsProperty.arraySize; i++)
             {
@@ -127,12 +117,12 @@ namespace LitMotion.Animation.Editor
                     view.EnabledToggle.BindProperty(enabledProperty);
                 }
 
-                root.Add(view);
+                box.Add(view);
                 views.Add(view);
                 CreateContextMenuManipulator(componentsProperty, i, true).target = view.ContextMenuButton;
             }
 
-            addButton = new Button(() => dropdown.Show(addButton.worldBound))
+            var addButton = new Button()
             {
                 text = "Add...",
                 style = {
@@ -140,29 +130,126 @@ namespace LitMotion.Animation.Editor
                     alignSelf = Align.Center
                 }
             };
-            root.Add(addButton);
+            addButton.clicked += () => dropdown.Show(addButton.worldBound);
+            box.Add(addButton);
 
-            var box = new Box
+            box.schedule.Execute(() =>
+            {
+                var enabled = IsPlaying();
+                foreach (var view in views)
+                {
+                    view.SetEnabled(enabled);
+                }
+                addButton.SetEnabled(enabled);
+            }).Every(10);
+
+            box.schedule.Execute(() =>
+            {
+                if (componentsProperty.arraySize != prevArraySize)
+                {
+                    RefleshComponentsView(true);
+                    prevArraySize = componentsProperty.arraySize;
+                }
+
+                var components = ((LitMotionAnimation)target).Components;
+                for (int i = 0; i < views.Count; i++)
+                {
+                    var component = components[i];
+                    if (component == null)
+                    {
+                        views[i].Progress = 0f;
+                        continue;
+                    }
+
+                    var handle = component.TrackedHandle;
+
+                    if (handle.IsActive() && !double.IsInfinity(handle.Duration))
+                    {
+                        views[i].Progress = Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time);
+                    }
+                    else
+                    {
+                        views[i].Progress = 0f;
+                    }
+                }
+            })
+            .Every(10);
+
+            return box;
+        }
+
+        VisualElement CreateDebugPanel()
+        {
+            var box = CreateBox("Debug");
+            var buttonGroup = new VisualElement
             {
                 style = {
-                    marginTop = 6f,
-                    marginBottom = 2f,
-                    alignItems = Align.FlexStart,
-                    flexDirection = FlexDirection.Column
+                    flexDirection = FlexDirection.Row,
+                    flexGrow = 1f,
                 }
             };
-            box.Add(new Label("Debug")
+            var playButton = new Button(() => ((LitMotionAnimation)target).Play())
             {
+                text = "Play",
                 style = {
-                    marginTop = 5f,
-                    marginBottom = 2f,
-                    marginLeft = 5f,
-                    unityFontStyleAndWeight = FontStyle.Bold
+                    flexGrow = 1f,
                 }
-            });
-            var controlPanel = CreateControlPanel();
-            box.Add(controlPanel);
-            root.Add(box);
+            };
+            var restartButton = new Button(() =>
+            {
+                var animation = (LitMotionAnimation)target;
+                animation.Reset();
+                animation.Play();
+            })
+            {
+                text = "Restart",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+            var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
+            {
+                text = "Stop",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+            var resetButton = new Button(() => ((LitMotionAnimation)target).Reset())
+            {
+                text = "Reset",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
+
+            buttonGroup.Add(playButton);
+            buttonGroup.Add(restartButton);
+            buttonGroup.Add(stopButton);
+            buttonGroup.Add(resetButton);
+
+            buttonGroup.schedule.Execute(() =>
+            {
+                var enabled = !IsPlaying();
+                restartButton.SetEnabled(enabled);
+                stopButton.SetEnabled(enabled);
+                resetButton.SetEnabled(enabled);
+            })
+            .Every(10);
+
+            box.Add(buttonGroup);
+
+            return box;
+        }
+
+        void RefleshComponentsView(bool applyModifiedProperties)
+        {
+            if (applyModifiedProperties)
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+
+            componentRoot.Clear();
+            componentRoot.Add(CreateComponentsPanel());
         }
 
         AnimationComponentView CreateComponentGUI(SerializedProperty property)
@@ -220,7 +307,7 @@ namespace LitMotion.Animation.Editor
                     Undo.RecordObject(serializedObject.targetObject, "Reset LitMotionAnimation component");
                     var elementProperty = property.GetArrayElementAtIndex(arrayIndex);
                     elementProperty.managedReferenceValue = ReflectionHelper.CreateDefaultInstance(elementProperty.managedReferenceValue.GetType());
-                    RefleshInspector(true);
+                    RefleshComponentsView(true);
                 }, string.IsNullOrEmpty(property.GetArrayElementAtIndex(arrayIndex).managedReferenceFullTypename) ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
 
                 evt.menu.AppendSeparator();
@@ -228,7 +315,7 @@ namespace LitMotion.Animation.Editor
                 evt.menu.AppendAction("Remove Component", x =>
                 {
                     property.DeleteArrayElementAtIndex(arrayIndex);
-                    RefleshInspector(true);
+                    RefleshComponentsView(true);
                 });
             });
 
@@ -241,66 +328,6 @@ namespace LitMotion.Animation.Editor
             }
 
             return manipulator;
-        }
-
-        VisualElement CreateControlPanel()
-        {
-            var element = new VisualElement
-            {
-                style = {
-                    flexDirection = FlexDirection.Row,
-                    flexGrow = 1f,
-                }
-            };
-            var playButton = new Button(() => ((LitMotionAnimation)target).Play())
-            {
-                text = "Play",
-                style = {
-                    flexGrow = 1f,
-                }
-            };
-            var restartButton = new Button(() =>
-            {
-                var animation = (LitMotionAnimation)target;
-                animation.Reset();
-                animation.Play();
-            })
-            {
-                text = "Restart",
-                style = {
-                    flexGrow = 1f,
-                }
-            };
-            var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
-            {
-                text = "Stop",
-                style = {
-                    flexGrow = 1f,
-                }
-            };
-            var resetButton = new Button(() => ((LitMotionAnimation)target).Reset())
-            {
-                text = "Reset",
-                style = {
-                    flexGrow = 1f,
-                }
-            };
-
-            element.Add(playButton);
-            element.Add(restartButton);
-            element.Add(stopButton);
-            element.Add(resetButton);
-
-            element.schedule.Execute(() =>
-            {
-                var enabled = !IsPlaying();
-                restartButton.SetEnabled(enabled);
-                stopButton.SetEnabled(enabled);
-                resetButton.SetEnabled(enabled);
-            })
-            .Every(10);
-
-            return element;
         }
 
         bool IsPlaying()

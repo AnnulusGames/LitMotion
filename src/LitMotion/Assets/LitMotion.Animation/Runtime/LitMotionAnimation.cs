@@ -8,6 +8,8 @@ namespace LitMotion.Animation
     [AddComponentMenu("LitMotion Animation")]
     public sealed class LitMotionAnimation : MonoBehaviour
     {
+        [SerializeField] bool playOnAwake;
+
         [SerializeReference]
         LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
         {
@@ -18,6 +20,11 @@ namespace LitMotion.Animation
         FastListCore<MotionHandle> handles;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
+
+        void Start()
+        {
+            if (playOnAwake) Play();
+        }
 
         public void Play()
         {
