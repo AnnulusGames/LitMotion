@@ -271,7 +271,17 @@ namespace LitMotion.Animation.Editor
                 var targetProperty = property.FindPropertyRelative("target");
                 if (targetProperty != null)
                 {
-                    view.Icon = AssetPreview.GetMiniTypeThumbnail(targetProperty.GetPropertyType());
+                    var type = targetProperty.GetPropertyType();
+
+                    // HACK: AssetPreview.GetMiniTypeThumbnail doesn't work for TMP_Text, so set it separately.
+                    if (type.FullName == "TMPro.TMP_Text")
+                    {
+                        view.Icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Text Component Icon.psd");
+                    }
+                    else
+                    {
+                        view.Icon = AssetPreview.GetMiniTypeThumbnail(type);
+                    }
                 }
 
                 view.TrackPropertyValue(property.FindPropertyRelative("displayName"), x =>
