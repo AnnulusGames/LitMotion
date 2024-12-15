@@ -15,7 +15,7 @@ namespace LitMotion.Animation
             Sequential
         }
 
-        [SerializeField] bool playOnAwake;
+        [SerializeField] bool playOnAwake = true;
         [SerializeField] AnimationMode animationMode;
 
         [SerializeReference]
