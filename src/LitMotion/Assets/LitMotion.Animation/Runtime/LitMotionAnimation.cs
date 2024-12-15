@@ -6,7 +6,6 @@ using UnityEngine;
 namespace LitMotion.Animation
 {
     [AddComponentMenu("LitMotion Animation")]
-    [ExecuteAlways]
     public sealed class LitMotionAnimation : MonoBehaviour
     {
         enum AnimationMode
@@ -32,24 +31,15 @@ namespace LitMotion.Animation
 
         void Start()
         {
-#if UNITY_EDITOR
-            if (!UnityEditor.EditorApplication.isPlaying) return;
-#endif
             if (playOnAwake) Play();
         }
 
-        void Update()
+        void MoveNextMotion()
         {
-            if (animationMode != AnimationMode.Sequential) return;
-
-            foreach (var handle in handles.AsSpan())
-            {
-                if (handle.IsPlaying()) return;
-            }
-
             if (queue.TryDequeue(out var queuedComponent))
             {
                 var handle = queuedComponent.Play().Preserve();
+                MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).OnCompleteAction += MoveNextMotion;
                 queuedComponent.TrackedHandle = handle;
                 handles.Add(handle);
             }
@@ -82,8 +72,7 @@ namespace LitMotion.Animation
                         queue.Enqueue(component);
                     }
 
-                    Update();
-
+                    MoveNextMotion();
                     break;
                 case AnimationMode.Parallel:
                     foreach (var component in components)
