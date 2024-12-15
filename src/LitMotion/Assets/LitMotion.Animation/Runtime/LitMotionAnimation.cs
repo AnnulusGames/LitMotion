@@ -6,9 +6,17 @@ using UnityEngine;
 namespace LitMotion.Animation
 {
     [AddComponentMenu("LitMotion Animation")]
+    [ExecuteAlways]
     public sealed class LitMotionAnimation : MonoBehaviour
     {
+        enum AnimationMode
+        {
+            Parallel,
+            Sequential
+        }
+
         [SerializeField] bool playOnAwake;
+        [SerializeField] AnimationMode animationMode;
 
         [SerializeReference]
         LitMotionAnimationComponent[] components = new LitMotionAnimationComponent[]
@@ -17,13 +25,34 @@ namespace LitMotion.Animation
             new PositionAnimation(),
         };
 
+        Queue<LitMotionAnimationComponent> queue = new();
         FastListCore<MotionHandle> handles;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
 
         void Start()
         {
+#if UNITY_EDITOR
+            if (!UnityEditor.EditorApplication.isPlaying) return;
+#endif
             if (playOnAwake) Play();
+        }
+
+        void Update()
+        {
+            if (animationMode != AnimationMode.Sequential) return;
+
+            foreach (var handle in handles.AsSpan())
+            {
+                if (handle.IsPlaying()) return;
+            }
+
+            if (queue.TryDequeue(out var queuedComponent))
+            {
+                var handle = queuedComponent.Play().Preserve();
+                queuedComponent.TrackedHandle = handle;
+                handles.Add(handle);
+            }
         }
 
         public void Play()
@@ -43,14 +72,30 @@ namespace LitMotion.Animation
 
             handles.Clear();
 
-            foreach (var component in components)
+            switch (animationMode)
             {
-                if (component == null) continue;
-                if (!component.Enabled) continue;
+                case AnimationMode.Sequential:
+                    foreach (var component in components)
+                    {
+                        if (component == null) continue;
+                        if (!component.Enabled) continue;
+                        queue.Enqueue(component);
+                    }
 
-                var handle = component.Play().Preserve();
-                component.TrackedHandle = handle;
-                handles.Add(handle);
+                    Update();
+
+                    break;
+                case AnimationMode.Parallel:
+                    foreach (var component in components)
+                    {
+                        if (component == null) continue;
+                        if (!component.Enabled) continue;
+
+                        var handle = component.Play().Preserve();
+                        component.TrackedHandle = handle;
+                        handles.Add(handle);
+                    }
+                    break;
             }
         }
 
@@ -70,18 +115,20 @@ namespace LitMotion.Animation
             }
 
             handles.Clear();
+            queue.Clear();
         }
 
         public bool IsPlaying
         {
             get
             {
+                if (queue.Count > 0) return true;
+
                 foreach (var handle in handles.AsSpan())
                 {
                     if (handle.IsActive()) return true;
                 }
 
-                handles.Clear();
                 return false;
             }
         }

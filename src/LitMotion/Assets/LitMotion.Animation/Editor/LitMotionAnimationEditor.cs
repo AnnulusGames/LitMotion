@@ -94,6 +94,7 @@ namespace LitMotion.Animation.Editor
         {
             var box = CreateBox("Settings");
             box.Add(new PropertyField(serializedObject.FindProperty("playOnAwake")));
+            box.Add(new PropertyField(serializedObject.FindProperty("animationMode")));
             return box;
         }
 
