@@ -35,6 +35,7 @@ namespace LitMotion
     internal interface IMotionStorage
     {
         bool IsActive(MotionHandle handle);
+        bool IsPlaying(MotionHandle handle);
         bool TryCancel(MotionHandle handle, MotionStoragePermission permission);
         bool TryComplete(MotionHandle handle, MotionStoragePermission permission);
         void Cancel(MotionHandle handle, MotionStoragePermission permission);
@@ -233,6 +234,17 @@ namespace LitMotion
             ref var motion = ref unmanagedDataArray[slot.DenseIndex];
             return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing ||
                 (motion.Core.Status is MotionStatus.Completed && motion.Core.IsPreserved);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsPlaying(MotionHandle handle)
+        {
+            ref var slot = ref sparseSetCore.GetSlotRefUnchecked(handle.Index);
+            if (IsDenseIndexOutOfRange(slot.DenseIndex)) return false;
+            if (IsInvalidVersion(slot.Version, handle)) return false;
+
+            ref var motion = ref unmanagedDataArray[slot.DenseIndex];
+            return motion.Core.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing;
         }
 
         public bool TryCancel(MotionHandle handle, MotionStoragePermission permission)

@@ -1,0 +1,20 @@
+{
+    "name": "LitMotion.Animation.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3",
+        "GUID:aa9cad64d4fae43d2a90e595aea6cc7f",
+        "GUID:4368f6075359c4611b74470590e3ec1f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

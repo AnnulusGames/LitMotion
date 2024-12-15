@@ -3,6 +3,34 @@ using UnityEngine;
 
 namespace LitMotion
 {
+    internal enum SchedulerType : byte
+    {
+        Default,
+        Initialization,
+        InitializationIgnoreTimeScale,
+        InitializationRealtime,
+        EarlyUpdate,
+        EarlyUpdateIgnoreTimeScale,
+        EarlyUpdateRealtime,
+        FixedUpdate,
+        PreUpdate,
+        PreUpdateIgnoreTimeScale,
+        PreUpdateRealtime,
+        Update,
+        UpdateIgnoreTimeScale,
+        UpdateRealtime,
+        PreLateUpdate,
+        PreLateUpdateIgnoreTimeScale,
+        PreLateUpdateRealtime,
+        PostLateUpdate,
+        PostLateUpdateIgnoreTimeScale,
+        PostLateUpdateRealtime,
+        TimeUpdate,
+        TimeUpdateIgnoreTimeScale,
+        TimeUpdateRealtime,
+        Manual,
+    }
+
     /// <summary>
     /// Serializable(editable from the Inspector) MotionSettings.
     /// </summary>
@@ -13,34 +41,6 @@ namespace LitMotion
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {
-        enum SchedulerType : byte
-        {
-            Default,
-            Initialization,
-            InitializationIgnoreTimeScale,
-            InitializationRealtime,
-            EarlyUpdate,
-            EarlyUpdateIgnoreTimeScale,
-            EarlyUpdateRealtime,
-            FixedUpdate,
-            PreUpdate,
-            PreUpdateIgnoreTimeScale,
-            PreUpdateRealtime,
-            Update,
-            UpdateIgnoreTimeScale,
-            UpdateRealtime,
-            PreLateUpdate,
-            PreLateUpdateIgnoreTimeScale,
-            PreLateUpdateRealtime,
-            PostLateUpdate,
-            PostLateUpdateIgnoreTimeScale,
-            PostLateUpdateRealtime,
-            TimeUpdate,
-            TimeUpdateIgnoreTimeScale,
-            TimeUpdateRealtime,
-            Manual,
-        }
-
         [SerializeField] SchedulerType schedulerType;
 
 #if UNITY_EDITOR

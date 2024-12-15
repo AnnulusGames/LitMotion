@@ -17,7 +17,7 @@ namespace LitMotion
     public static class MotionHandleExtensions
     {
         /// <summary>
-        /// Checks if a motion is currently playing.
+        /// Checks if a motion is active.
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <returns>True if motion is active, otherwise false.</returns>
@@ -26,6 +26,18 @@ namespace LitMotion
         {
             return MotionManager.IsActive(handle);
         }
+
+        /// <summary>
+        /// Checks if a motion is currently playing.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <returns>True if motion is playing, otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPlaying(this MotionHandle handle)
+        {
+            return MotionManager.IsPlaying(handle);
+        }
+
 
         /// <summary>
         /// Gets the debug name set for the MotionHandle. If not specified, returns the result of ToString().

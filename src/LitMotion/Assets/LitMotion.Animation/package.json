@@ -1,0 +1,17 @@
+{
+    "name": "com.annulusgames.lit-motion.animation",
+    "version": "2.0.0",
+    "displayName": "LitMotion.Animation",
+    "description": "Animation component (visual editor) for LitMotion",
+    "keywords": [
+        "dots",
+        "tween",
+        "animation"
+    ],
+    "dependencies": {
+        "com.annulusgames.lit-motion": "2.0.0"
+    },
+    "author": {
+        "name": "Annulus Games"
+    }
+}
