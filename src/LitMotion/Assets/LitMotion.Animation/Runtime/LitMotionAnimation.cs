@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LitMotion.Animation.Components;
 using LitMotion.Collections;
@@ -25,7 +26,7 @@ namespace LitMotion.Animation
         };
 
         Queue<LitMotionAnimationComponent> queue = new();
-        FastListCore<MotionHandle> handles;
+        FastListCore<LitMotionAnimationComponent> playingComponents;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
 
@@ -41,7 +42,7 @@ namespace LitMotion.Animation
                 var handle = queuedComponent.Play().Preserve();
                 MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).OnCompleteAction += MoveNextMotion;
                 queuedComponent.TrackedHandle = handle;
-                handles.Add(handle);
+                playingComponents.Add(queuedComponent);
             }
         }
 
@@ -49,8 +50,9 @@ namespace LitMotion.Animation
         {
             var isPlaying = false;
 
-            foreach (var handle in handles.AsSpan())
+            foreach (var component in playingComponents.AsSpan())
             {
+                var handle = component.TrackedHandle;
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 1f;
@@ -60,7 +62,7 @@ namespace LitMotion.Animation
 
             if (isPlaying) return;
 
-            handles.Clear();
+            playingComponents.Clear();
 
             switch (animationMode)
             {
@@ -82,7 +84,7 @@ namespace LitMotion.Animation
 
                         var handle = component.Play().Preserve();
                         component.TrackedHandle = handle;
-                        handles.Add(handle);
+                        playingComponents.Add(component);
                     }
                     break;
             }
@@ -90,20 +92,25 @@ namespace LitMotion.Animation
 
         public void Stop()
         {
-            foreach (var handle in handles.AsSpan())
+            foreach (var component in playingComponents.AsSpan())
             {
+                var handle = component.TrackedHandle;
                 if (handle.IsActive()) handle.PlaybackSpeed = 0f;
             }
         }
 
         public void Reset()
         {
-            foreach (var handle in handles.AsSpan())
+            var span = playingComponents.AsSpan();
+            span.Reverse();
+            foreach (var component in span)
             {
+                var handle = component.TrackedHandle;
                 handle.TryCancel();
+                component.Revert();
             }
 
-            handles.Clear();
+            playingComponents.Clear();
             queue.Clear();
         }
 
@@ -113,8 +120,9 @@ namespace LitMotion.Animation
             {
                 if (queue.Count > 0) return true;
 
-                foreach (var handle in handles.AsSpan())
+                foreach (var component in playingComponents.AsSpan())
                 {
+                    var handle = component.TrackedHandle;
                     if (handle.IsActive()) return true;
                 }
 

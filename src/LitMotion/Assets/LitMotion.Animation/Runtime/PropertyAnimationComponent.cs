@@ -15,15 +15,9 @@ namespace LitMotion.Animation
         [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
         [SerializeField] bool relative;
 
-        readonly Action revertAction;
         TValue startValue;
 
-        public PropertyAnimationComponent()
-        {
-            revertAction = Revert;
-        }
-
-        protected void Revert()
+        public sealed override void Revert()
         {
             if (target == null) return;
             SetValue(target, startValue);
@@ -45,7 +39,6 @@ namespace LitMotion.Animation
             if (relative)
             {
                 handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
-                    .WithOnCancel(revertAction)
                     .Bind(this, (x, state) =>
                     {
                         state.SetValue(target, state.GetRelativeValue(state.startValue, x));
@@ -54,7 +47,6 @@ namespace LitMotion.Animation
             else
             {
                 handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
-                    .WithOnCancel(revertAction)
                     .Bind(this, (x, state) =>
                     {
                         state.SetValue(target, x);

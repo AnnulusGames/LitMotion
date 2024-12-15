@@ -22,6 +22,8 @@ namespace LitMotion.Animation.Components
                     state.onValueChanged.Invoke(x);
                 });
         }
+
+        public override void Revert() { }
     }
 
     [Serializable]
@@ -72,5 +74,7 @@ namespace LitMotion.Animation.Components
                     state.onValueChanged.Invoke(x.ConvertToString());
                 });
         }
+
+        public override void Revert() { }
     }
 }

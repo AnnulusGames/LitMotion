@@ -15,6 +15,8 @@ namespace LitMotion.Animation.Components
             return LMotion.Create(0f, 1f, delay)
                 .RunWithoutBinding();
         }
+
+        public override void Revert() { }
     }
 
     [Serializable]
@@ -30,5 +32,7 @@ namespace LitMotion.Animation.Components
                 .WithOnComplete(() => onPlay.Invoke())
                 .RunWithoutBinding();
         }
+
+        public override void Revert() { }
     }
 }

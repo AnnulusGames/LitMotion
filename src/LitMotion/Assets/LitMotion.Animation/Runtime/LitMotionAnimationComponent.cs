@@ -26,6 +26,7 @@ namespace LitMotion.Animation
         public string DisplayName => displayName;
 
         public abstract MotionHandle Play();
+        public abstract void Revert();
 
         public MotionHandle TrackedHandle { get; set; }
     }
