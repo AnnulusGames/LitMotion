@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Material Property (Float)")]
+    [LitMotionAnimationComponentMenu("Rendering/Material/Property (Float)")]
     public sealed class MaterialFloatAnimation : FloatPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
@@ -24,7 +24,7 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Material Property (Int)")]
+    [LitMotionAnimationComponentMenu("Rendering/Material/Property (Int)")]
     public sealed class MaterialIntAnimation : IntPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
@@ -41,7 +41,7 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Material Property (Vector)")]
+    [LitMotionAnimationComponentMenu("Rendering/Material/Property (Vector)")]
     public sealed class MaterialVectorAnimation : Vector4PropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "";
@@ -58,7 +58,7 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Material Property (Color)")]
+    [LitMotionAnimationComponentMenu("Rendering/Material/Property (Color)")]
     public sealed class MaterialColorAnimation : ColorPropertyAnimationComponent<Material>
     {
         [SerializeField] string propertyName = "_Color";
@@ -75,7 +75,7 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Sprite Renderer Color")]
+    [LitMotionAnimationComponentMenu("Rendering/Sprite Renderer/Color")]
     public sealed class SpriteRendererColorAnimation : ColorPropertyAnimationComponent<SpriteRenderer>
     {
         protected override Color GetValue(SpriteRenderer target)
@@ -92,7 +92,7 @@ namespace LitMotion.Animation.Components
 #if LITMOTION_ANIMATION_RENDER_PIPELINES
 
     [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Volume Weight")]
+    [LitMotionAnimationComponentMenu("Rendering/Volume/Weight")]
     public sealed class VolumeWeightAnimation : FloatPropertyAnimationComponent<Volume>
     {
         protected override float GetValue(Volume target) => target.weight;

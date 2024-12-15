@@ -3,7 +3,7 @@ using LitMotion.Animation;
 using UnityEngine;
 
 [Serializable]
-[LitMotionAnimationComponentMenu("UI/Rect Transform Size Delta")]
+[LitMotionAnimationComponentMenu("UI/Rect Transform/Size Delta")]
 public sealed class RectTransformSizeDeltaAnimation : Vector2PropertyAnimationComponent<RectTransform>
 {
     protected override Vector2 GetValue(RectTransform target) => target.sizeDelta;
@@ -11,7 +11,7 @@ public sealed class RectTransformSizeDeltaAnimation : Vector2PropertyAnimationCo
 }
 
 [Serializable]
-[LitMotionAnimationComponentMenu("UI/Rect Transform Pivot")]
+[LitMotionAnimationComponentMenu("UI/Rect Transform/Pivot")]
 public sealed class RectTransformPivotAnimation : Vector2PropertyAnimationComponent<RectTransform>
 {
     protected override Vector2 GetValue(RectTransform target) => target.pivot;
