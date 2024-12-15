@@ -41,6 +41,16 @@
             "name": "com.unity.modules.audio",
             "expression": "",
             "define": "LITMOTION_ANIMATION_UNITY_AUDIO"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_PHYSICS"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_PHYSICS_2D"
         }
     ],
     "noEngineReferences": false
