@@ -137,6 +137,15 @@ namespace LitMotion.Animation
         }
     }
 
+    public abstract class RectPropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, Rect, NoOptions, RectMotionAdapter>
+        where TObject : UnityEngine.Object
+    {
+        protected sealed override Rect GetRelativeValue(in Rect startValue, in Rect relativeValue)
+        {
+            return new Rect(startValue.position + relativeValue.position, startValue.size + relativeValue.size);
+        }
+    }
+
     public abstract class FixedString512BytesPropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, FixedString512Bytes, StringOptions, FixedString512BytesMotionAdapter>
         where TObject : UnityEngine.Object
     {
