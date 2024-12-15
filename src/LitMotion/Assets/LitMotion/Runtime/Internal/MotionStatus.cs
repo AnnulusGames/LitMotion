@@ -3,7 +3,7 @@ namespace LitMotion
     /// <summary>
     /// Motion status.
     /// </summary>
-    public enum MotionStatus
+    public enum MotionStatus : byte
     {
         None = 0,
         Scheduled = 1,

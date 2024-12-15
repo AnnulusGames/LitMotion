@@ -1,0 +1,16 @@
+{
+    "name": "LitMotion.Sequences",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -31,11 +31,11 @@ namespace LitMotion
 
         ValueTaskMotionConfiguredSource() : base() { }
 
-        public static IValueTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken, out short token)
+        public static IValueTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
+                OnCanceledTokenReceived(motionHandle, cancelBehavior);
                 return FromCanceled(out token);
             }
 
@@ -44,7 +44,7 @@ namespace LitMotion
                 result = new ValueTaskMotionConfiguredSource();
             }
 
-            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
+            result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);
 
             token = result.core.Version;
             return result;

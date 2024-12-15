@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace LitMotion
 {
-    internal sealed class UniTaskMotionConfiguredSource : MotionConfiguredSourceBase ,IUniTaskSource, ITaskPoolNode<UniTaskMotionConfiguredSource>
+    internal sealed class UniTaskMotionConfiguredSource : MotionConfiguredSourceBase, IUniTaskSource, ITaskPoolNode<UniTaskMotionConfiguredSource>
     {
         static UniTaskMotionConfiguredSource()
         {
@@ -20,11 +20,11 @@ namespace LitMotion
 
         UniTaskCompletionSourceCore<AsyncUnit> core;
 
-        public static IUniTaskSource Create(MotionHandle motionHandle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken, out short token)
+        public static IUniTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                OnCanceledTokenReceived(motionHandle, cancelBehaviour);
+                OnCanceledTokenReceived(motionHandle, cancelBehavior);
                 return AutoResetUniTaskCompletionSource.CreateFromCanceled(cancellationToken, out token);
             }
 
@@ -33,7 +33,7 @@ namespace LitMotion
                 result = new UniTaskMotionConfiguredSource();
             }
 
-            result.Initialize(motionHandle, cancelBehaviour, cancellationToken);
+            result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);
 
             TaskTracker.TrackActiveTask(result, 3);
 
@@ -50,7 +50,7 @@ namespace LitMotion
         {
             core.TrySetResult(AsyncUnit.Default);
         }
-        
+
         public void GetResult(short token)
         {
             try
@@ -82,7 +82,7 @@ namespace LitMotion
         {
             TaskTracker.RemoveTracking(this);
             core.Reset();
-            
+
             DisposeRegistration();
             RestoreOriginalCallback();
             ResetFields();
