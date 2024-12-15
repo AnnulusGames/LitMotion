@@ -315,6 +315,19 @@ namespace LitMotion.Animation.Editor
                     property.DeleteArrayElementAtIndex(arrayIndex);
                     RefleshComponentsView(true);
                 });
+
+                evt.menu.AppendAction("Move Up", x =>
+                {
+                    property.MoveArrayElement(arrayIndex, arrayIndex - 1);
+                    RefleshComponentsView(true);
+                }, arrayIndex == 0 ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
+
+
+                evt.menu.AppendAction("Move Down", x =>
+                {
+                    property.MoveArrayElement(arrayIndex, arrayIndex + 1);
+                    RefleshComponentsView(true);
+                }, arrayIndex == property.arraySize - 1 ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
             });
 
             if (activeLeftClick)

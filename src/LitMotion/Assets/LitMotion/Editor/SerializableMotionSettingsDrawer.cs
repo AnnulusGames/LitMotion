@@ -67,7 +67,17 @@ namespace LitMotion.Editor
 
                 group.Add(customEaseCurve);
                 customEaseCurve.schedule
-                    .Execute(() => customEaseCurve.style.display = ease.enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None)
+                    .Execute(() =>
+                    {
+                        try
+                        {
+                            customEaseCurve.style.display = ease.enumValueIndex == (int)Ease.CustomAnimationCurve ? DisplayStyle.Flex : DisplayStyle.None;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // do nothing
+                        }
+                    })
                     .Every(10);
             });
 
