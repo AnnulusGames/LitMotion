@@ -152,6 +152,12 @@ namespace LitMotion.Animation.Editor
                 var components = ((LitMotionAnimation)target).Components;
                 for (int i = 0; i < views.Count; i++)
                 {
+                    if (components.Count <= i)
+                    {
+                        views[i].Progress = 0f;
+                        continue;
+                    }
+
                     var component = components[i];
                     if (component == null)
                     {
