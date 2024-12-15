@@ -64,7 +64,7 @@ namespace LitMotion.Animation.Editor
             }
         }
 
-        VisualElement CreateBox(string label = null)
+        VisualElement CreateBox(string label)
         {
             var box = new Box
             {
@@ -78,17 +78,14 @@ namespace LitMotion.Animation.Editor
                 }
             };
 
-            if (label != null)
+            box.Add(new Label(label)
             {
-                box.Add(new Label(label)
-                {
-                    style = {
-                        marginTop = 5f,
-                        marginBottom = 2f,
-                        unityFontStyleAndWeight = FontStyle.Bold
-                    }
-                });
-            }
+                style = {
+                    marginTop = 5f,
+                    marginBottom = 3f,
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            });
 
             return box;
         }
