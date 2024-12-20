@@ -77,12 +77,12 @@ namespace LitMotion
         /// <param name="deltaTime">Delta time</param>
         public void Update(double deltaTime)
         {
+            time += deltaTime;
+
             foreach (var kv in runners)
             {
-                kv.Value.Update(deltaTime, deltaTime, deltaTime);
+                kv.Value.Update(time, time, time);
             }
-
-            time += deltaTime;
         }
 
         /// <summary>
