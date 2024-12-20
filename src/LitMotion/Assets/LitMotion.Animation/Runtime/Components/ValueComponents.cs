@@ -23,7 +23,7 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void Revert() { }
+        public override void Stop() { }
     }
 
     [Serializable]
@@ -75,6 +75,6 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void Revert() { }
+        public override void Stop() { }
     }
 }
