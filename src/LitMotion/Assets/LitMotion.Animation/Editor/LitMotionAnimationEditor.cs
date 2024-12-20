@@ -213,14 +213,14 @@ namespace LitMotion.Animation.Editor
             };
             var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
             {
-                text = "Stop",
+                text = "Pause",
                 style = {
                     flexGrow = 1f,
                 }
             };
             var resetButton = new Button(() => ((LitMotionAnimation)target).Reset())
             {
-                text = "Reset",
+                text = "Stop",
                 style = {
                     flexGrow = 1f,
                 }
