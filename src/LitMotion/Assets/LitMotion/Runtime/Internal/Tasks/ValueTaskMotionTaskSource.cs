@@ -5,16 +5,16 @@ using LitMotion.Collections;
 
 namespace LitMotion
 {
-    internal sealed class ValueTaskMotionConfiguredSource : MotionConfiguredSourceBase, IValueTaskSource, ILinkedPoolNode<ValueTaskMotionConfiguredSource>
+    internal sealed class ValueTaskMotionTaskSource : MotionTaskSourceBase, IValueTaskSource, ILinkedPoolNode<ValueTaskMotionTaskSource>
     {
-        static LinkedPool<ValueTaskMotionConfiguredSource> pool;
+        static LinkedPool<ValueTaskMotionTaskSource> pool;
 
-        ValueTaskMotionConfiguredSource nextNode;
-        public ref ValueTaskMotionConfiguredSource NextNode => ref nextNode;
+        ValueTaskMotionTaskSource nextNode;
+        public ref ValueTaskMotionTaskSource NextNode => ref nextNode;
 
         ManualResetValueTaskSourceCore<object> core;
 
-        static ValueTaskMotionConfiguredSource FromCanceled(out short token)
+        static ValueTaskMotionTaskSource FromCanceled(out short token)
         {
             if (canceledSource == null)
             {
@@ -27,9 +27,9 @@ namespace LitMotion
             token = canceledSource.Version;
             return canceledSource;
         }
-        static ValueTaskMotionConfiguredSource canceledSource;
+        static ValueTaskMotionTaskSource canceledSource;
 
-        ValueTaskMotionConfiguredSource() : base() { }
+        ValueTaskMotionTaskSource() : base() { }
 
         public static IValueTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken, out short token)
         {
@@ -41,7 +41,7 @@ namespace LitMotion
 
             if (!pool.TryPop(out var result))
             {
-                result = new ValueTaskMotionConfiguredSource();
+                result = new ValueTaskMotionTaskSource();
             }
 
             result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);

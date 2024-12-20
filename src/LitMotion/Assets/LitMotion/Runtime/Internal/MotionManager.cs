@@ -20,17 +20,17 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref MotionDataCore GetDataRef(MotionHandle handle, MotionStoragePermission permission)
+        public static ref MotionData GetDataRef(MotionHandle handle, bool checkIsInSequence = true)
         {
             CheckTypeId(handle);
-            return ref list[handle.StorageId].GetDataRef(handle, permission);
+            return ref list[handle.StorageId].GetDataRef(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref ManagedMotionData GetManagedDataRef(MotionHandle handle, MotionStoragePermission permission)
+        public static ref ManagedMotionData GetManagedDataRef(MotionHandle handle, bool checkIsInSequence = true)
         {
             CheckTypeId(handle);
-            return ref list[handle.StorageId].GetManagedDataRef(handle, permission);
+            return ref list[handle.StorageId].GetManagedDataRef(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,31 +41,31 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Complete(MotionHandle handle, MotionStoragePermission permission)
+        public static void Complete(MotionHandle handle, bool checkIsInSequence = true)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].Complete(handle, permission);
+            list[handle.StorageId].Complete(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool TryComplete(MotionHandle handle, MotionStoragePermission permission)
+        public static bool TryComplete(MotionHandle handle, bool checkIsInSequence = true)
         {
             if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
-            return list[handle.StorageId].TryComplete(handle, permission);
+            return list[handle.StorageId].TryComplete(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Cancel(MotionHandle handle, MotionStoragePermission permission)
+        public static void Cancel(MotionHandle handle, bool checkIsInSequence = true)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].Cancel(handle, permission);
+            list[handle.StorageId].Cancel(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool TryCancel(MotionHandle handle, MotionStoragePermission permission)
+        public static bool TryCancel(MotionHandle handle, bool checkIsInSequence = true)
         {
             if (handle.StorageId < 0 || handle.StorageId >= MotionTypeCount) return false;
-            return list[handle.StorageId].TryCancel(handle, permission);
+            return list[handle.StorageId].TryCancel(handle, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,10 +83,10 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SetTime(MotionHandle handle, double time, MotionStoragePermission permission)
+        public static void SetTime(MotionHandle handle, double time, bool checkIsInSequence = true)
         {
             CheckTypeId(handle);
-            list[handle.StorageId].SetTime(handle, time, permission);
+            list[handle.StorageId].SetTime(handle, time, checkIsInSequence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

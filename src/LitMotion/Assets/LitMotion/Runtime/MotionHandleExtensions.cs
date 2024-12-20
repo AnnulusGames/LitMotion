@@ -48,7 +48,7 @@ namespace LitMotion
         public static string GetDebugName(this MotionHandle handle)
         {
 #if LITMOTION_DEBUG
-            return MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).DebugName ?? handle.ToString();
+            return MotionManager.GetManagedDataRef(handle, false).DebugName ?? handle.ToString();
 #else
             return handle.ToString();
 #endif
@@ -62,7 +62,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MotionHandle Preserve(this MotionHandle handle)
         {
-            MotionManager.GetDataRef(handle, MotionStoragePermission.User).IsPreserved = true;
+            MotionManager.GetDataRef(handle).State.IsPreserved = true;
             return handle;
         }
 
@@ -73,7 +73,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Complete(this MotionHandle handle)
         {
-            MotionManager.Complete(handle, MotionStoragePermission.User);
+            MotionManager.Complete(handle);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryComplete(this MotionHandle handle)
         {
-            return MotionManager.TryComplete(handle, MotionStoragePermission.User);
+            return MotionManager.TryComplete(handle);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cancel(this MotionHandle handle)
         {
-            MotionManager.Cancel(handle, MotionStoragePermission.User);
+            MotionManager.Cancel(handle);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace LitMotion
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryCancel(this MotionHandle handle)
         {
-            return MotionManager.TryCancel(handle, MotionStoragePermission.User);
+            return MotionManager.TryCancel(handle);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -242,7 +242,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, MotionCancelBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, cancelBehavior, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -257,7 +257,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -270,8 +270,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
@@ -283,8 +283,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, MotionCancelBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, cancelBehavior, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
@@ -297,8 +297,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
         }
 #endif
 

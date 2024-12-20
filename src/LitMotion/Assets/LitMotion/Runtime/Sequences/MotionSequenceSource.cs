@@ -88,13 +88,13 @@ namespace LitMotion.Sequences
                 {
                     var item = span[index];
                     if (item.Position < time) break;
-                    MotionManager.SetTime(item.Handle, time - item.Position, MotionStoragePermission.Admin);
+                    MotionManager.SetTime(item.Handle, time - item.Position, false);
                     index--;
                 }
 
                 foreach (var item in span[..(index + 1)])
                 {
-                    MotionManager.SetTime(item.Handle, time - item.Position, MotionStoragePermission.Admin);
+                    MotionManager.SetTime(item.Handle, time - item.Position, false);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace LitMotion.Sequences
         void OnComplete()
         {
             if (!handle.IsActive()) return;
-            if (MotionManager.GetDataRef(handle, MotionStoragePermission.Admin).IsPreserved) return;
+            if (MotionManager.GetDataRef(handle, false).State.IsPreserved) return;
 
             Return(this);
         }
@@ -113,7 +113,7 @@ namespace LitMotion.Sequences
         {
             foreach (var item in Items)
             {
-                MotionManager.Cancel(item.Handle, MotionStoragePermission.Admin);
+                MotionManager.Cancel(item.Handle, false);
             }
 
             Return(this);

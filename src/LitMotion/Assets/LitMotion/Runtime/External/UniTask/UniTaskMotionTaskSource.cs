@@ -5,18 +5,18 @@ using Cysharp.Threading.Tasks;
 
 namespace LitMotion
 {
-    internal sealed class UniTaskMotionConfiguredSource : MotionConfiguredSourceBase, IUniTaskSource, ITaskPoolNode<UniTaskMotionConfiguredSource>
+    internal sealed class UniTaskMotionTaskSource : MotionTaskSourceBase, IUniTaskSource, ITaskPoolNode<UniTaskMotionTaskSource>
     {
-        static UniTaskMotionConfiguredSource()
+        static UniTaskMotionTaskSource()
         {
-            TaskPool.RegisterSizeGetter(typeof(UniTaskMotionConfiguredSource), () => pool.Size);
+            TaskPool.RegisterSizeGetter(typeof(UniTaskMotionTaskSource), () => pool.Size);
         }
 
-        UniTaskMotionConfiguredSource() : base() { }
+        UniTaskMotionTaskSource() : base() { }
 
-        static TaskPool<UniTaskMotionConfiguredSource> pool;
-        UniTaskMotionConfiguredSource nextNode;
-        public ref UniTaskMotionConfiguredSource NextNode => ref nextNode;
+        static TaskPool<UniTaskMotionTaskSource> pool;
+        UniTaskMotionTaskSource nextNode;
+        public ref UniTaskMotionTaskSource NextNode => ref nextNode;
 
         UniTaskCompletionSourceCore<AsyncUnit> core;
 
@@ -30,7 +30,7 @@ namespace LitMotion
 
             if (!pool.TryPop(out var result))
             {
-                result = new UniTaskMotionConfiguredSource();
+                result = new UniTaskMotionTaskSource();
             }
 
             result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);

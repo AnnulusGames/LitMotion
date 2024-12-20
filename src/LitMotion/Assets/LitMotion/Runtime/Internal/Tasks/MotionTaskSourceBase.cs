@@ -3,9 +3,9 @@ using System.Threading;
 
 namespace LitMotion
 {
-    internal abstract class MotionConfiguredSourceBase
+    internal abstract class MotionTaskSourceBase
     {
-        public MotionConfiguredSourceBase()
+        public MotionTaskSourceBase()
         {
             onCancelCallbackDelegate = OnCancelCallbackDelegate;
             onCompleteCallbackDelegate = OnCompleteCallbackDelegate;
@@ -74,7 +74,7 @@ namespace LitMotion
             this.cancelAwaitOnMotionCanceled = cancelAwaitOnMotionCanceled;
             this.cancellationToken = cancellationToken;
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, MotionStoragePermission.Admin);
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, false);
             originalCancelAction = managedData.OnCancelAction;
             originalCompleteAction = managedData.OnCompleteAction;
             managedData.OnCancelAction = onCancelCallbackDelegate;
@@ -93,7 +93,7 @@ namespace LitMotion
             {
                 cancellationRegistration = RegisterWithoutCaptureExecutionContext(cancellationToken, static x =>
                 {
-                    var source = (MotionConfiguredSourceBase)x;
+                    var source = (MotionTaskSourceBase)x;
                     if (!source.motionHandle.IsActive()) return;
 
                     source.RestoreOriginalCallback(false);
@@ -129,7 +129,7 @@ namespace LitMotion
         {
             if (checkIsActive && !motionHandle.IsActive()) return;
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, MotionStoragePermission.Admin);
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, false);
             managedData.OnCancelAction = originalCancelAction;
             managedData.OnCompleteAction = originalCompleteAction;
         }

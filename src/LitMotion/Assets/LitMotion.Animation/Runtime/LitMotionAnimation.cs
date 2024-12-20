@@ -38,7 +38,7 @@ namespace LitMotion.Animation
                 try
                 {
                     var handle = queuedComponent.Play().Preserve();
-                    MotionManager.GetManagedDataRef(handle, MotionStoragePermission.Admin).OnCompleteAction += MoveNextMotion;
+                    MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
                     queuedComponent.TrackedHandle = handle;
                     playingComponents.Add(queuedComponent);
                 }

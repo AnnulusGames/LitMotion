@@ -123,7 +123,6 @@ namespace LitMotion.Editor
             }
         }
 
-
         static GUIStyle detailsStyle;
         Vector2 detailsScroll;
         Vector2 stackTraceScroll;
@@ -147,9 +146,12 @@ namespace LitMotion.Editor
                 var selected = treeView.state.selectedIDs;
                 if (selected.Count > 0 && treeView.CurrentBindingItems.FirstOrDefault(x => x.id == selected[0]) is MotionDebuggerViewItem item)
                 {
-                    ref var unmanagedData = ref MotionManager.GetDataRef(item.Handle, MotionStoragePermission.Admin);
-                    ref var managedData = ref MotionManager.GetManagedDataRef(item.Handle, MotionStoragePermission.Admin);
+                    ref var dataRef = ref MotionManager.GetDataRef(item.Handle, false);
+                    ref var managedDataRef = ref MotionManager.GetManagedDataRef(item.Handle, false);
                     var debugInfo = MotionManager.GetDebugInfo(item.Handle);
+
+                    ref var state = ref dataRef.State;
+                    ref var parameters = ref dataRef.Parameters;
 
                     using (new EditorGUILayout.VerticalScope(GUI.skin.box))
                     {
@@ -174,27 +176,27 @@ namespace LitMotion.Editor
                         GenericField("End Value", debugInfo.EndValue);
 
                         EditorGUILayout.Space(4);
-                        GenericField("Duration", unmanagedData.Duration);
-                        GenericField("Delay", unmanagedData.Delay);
-                        GenericField("Delay Type", unmanagedData.DelayType);
-                        GenericField("Loops", unmanagedData.Loops);
-                        GenericField("Loop Type", unmanagedData.LoopType);
+                        GenericField("Duration", parameters.Duration);
+                        GenericField("Delay", parameters.Delay);
+                        GenericField("Delay Type", parameters.DelayType);
+                        GenericField("Loops", parameters.Loops);
+                        GenericField("Loop Type", parameters.LoopType);
 
                         EditorGUILayout.Space(4);
-                        GenericField("Ease", unmanagedData.Ease);
-                        if (unmanagedData.Ease is Ease.CustomAnimationCurve)
+                        GenericField("Ease", parameters.Ease);
+                        if (parameters.Ease is Ease.CustomAnimationCurve)
                         {
-                            GenericField("Custom Ease Curve", unmanagedData.AnimationCurve);
+                            GenericField("Custom Ease Curve", parameters.AnimationCurve);
                         }
 
                         EditorGUILayout.Space(4);
-                        GenericField("Cancel On Error", managedData.CancelOnError);
-                        GenericField("Skip Values During Delay", managedData.SkipValuesDuringDelay);
+                        GenericField("Cancel On Error", managedDataRef.CancelOnError);
+                        GenericField("Skip Values During Delay", managedDataRef.SkipValuesDuringDelay);
 
                         EditorGUILayout.Space(4);
-                        GenericField("State[0]", managedData.State0);
-                        GenericField("State[1]", managedData.State1);
-                        GenericField("State[2]", managedData.State2);
+                        GenericField("State[0]", managedDataRef.State0);
+                        GenericField("State[1]", managedDataRef.State1);
+                        GenericField("State[2]", managedDataRef.State2);
                     }
 
                     using (new EditorGUILayout.VerticalScope(GUI.skin.box))
@@ -202,12 +204,12 @@ namespace LitMotion.Editor
                         EditorGUILayout.LabelField("Status", EditorStyles.boldLabel);
                         EditorGUILayout.Space(1);
 
-                        EditorGUILayout.LabelField("Status", unmanagedData.Status.ToString());
-                        GenericField("Time", unmanagedData.Time);
-                        GenericField("Completed Loops", unmanagedData.ComplpetedLoops);
+                        EditorGUILayout.LabelField("Status", state.Status.ToString());
+                        GenericField("Time", state.Time);
+                        GenericField("Completed Loops", state.CompletedLoops);
                         EditorGUILayout.Space(4);
-                        GenericField("Playback Speed", unmanagedData.PlaybackSpeed);
-                        GenericField("Is Preserved", unmanagedData.IsPreserved);
+                        GenericField("Playback Speed", state.PlaybackSpeed);
+                        GenericField("Is Preserved", state.IsPreserved);
                     }
                 }
             }
