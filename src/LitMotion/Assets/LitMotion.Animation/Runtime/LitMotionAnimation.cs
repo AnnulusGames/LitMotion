@@ -37,14 +37,18 @@ namespace LitMotion.Animation
                 try
                 {
                     var handle = queuedComponent.Play();
-                    if (handle.IsActive())
+                    var isActive = handle.IsActive();
+
+                    if (isActive)
                     {
                         handle.Preserve();
                         MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
-                        queuedComponent.TrackedHandle = handle;
-                        playingComponents.Add(queuedComponent);
                     }
-                    else
+
+                    queuedComponent.TrackedHandle = handle;
+                    playingComponents.Add(queuedComponent);
+
+                    if (!isActive)
                     {
                         MoveNextMotion();
                     }
@@ -100,8 +104,9 @@ namespace LitMotion.Animation
                             if (handle.IsActive())
                             {
                                 handle.Preserve();
-                                playingComponents.Add(component);
                             }
+
+                            playingComponents.Add(component);
                         }
                         catch (Exception ex)
                         {

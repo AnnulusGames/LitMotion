@@ -30,12 +30,30 @@ namespace LitMotion.Animation.Components
         public override MotionHandle Play()
         {
             onPlay.Invoke();
-            return MotionHandle.None;
+            return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
         }
 
         public override void Stop()
         {
             onStop.Invoke();
+        }
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Control/Play LitMotion Animation")]
+    public sealed class PlayLitMotionAnimationComponent : LitMotionAnimationComponent
+    {
+        [SerializeField] LitMotionAnimation target;
+
+        public override MotionHandle Play()
+        {
+            target.Play();
+            return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
+        }
+
+        public override void Stop()
+        {
+            target.Stop();
         }
     }
 }
