@@ -3,14 +3,15 @@ using UnityEngine;
 
 namespace LitMotion.Tests.Runtime
 {
-    public class BindOnScheduleTest
+    public class ImmediateBindTest
     {
         [Test]
-        public void Test_BindOnSchedule()
+        public void Test_ImmediateBind()
         {
             var value = 0f;
 
             var motion = LMotion.Create(1f, 0f, 1f)
+                .WithImmediateBind(false)
                 .Bind(x => value = x);
 
             motion.Cancel();
@@ -20,7 +21,7 @@ namespace LitMotion.Tests.Runtime
             value = 0f;
 
             motion = LMotion.Create(1f, 0f, 1f)
-                .WithBindOnSchedule()
+                .WithImmediateBind()
                 .Bind(x => value = x);
 
             motion.Cancel();
@@ -29,14 +30,14 @@ namespace LitMotion.Tests.Runtime
         }
 
         [Test]
-        public void Test_BindOnSchedule_AnimationCurve()
+        public void Test_ImmediateBind_AnimationCurve()
         {
             var curve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
 
             var value = 0f;
             var motion = LMotion.Create(0f, 1f, 1f)
                 .WithEase(curve)
-                .WithBindOnSchedule()
+                .WithImmediateBind()
                 .Bind(x => value = x);
 
             motion.Cancel();

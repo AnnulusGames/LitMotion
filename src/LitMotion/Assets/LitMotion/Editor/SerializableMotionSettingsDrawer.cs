@@ -109,7 +109,7 @@ namespace LitMotion.Editor
                     group.style.marginLeft = 15f;
                     AddPropertyField(group, property, "cancelOnError");
                     AddPropertyField(group, property, "skipValuesDuringDelay");
-                    AddPropertyField(group, property, "bindOnSchedule");
+                    AddPropertyField(group, property, "immediateBind");
                     group.Add(new PropertyField(property.FindPropertyRelative("schedulerType"), "Scheduler"));
                 });
             });

@@ -101,7 +101,7 @@ namespace LitMotion
             buffer.LoopType = settings.LoopType;
             buffer.CancelOnError = settings.CancelOnError;
             buffer.SkipValuesDuringDelay = settings.SkipValuesDuringDelay;
-            buffer.BindOnSchedule = settings.BindOnSchedule;
+            buffer.ImmediateBind = settings.ImmediateBind;
             buffer.Scheduler = settings.Scheduler;
             return new MotionBuilder<TValue, TOptions, TAdapter>(buffer);
         }

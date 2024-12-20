@@ -33,7 +33,7 @@ namespace LitMotion
         public static void Return(MotionBuilderBuffer<TValue, TOptions> buffer)
         {
             buffer.Version++;
-            buffer.BindOnSchedule = false;
+            buffer.ImmediateBind = true;
 
             buffer.StartValue = default;
             buffer.EndValue = default;
@@ -87,7 +87,7 @@ namespace LitMotion
         public LoopType LoopType;
         public bool CancelOnError;
         public bool SkipValuesDuringDelay;
-        public bool BindOnSchedule;
+        public bool ImmediateBind = true;
 
         public object State0;
         public object State1;
@@ -251,15 +251,15 @@ namespace LitMotion
         }
 
         /// <summary>
-        /// Bind values when scheduling the motion.
+        /// Bind values ​​immediately when scheduling the motion.
         /// </summary>
-        /// <param name="bindOnSchedule">Whether to bind on sheduling</param>
+        /// <param name="immediateBind">Whether to bind on sheduling</param>
         /// <returns>This builder to allow chaining multiple method calls.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithBindOnSchedule(bool bindOnSchedule = true)
+        public readonly MotionBuilder<TValue, TOptions, TAdapter> WithImmediateBind(bool immediateBind = true)
         {
             CheckBuffer();
-            buffer.BindOnSchedule = bindOnSchedule;
+            buffer.ImmediateBind = immediateBind;
             return this;
         }
 
@@ -394,7 +394,7 @@ namespace LitMotion
                 LoopType = buffer.LoopType,
                 CancelOnError = buffer.CancelOnError,
                 SkipValuesDuringDelay = buffer.SkipValuesDuringDelay,
-                BindOnSchedule = buffer.BindOnSchedule,
+                ImmediateBind = buffer.ImmediateBind,
                 Scheduler = buffer.Scheduler,
             };
         }

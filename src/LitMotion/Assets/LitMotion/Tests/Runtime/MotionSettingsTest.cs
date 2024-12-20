@@ -16,7 +16,7 @@ namespace LitMotion.Tests.Runtime
                 StartValue = 0f,
                 EndValue = 1f,
                 Duration = 1f,
-                BindOnSchedule = true,
+                ImmediateBind = true,
             };
 
             var x = -1f;
