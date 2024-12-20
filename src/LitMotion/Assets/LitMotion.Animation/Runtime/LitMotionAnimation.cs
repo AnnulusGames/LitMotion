@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using LitMotion.Animation.Components;
 using LitMotion.Collections;
 using UnityEngine;
 
@@ -100,7 +99,7 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Stop()
+        public void Pause()
         {
             foreach (var component in playingComponents.AsSpan())
             {
@@ -109,7 +108,7 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Reset()
+        public void Stop()
         {
             var span = playingComponents.AsSpan();
             span.Reverse();
@@ -122,6 +121,12 @@ namespace LitMotion.Animation
 
             playingComponents.Clear();
             queue.Clear();
+        }
+
+        public void Restart()
+        {
+            Stop();
+            Play();
         }
 
         public bool IsPlaying
@@ -142,7 +147,7 @@ namespace LitMotion.Animation
 
         void OnDestroy()
         {
-            Reset();
+            Stop();
         }
     }
 }
