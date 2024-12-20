@@ -60,7 +60,7 @@ namespace LitMotion.Animation.Editor
             };
             root.Add(foldout);
             foldout.Add(new VisualElement() { style = { height = 5f } });
-            var foldoutCheck = foldout.Q("unity-checkmark");
+            var foldoutCheck = foldout.Q(className: Foldout.checkmarkUssClassName);
             icon = new VisualElement
             {
                 style = {
@@ -74,12 +74,18 @@ namespace LitMotion.Animation.Editor
             foldoutCheck.parent.Add(icon);
             enabledToggle = new Toggle
             {
-                toggleOnLabelClick = false,
                 style = {
                     unityFontStyleAndWeight = FontStyle.Bold,
                 }
             };
-            enabledToggle.Q("unity-checkmark").style.marginRight = 6f;
+            enabledToggle.Q(className: Toggle.checkmarkUssClassName).style.marginRight = 6f;
+            enabledToggle.schedule.Execute(() =>
+            {
+                enabledToggle.pickingMode = PickingMode.Ignore;
+                enabledToggle.Q(className: Toggle.inputUssClassName).pickingMode = PickingMode.Ignore;
+                enabledToggle.Q(className: Toggle.textUssClassName).pickingMode = PickingMode.Ignore;
+                enabledToggle.Q(className: Toggle.checkmarkUssClassName).pickingMode = PickingMode.Position;
+            });
             foldoutCheck.parent.Add(enabledToggle);
 
             progressBar = new ProgressBar
@@ -96,12 +102,12 @@ namespace LitMotion.Animation.Editor
                     alignSelf = Align.Stretch,
                 }
             };
-            var background = progressBar.Q(null, "unity-progress-bar__background");
+            var background = progressBar.Q(className: AbstractProgressBar.backgroundUssClassName);
             background.style.borderTopWidth = 0f;
             background.style.borderBottomWidth = 0f;
             background.style.borderLeftWidth = 0f;
             background.style.borderRightWidth = 0f;
-            var progress = progressBar.Q(null, "unity-progress-bar__progress");
+            var progress = progressBar.Q(className: AbstractProgressBar.progressUssClassName);
             progress.style.backgroundColor = Color.white;
             progress.style.minWidth = 0f;
             progressBar.schedule.Execute(() => progress.style.display = progressBar.value > progressBar.lowValue ? DisplayStyle.Flex : DisplayStyle.None).Every(10);
