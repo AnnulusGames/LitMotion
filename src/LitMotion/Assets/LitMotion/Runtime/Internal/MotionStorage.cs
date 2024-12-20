@@ -338,40 +338,12 @@ namespace LitMotion
                 return 4;
             }
 
+            dataRef.Complete<TAdapter>(out var result);
+
             ref var managedData = ref managedDataArray[slot.DenseIndex];
-
-            state.Status = MotionStatus.Completed;
-            state.Time = parameters.TotalDuration;
-            state.CompletedLoops = (ushort)parameters.Loops;
-
-            var endProgress = parameters.LoopType switch
-            {
-                LoopType.Restart => 1f,
-                LoopType.Flip or LoopType.Yoyo => parameters.Loops % 2 == 0 ? 0f : 1f,
-                LoopType.Incremental => parameters.Loops,
-                _ => 1f
-            };
-
-            var easedEndProgress = parameters.Ease switch
-            {
-                Ease.CustomAnimationCurve => parameters.AnimationCurve.Evaluate(endProgress),
-                _ => EaseUtility.Evaluate(endProgress, parameters.Ease),
-            };
-
             try
             {
-                var endValue = default(TAdapter).Evaluate(
-                    ref dataRef.StartValue,
-                    ref dataRef.EndValue,
-                    ref dataRef.Options,
-                    new()
-                    {
-                        Progress = easedEndProgress,
-                        Time = state.Time,
-                    }
-                );
-
-                managedData.UpdateUnsafe(endValue);
+                managedData.UpdateUnsafe(result);
             }
             catch (Exception ex)
             {

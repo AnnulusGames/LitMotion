@@ -173,6 +173,22 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Complete(out float progress)
+        {
+            State.Status = MotionStatus.Completed;
+            State.Time = Parameters.TotalDuration;
+            State.CompletedLoops = (ushort)Parameters.Loops;
+
+            progress = GetEasedValue(Parameters.LoopType switch
+            {
+                LoopType.Restart => 1f,
+                LoopType.Flip or LoopType.Yoyo => Parameters.Loops % 2 == 0 ? 0f : 1f,
+                LoopType.Incremental => Parameters.Loops,
+                _ => 1f
+            });
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         readonly int GetClampedCompletedLoops(int completedLoops)
         {
             return Parameters.Loops < 0
@@ -218,6 +234,24 @@ namespace LitMotion
                 Progress = progress,
                 Time = time,
             });
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Complete<TAdapter>(out TValue result)
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            Core.Complete(out var progress);
+
+            result = default(TAdapter).Evaluate(
+                ref StartValue,
+                ref EndValue,
+                ref Options,
+                new()
+                {
+                    Progress = progress,
+                    Time = Core.State.Time,
+                }
+            );
         }
     }
 }
