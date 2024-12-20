@@ -42,7 +42,7 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle.ToUniTask(MotionCancelBehavior.Complete, source.Token);
+                await handle.ToUniTask(CancelBehavior.Complete, source.Token);
             }
             catch (OperationCanceledException)
             {
@@ -69,7 +69,7 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle.ToUniTask(MotionCancelBehavior.Cancel, source.Token);
+                await handle.ToUniTask(CancelBehavior.Cancel, source.Token);
             }
             catch (OperationCanceledException)
             {
@@ -136,7 +136,7 @@ namespace LitMotion.Tests.Runtime
             DelayedCall(0.2f, () => handle.Cancel()).Forget();
             try
             {
-                await handle.ToUniTask(MotionCancelBehavior.Cancel, false);
+                await handle.ToUniTask(CancelBehavior.Cancel, false);
             }
             catch (OperationCanceledException)
             {
