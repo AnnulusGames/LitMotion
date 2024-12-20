@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using LitMotion.Animation.Components;
 using LitMotion.Collections;
 using UnityEngine;
 
@@ -37,10 +36,22 @@ namespace LitMotion.Animation
             {
                 try
                 {
-                    var handle = queuedComponent.Play().Preserve();
-                    MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
+                    var handle = queuedComponent.Play();
+                    var isActive = handle.IsActive();
+
+                    if (isActive)
+                    {
+                        handle.Preserve();
+                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
+                    }
+
                     queuedComponent.TrackedHandle = handle;
                     playingComponents.Add(queuedComponent);
+
+                    if (!isActive)
+                    {
+                        MoveNextMotion();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -87,8 +98,14 @@ namespace LitMotion.Animation
 
                         try
                         {
-                            var handle = component.Play().Preserve();
+                            var handle = component.Play();
                             component.TrackedHandle = handle;
+
+                            if (handle.IsActive())
+                            {
+                                handle.Preserve();
+                            }
+
                             playingComponents.Add(component);
                         }
                         catch (Exception ex)
@@ -100,7 +117,7 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Stop()
+        public void Pause()
         {
             foreach (var component in playingComponents.AsSpan())
             {
@@ -109,7 +126,7 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Reset()
+        public void Stop()
         {
             var span = playingComponents.AsSpan();
             span.Reverse();
@@ -117,11 +134,18 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.Revert();
+                component.Stop();
+                component.TrackedHandle = handle;
             }
 
             playingComponents.Clear();
             queue.Clear();
+        }
+
+        public void Restart()
+        {
+            Stop();
+            Play();
         }
 
         public bool IsPlaying
@@ -142,7 +166,7 @@ namespace LitMotion.Animation
 
         void OnDestroy()
         {
-            Reset();
+            Stop();
         }
     }
 }

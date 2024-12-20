@@ -50,7 +50,7 @@ namespace LitMotion.Animation.Editor
         {
             if (!EditorApplication.isPlayingOrWillChangePlaymode && target != null)
             {
-                ((LitMotionAnimation)target).Reset();
+                ((LitMotionAnimation)target).Stop();
             }
 
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
@@ -60,7 +60,7 @@ namespace LitMotion.Animation.Editor
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
-                ((LitMotionAnimation)target).Reset();
+                ((LitMotionAnimation)target).Stop();
             }
         }
 
@@ -199,26 +199,21 @@ namespace LitMotion.Animation.Editor
                     flexGrow = 1f,
                 }
             };
-            var restartButton = new Button(() =>
-            {
-                var animation = (LitMotionAnimation)target;
-                animation.Reset();
-                animation.Play();
-            })
+            var restartButton = new Button(() => ((LitMotionAnimation)target).Restart())
             {
                 text = "Restart",
                 style = {
                     flexGrow = 1f,
                 }
             };
-            var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
+            var stopButton = new Button(() => ((LitMotionAnimation)target).Pause())
             {
                 text = "Pause",
                 style = {
                     flexGrow = 1f,
                 }
             };
-            var resetButton = new Button(() => ((LitMotionAnimation)target).Reset())
+            var resetButton = new Button(() => ((LitMotionAnimation)target).Stop())
             {
                 text = "Stop",
                 style = {
