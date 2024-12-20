@@ -8,6 +8,11 @@ namespace LitMotion
     public struct MotionHandle : IEquatable<MotionHandle>
     {
         /// <summary>
+        /// Represents an empty MotionHandle. This is the same as default(MotionHandle).
+        /// </summary>
+        public static readonly MotionHandle None = default;
+
+        /// <summary>
         /// The ID of motion storage.
         /// </summary>
         public int StorageId;
