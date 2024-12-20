@@ -135,7 +135,7 @@ namespace LitMotion
             managedDataRef.DebugName = buffer.DebugName;
 #endif
 
-            if (buffer.BindOnSchedule && buffer.UpdateAction != null)
+            if (buffer.ImmediateBind && buffer.UpdateAction != null)
             {
                 managedDataRef.UpdateUnsafe(
                     default(TAdapter).Evaluate(

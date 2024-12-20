@@ -83,10 +83,10 @@ namespace LitMotion
             init => skipValuesDuringDelay = value;
         }
 
-        public bool BindOnSchedule
+        public bool ImmediateBind
         {
-            get => bindOnSchedule;
-            init => bindOnSchedule = value;
+            get => immediateBind;
+            init => immediateBind = value;
         }
 
         public IMotionScheduler Scheduler
@@ -107,7 +107,7 @@ namespace LitMotion
         [SerializeField] LoopType loopType;
         [SerializeField] bool cancelOnError;
         [SerializeField] bool skipValuesDuringDelay;
-        [SerializeField] bool bindOnSchedule;
+        [SerializeField] bool immediateBind;
 
         internal IMotionScheduler scheduler;
     }
