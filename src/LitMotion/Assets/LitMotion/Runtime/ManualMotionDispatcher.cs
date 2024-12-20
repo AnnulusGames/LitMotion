@@ -3,29 +3,29 @@ using System.Collections.Generic;
 
 namespace LitMotion
 {
+    internal sealed class ManualMotionDispatcherScheduler : IMotionScheduler
+    {
+        readonly ManualMotionDispatcher dispatcher;
+
+        public ManualMotionDispatcherScheduler(ManualMotionDispatcher dispatcher)
+        {
+            this.dispatcher = dispatcher;
+        }
+
+        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            return dispatcher.GetOrCreateRunner<TValue, TOptions, TAdapter>().Storage.Create(ref builder);
+        }
+    }
+
     /// <summary>
     /// Manually updatable MotionDispatcher
     /// </summary>
     public sealed class ManualMotionDispatcher
     {
-        sealed class DispatcherScheduler : IMotionScheduler
-        {
-            readonly ManualMotionDispatcher dispatcher;
-
-            public DispatcherScheduler(ManualMotionDispatcher dispatcher)
-            {
-                this.dispatcher = dispatcher;
-            }
-
-            public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
-                where TValue : unmanaged
-                where TOptions : unmanaged, IMotionOptions
-                where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
-            {
-                return dispatcher.GetOrCreateRunner<TValue, TOptions, TAdapter>().Storage.Create(ref builder);
-            }
-        }
-
         /// <summary>
         /// Default ManualMotionDispatcher
         /// </summary>
@@ -36,7 +36,7 @@ namespace LitMotion
         /// </summary>
         public IMotionScheduler Scheduler => scheduler;
 
-        readonly DispatcherScheduler scheduler;
+        readonly ManualMotionDispatcherScheduler scheduler;
         readonly Dictionary<Type, IUpdateRunner> runners = new();
 
         public ManualMotionDispatcher()
@@ -98,7 +98,7 @@ namespace LitMotion
             time = 0;
         }
 
-        UpdateRunner<TValue, TOptions, TAdapter> GetOrCreateRunner<TValue, TOptions, TAdapter>()
+        internal UpdateRunner<TValue, TOptions, TAdapter> GetOrCreateRunner<TValue, TOptions, TAdapter>()
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
