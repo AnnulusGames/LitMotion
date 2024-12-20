@@ -116,7 +116,7 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.Revert();
+                component.Stop();
             }
 
             playingComponents.Clear();

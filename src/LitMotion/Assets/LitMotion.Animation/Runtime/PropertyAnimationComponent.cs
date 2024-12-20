@@ -17,7 +17,7 @@ namespace LitMotion.Animation
 
         TValue startValue;
 
-        public sealed override void Revert()
+        public sealed override void Stop()
         {
             if (target == null) return;
             SetValue(target, startValue);

@@ -16,7 +16,7 @@ namespace LitMotion.Animation.Components
                 .RunWithoutBinding();
         }
 
-        public override void Revert() { }
+        public override void Stop() { }
     }
 
     [Serializable]
@@ -25,18 +25,17 @@ namespace LitMotion.Animation.Components
     {
         [Space(5f)]
         [SerializeField] UnityEvent onPlay;
-        [SerializeField] UnityEvent onRevert;
+        [SerializeField] UnityEvent onStop;
 
         public override MotionHandle Play()
         {
             onPlay.Invoke();
-            return LMotion.Create(0f, 1f, 0f)
-                .RunWithoutBinding();
+            return MotionHandle.None;
         }
 
-        public override void Revert()
+        public override void Stop()
         {
-            onRevert.Invoke();
+            onStop.Invoke();
         }
     }
 }
