@@ -15,7 +15,6 @@ namespace LitMotion.Editor
             var foldout = new Foldout()
             {
                 text = property.displayName,
-                toggleOnLabelClick = true
             };
 
             foldout.BindProperty(property);
@@ -131,7 +130,6 @@ namespace LitMotion.Editor
             {
                 text = label,
                 style = { marginBottom = 3f },
-                toggleOnLabelClick = true
             };
             group.BindProperty(property);
             configure(group);

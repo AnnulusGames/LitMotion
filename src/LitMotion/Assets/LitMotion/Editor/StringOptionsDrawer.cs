@@ -13,7 +13,6 @@ namespace LitMotion.Editor
             var foldout = new Foldout
             {
                 text = property.displayName,
-                toggleOnLabelClick = true,
             };
             foldout.BindProperty(property);
 
