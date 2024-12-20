@@ -108,7 +108,7 @@ namespace LitMotion.Tests.Runtime
 
             try
             {
-                await handle.ToAwaitable(MotionCancelBehavior.Cancel, false);
+                await handle.ToAwaitable(CancelBehavior.Cancel, false);
             }
             catch (OperationCanceledException)
             {

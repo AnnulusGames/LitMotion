@@ -44,7 +44,7 @@ namespace LitMotion
 
         AwaitableMotionTaskSource() : base() { }
 
-        public static AwaitableMotionTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
+        public static AwaitableMotionTaskSource Create(MotionHandle motionHandle, CancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {

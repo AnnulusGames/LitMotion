@@ -15,7 +15,7 @@ namespace LitMotion
         readonly Action onCompleteCallbackDelegate;
 
         MotionHandle motionHandle;
-        MotionCancelBehavior cancelBehavior;
+        CancelBehavior cancelBehavior;
         bool cancelAwaitOnMotionCanceled;
         CancellationToken cancellationToken;
         CancellationTokenRegistration cancellationRegistration;
@@ -54,20 +54,20 @@ namespace LitMotion
             }
         }
 
-        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior)
+        protected static void OnCanceledTokenReceived(MotionHandle motionHandle, CancelBehavior cancelBehavior)
         {
             switch (cancelBehavior)
             {
-                case MotionCancelBehavior.Cancel:
+                case CancelBehavior.Cancel:
                     motionHandle.Cancel();
                     break;
-                case MotionCancelBehavior.Complete:
+                case CancelBehavior.Complete:
                     motionHandle.Complete();
                     break;
             }
         }
 
-        protected void Initialize(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
+        protected void Initialize(MotionHandle motionHandle, CancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             this.motionHandle = motionHandle;
             this.cancelBehavior = cancelBehavior;
@@ -102,10 +102,10 @@ namespace LitMotion
                     {
                         default:
                             break;
-                        case MotionCancelBehavior.Cancel:
+                        case CancelBehavior.Cancel:
                             source.motionHandle.Cancel();
                             break;
-                        case MotionCancelBehavior.Complete:
+                        case CancelBehavior.Complete:
                             source.motionHandle.Complete();
                             break;
                     }
