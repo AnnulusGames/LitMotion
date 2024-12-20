@@ -104,7 +104,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             var key = typeof((TValue, TOptions, TAdapter));
-            if (runners.TryGetValue(key, out var runner))
+            if (!runners.TryGetValue(key, out var runner))
             {
                 var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionManager.MotionTypeCount);
                 MotionManager.Register(storage);
