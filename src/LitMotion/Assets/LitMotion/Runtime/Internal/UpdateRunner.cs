@@ -7,6 +7,7 @@ namespace LitMotion
 {
     internal interface IUpdateRunner
     {
+        IMotionStorage Storage { get; }
         public void Update(double time, double unscaledTime, double realtime);
         public void Reset();
     }
@@ -29,6 +30,9 @@ namespace LitMotion
         double prevTime;
         double prevUnscaledTime;
         double prevRealtime;
+
+        public MotionStorage<TValue, TOptions, TAdapter> Storage => storage;
+        IMotionStorage IUpdateRunner.Storage => storage;
 
         public unsafe void Update(double time, double unscaledTime, double realtime)
         {
@@ -107,6 +111,16 @@ namespace LitMotion
             prevUnscaledTime = 0;
             prevRealtime = 0;
             storage.Reset();
+        }
+
+        void IUpdateRunner.Update(double time, double unscaledTime, double realtime)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IUpdateRunner.Reset()
+        {
+            throw new NotImplementedException();
         }
     }
 }
