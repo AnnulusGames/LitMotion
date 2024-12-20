@@ -112,15 +112,5 @@ namespace LitMotion
             prevRealtime = 0;
             storage.Reset();
         }
-
-        void IUpdateRunner.Update(double time, double unscaledTime, double realtime)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IUpdateRunner.Reset()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
