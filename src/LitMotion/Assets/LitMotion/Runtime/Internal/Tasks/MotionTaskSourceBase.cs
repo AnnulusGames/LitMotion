@@ -3,9 +3,9 @@ using System.Threading;
 
 namespace LitMotion
 {
-    internal abstract class MotionConfiguredSourceBase
+    internal abstract class MotionTaskSourceBase
     {
-        public MotionConfiguredSourceBase()
+        public MotionTaskSourceBase()
         {
             onCancelCallbackDelegate = OnCancelCallbackDelegate;
             onCompleteCallbackDelegate = OnCompleteCallbackDelegate;
@@ -93,7 +93,7 @@ namespace LitMotion
             {
                 cancellationRegistration = RegisterWithoutCaptureExecutionContext(cancellationToken, static x =>
                 {
-                    var source = (MotionConfiguredSourceBase)x;
+                    var source = (MotionTaskSourceBase)x;
                     if (!source.motionHandle.IsActive()) return;
 
                     source.RestoreOriginalCallback(false);

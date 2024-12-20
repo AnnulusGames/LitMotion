@@ -6,9 +6,9 @@ namespace LitMotion
 {
     // TODO: use object pool
 
-    internal sealed class AwaitableMotionConfiguredSource : MotionConfiguredSourceBase
+    internal sealed class AwaitableMotionTaskSource : MotionTaskSourceBase
     {
-        public static AwaitableMotionConfiguredSource CompletedSource
+        public static AwaitableMotionTaskSource CompletedSource
         {
             get
             {
@@ -21,9 +21,9 @@ namespace LitMotion
                 return completedSource;
             }
         }
-        static AwaitableMotionConfiguredSource completedSource;
+        static AwaitableMotionTaskSource completedSource;
 
-        public static AwaitableMotionConfiguredSource CanceledSource
+        public static AwaitableMotionTaskSource CanceledSource
         {
             get
             {
@@ -36,15 +36,15 @@ namespace LitMotion
                 return canceledSource;
             }
         }
-        static AwaitableMotionConfiguredSource canceledSource;
+        static AwaitableMotionTaskSource canceledSource;
 
         readonly AwaitableCompletionSource core = new();
 
         public Awaitable Awaitable => core.Awaitable;
 
-        AwaitableMotionConfiguredSource() : base() { }
+        AwaitableMotionTaskSource() : base() { }
 
-        public static AwaitableMotionConfiguredSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
+        public static AwaitableMotionTaskSource Create(MotionHandle motionHandle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -52,7 +52,7 @@ namespace LitMotion
                 return CanceledSource;
             }
 
-            var result = new AwaitableMotionConfiguredSource();
+            var result = new AwaitableMotionTaskSource();
             result.Initialize(motionHandle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken);
             return result;
         }

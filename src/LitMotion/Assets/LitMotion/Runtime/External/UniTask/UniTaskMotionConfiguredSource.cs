@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace LitMotion
 {
-    internal sealed class UniTaskMotionConfiguredSource : MotionConfiguredSourceBase, IUniTaskSource, ITaskPoolNode<UniTaskMotionConfiguredSource>
+    internal sealed class UniTaskMotionConfiguredSource : MotionTaskSourceBase, IUniTaskSource, ITaskPoolNode<UniTaskMotionConfiguredSource>
     {
         static UniTaskMotionConfiguredSource()
         {

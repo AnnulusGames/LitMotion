@@ -228,7 +228,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -242,7 +242,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, MotionCancelBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, cancelBehavior, true, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -257,7 +257,7 @@ namespace LitMotion
         public static ValueTask ToValueTask(this MotionHandle handle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return default;
-            var source = ValueTaskMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
+            var source = ValueTaskMotionTaskSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token);
             return new ValueTask(source, token);
         }
 
@@ -270,8 +270,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, MotionCancelBehavior.Cancel, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
@@ -283,8 +283,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, MotionCancelBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, true, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, cancelBehavior, true, cancellationToken).Awaitable;
         }
 
         /// <summary>
@@ -297,8 +297,8 @@ namespace LitMotion
         /// <returns></returns>
         public static Awaitable ToAwaitable(this MotionHandle handle, MotionCancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
         {
-            if (!handle.IsActive()) return AwaitableMotionConfiguredSource.CompletedSource.Awaitable;
-            return AwaitableMotionConfiguredSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
+            if (!handle.IsActive()) return AwaitableMotionTaskSource.CompletedSource.Awaitable;
+            return AwaitableMotionTaskSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken).Awaitable;
         }
 #endif
 
