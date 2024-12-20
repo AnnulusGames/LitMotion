@@ -342,7 +342,7 @@ namespace LitMotion
 
             state.Status = MotionStatus.Completed;
             state.Time = parameters.TotalDuration;
-            state.ComplpetedLoops = (ushort)parameters.Loops;
+            state.CompletedLoops = (ushort)parameters.Loops;
 
             var endProgress = parameters.LoopType switch
             {
@@ -380,7 +380,7 @@ namespace LitMotion
 
             if (state.WasLoopCompleted)
             {
-                managedData.InvokeOnLoopComplete(state.ComplpetedLoops);
+                managedData.InvokeOnLoopComplete(state.CompletedLoops);
             }
 
             managedData.InvokeOnComplete();
@@ -429,7 +429,7 @@ namespace LitMotion
 
                     if (state.WasLoopCompleted)
                     {
-                        managedData.InvokeOnLoopComplete(state.ComplpetedLoops);
+                        managedData.InvokeOnLoopComplete(state.CompletedLoops);
                     }
 
                     if (status is MotionStatus.Completed && state.WasStatusChanged)

@@ -87,7 +87,7 @@ namespace LitMotion
 
                         if (state.WasLoopCompleted)
                         {
-                            managedData.InvokeOnLoopComplete(state.ComplpetedLoops);
+                            managedData.InvokeOnLoopComplete(state.CompletedLoops);
                         }
 
                         if (status is MotionStatus.Completed && state.WasStatusChanged)

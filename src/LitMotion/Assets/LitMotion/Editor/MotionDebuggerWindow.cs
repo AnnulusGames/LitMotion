@@ -206,7 +206,7 @@ namespace LitMotion.Editor
 
                         EditorGUILayout.LabelField("Status", state.Status.ToString());
                         GenericField("Time", state.Time);
-                        GenericField("Completed Loops", state.ComplpetedLoops);
+                        GenericField("Completed Loops", state.CompletedLoops);
                         EditorGUILayout.Space(4);
                         GenericField("Playback Speed", state.PlaybackSpeed);
                         GenericField("Is Preserved", state.IsPreserved);

@@ -16,14 +16,14 @@ namespace LitMotion
             public bool IsPreserved;
             public bool IsInSequence;
 
-            public ushort ComplpetedLoops;
+            public ushort CompletedLoops;
             public ushort PrevCompletedLoops;
 
             public double Time;
             public float PlaybackSpeed;
 
             public readonly bool WasStatusChanged => Status != PrevStatus;
-            public readonly bool WasLoopCompleted => ComplpetedLoops > PrevCompletedLoops;
+            public readonly bool WasLoopCompleted => CompletedLoops > PrevCompletedLoops;
 
         }
 
@@ -59,7 +59,7 @@ namespace LitMotion
 
         public void Update(double time, out float progress)
         {
-            State.PrevCompletedLoops = State.ComplpetedLoops;
+            State.PrevCompletedLoops = State.CompletedLoops;
             State.PrevStatus = State.Status;
 
             State.Time = time;
@@ -136,7 +136,7 @@ namespace LitMotion
                 }
             }
 
-            State.ComplpetedLoops = (ushort)clampedCompletedLoops;
+            State.CompletedLoops = (ushort)clampedCompletedLoops;
 
             switch (Parameters.LoopType)
             {

@@ -55,7 +55,7 @@ namespace LitMotion
         {
             get
             {
-                return MotionManager.GetDataRef(this).State.ComplpetedLoops;
+                return MotionManager.GetDataRef(this).State.CompletedLoops;
             }
         }
 
