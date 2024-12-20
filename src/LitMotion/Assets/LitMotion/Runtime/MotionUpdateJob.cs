@@ -3,7 +3,6 @@ using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
-using Unity.Mathematics;
 
 namespace LitMotion
 {
@@ -30,14 +29,15 @@ namespace LitMotion
         public void Execute([AssumeRange(0, int.MaxValue)] int index)
         {
             var ptr = DataPtr + index;
-            var corePtr = (MotionDataCore*)ptr;
+            ref var state = ref ptr->Core.State;
+            ref var parameters = ref ptr->Core.Parameters;
 
-            if (Hint.Likely(corePtr->Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing) ||
-                Hint.Unlikely(corePtr->IsPreserved && corePtr->Status is MotionStatus.Completed))
+            if (Hint.Likely(state.Status is MotionStatus.Scheduled or MotionStatus.Delayed or MotionStatus.Playing) ||
+                Hint.Unlikely(state.IsPreserved && state.Status is MotionStatus.Completed))
             {
-                if (Hint.Unlikely(corePtr->IsInSequence)) return;
+                if (Hint.Unlikely(state.IsInSequence)) return;
 
-                var deltaTime = corePtr->TimeKind switch
+                var deltaTime = parameters.TimeKind switch
                 {
                     MotionTimeKind.Time => DeltaTime,
                     MotionTimeKind.UnscaledTime => UnscaledDeltaTime,
@@ -45,16 +45,14 @@ namespace LitMotion
                     _ => default
                 };
 
-                var time = corePtr->Time + deltaTime * corePtr->PlaybackSpeed;
-
-                MotionHelper.Update<TValue, TOptions, TAdapter>(ptr, time, out var result);
-
+                var time = state.Time + deltaTime * state.PlaybackSpeed;
+                ptr->Update<TAdapter>(time, out var result);
                 Output[index] = result;
             }
-            else if ((!corePtr->IsPreserved && corePtr->Status is MotionStatus.Completed) || corePtr->Status is MotionStatus.Canceled)
+            else if ((!state.IsPreserved && state.Status is MotionStatus.Completed) || state.Status is MotionStatus.Canceled)
             {
                 CompletedIndexList.AddNoResize(index);
-                corePtr->Status = MotionStatus.Disposed;
+                state.Status = MotionStatus.Disposed;
             }
         }
     }

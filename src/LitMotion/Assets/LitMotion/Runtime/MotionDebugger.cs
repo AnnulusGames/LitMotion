@@ -27,7 +27,7 @@ namespace LitMotion
 
             if (EnableStackTrace) state.StackTrace = new StackTrace(skipFrames, true);
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, MotionStoragePermission.Admin);
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, false);
             state.OriginalOnCompleteCallback = managedData.OnCompleteAction;
             managedData.OnCompleteAction = state.OnCompleteDelegate;
             state.OriginalOnCancelCallback = managedData.OnCancelAction;
@@ -84,7 +84,7 @@ namespace LitMotion
                     MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                 }
 
-                if (Handle.IsActive() && !MotionManager.GetDataRef(Handle, MotionStoragePermission.Admin).IsPreserved)
+                if (Handle.IsActive() && !MotionManager.GetDataRef(Handle, false).State.IsPreserved)
                 {
                     Release();
                 }

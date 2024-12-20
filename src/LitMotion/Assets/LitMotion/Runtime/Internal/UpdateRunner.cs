@@ -63,10 +63,11 @@ namespace LitMotion
                 for (int i = 0; i < managedDataSpan.Length; i++)
                 {
                     var currentDataPtr = dataPtr + i;
+                    ref var state = ref currentDataPtr->Core.State;
 
-                    if (currentDataPtr->Core.IsInSequence) continue;
+                    if (state.IsInSequence) continue;
 
-                    var status = currentDataPtr->Core.Status;
+                    var status = state.Status;
                     ref var managedData = ref managedDataSpan[i];
                     if (status is MotionStatus.Playing or MotionStatus.Completed || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                     {
@@ -79,17 +80,17 @@ namespace LitMotion
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
                             if (managedData.CancelOnError)
                             {
-                                currentDataPtr->Core.Status = MotionStatus.Canceled;
+                                state.Status = MotionStatus.Canceled;
                                 managedData.OnCancelAction?.Invoke();
                             }
                         }
 
-                        if (currentDataPtr->Core.WasLoopCompleted)
+                        if (state.WasLoopCompleted)
                         {
-                            managedData.InvokeOnLoopComplete(currentDataPtr->Core.ComplpetedLoops);
+                            managedData.InvokeOnLoopComplete(state.ComplpetedLoops);
                         }
 
-                        if (status is MotionStatus.Completed && currentDataPtr->Core.WasStatusChanged)
+                        if (status is MotionStatus.Completed && state.WasStatusChanged)
                         {
                             managedData.InvokeOnComplete();
                         }

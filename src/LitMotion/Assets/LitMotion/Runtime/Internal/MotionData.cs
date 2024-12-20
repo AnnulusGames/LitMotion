@@ -1,39 +1,194 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LitMotion.Collections;
+using Unity.Burst.CompilerServices;
+using Unity.Mathematics;
 
 namespace LitMotion
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct MotionDataCore
+    public struct MotionData
     {
-        // state
-        public MotionStatus Status;
-        public MotionStatus PrevStatus;
-        public bool IsPreserved;
-        public bool IsInSequence;
+        public struct MotionState
+        {
+            public MotionStatus Status;
+            public MotionStatus PrevStatus;
+            public bool IsPreserved;
+            public bool IsInSequence;
 
-        public ushort ComplpetedLoops;
-        public ushort PrevCompletedLoops;
+            public ushort ComplpetedLoops;
+            public ushort PrevCompletedLoops;
 
-        public double Time;
-        public float PlaybackSpeed;
+            public double Time;
+            public float PlaybackSpeed;
 
-        // parameters
-        public float Duration;
-        public Ease Ease;
+            public readonly bool WasStatusChanged => Status != PrevStatus;
+            public readonly bool WasLoopCompleted => ComplpetedLoops > PrevCompletedLoops;
+
+        }
+
+        public struct MotionParameters
+        {
+            public float Duration;
+            public Ease Ease;
 #if LITMOTION_COLLECTIONS_2_0_OR_NEWER
-        public NativeAnimationCurve AnimationCurve;
+            public NativeAnimationCurve AnimationCurve;
 #else
-        public UnsafeAnimationCurve AnimationCurve;
+            public UnsafeAnimationCurve AnimationCurve;
 #endif
-        public MotionTimeKind TimeKind;
-        public float Delay;
-        public int Loops;
-        public DelayType DelayType;
-        public LoopType LoopType;
+            public MotionTimeKind TimeKind;
+            public float Delay;
+            public int Loops;
+            public DelayType DelayType;
+            public LoopType LoopType;
 
-        public readonly bool WasStatusChanged => Status != PrevStatus;
-        public readonly bool WasLoopCompleted => ComplpetedLoops > PrevCompletedLoops;
+            public readonly double TotalDuration
+            {
+                get
+                {
+                    if (Loops < 0) return double.PositiveInfinity;
+                    return Delay * (DelayType == DelayType.EveryLoop ? Loops : 1) + Duration * Loops;
+                }
+            }
+        }
+
+        public MotionState State;
+        public MotionParameters Parameters;
+
+        public readonly double TimeSinceStart => State.Time - Parameters.Delay;
+
+        public void Update(double time, out float progress)
+        {
+            State.PrevCompletedLoops = State.ComplpetedLoops;
+            State.PrevStatus = State.Status;
+
+            State.Time = time;
+            time = math.max(time, 0.0);
+
+            double t;
+            bool isCompleted;
+            bool isDelayed;
+            int completedLoops;
+            int clampedCompletedLoops;
+
+            if (Hint.Unlikely(Parameters.Duration <= 0f))
+            {
+                if (Parameters.DelayType == DelayType.FirstLoop || Parameters.Delay == 0f)
+                {
+                    isCompleted = Parameters.Loops >= 0 && TimeSinceStart > 0f;
+                    if (isCompleted)
+                    {
+                        t = 1f;
+                        completedLoops = Parameters.Loops;
+                    }
+                    else
+                    {
+                        t = 0f;
+                        completedLoops = TimeSinceStart < 0f ? -1 : 0;
+                    }
+                    clampedCompletedLoops = GetClampedCompletedLoops(completedLoops);
+                    isDelayed = TimeSinceStart < 0;
+                }
+                else
+                {
+                    completedLoops = (int)math.floor(time / Parameters.Delay);
+                    clampedCompletedLoops = GetClampedCompletedLoops(completedLoops);
+                    isCompleted = Parameters.Loops >= 0 && clampedCompletedLoops > Parameters.Loops - 1;
+                    isDelayed = !isCompleted;
+                    t = isCompleted ? 1f : 0f;
+                }
+            }
+            else
+            {
+                if (Parameters.DelayType == DelayType.FirstLoop)
+                {
+                    completedLoops = (int)math.floor(TimeSinceStart / Parameters.Duration);
+                    clampedCompletedLoops = GetClampedCompletedLoops(completedLoops);
+                    isCompleted = Parameters.Loops >= 0 && clampedCompletedLoops > Parameters.Loops - 1;
+                    isDelayed = TimeSinceStart < 0f;
+
+                    if (isCompleted)
+                    {
+                        t = 1f;
+                    }
+                    else
+                    {
+                        var currentLoopTime = TimeSinceStart - Parameters.Duration * clampedCompletedLoops;
+                        t = math.clamp(currentLoopTime / Parameters.Duration, 0f, 1f);
+                    }
+                }
+                else
+                {
+                    var currentLoopTime = math.fmod(time, Parameters.Duration + Parameters.Delay) - Parameters.Delay;
+                    completedLoops = (int)math.floor(time / (Parameters.Duration + Parameters.Delay));
+                    clampedCompletedLoops = GetClampedCompletedLoops(completedLoops);
+                    isCompleted = Parameters.Loops >= 0 && clampedCompletedLoops > Parameters.Loops - 1;
+                    isDelayed = currentLoopTime < 0;
+
+                    if (isCompleted)
+                    {
+                        t = 1f;
+                    }
+                    else
+                    {
+                        t = math.clamp(currentLoopTime / Parameters.Duration, 0f, 1f);
+                    }
+                }
+            }
+
+            State.ComplpetedLoops = (ushort)clampedCompletedLoops;
+
+            switch (Parameters.LoopType)
+            {
+                default:
+                case LoopType.Restart:
+                    progress = GetEasedValue((float)t);
+                    break;
+                case LoopType.Flip:
+                    progress = GetEasedValue((float)t);
+                    if ((clampedCompletedLoops + (int)t) % 2 == 1) progress = 1f - progress;
+                    break;
+                case LoopType.Incremental:
+                    progress = GetEasedValue(1f) * clampedCompletedLoops + GetEasedValue((float)math.fmod(t, 1f));
+                    break;
+                case LoopType.Yoyo:
+                    progress = (clampedCompletedLoops + (int)t) % 2 == 1
+                        ? GetEasedValue((float)(1f - t))
+                        : GetEasedValue((float)t);
+                    break;
+            }
+
+            if (isCompleted)
+            {
+                State.Status = MotionStatus.Completed;
+            }
+            else if (isDelayed || State.Time < 0)
+            {
+                State.Status = MotionStatus.Delayed;
+            }
+            else
+            {
+                State.Status = MotionStatus.Playing;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        readonly int GetClampedCompletedLoops(int completedLoops)
+        {
+            return Parameters.Loops < 0
+                ? math.max(0, completedLoops)
+                : math.clamp(completedLoops, 0, Parameters.Loops);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        readonly float GetEasedValue(float value)
+        {
+            return Parameters.Ease switch
+            {
+                Ease.CustomAnimationCurve => Parameters.AnimationCurve.Evaluate(value),
+                _ => EaseUtility.Evaluate(value, Parameters.Ease)
+            };
+        }
     }
 
     /// <summary>
@@ -47,10 +202,22 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
     {
         // Because of pointer casting, this field must always be placed at the beginning.
-        public MotionDataCore Core;
+        public MotionData Core;
 
         public TValue StartValue;
         public TValue EndValue;
         public TOptions Options;
+
+        public void Update<TAdapter>(double time, out TValue result)
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            Core.Update(time, out var progress);
+
+            result = default(TAdapter).Evaluate(ref StartValue, ref EndValue, ref Options, new MotionEvaluationContext()
+            {
+                Progress = progress,
+                Time = time,
+            });
+        }
     }
 }

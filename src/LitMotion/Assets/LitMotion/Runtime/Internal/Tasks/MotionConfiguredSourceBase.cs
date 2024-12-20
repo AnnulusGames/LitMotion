@@ -74,7 +74,7 @@ namespace LitMotion
             this.cancelAwaitOnMotionCanceled = cancelAwaitOnMotionCanceled;
             this.cancellationToken = cancellationToken;
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, MotionStoragePermission.Admin);
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, false);
             originalCancelAction = managedData.OnCancelAction;
             originalCompleteAction = managedData.OnCompleteAction;
             managedData.OnCancelAction = onCancelCallbackDelegate;
@@ -129,7 +129,7 @@ namespace LitMotion
         {
             if (checkIsActive && !motionHandle.IsActive()) return;
 
-            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, MotionStoragePermission.Admin);
+            ref var managedData = ref MotionManager.GetManagedDataRef(motionHandle, false);
             managedData.OnCancelAction = originalCancelAction;
             managedData.OnCompleteAction = originalCompleteAction;
         }

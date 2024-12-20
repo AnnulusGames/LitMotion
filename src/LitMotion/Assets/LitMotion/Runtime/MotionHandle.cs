@@ -29,11 +29,11 @@ namespace LitMotion
         {
             get
             {
-                return MotionManager.GetDataRef(this, MotionStoragePermission.Admin).Time;
+                return MotionManager.GetDataRef(this, false).State.Time;
             }
             set
             {
-                MotionManager.SetTime(this, value, MotionStoragePermission.User);
+                MotionManager.SetTime(this, value);
             }
         }
 
@@ -44,7 +44,7 @@ namespace LitMotion
         {
             get
             {
-                return MotionHelper.GetTotalDuration(ref MotionManager.GetDataRef(this, MotionStoragePermission.Admin));
+                return MotionManager.GetDataRef(this, false).Parameters.TotalDuration;
             }
         }
 
@@ -55,7 +55,7 @@ namespace LitMotion
         {
             get
             {
-                return MotionManager.GetDataRef(this, MotionStoragePermission.User).ComplpetedLoops;
+                return MotionManager.GetDataRef(this).State.ComplpetedLoops;
             }
         }
 
@@ -66,11 +66,11 @@ namespace LitMotion
         {
             get
             {
-                return MotionManager.GetDataRef(this, MotionStoragePermission.User).PlaybackSpeed;
+                return MotionManager.GetDataRef(this).State.PlaybackSpeed;
             }
             set
             {
-                MotionManager.GetDataRef(this, MotionStoragePermission.User).PlaybackSpeed = value;
+                MotionManager.GetDataRef(this).State.PlaybackSpeed = value;
             }
         }
 
