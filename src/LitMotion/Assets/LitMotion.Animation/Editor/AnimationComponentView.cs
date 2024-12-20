@@ -48,6 +48,7 @@ namespace LitMotion.Animation.Editor
                     flexGrow = 1f,
                 }
             };
+            root.Clear();
             Add(root);
 
             foldout = new Foldout
