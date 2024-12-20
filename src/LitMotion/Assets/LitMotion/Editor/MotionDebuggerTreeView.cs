@@ -135,7 +135,7 @@ namespace LitMotion.Editor
             return scheduler switch
             {
                 PlayerLoopMotionScheduler loopMotionScheduler => loopMotionScheduler.playerLoopTiming.ToString() + GetTimeKindName(loopMotionScheduler.timeKind),
-                ManualMotionScheduler => "Manual",
+                ManualMotionDispatcherScheduler => "Manual",
                 EditorUpdateMotionScheduler => "EditorUpdate",
                 _ => scheduler.GetType()?.Name,
             };

@@ -1,3 +1,5 @@
+using System;
+
 namespace LitMotion
 {
     /// <summary>
@@ -112,8 +114,8 @@ namespace LitMotion
         public static readonly IMotionScheduler TimeUpdateRealtime = new PlayerLoopMotionScheduler(PlayerLoopTiming.TimeUpdate, MotionTimeKind.Realtime);
 
         /// <summary>
-        /// Scheduler that updates motion with `ManualMotionDispatcher.Update()`
+        /// Scheduler that updates motion with `ManualMotionDispatcher.Default.Update()`
         /// </summary>
-        public static readonly IMotionScheduler Manual = new ManualMotionScheduler();
+        public static IMotionScheduler Manual => ManualMotionDispatcher.Default.Scheduler;
     }
 }
