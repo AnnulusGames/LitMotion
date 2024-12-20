@@ -7,7 +7,7 @@ using Unity.Mathematics;
 namespace LitMotion
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct MotionData
+    internal struct MotionData
     {
         public struct MotionState
         {
@@ -197,7 +197,7 @@ namespace LitMotion
     /// <typeparam name="TValue">The type of value to animate</typeparam>
     /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
     [StructLayout(LayoutKind.Sequential)]
-    public struct MotionData<TValue, TOptions>
+    internal struct MotionData<TValue, TOptions>
         where TValue : unmanaged
         where TOptions : unmanaged, IMotionOptions
     {

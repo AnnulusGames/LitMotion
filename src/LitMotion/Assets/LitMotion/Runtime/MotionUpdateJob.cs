@@ -18,7 +18,7 @@ namespace LitMotion
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
-        [NativeDisableUnsafePtrRestriction] public MotionData<TValue, TOptions>* DataPtr;
+        [NativeDisableUnsafePtrRestriction] internal MotionData<TValue, TOptions>* DataPtr;
         [ReadOnly] public double DeltaTime;
         [ReadOnly] public double UnscaledDeltaTime;
         [ReadOnly] public double RealDeltaTime;
