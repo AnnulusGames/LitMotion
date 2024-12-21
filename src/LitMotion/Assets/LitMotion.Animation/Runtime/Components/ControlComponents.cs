@@ -16,7 +16,7 @@ namespace LitMotion.Animation.Components
                 .RunWithoutBinding();
         }
 
-        public override void Stop() { }
+        public override void OnStop() { }
     }
 
     [Serializable]
@@ -33,7 +33,7 @@ namespace LitMotion.Animation.Components
             return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
         }
 
-        public override void Stop()
+        public override void OnStop()
         {
             onStop.Invoke();
         }
@@ -56,7 +56,17 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void Stop()
+        public override void OnResume()
+        {
+            target.Play();
+        }
+
+        public override void OnPause()
+        {
+            target.Pause();
+        }
+
+        public override void OnStop()
         {
             target.Stop();
         }

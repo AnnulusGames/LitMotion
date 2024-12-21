@@ -26,7 +26,10 @@ namespace LitMotion.Animation
         public string DisplayName => displayName;
 
         public abstract MotionHandle Play();
-        public abstract void Stop();
+
+        public virtual void OnResume() { }
+        public virtual void OnPause() { }
+        public virtual void OnStop() { }
 
         public MotionHandle TrackedHandle { get; set; }
     }
