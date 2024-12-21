@@ -148,7 +148,7 @@ namespace LitMotion.Animation
             Play();
         }
 
-        public bool IsPlaying
+        public bool IsActive
         {
             get
             {
@@ -158,6 +158,22 @@ namespace LitMotion.Animation
                 {
                     var handle = component.TrackedHandle;
                     if (handle.IsActive()) return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                if (queue.Count > 0) return true;
+
+                foreach (var component in playingComponents.AsSpan())
+                {
+                    var handle = component.TrackedHandle;
+                    if (handle.IsPlaying() && handle.PlaybackSpeed != 0f) return true;
                 }
 
                 return false;

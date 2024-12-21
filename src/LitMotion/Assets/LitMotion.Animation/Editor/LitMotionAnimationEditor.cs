@@ -133,7 +133,7 @@ namespace LitMotion.Animation.Editor
 
             box.schedule.Execute(() =>
             {
-                var enabled = IsPlaying();
+                var enabled = IsActive();
                 foreach (var view in views)
                 {
                     view.SetEnabled(enabled);
@@ -228,7 +228,7 @@ namespace LitMotion.Animation.Editor
 
             buttonGroup.schedule.Execute(() =>
             {
-                var enabled = !IsPlaying();
+                var enabled = !IsActive();
                 restartButton.SetEnabled(enabled);
                 stopButton.SetEnabled(enabled);
                 resetButton.SetEnabled(enabled);
@@ -341,9 +341,9 @@ namespace LitMotion.Animation.Editor
             return manipulator;
         }
 
-        bool IsPlaying()
+        bool IsActive()
         {
-            return !((LitMotionAnimation)target).IsPlaying;
+            return !((LitMotionAnimation)target).IsActive;
         }
     }
 }

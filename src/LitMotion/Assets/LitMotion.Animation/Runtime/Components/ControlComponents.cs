@@ -48,7 +48,12 @@ namespace LitMotion.Animation.Components
         public override MotionHandle Play()
         {
             target.Play();
-            return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
+            return LMotion.Create(0f, 1f, float.MaxValue)
+                .Bind(this, (x, state) =>
+                {
+                    if (target == null) TrackedHandle.TryComplete();
+                    if (!target.IsPlaying) TrackedHandle.TryComplete();
+                });
         }
 
         public override void Stop()
