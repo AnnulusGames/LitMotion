@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using LitMotion.Sequences;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Runtime.CompilerServices;
 using LitMotion.Collections;
 
-namespace LitMotion.Sequences
+namespace LitMotion
 {
     internal sealed class MotionSequenceBuilderSource : ILinkedPoolNode<MotionSequenceBuilderSource>
     {

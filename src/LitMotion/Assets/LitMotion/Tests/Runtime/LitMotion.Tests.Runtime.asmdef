@@ -7,7 +7,6 @@
         "Unity.Burst",
         "Unity.Collections",
         "LitMotion",
-        "LitMotion.Sequences",
         "LitMotion.Extensions",
         "UniTask",
         "UniRx"

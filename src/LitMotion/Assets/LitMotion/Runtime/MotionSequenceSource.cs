@@ -2,7 +2,7 @@ using System;
 using System.Buffers;
 using LitMotion.Collections;
 
-namespace LitMotion.Sequences
+namespace LitMotion
 {
     internal struct MotionSequenceItem : IComparable<MotionSequenceItem>
     {

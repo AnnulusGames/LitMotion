@@ -1,4 +1,4 @@
-namespace LitMotion.Sequences
+namespace LitMotion
 {
     public static class LSequence
     {
