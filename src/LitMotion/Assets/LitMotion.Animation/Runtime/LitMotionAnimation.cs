@@ -71,6 +71,8 @@ namespace LitMotion.Animation
                 {
                     handle.PlaybackSpeed = 1f;
                     isPlaying = true;
+
+                    component.OnResume();
                 }
             }
 
@@ -122,7 +124,11 @@ namespace LitMotion.Animation
             foreach (var component in playingComponents.AsSpan())
             {
                 var handle = component.TrackedHandle;
-                if (handle.IsActive()) handle.PlaybackSpeed = 0f;
+                if (handle.IsActive())
+                {
+                    handle.PlaybackSpeed = 0f;
+                    component.OnPause();
+                }
             }
         }
 
@@ -134,7 +140,7 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.Stop();
+                component.OnStop();
                 component.TrackedHandle = handle;
             }
 
@@ -173,7 +179,7 @@ namespace LitMotion.Animation
                 foreach (var component in playingComponents.AsSpan())
                 {
                     var handle = component.TrackedHandle;
-                    if (handle.IsPlaying() && handle.PlaybackSpeed != 0f) return true;
+                    if (handle.IsPlaying()) return true;
                 }
 
                 return false;

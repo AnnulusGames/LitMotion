@@ -17,22 +17,15 @@ namespace LitMotion.Animation
 
         TValue startValue;
 
-        public sealed override void Stop()
+        public override void OnStop()
         {
             if (target == null) return;
             SetValue(target, startValue);
-            OnRevert(target);
         }
-
-        protected virtual void OnBeforePlay(TObject target) { }
-        protected virtual void OnAfterPlay(TObject target) { }
-        protected virtual void OnRevert(TObject target) { }
 
         public override MotionHandle Play()
         {
             startValue = GetValue(target);
-
-            OnBeforePlay(target);
 
             MotionHandle handle;
 
@@ -52,8 +45,6 @@ namespace LitMotion.Animation
                         state.SetValue(target, x);
                     });
             }
-
-            OnAfterPlay(target);
 
             return handle;
         }
