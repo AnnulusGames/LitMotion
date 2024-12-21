@@ -23,7 +23,7 @@ public class Sandbox : MonoBehaviour
             .Preserve()
             .AddTo(this);
 
-        slider.maxValue = (float)handle.Duration;
+        slider.maxValue = (float)handle.TotalDuration;
     }
 
     void Update()

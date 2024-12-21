@@ -43,13 +43,46 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// The delay of the motion
+        /// </summary>
+        public readonly float Delay
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Delay;
+            }
+        }
+
+        /// <summary>
+        /// The duration of the motion
+        /// </summary>
+        public readonly float Duration
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Duration;
+            }
+        }
+
+        /// <summary>
         /// The total duration of the motion
         /// </summary>
-        public readonly double Duration
+        public readonly double TotalDuration
         {
             get
             {
                 return MotionManager.GetDataRef(this, false).Parameters.TotalDuration;
+            }
+        }
+
+        /// <summary>
+        /// The number of loops
+        /// </summary>
+        public readonly int Loops
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Loops;
             }
         }
 
