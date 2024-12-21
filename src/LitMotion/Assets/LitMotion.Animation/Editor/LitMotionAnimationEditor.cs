@@ -167,9 +167,9 @@ namespace LitMotion.Animation.Editor
 
                     var handle = component.TrackedHandle;
 
-                    if (handle.IsActive() && !double.IsInfinity(handle.Duration))
+                    if (handle.IsActive() && !double.IsInfinity(handle.TotalDuration))
                     {
-                        views[i].Progress = Mathf.InverseLerp(0f, (float)handle.Duration, (float)handle.Time);
+                        views[i].Progress = Mathf.InverseLerp(0f, (float)handle.TotalDuration, (float)handle.Time);
                     }
                     else
                     {

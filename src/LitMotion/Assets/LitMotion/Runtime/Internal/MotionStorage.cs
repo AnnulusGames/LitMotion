@@ -422,7 +422,7 @@ namespace LitMotion
                 throw new ArgumentException("Cannot add a running motion to a sequence.");
             }
 
-            motionDuration = handle.Duration;
+            motionDuration = handle.TotalDuration;
             if (double.IsInfinity(motionDuration))
             {
                 throw new ArgumentException("Cannot add an infinitely looping motion to a sequence.");
