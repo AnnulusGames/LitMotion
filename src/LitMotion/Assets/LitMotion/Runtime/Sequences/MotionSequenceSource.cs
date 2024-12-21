@@ -38,6 +38,11 @@ namespace LitMotion.Sequences
                 ArrayPool<MotionSequenceItem>.Shared.Return(source.itemBuffer);
                 source.itemBuffer = null;
             }
+
+            source.itemCount = default;
+            source.duration = default;
+            source.time = default;
+
             pool.TryPush(source);
         }
 
