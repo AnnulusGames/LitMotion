@@ -1,7 +1,9 @@
 using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Assertions;
+using UnityEngine.Assertions.Comparers;
 using UnityEngine.TestTools;
+using UnityEngine.TestTools.Utils;
 
 namespace LitMotion.Tests.Runtime
 {
@@ -26,6 +28,28 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_TryCancel()
+        {
+            var value = 0f;
+            var endValue = 10f;
+            var handle = LMotion.Create(0f, endValue, 2f)
+                .Bind(x =>
+                {
+                    value = x;
+                    Debug.Log(x);
+                });
+            yield return new WaitForSeconds(1f);
+            var tryResult = handle.TryCancel();
+            Assert.IsTrue(tryResult);
+            yield return new WaitForSeconds(1f);
+            Assert.IsTrue(value < endValue);
+            Assert.IsTrue(!handle.IsActive());
+
+            tryResult = handle.TryCancel();
+            Assert.IsFalse(tryResult);
+        }
+
+        [UnityTest]
         public IEnumerator Test_Complete()
         {
             var value = 0f;
@@ -38,8 +62,29 @@ namespace LitMotion.Tests.Runtime
                 });
             yield return new WaitForSeconds(1f);
             handle.Complete();
-            Assert.AreApproximatelyEqual(value, endValue);
+            Assert.That(value, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
             Assert.IsTrue(!handle.IsActive());
+        }
+
+        [UnityTest]
+        public IEnumerator Test_TryComplete()
+        {
+            var value = 0f;
+            var endValue = 10f;
+            var handle = LMotion.Create(0f, endValue, 2f)
+                .Bind(x =>
+                {
+                    value = x;
+                    Debug.Log(x);
+                });
+            yield return new WaitForSeconds(1f);
+            var tryResult = handle.TryComplete();
+            Assert.IsTrue(tryResult);
+            Assert.That(value, Is.EqualTo(endValue).Using(FloatEqualityComparer.Instance));
+            Assert.IsTrue(!handle.IsActive());
+
+            tryResult = handle.TryComplete();
+            Assert.IsFalse(tryResult);
         }
 
         [UnityTest]
@@ -56,7 +101,7 @@ namespace LitMotion.Tests.Runtime
                 });
             yield return new WaitForSeconds(1f);
             handle.Complete();
-            Assert.AreApproximatelyEqual(value, startValue);
+            Assert.That(value, Is.EqualTo(startValue).Using(FloatEqualityComparer.Instance));
             Assert.IsTrue(!handle.IsActive());
         }
 
@@ -73,9 +118,9 @@ namespace LitMotion.Tests.Runtime
                     Debug.Log(x);
                 });
             yield return new WaitForSeconds(1f);
-            handle.Complete();
+            handle.TryComplete();
             Assert.IsTrue(handle.IsActive());
-            handle.Cancel();
+            handle.TryCancel();
             Assert.IsTrue(!handle.IsActive());
         }
 
@@ -104,6 +149,23 @@ namespace LitMotion.Tests.Runtime
             Assert.IsTrue(handle.IsActive());
             yield return new WaitForSeconds(2.5f);
             Assert.IsFalse(handle.IsActive());
+        }
+
+        [UnityTest]
+        public IEnumerator Test_CompletedLoops()
+        {
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithLoops(3)
+                .RunWithoutBinding()
+                .Preserve();
+
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(0));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(1));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(2));
+            yield return new WaitForSeconds(1f);
+            Assert.That(handle.ComplatedLoops, Is.EqualTo(3));
         }
     }
 }

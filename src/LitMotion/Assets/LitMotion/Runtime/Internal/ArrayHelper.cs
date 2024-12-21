@@ -8,7 +8,28 @@ namespace LitMotion
         const int ArrayMaxSize = 0x7FFFFFC7;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void EnsureCapacity(ref char[] buffer, int minimumCapacity)
+        public static void EnsureCapacity<T>(ref T[] array, int minimumCapacity)
+        {
+            if (array == null)
+            {
+                array = new T[minimumCapacity];
+            }
+            else
+            {
+                var l = array.Length;
+                if (l >= minimumCapacity) return;
+
+                while (l < minimumCapacity)
+                {
+                    l *= 2;
+                }
+
+                Array.Resize(ref array, l);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void EnsureBufferCapacity(ref char[] buffer, int minimumCapacity)
         {
             if (buffer == null)
             {

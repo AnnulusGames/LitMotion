@@ -29,7 +29,7 @@ namespace LitMotion.Tests.Runtime
             var handle = LMotion.Create(0f, 1f, 2f)
                 .WithOnCancel(() => canceled = true)
                 .RunWithoutBinding()
-                .AddTo(obj, LinkBehaviour.CancelOnDisable);
+                .AddTo(obj, LinkBehavior.CancelOnDisable);
             yield return new WaitForSeconds(0.1f);
             obj.SetActive(false);
             Assert.IsTrue(canceled);
@@ -43,7 +43,7 @@ namespace LitMotion.Tests.Runtime
             var handle = LMotion.Create(0f, 1f, 2f)
                 .WithOnComplete(() => completed = true)
                 .RunWithoutBinding()
-                .AddTo(obj, LinkBehaviour.CompleteOnDisable);
+                .AddTo(obj, LinkBehavior.CompleteOnDisable);
             yield return new WaitForSeconds(0.1f);
             obj.SetActive(false);
             Assert.IsTrue(completed);

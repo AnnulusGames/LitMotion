@@ -11,18 +11,12 @@ namespace LitMotion
         /// <typeparam name="TValue">The type of value to animate</typeparam>
         /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
         /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
-        /// <param name="data">Motion data</param>
-        /// <param name="callbackData">Motion callback data</param>
+        /// <param name="builder">Motion builder</param>
         /// <returns>Motion handle</returns>
-        MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionData<TValue, TOptions> data, ref MotionCallbackData callbackData)
+        MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>;
-
-        /// <summary>
-        /// Returns the current time.
-        /// </summary>
-        double Time { get; }
     }
 
     /// <summary>

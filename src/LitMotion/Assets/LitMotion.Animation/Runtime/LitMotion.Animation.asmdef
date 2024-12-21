@@ -1,0 +1,56 @@
+{
+    "name": "LitMotion.Animation",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.ugui",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_UGUI"
+        },
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_TMP"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "2.0.0",
+            "define": "LITMOTION_ANIMATION_TMP"
+        },
+        {
+            "name": "com.unity.render-pipelines.core",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_RENDER_PIPELINES"
+        },
+        {
+            "name": "com.unity.modules.audio",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_UNITY_AUDIO"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_PHYSICS"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "",
+            "define": "LITMOTION_ANIMATION_PHYSICS_2D"
+        }
+    ],
+    "noEngineReferences": false
+}

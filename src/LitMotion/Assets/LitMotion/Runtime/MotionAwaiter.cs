@@ -31,9 +31,9 @@ namespace LitMotion
         {
             if (continuation == null) return;
 
-            ref var callbackData = ref MotionStorageManager.GetMotionCallbackDataRef(handle);
-            callbackData.OnCompleteAction += continuation;
-            callbackData.OnCancelAction += continuation;
+            ref var managedData = ref MotionManager.GetManagedDataRef(handle, false);
+            managedData.OnCompleteAction += continuation;
+            managedData.OnCancelAction += continuation;
         }
     }
 }

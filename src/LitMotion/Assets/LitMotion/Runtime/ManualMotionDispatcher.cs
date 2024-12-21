@@ -1,107 +1,119 @@
 using System;
-using LitMotion.Collections;
+using System.Collections.Generic;
 
 namespace LitMotion
 {
-    /// <summary>
-    /// Manually updatable MotionDispatcher
-    /// </summary>
-    public static class ManualMotionDispatcher
+    internal sealed class ManualMotionDispatcherScheduler : IMotionScheduler
     {
-        static class Cache<TValue, TOptions, TAdapter>
+        readonly ManualMotionDispatcher dispatcher;
+
+        public ManualMotionDispatcherScheduler(ManualMotionDispatcher dispatcher)
+        {
+            this.dispatcher = dispatcher;
+        }
+
+        public MotionHandle Schedule<TValue, TOptions, TAdapter>(ref MotionBuilder<TValue, TOptions, TAdapter> builder)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            public static MotionStorage<TValue, TOptions, TAdapter> updateStorage;
-            public static UpdateRunner<TValue, TOptions, TAdapter> updateRunner;
-
-            public static MotionStorage<TValue, TOptions, TAdapter> GetOrCreate()
-            {
-                if (updateStorage == null)
-                {
-                    var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionStorageManager.CurrentStorageId);
-                    MotionStorageManager.AddStorage(storage);
-                    updateStorage = storage;
-                }
-                return updateStorage;
-            }
+            return dispatcher.GetOrCreateRunner<TValue, TOptions, TAdapter>().Storage.Create(ref builder);
         }
+    }
 
-        static FastListCore<IUpdateRunner> updateRunners;
+    /// <summary>
+    /// Manually updatable MotionDispatcher
+    /// </summary>
+    public sealed class ManualMotionDispatcher
+    {
+        /// <summary>
+        /// Default ManualMotionDispatcher
+        /// </summary>
+        public static readonly ManualMotionDispatcher Default = new();
+
+        /// <summary>
+        /// MotionScheduler for scheduling to the dispatcher.
+        /// </summary>
+        public IMotionScheduler Scheduler => scheduler;
+
+        readonly ManualMotionDispatcherScheduler scheduler;
+        readonly Dictionary<Type, IUpdateRunner> runners = new();
+
+        public ManualMotionDispatcher()
+        {
+            scheduler = new(this);
+        }
 
         /// <summary>
         /// ManualMotionDispatcher time. It increases every time Update is called.
         /// </summary>
-        public static double Time { get; set; }
+        public double Time
+        {
+            get => time;
+            set
+            {
+                Update(value - time);
+            }
+        }
+
+        double time;
 
         /// <summary>
-        /// Ensures the storage capacity until it reaches at least `capacity`.
+        /// Ensures the storage capacity until it reaches at least capacity.
         /// </summary>
-        /// <param name="capacity">The minimum capacity to ensure.</param>
-        public static void EnsureStorageCapacity<TValue, TOptions, TAdapter>(int capacity)
+        /// <param name="capacity">The minimum capacity to ensure</param>
+        public void EnsureStorageCapacity<TValue, TOptions, TAdapter>(int capacity)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            Cache<TValue, TOptions, TAdapter>.GetOrCreate().EnsureCapacity(capacity);
+
+            GetOrCreateRunner<TValue, TOptions, TAdapter>().Storage.EnsureCapacity(capacity);
         }
 
         /// <summary>
-        /// Update all scheduled motions with MotionScheduler.Manual
+        /// Update all scheduled motions.
         /// </summary>
         /// <param name="deltaTime">Delta time</param>
-        public static void Update(double deltaTime)
+        public void Update(double deltaTime)
         {
-            if (deltaTime < 0f) throw new ArgumentException("deltaTime must be 0 or higher.");
-            Time += deltaTime;
-            Update();
-        }
+            time += deltaTime;
 
-        /// <summary>
-        /// Update all scheduled motions with MotionScheduler.Manual
-        /// </summary>
-        public static void Update()
-        {
-            var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++)
+            foreach (var kv in runners)
             {
-                span[i].Update(Time, Time, Time);
+                kv.Value.Update(time, time, time);
             }
         }
 
         /// <summary>
         /// Cancel all motions and reset data.
         /// </summary>
-        public static void Reset()
+        public void Reset()
         {
-            var span = updateRunners.AsSpan();
-            for (int i = 0; i < span.Length; i++)
+            foreach (var kv in runners)
             {
-                span[i].Reset();
+                kv.Value.Reset();
             }
+
+            time = 0;
         }
 
-        internal static MotionHandle Schedule<TValue, TOptions, TAdapter>(in MotionData<TValue, TOptions> data, in MotionCallbackData callbackData)
-           where TValue : unmanaged
-           where TOptions : unmanaged, IMotionOptions
-           where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        internal UpdateRunner<TValue, TOptions, TAdapter> GetOrCreateRunner<TValue, TOptions, TAdapter>()
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
-            MotionStorage<TValue, TOptions, TAdapter> storage = Cache<TValue, TOptions, TAdapter>.GetOrCreate();
-            if (Cache<TValue, TOptions, TAdapter>.updateRunner == null)
+            var key = typeof((TValue, TOptions, TAdapter));
+            if (!runners.TryGetValue(key, out var runner))
             {
-                var runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, Time, Time, Time);
-                updateRunners.Add(runner);
-                Cache<TValue, TOptions, TAdapter>.updateRunner = runner;
+                var storage = new MotionStorage<TValue, TOptions, TAdapter>(MotionManager.MotionTypeCount);
+                MotionManager.Register(storage);
+
+                runner = new UpdateRunner<TValue, TOptions, TAdapter>(storage, 0, 0, 0);
+                runners.Add(key, runner);
             }
 
-            var (EntryIndex, Version) = storage.Append(data, callbackData);
-            return new MotionHandle()
-            {
-                StorageId = storage.StorageId,
-                Index = EntryIndex,
-                Version = Version
-            };
+            return (UpdateRunner<TValue, TOptions, TAdapter>)runner;
         }
     }
 }
