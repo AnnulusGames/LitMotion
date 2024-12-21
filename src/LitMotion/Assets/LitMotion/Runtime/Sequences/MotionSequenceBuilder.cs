@@ -94,6 +94,7 @@ namespace LitMotion.Sequences
             else if (buffer.Length == count)
             {
                 var newBuffer = ArrayPool<MotionSequenceItem>.Shared.Rent(count * 2);
+                buffer.CopyTo(newBuffer.AsSpan(0, count));
                 ArrayPool<MotionSequenceItem>.Shared.Return(buffer);
                 buffer = newBuffer;
             }
