@@ -1,6 +1,5 @@
 using LitMotion;
 using LitMotion.Extensions;
-using LitMotion.Sequences;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +16,14 @@ public class Sandbox : MonoBehaviour
             .Append(LMotion.Create(-5f, 5f, 0.5f).BindToPositionX(target))
             .Append(LMotion.Create(0f, 5f, 0.5f).BindToPositionY(target))
             .Append(LMotion.Create(-2f, 2f, 1f).BindToPositionZ(target))
-            .Schedule();
+            .Append(LMotion.Create(5f, 0f, 0.5f).BindToPositionX(target))
+            .Append(LMotion.Create(5f, 0f, 0.5f).BindToPositionY(target))
+            .Append(LMotion.Create(2f, 0f, 1f).BindToPositionZ(target))
+            .Schedule()
+            .Preserve()
+            .AddTo(this);
+
+        slider.maxValue = (float)handle.Duration;
     }
 
     void Update()
