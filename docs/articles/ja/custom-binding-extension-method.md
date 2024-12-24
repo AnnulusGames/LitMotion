@@ -1,6 +1,6 @@
 # Bind拡張メソッドを作成する
 
-`LitMotion.Extensions`で用意されていないプロパティは`Bind()`や`BindWithState()`を用いてアニメーションさせることが可能ですが、多用するものに関しては拡張メソッドを定義した方が便利な場合もあります。ここでは、`MotionBuilder`に独自のBind拡張メソッドを追加する方法を示します。
+`LitMotion.Extensions`で用意されていないプロパティは`Bind()`を用いてアニメーションさせることが可能ですが、多用するものに関しては拡張メソッドを定義した方が便利な場合もあります。ここでは、`MotionBuilder`に独自のBind拡張メソッドを追加する方法を示します。
 
 例として、以下のような`Foo`クラスの`Value`プロパティにモーションをバインドする拡張メソッドを定義してみましょう。
 
@@ -20,7 +20,7 @@ public static class FooMotionExtensions
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
     {
-        return builder.BindWithState(target, (x, target) =>
+        return builder.Bind(target, (x, target) =>
         {
             target.Value = x;
         });
@@ -28,7 +28,7 @@ public static class FooMotionExtensions
 }
 ```
 
-ジェネリックメソッドとして定義することにより、float型の値であれば`TOptions`や`TAdapter`の型が何であってもバインドを行うことが可能になります。また、対象がクラスの場合は`BindWithState()`を用いることでクロージャを避け、ゼロアロケーションでモーションを作成できます。
+ジェネリックメソッドとして定義することにより、float型の値であれば`TOptions`や`TAdapter`の型が何であってもバインドを行うことが可能になります。また、対象がクラスの場合は`Bind(TStete, Action<T, TState>)`のオーバーロードを利用することでクロージャを避け、ゼロアロケーションでモーションを作成できます。
 
 実際にこれを使用して値をアニメーションさせるコードは以下のようになります。
 

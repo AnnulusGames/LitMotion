@@ -1,12 +1,12 @@
 # コルーチンでモーションを待機する
 
-モーションの完了をコルーチン内で待機することが可能です。コルーチンで待機するには`MotionHandle`の`ToYieldInteraction()`を呼び出します。
+モーションの完了をコルーチン内で待機することが可能です。コルーチンで待機するには`MotionHandle`の`ToYieldInstruction()`を呼び出します。
 
 ```cs
 IEnumerator CoruntineExample()
 {
     yield return LMotion.Create(0f, 10f, 2f).Bind(x => Debug.Log(x))
-        .ToYieldInteraction();
+        .ToYieldInstruction();
 }
 ```
 

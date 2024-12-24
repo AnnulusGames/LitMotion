@@ -50,24 +50,6 @@ if (handle.IsActive())
 }
 ```
 
-また、`AddTo()`でキャンセルのタイミングをGameObjectに紐付けることも可能です。
-
-```cs
-LMotion.Create(0f, 10f, 3f)
-    .Bind(x => value = x)
-    .AddTo(this.gameObject);
-```
-
-`CompositeMotionHandle`を用いることで複数のMotionHandleを一括管理できます。
-
-```cs
-var handles = new CompositeMotionHandle();
-
-LMotion.Create(0f, 10f, 2f)
-    .Bind(() => Debug.Log(x))
-    .AddTo(handles);
-```
-
 詳細は[モーションを制御する](controlling-motion.md)を参照してください。
 
 ### MotionScheduler
@@ -82,7 +64,7 @@ LMotion.Create(0f, 10f, 2f)
 
 詳細は[モーションの設定](motion-configuration.md)を参照してください。
 
-### IMotionAdapter
+### MotionAdapter
 
 2つの値を補間する処理は`IMotionAdapter<T, TOptions>`を実装した構造体に記述されています。組み込みのAdapterは`LitMotion.Adapters`名前空間内に定義されています。
 

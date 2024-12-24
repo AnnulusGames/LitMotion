@@ -54,11 +54,15 @@ LMotion.Create(0f, 10f, 2f)
 
 #### WithOnComplete
 
-再生終了時のコールバックを指定します。
+再生終了時のコールバックを指定します。`Preserve()`で`MotionHandle`を再利用する場合、このコールバックはモーションの完了時に毎回呼び出されます。
 
 #### WithOnCancel
 
 キャンセル時のコールバックを指定します。
+
+#### WithOnLoopComplete
+
+各ループ終了時のコールバックを指定します。これはモーションの完了時にも呼び出され、順番は`OnLoopComplate` → `OnComplete`になります。
 
 #### WithScheduler
 
@@ -88,16 +92,20 @@ LMotion.Create(0f, 10f, 2f)
 | MotionScheduler.TimeUpdate | TimeUpdateのタイミングで更新を行います。 |
 | MotionScheduler.TimeUpdateIgnoreTimeScale | TimeUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視します。 |
 | MotionScheduler.TimeUpdateRealtime | TimeUpdateのタイミングで更新を行います。また、`Time.timeScale`の影響を無視し、`Time.realtimeSinceStartup`を用いて時間の計算を行います。 |
-| MotionScheduler.Manual | 更新を手動で行います。詳細は[モーションを手動で更新する](updating-motion-manually.md)を参照してください。 |
+| MotionScheduler.Manual | ManualMotionDispatcherを用いて更新を行います。詳細は[ManualMotionDispatcher](manual-motion-dispatcher.md)を参照してください。 |
 | EditorMotionScheduler.Update (LitMotion.Editor) | EditorApplication.updateのタイミングで更新を行います。このSchedulerはエディタ限定で使用できます。 |
 
 #### WithCancelOnError
 
 モーションの`Bind`関数内でcatchされていない例外が発生した際にモーションをキャンセルします。デフォルトではfalseに設定されています。
 
-#### WithBindOnSchedule
+#### WithImmediateBind
 
-モーションをスケジュールするタイミングでBindの処理を実行します。デフォルトではfalseに設定されています。
+モーションをスケジュールするタイミングでBindの処理を実行します。デフォルトではtrueに設定されています。
+
+#### WithDebugName
+
+デバッグに利用する名前を設定します。詳細は[LitMotion Debugger](litmotion-debugger.md)の項目を参照してください。
 
 #### WithRoundingMode (int, long)
 

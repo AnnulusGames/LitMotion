@@ -1,5 +1,15 @@
 # async/awaitでモーションを待機する
 
+`MotionHandle`は`GetAwaiter()`メソッドを実装しているため、そのままawaitで完了を待機することができます。
+
+```cs
+await handle;
+```
+
+`CancellationToken`を渡したい場合は以下の`ToValueTask()` / `ToAwaitable()`やUniTaskを利用してください。
+
+## ValueTask
+
 `MotionHandle.ToValueTask()`を使用してモーションを`ValueTask`に変換することができます。これを使用することで、async/awaitでモーションの完了を待機することが可能になります。
 
 ```cs
