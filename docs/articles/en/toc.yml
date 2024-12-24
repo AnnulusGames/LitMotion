@@ -1,6 +1,8 @@
 - name: Get Started
 - name: LitMotion Overview
-  href: about.md
+  href: ../../index.md
+- name: What's new in v2
+  href: whats-new-in-v2.md
 - name: Installation
   href: installation.md
 - name: Quick Start
@@ -9,42 +11,62 @@
   href: package-structure.md
 - name: Supported Types
   href: supported-types.md
+- name: FAQ
+  href: faq.md
 
 - name: Essentials
 - name: Basic Concepts
   href: basic-concepts.md
 - name: Binding
   href: binding.md
-- name: Controlling Motion
-  href: controlling-motion.md
+- name: Motion Control
+  href: motion-control.md
 - name: Motion Configuration
   href: motion-configuration.md
-- name: Waiting for Motion in Coroutine
-  href: waiting-for-motion-in-coroutine.md
-- name: Waiting for Motion in async/await
-  href: waiting-for-motion-in-async-await.md
+- name: MotionSettings
+  href: motion-settings.md
+- name: Sequence
+  href: sequence.md
 - name: Vibration Motion with Punch/Shake
   href: punch-and-shake.md
 - name: Text Animation
   href: text-animation.md
 - name: TextMesh Pro Character Animation
   href: textmesh-pro-character-animation.md
-- name: Updating Motion Manually
-  href: updating-motion-manually.md
-- name: Reusing MotionBuilder
-  href: reusing-builder.md
-- name: Avoiding Dynamic Memory Allocation
-  href: avoiding-dynamic-memory-allocation.md
+- name: Await Motion in Coroutine
+  href: await-motion-in-coroutine.md
+- name: Await Motion in async/await
+  href: await-motion-in-async-await.md
+- name: Convert to IDisposable
+  href: convert-to-disposable.md
+- name: LitMotion Debugger
+  href: litmotion-debugger.md
+
+- name: Advanved
+- name: Play Motion in Editor
+  href: play-motion-in-editor.md
 - name: Exception Handling
   href: exception-handling.md
-- name: Playing in UnityEditor
-  href: playing-in-editor.md
+- name: ManualMotionDispatcher
+  href: manual-motion-dispatcher.md
+- name: Avoid Dynamic Memory Allocatoin
+  href: avoid-dynamic-memory-allocation.md
 - name: Custom Binding Extension Method
   href: custom-binding-extension-method.md
 - name: Custom Adapter
   href: custom-adapter.md
-- name: Motion Tracker
-  href: motion-tracker.md
+
+- name: LitMotion.Animation
+- name: LitMotion.Animation Overview
+  href: litmotion-animation-overview.md
+- name: Installation
+  href: litmotion-animation-installation.md
+- name: LitMotion Animation
+  href: litmotion-animation.md
+- name: Control LitMotion Animation from C#
+  href: litmotion-animation-script.md
+- name: Custom Animation Component
+  href: custom-animation-component.md
 
 - name: Integrations
 - name: R3
@@ -55,6 +77,16 @@
   href: integration-unitask.md
 - name: ZString
   href: integration-zstring.md
+
+- name: Migrating
+- name: Migrate from DOTween
+  href: migrate-from-dotween.md
+- name: Migrate from LeanTween
+  href: migrate-from-leantween.md
+- name: Migrate from PrimeTween
+  href: migrate-from-primetween.md
+- name: Migrate from LitMotion v1
+  href: migrate-from-v1.md
 
 - name: Concepts
 - name: Design Philosophy

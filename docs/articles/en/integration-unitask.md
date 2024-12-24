@@ -6,13 +6,7 @@ If you have installed UniTask via the Package Manager, the following functionali
 
 ### Waiting for Motion
 
-By integrating UniTask, you can await `MotionHandle`:
-
-```cs
-await LMotion.Create(0f, 10f, 2f).Bind(x => Debug.Log(x));
-```
-
-You can also pass a `CancellationToken` using the `ToUniTask()` method:
+You can convert a `MotionHandle` to a `UniTask` using the `ToUniTask()` method.
 
 ```cs
 var cts = new CancellationTokenSource();
@@ -20,4 +14,4 @@ await LMotion.Create(0f, 10f, 2f).Bind(x => Debug.Log(x))
     .ToUniTask(cts.Token);
 ```
 
-Passing a CancellationToken automatically cancels motion playback when asynchronous processing is canceled.
+The options that can be specified in the argument are the same as for `ToValueTask()` / `ToAwaitable()`.

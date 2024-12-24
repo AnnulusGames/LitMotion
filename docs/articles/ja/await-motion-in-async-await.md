@@ -37,3 +37,13 @@ async Awaitable ExampleAsync(CancellationToken cancellationToken)
         .ToAwaitable(cancellationToken);
 }
 ```
+
+### キャンセル時の挙動を変更する
+
+`ToValueTask()` / `ToAwaitable()`の引数に`CancelBehavior`を指定することで、asyncメソッドがキャンセルされた時の挙動を変更できます。また、`cancelAwaitOnMotionCanceled`を`true`に設定することで、`MotionHandle`はキャンセルされた際にasyncメソッドをキャンセルすることが可能になります。
+
+```cs
+await LMotion.Create(0f, 10f, 1f)
+    .RunWithoutBinding()
+    .ToAwaitable(CancelBehavior.Complete, true, cancellationToken);
+```

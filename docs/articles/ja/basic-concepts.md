@@ -50,7 +50,7 @@ if (handle.IsActive())
 }
 ```
 
-詳細は[モーションを制御する](controlling-motion.md)を参照してください。
+詳細は[モーションを制御する](motion-control.md)を参照してください。
 
 ### MotionScheduler
 

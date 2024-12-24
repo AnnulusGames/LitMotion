@@ -49,8 +49,9 @@ LMotion.Create(0f, 10f, 2f)
 | LoopType | 動作 | 
 | - | - | 
 | LoopType.Restart | デフォルトの設定。ループ終了時に開始値にリセットされます。| 
-| LoopType.Yoyo | 開始値と終了地を往復するように値をアニメーションさせます。| 
+| LoopType.Flip | 開始値と終了地を往復するように値をアニメーションさせます。| 
 | LoopType.Increment | ループごとに値が増加します。 | 
+| LoopType.Yoyo | 開始値と終了値をヨーヨーのような動きでアニメーションさせます。| 
 
 #### WithOnComplete
 

@@ -1,4 +1,4 @@
-# Unity Editor上で再生する
+# Unity Editor上でモーションを再生する
 
 LitMotionはエディタ上での再生に対応しています。Edit Mode時にモーションを作成した場合、自動でEditor上にスケジュールされます。この場合、モーションは`EditorApplication.update`上で駆動されます。
 

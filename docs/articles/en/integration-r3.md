@@ -6,7 +6,7 @@ If you have installed R3 via the Package Manager, the following functionality wi
 
 ### Creating Motion as an Observable
 
-You can create motion as an `IObservable<T>` using the `ToObservable()` method:
+You can create motion as an `Observable<T>` using the `ToObservable()` method:
 
 ```cs
 var observable = LMotion.Create(0f, 5f, 2f).ToObservable();

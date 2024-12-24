@@ -1,4 +1,4 @@
-# LitMotion Animationコンポーネント
+# LitMotion Animation
 
 ![img](../../images/img-litmotion-animation-inspector.png)
 

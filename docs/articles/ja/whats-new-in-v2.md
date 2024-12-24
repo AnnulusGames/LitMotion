@@ -10,7 +10,7 @@ Inspectorからアニメーションを作成するための機能を提供す�
 
 ![img](../../images/img-litmotion-animation.gif)
 
-詳細は[LitMotion.Animation](./litmotion-animation-about.md)の項目を参照してください。
+詳細は[LitMotion.Animation](./litmotion-animation-overview.md)の項目を参照してください。
 
 ## Sequence
 
@@ -52,7 +52,7 @@ handle.Time;
 
 ## WithOnLoopComplete
 
-各ループの完了時に呼び出される新たなコールバックが追加されました。これは`WothOnLoopComplete()`を用いて追加できます。
+各ループの完了時に呼び出される新たなコールバックが追加されました。これは`WithOnLoopComplete()`を用いて追加できます。
 
 ```cs
 LMotion.Create(...)

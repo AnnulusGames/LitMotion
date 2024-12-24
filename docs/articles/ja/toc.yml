@@ -1,6 +1,6 @@
 - name: Get Started
 - name: LitMotionとは
-  href: about.md
+  href: overview.md
 - name: v2の新機能
   href: whats-new-in-v2.md
 - name: インストール
@@ -20,7 +20,7 @@
 - name: 値のバインディング
   href: binding.md
 - name: モーションの制御
-  href: controlling-motion.md
+  href: motion-control.md
 - name: モーションの設定
   href: motion-configuration.md
 - name: MotionSettings
@@ -34,23 +34,23 @@
 - name: TextMesh Proの文字をアニメーションさせる
   href: textmesh-pro-character-animation.md
 - name: コルーチンでモーションを待機する
-  href: waiting-for-motion-in-coroutine.md
+  href: await-motion-in-coroutine.md
 - name: async/awaitでモーションを待機する
-  href: waiting-for-motion-in-async-await.md
+  href: await-motion-in-async-await.md
 - name: IDisposableに変換する
   href: convert-to-disposable.md
 - name: LitMotion Debugger
   href: litmotion-debugger.md
 
 - name: Advanved
-- name: Unity Editor上で再生する
-  href: playing-in-editor.md
+- name: Unity Editor上でモーションを再生する
+  href: play-motion-in-editor.md
 - name: 例外処理
   href: exception-handling.md
 - name: ManualMotionDispatcher
   href: manual-motion-dispatcher.md
 - name: 動的なメモリ確保を回避する
-  href: avoiding-dynamic-memory-allocation.md
+  href: avoid-dynamic-memory-allocation.md
 - name: Bind拡張メソッドを作成する
   href: custom-binding-extension-method.md
 - name: カスタムAdapterを作成する
@@ -58,11 +58,11 @@
 
 - name: LitMotion.Animation
 - name: LitMotion.Animationとは
-  href: litmotion-animation-about.md
+  href: litmotion-animation-overview.md
 - name: インストール
   href: litmotion-animation-installation.md
-- name: LitMotion Animationコンポーネント
-  href: litmotion-animation-component.md
+- name: LitMotion Animation
+  href: litmotion-animation.md
 - name: LitMotion AnimationをC#から操作する
   href: litmotion-animation-script.md
 - name: Animation Componentを作成する
