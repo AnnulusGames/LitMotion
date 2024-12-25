@@ -6,6 +6,8 @@ LitMotion is a high-performance tweening library for Unity. It encompasses a ric
 
 The biggest feature of LitMotion is its excellent performance. Designed to take full advantage of Unity's latest technology, "DOTS", including the C# Job System and Burst Compiler, LitMotion runs 2-20 times (or more) faster than other tween libraries in various situations, such as creating and executing tweens. In addition, there are no allocations during tween creation.
 
+![img](./images/img-v2-available.png)
+
 Additionally, v2 introduces Sequence for combining multiple motions and the LitMotion.Animation package, which allows you to create tween animations directly from the Inspector. With these additions, LitMotion is now as powerful, if not more, than DOTween Pro or PrimeTween in terms of features.
 
 ## Features

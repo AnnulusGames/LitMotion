@@ -1,5 +1,7 @@
 # v2の新機能
 
+![img](../../images/img-v2-available.png)
+
 LitMotion v2では機能面で大幅な強化が行われました。ここではv2で追加された機能について紹介します。
 
 v1からの移行については[LitMotion v1から移行する](./migrate-from-v1.md)を参照してください。
