@@ -5,14 +5,13 @@
         {
           "files": [
             "LitMotion/Assets/LitMotion/Runtime/**/*.cs",
-            "LitMotion/Assets/LitMotion/Editor/**/*.cs"
+            "LitMotion/Assets/LitMotion/Editor/**/*.cs",
+            "LitMotion/Assets/LitMotion.Animation/Runtime/**/*.cs",
+            "LitMotion/Assets/LitMotion.Animation/Editor/**/*.cs"
           ],
           "src": "../src"
         }
       ],
-      "properties": {
-        "AllowUnsafeBlocks": true
-      },
       "dest": "api",
       "disableGitFeatures": false,
       "disableDefaultFilter": false,
@@ -53,7 +52,7 @@
     "globalMetadata": {
       "_appName": "LitMotion",
       "_appTitle": "LitMotion",
-      "_appFooter": "<span>Copyright © 2023 Annulus Games. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
+      "_appFooter": "<span>Copyright © 2024 Annulus Games. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
       "_enableSearch": true,
       "pdf": false,
       "_appLogoPath": "images/icon.svg",
