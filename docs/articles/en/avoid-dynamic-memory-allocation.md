@@ -1,4 +1,4 @@
-## Avoiding Dynamic Memory Allocation
+## Avoid Dynamic Memory Allocation
 
 You can expand the capacity of the internal array that holds motions beforehand by calling `MotionDispatcher.EnsureStorageCapacity()`. By ensuring the maximum anticipated capacity, such as during the app's startup, you can mitigate runtime dynamic memory allocation.
 

@@ -47,8 +47,9 @@ Additionally, you can set the behavior during repetition by specifying `LoopType
 | LoopType | Behavior |
 | - | - |
 | LoopType.Restart | Default behavior. Resets to the start value at the end of each loop. |
-| LoopType.Yoyo | Animates the value back and forth between start and end values. |
+| LoopType.Flip | Animates the value back and forth between start and end values. |
 | LoopType.Increment | Value increases with each loop. |
+| LoopType.Yoyo | Animates between the start and end values in a back-and-forth (yo-yo) motion. |
 
 #### WithOnComplete
 
@@ -57,6 +58,11 @@ Specifies a callback at the end of the playback.
 #### WithOnCancel
 
 Specifies a callback for when the motion is canceled.
+Here’s the English translation for the provided text:
+
+#### WithOnLoopComplete
+
+Specifies a callback to be called at the end of each loop. This is also called when the motion completes, with the order being `OnLoopComplete` → `OnComplete`. 
 
 #### WithScheduler
 
@@ -86,16 +92,21 @@ Specifies the Scheduler used for motion playback.
 | MotionScheduler.TimeUpdate | Updates at the TimeUpdate timing. |
 | MotionScheduler.TimeUpdateIgnoreTimeScale | Updates at the TimeUpdate timing, ignores the influence of `Time.timeScale`. |
 | MotionScheduler.TimeUpdateRealtime | Updates at the TimeUpdate timing, ignores the influence of `Time.timeScale`, and calculates time using `Time.realtimeSinceStartup`. |
-| MotionScheduler.Manual | Updates manually. For details, see [Updating Motion Manually](updating-motion-manually.md).  |
+| MotionScheduler.Manual | Updates will be performed using the ManualMotionDispatcher. For more details, please refer to 
+[ManualMotionDispatcher](./manual-motion-dispatcher.md). |
 | EditorMotionScheduler.Update (LitMotion.Editor) | Updates at the EditorApplication.update timing. This Scheduler is limited to the editor. |
 
 #### WithCancelOnError
 
 Cancels the motion when an uncaught exception occurs within the motion's `Bind` function. It is set to false by default.
 
-#### WithBindOnSchedule
+#### WithImmediateBind
 
-Execute Bind processing at the timing of scheduling the motion. It is set to false by default.
+Executes the Bind operation at the time of scheduling the motion. By default, it is set to true.
+
+#### WithDebugName
+
+Sets a name for debugging purposes. For more details, refer to the [LitMotion Debugger](litmotion-debugger.md) section.
 
 #### WithRoundingMode (int)
 

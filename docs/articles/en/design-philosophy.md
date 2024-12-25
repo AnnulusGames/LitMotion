@@ -34,7 +34,7 @@ LMotion.Create(0f, 10f, 2f)
 
 ### Integration with Coroutines, Rx, async/await
 
-Unlike DOTween or Magic Tween, LitMotion doesn’t support the functionality of a Sequence. Instead, it provides conversion methods to Coroutine, Observable, and UniTask.
+In v2, LitMotion now supports Sequence functionality, but compared to DOTween's Sequence, its features are more limited. As an alternative, LitMotion provides methods for converting to coroutines, Observables, and UniTask.
 
 While Sequences are easy to use and convenient, they can make the code complex and affect readability when constructing intricate animations. Also, DOTween's Sequence has complex behaviors that may not be fully understood from the code alone.
 

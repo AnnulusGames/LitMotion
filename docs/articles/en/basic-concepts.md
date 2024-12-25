@@ -50,25 +50,7 @@ if (handle.IsActive())
 }
 ```
 
-Additionally, tying cancellation timing to a GameObject is possible using `AddTo()`.
-
-```cs
-LMotion.Create(0f, 10f, 3f)
-    .Bind(x => value = x)
-    .AddTo(this.gameObject);
-```
-
-Use `CompositeMotionHandle` to manage multiple MotionHandles together.
-
-```cs
-var handles = new CompositeMotionHandle();
-
-LMotion.Create(0f, 10f, 2f)
-    .Bind(() => Debug.Log(x))
-    .AddTo(handles);
-```
-
-For further details, refer to [Controlling Motion](controlling-motion.md).
+For further details, refer to [Motion Control](motion-control.md).
 
 ### MotionScheduler
 
@@ -82,7 +64,7 @@ LMotion.Create(0f, 10f, 2f)
 
 Refer to [Motion Configuration](motion-configuration.md) for more information.
 
-### IMotionAdapter
+### MotionAdapter
 
 The interpolation between two values is described by structures implementing `IMotionAdapter<T, TOptions>`. Built-in adapters are defined within the `LitMotion.Adapters` namespace.
 

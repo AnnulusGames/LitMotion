@@ -1,6 +1,8 @@
 - name: Get Started
 - name: LitMotionとは
-  href: about.md
+  href: overview.md
+- name: v2の新機能
+  href: whats-new-in-v2.md
 - name: インストール
   href: installation.md
 - name: クイックスタート
@@ -9,6 +11,8 @@
   href: package-structure.md
 - name: サポートする型
   href: supported-types.md
+- name: よくある質問
+  href: faq.md
 
 - name: Essentials
 - name: 基本的な概念
@@ -16,35 +20,53 @@
 - name: 値のバインディング
   href: binding.md
 - name: モーションの制御
-  href: controlling-motion.md
+  href: motion-control.md
 - name: モーションの設定
   href: motion-configuration.md
-- name: コルーチンでモーションを待機する
-  href: waiting-for-motion-in-coroutine.md
-- name: async/awaitでモーションを待機する
-  href: waiting-for-motion-in-async-await.md
+- name: MotionSettings
+  href: motion-settings.md
+- name: Sequence
+  href: sequence.md
 - name: Punch/Shakeによる振動のモーション
   href: punch-and-shake.md
 - name: テキストアニメーション
   href: text-animation.md
 - name: TextMesh Proの文字をアニメーションさせる
   href: textmesh-pro-character-animation.md
-- name: モーションを手動で更新する
-  href: updating-motion-manually.md
-- name: MotionBuilderを再利用する
-  href: reusing-builder.md
-- name: 動的なメモリ確保を回避する
-  href: avoiding-dynamic-memory-allocation.md
+- name: コルーチンでモーションを待機する
+  href: await-motion-in-coroutine.md
+- name: async/awaitでモーションを待機する
+  href: await-motion-in-async-await.md
+- name: IDisposableに変換する
+  href: convert-to-disposable.md
+- name: LitMotion Debugger
+  href: litmotion-debugger.md
+
+- name: Advanved
+- name: Unity Editor上でモーションを再生する
+  href: play-motion-in-editor.md
 - name: 例外処理
   href: exception-handling.md
-- name: Unity Editor上で再生する
-  href: playing-in-editor.md
+- name: ManualMotionDispatcher
+  href: manual-motion-dispatcher.md
+- name: 動的なメモリ確保を回避する
+  href: avoid-dynamic-memory-allocation.md
 - name: Bind拡張メソッドを作成する
   href: custom-binding-extension-method.md
 - name: カスタムAdapterを作成する
   href: custom-adapter.md
-- name: Motion Tracker
-  href: motion-tracker.md
+
+- name: LitMotion.Animation
+- name: LitMotion.Animationとは
+  href: litmotion-animation-overview.md
+- name: インストール
+  href: litmotion-animation-installation.md
+- name: LitMotion Animation
+  href: litmotion-animation.md
+- name: LitMotion AnimationをC#から操作する
+  href: litmotion-animation-script.md
+- name: Animation Componentを作成する
+  href: custom-animation-component.md
 
 - name: Integrations
 - name: R3
@@ -55,6 +77,16 @@
   href: integration-unitask.md
 - name: ZString
   href: integration-zstring.md
+
+- name: Migrating
+- name: DOTweenから移行する
+  href: migrate-from-dotween.md
+- name: LeanTweenから移行する
+  href: migrate-from-leantween.md
+- name: PrimeTweenから移行する
+  href: migrate-from-primetween.md
+- name: LitMotion v1から移行する
+  href: migrate-from-v1.md
 
 - name: Concepts
 - name: 設計思想

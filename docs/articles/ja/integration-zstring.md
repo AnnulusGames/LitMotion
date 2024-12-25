@@ -18,7 +18,7 @@ LMotion.Create(0, 100, 2f)
 
 ```cs
 // BindToText()のコードの一部
-builder.BindWithState(text, format, (x, target, format) =>
+builder.Bind(text, format, (x, target, format) =>
 {
     ...
     target.text = string.Format(format, x); // ここでボックス化によるアロケーションが発生
@@ -28,7 +28,7 @@ builder.BindWithState(text, format, (x, target, format) =>
 ZStringを導入することで、LitMotionはこれを`ZString.Format()`を使用した処理に置き換えます。これによって余計なボックス化のアロケーションを削減できます。
 
 ```cs
-builder.BindWithState(text, format, (x, target, format) =>
+builder.Bind(text, format, (x, target, format) =>
 {
     ...
     target.text = ZString.Format(format, x); // ゼロアロケーションでFormatが可能
@@ -38,7 +38,7 @@ builder.BindWithState(text, format, (x, target, format) =>
 さらに対象が`TMP_Text`の場合、`ZString.Format()`の代わりにZStringの拡張メソッドである`SetTextFormat()`を使用します。これは内部で`TMP_Text.SetText()`を使用するため、完全にゼロアロケーションでフォーマットの処理を行うことが可能になります。
 
 ```cs
-builder.BindWithState(text, format, (x, target, format) =>
+builder.Bind(text, format, (x, target, format) =>
 {
     ...
     target.SetTextFormat(format, x);

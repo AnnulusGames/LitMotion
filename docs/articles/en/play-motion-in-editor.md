@@ -1,4 +1,4 @@
-# Playing in Unity Editor
+# Play Motion in Unity Editor
 
 LitMotion supports playback in the Unity Editor. When creating motions in Edit Mode, they are automatically scheduled in the Editor. In this case, the motions are driven on `EditorApplication.update`.
 

@@ -1,6 +1,6 @@
 # 値のバインディング
 
-LitMotionでは、モーションの作成時に値を対象のフィールドやプロパティに紐付ける必要があります。モーションの値はMotionDispatcherのUpdate(LateUpdate, FixedUpdate)関数内で更新され、バインドしたフィールド/プロパティに最新の値が反映されます。
+LitMotionでは、モーションの作成時に値を対象のフィールドやプロパティに紐付ける必要があります。モーションの値はSchedulerで指定されたPlayerLoop内で更新され、バインドしたフィールド/プロパティに最新の値が反映されます。
 
 ```cs
 var value = 0f;
@@ -12,7 +12,7 @@ LMotion.Create(0f, 10f, 2f)
 
 `Bind()`に渡すラムダ式は外部変数をキャプチャするためアロケーションが発生します。(これはクロージャと呼ばれます)
 
-対象がclassの場合には`Bind()`の代わりに`BindWithState()`を利用することでクロージャによるアロケーションを回避できます。
+また、`Bind()`の引数にstateを渡すことでクロージャによるアロケーションを回避できます。
 
 ```cs
 class FooClass
@@ -23,7 +23,7 @@ class FooClass
 var target = new FooClass();
 
 LMotion.Create(0f, 10f, 2f)
-    .BindWithState(target, (x, target) => target.Value = x); // 第一引数に対象のオブジェクトを渡す
+    .Bind(target, (x, target) => target.Value = x); // 第一引数に対象のオブジェクトを渡す
 ```
 
 ### 拡張メソッド
