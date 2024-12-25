@@ -6,10 +6,10 @@
 var disposable = handle.ToDisposable();
 ```
 
-By default, calling `Dispose()` on this `IDisposable` will cancel the motion. This behavior can be changed by specifying a `MotionDisposeBehavior` argument in `ToDisposable()`.
+By default, calling `Dispose()` on this `IDisposable` will cancel the motion. This behavior can be changed by specifying a `DisposeBehavior` argument in `ToDisposable()`.
 
 ```cs
-var disposable = handle.ToDisposable(MotionDisposeBehavior.Complete);
+var disposable = handle.ToDisposable(DisposeBehavior.Complete);
 
 // handle.Complete() will be called
 disposable.Dispose();
