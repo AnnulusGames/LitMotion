@@ -2,7 +2,7 @@
 
 By integrating [R3](https://github.com/Cysharp/R3) into your project, it adds extension methods compatible with Reactive Extensions (Rx).
 
-If you have installed R3 via the Package Manager, the following functionality will be automatically added. However, if you have imported UniRx via a unitypackage or similar method, you'll need to add `LITMOTION_SUPPORT_R3` to `Settings > Player > Scripting Define Symbols`.
+If you have installed R3 via the Package Manager, the following functionality will be automatically added. However, if you have imported R3 via a unitypackage or similar method, you'll need to add `LITMOTION_SUPPORT_R3` to `Settings > Player > Scripting Define Symbols`.
 
 ### Creating Motion as an Observable
 
