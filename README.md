@@ -14,26 +14,31 @@ LitMotion is a high-performance tween library for Unity. LitMotion includes a ri
 
 LitMotion is my second tween library I created after [Magic Tween](https://github.com/AnnulusGames/MagicTween). LitMotion was designed based on experience implementing Magic Tween to achieve rich functionality and extremely high performance. In all situations such as creating and updating tweens, it exhibits overwhelming performance that is 2 to 20 times faster than other tween libraries. Of course, there is no allocation at all when creating a tween.
 
+![img](./docs/images/img-v2-available.png)
+
+Additionally, v2 introduces Sequence for combining multiple motions and the LitMotion.Animation package, which allows you to create tween animations directly from the Inspector. With these additions, LitMotion is now as powerful, if not more, than DOTween Pro or PrimeTween in terms of features.
+
 ## Documentation
 
 The full version of documentation can be found [here](https://annulusgames.github.io/LitMotion/).
 
 ## Features
 
-- Animate anything in one line of code.
-- Achieves zero allocations due to its struct-based design.
-- Highly optimized using DOTS (Data-Oriented Technology Stack).
-- Works in both runtime and editor.
-- Provides a rich set of schedulers, allowing you to specify the PlayerLoop to execute.
-- Apply complex settings like easing and looping.
-- Wait for completion via callbacks/coroutines.
-- Zero allocation string animation with FixedString and TextMeshPro
-- Character animation for TextMeshPro text.
-- Motion Tracker Window for monitoring motions in progress.
-- Convert to Observables using UniRx.
-- Convert to Observables using R3.
-- Supports async/await via UniTask.
-- Extend types using `IMotionOptions` and `IMotionAdapter`.
+* Animate anything in one line of code.
+* Achieves zero allocations with the struct-based design
+* Extremely high-performance implementation optimized using DOTS (Data-Oriented Technology Stack)
+* Works in both runtime and editor
+* Supports complex settings like easing and looping
+* Waits for completion using callbacks/coroutines
+* Zero allocation text animationSupports TextMesh Pro / UI Toolkit
+* Special motions like Punch, Shake, etc.
+* Conversion to Observable using [UniRx](https://github.com/neuecc/UniRx) / [R3](https://github.com/Cysharp/R3)
+* async/await support using [UniTask](https://github.com/Cysharp/UniTask)
+* Type extension with `IMotionOptions` and `IMotionAdapter`
+* Integration with the Inspector via `SerializableMotionSettings<T, TOptions>`
+* Debugging API and LitMotion Debugger window
+* Combine animations using `LSequence`
+* Create complex animations directly from the Inspector with the [LitMotion.Animation](articles/en/litmotion-animation-overview.md) package
 
 ## Setup
 
@@ -74,7 +79,7 @@ Here's a sample code. Refer to the documentation for more details.
 using System;
 using System.Threading;
 using UnityEngine;
-using UniRx; // UniRx
+using R3; // R3
 using Cysharp.Threading.Tasks; // UniTask
 using LitMotion;
 using LitMotion.Extensions;
@@ -157,12 +162,12 @@ public class Example : MonoBehaviour
         await handle.ToUniTask(cancellationToken); // Await with passing CancellationToken
     }
 
-    // Convert to IObservable<T> using UniRx
+    // Convert to Observable<T> using R3
     void RxExample()
     {
         LMotion.Create(0f, 1f, 2f)
-            .ToObservable() // Create motion as IObservable<T>
-            .Where(x => x > 0.5f) // Utilize UniRx operators
+            .ToObservable() // Create motion as Observable<T>
+            .Where(x => x > 0.5f) // Utilize R3 operators
             .Select(x => x.ToString())
             .Subscribe(x =>
             {
@@ -173,13 +178,59 @@ public class Example : MonoBehaviour
 }
 ```
 
-## Motion Tracker
+## Sequence
 
-You can track all active motions using the Motion Tracker Window.
+The Sequence feature is provided for combining multiple motions.
 
-<img src="https://annulusgames.github.io/LitMotion/images/motion-tracker-window.png" width="800">
+```cs
+LSequence.Create()
+    .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
+    .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
+    .Insert(0f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
+    .Run();
+```
 
-For more details, please refer to [Motion Tracker](https://annulusgames.github.io/LitMotion/articles/en/motion-tracker.html).
+For more details, refer to the [Sequence](https://annulusgames.github.io/LitMotion/ja/sequence.html) section in the documentation.
+
+## LitMotion.Animation
+
+LitMotion.Animation is an additional package that provides animation functionality built with LitMotion. 
+
+By introducing this package, you can use the LitMotion Animation component to construct animations in the Inspector.
+
+![img](./docs/images/img-litmotion-animation.gif)
+
+
+### Requirements
+
+* Unity 2021.3 or later
+* LitMotion 2.0.0 or later
+
+### Installation
+
+You can install LitMotion using the Package Manager.
+
+1. Open Package Manager by navigating to Window > Package Manager.
+2. Click on the "+" button and select "Add package from git URL."
+3. Enter the following URL:
+
+```text
+https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
+```
+
+Alternatively, you can open the `Packages/manifest.json` file and add the following line within the `dependencies` block:
+
+```json
+{
+    "dependencies": {
+        "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
+    }
+}
+```
+
+### How to Use
+
+For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://annulusgames.github.io/LitMotion/ja/litmotion-animation-overview.html).
 
 ## Performance
 

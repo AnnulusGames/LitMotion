@@ -14,26 +14,32 @@ LitMotionはUnity向けのハイパフォーマンスなトゥイーンライブ
 
 LitMotionは[Magic Tween](https://github.com/AnnulusGames/MagicTween)に続いて私が作成した2つ目のトゥイーンライブラリです。LitMotionはMagic Tweenの実装で得た経験をもとに、必要十分な機能を厳選しつつ、最速で動作させることを念頭に置いて設計されました。トゥイーンの作成や駆動などあらゆるシチュエーションにおいて、他のトゥイーンライブラリと比較して2倍から20倍以上の圧倒的なパフォーマンスを発揮します。当然、トゥイーン作成時のアロケーションも一切ありません。
 
+![img](./docs/images/img-v2-available.png)
+
+また、v2より複数のモーションを合成するためのSequenceと、Inspectorからトゥイーンアニメーションを作成可能なLitMotion.Animationパッケージが追加されました。これにより機能面においてもDOTween ProやPrimeTweenと同等または以上に強力なライブラリとなっています。
+
 ## ドキュメント
 
 ドキュメントのフルバージョンは[こちら](https://annulusgames.github.io/LitMotion/)から確認できます。
 
 ## 特徴
 
-- あらゆる値をコード一行でアニメーション可能
-- 構造体ベースの設計でゼロアロケーションを達成
-- DOTSを活用して最適化された極めてハイパフォーマンスな実装
-- ランタイムとエディタの両方で動作
-- 実行するPlayerLoopを指定する豊富なSchedulerを用意
-- イージングや繰り返しなど複雑な設定を適用可能
-- コールバック/コルーチンによる完了の待機
-- FixedStringとTextMeshProによるゼロアロケーションな文字列のアニメーション
-- TextMeshProのテキストを文字ごとにアニメーション可能
-- MotionTrackerウィンドウによる動作中のモーションの追跡
-- UniRxを利用したObservableへの変換
-- R3を利用したObservableへの変換
-- UniTaskを利用したasync/await対応
-- `IMotionOptions`と`IMotionAdapter`を用いた型の拡張
+* あらゆる値をコード一行でアニメーション可能
+* 構造体ベースの設計でゼロアロケーションを達成
+* DOTSを活用して最適化された極めてハイパフォーマンスな実装
+* ランタイムとエディタの両方で動作
+* イージングや繰り返しなど複雑な設定を適用可能
+* コールバック/コルーチンによる完了の待機
+* ゼロアロケーションなテキストアニメーション
+* TextMesh Pro / UI Toolkitに対応
+* Punch、Shakeなどの特殊なモーション
+* UniRx/R3を利用したObservableへの変換
+* UniTaskを利用したasync/await対応
+* `IMotionOptions`と`IMotionAdapter`を用いた型の拡張
+* `SerializableMotionSettings<T, TOptions>`によるInspectorとの統合
+* デバッグ用のAPIおよびLitMotion Debuggerウィンドウ
+* Sequenceによるアニメーションの合成
+* Inspectorから複雑なアニメーションを作成可能なLitMotion.Animationパッケージ
 
 ## セットアップ
 
@@ -74,7 +80,7 @@ LitMotionを用いることでTransformやMaterialなどの値を簡単にアニ
 using System;
 using System.Threading;
 using UnityEngine;
-using UniRx; // UniRx
+using R3; // R3
 using Cysharp.Threading.Tasks; // UniTask
 using LitMotion;
 using LitMotion.Extensions;
@@ -157,12 +163,12 @@ public class Example : MonoBehaviour
         await handle.ToUniTask(cancellationToken); // ToUniTaskでCancellationTokenを渡してawait
     }
 
-    // UniRxを利用したIObservable<T>への変換に対応
+    // R3を利用したObservable<T>への変換に対応
     void RxExample()
     {
         LMotion.Create(0f, 1f, 2f)
-            .ToObservable() // モーションをIObservable<T>として作成
-            .Where(x => x > 0.5f) // UniRxのオペレータを利用可能
+            .ToObservable() // モーションをObservable<T>として作成
+            .Where(x => x > 0.5f) // R3のオペレータを利用可能
             .Select(x => x.ToString())
             .Subscribe(x =>
             {
@@ -173,13 +179,54 @@ public class Example : MonoBehaviour
 }
 ```
 
-## Motion Tracker
+## Sequence
 
-Motion Trackerウィンドウを使用して動作中の全てのモーションを追跡できます。
+複数のモーションを合成するための機能として、Sequenceが提供されています。
 
-<img src="https://annulusgames.github.io/LitMotion/images/motion-tracker-window.png" width="800">
+```cs
+LSequence.Create()
+    .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
+    .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
+    .Insert(0f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
+    .Run();
+```
 
-詳細は[Motion Tracker](https://annulusgames.github.io/LitMotion/articles/ja/motion-tracker.html)を参照してください。
+詳細はドキュメントの[Sequence](https://annulusgames.github.io/LitMotion/ja/sequence.html)を参照してください。
+
+## LitMotion.Animation
+
+LitMotion.AnimationはLitMotionで構築されたアニメーションの機能を提供する追加パッケージです。これを導入することで、Inspector上でアニメーションを構築できるLitMotion Animationコンポーネントが利用可能になります。
+
+![img](./docs/images/img-litmotion-animation.gif)
+
+### 要件
+
+* Unity 2021.3 以上
+* LitMotion 2.0.0 以上
+
+### インストール
+
+1. Window > Package ManagerからPackage Managerを開く
+2. 「+」ボタン > Add package from git URL
+3. 以下のURLを入力
+
+```text
+https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
+```
+
+あるいはPackages/manifest.jsonを開き、dependenciesブロックに以下を追記します。
+
+```json
+{
+    "dependencies": {
+        "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
+    }
+}
+```
+
+### 使い方
+
+LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://annulusgames.github.io/LitMotion/ja/litmotion-animation-overview.html)を参照してください。
 
 ## パフォーマンス
 
