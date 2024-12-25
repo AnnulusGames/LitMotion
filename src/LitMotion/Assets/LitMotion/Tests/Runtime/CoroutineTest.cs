@@ -1,4 +1,5 @@
 using System.Collections;
+using LitMotion.Extensions;
 using UnityEngine.TestTools;
 
 namespace LitMotion.Tests.Runtime
@@ -10,7 +11,7 @@ namespace LitMotion.Tests.Runtime
         {
             yield return LMotion.Create(0f, 10f, 3f)
                 .BindToUnityLogger()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
     }
 }

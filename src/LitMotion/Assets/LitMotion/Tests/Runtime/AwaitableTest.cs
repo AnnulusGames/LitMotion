@@ -79,7 +79,7 @@ namespace LitMotion.Tests.Runtime
             var handle = LMotion.Create(0f, 10f, 1f)
                 .WithOnCancel(() => canceled = true)
                 .RunWithoutBinding();
-            
+
             _ = DelayedCall(0.2f, () => handle.Cancel());
 
             try
@@ -92,6 +92,31 @@ namespace LitMotion.Tests.Runtime
                 return;
             }
             Assert.Fail();
+        }
+
+
+        [Test]
+        public async Task Test_Awaitable_CancelWhileAwait_WithoutCancelAwaitOnMotionCanceled()
+        {
+            var canceled = false;
+
+            var handle = LMotion.Create(0f, 10f, 1f)
+                .WithOnCancel(() => canceled = true)
+                .RunWithoutBinding();
+
+            _ = DelayedCall(0.2f, () => handle.Cancel());
+
+            try
+            {
+                await handle.ToAwaitable(CancelBehavior.Cancel, false);
+            }
+            catch (OperationCanceledException)
+            {
+                Assert.Fail();
+                return;
+            }
+
+            Assert.IsTrue(canceled);
         }
 
         [Test]

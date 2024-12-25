@@ -1,6 +1,6 @@
 # Custom Binding Extension Method
 
-Although it is possible to animate properties not provided in `LitMotion.Extensions` using `Bind()` or `BindWithState()`, it can be convenient to define extension methods for frequently used properties. Here, we will demonstrate how to add a custom binding extension method to `MotionBuilder`.
+Although it is possible to animate properties not provided in `LitMotion.Extensions` using `Bind()`, it can be convenient to define extension methods for frequently used properties. Here, we will demonstrate how to add a custom binding extension method to `MotionBuilder`.
 
 As an example, let's define an extension method to bind a motion to the `Value` property of a `Foo` class like the one below:
 
@@ -20,7 +20,7 @@ public static class FooMotionExtensions
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
     {
-        return builder.BindWithState(target, (x, target) =>
+        return builder.Bind(target, (x, target) =>
         {
             target.Value = x;
         });
@@ -28,7 +28,7 @@ public static class FooMotionExtensions
 }
 ```
 
-By defining it as a generic method, you can bind values of float type regardless of the types of `TOptions` and `TAdapter`. Additionally, when the target is a class, using `BindWithState()` avoids the use of closures, allowing you to create motions with zero allocation.
+By defining it as a generic method, you can bind values of float type regardless of the types of `TOptions` and `TAdapter`. Additionally, when the target is a class, using `Bind(TState, Action<T, TState>)` avoids the use of closures, allowing you to create motions with zero allocation.
 
 The code to animate a value using this extension method is below.
 

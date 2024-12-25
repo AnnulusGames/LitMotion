@@ -47,8 +47,7 @@ namespace LitMotion.Extensions
         {
             if (textToAnimator.TryGetValue(text, out var animator))
             {
-                animator.RemoveCompletedMotions();
-                if (animator.motionHandleList.Length == 0) animator.Reset();
+                animator.Reset();
                 return animator;
             }
 
@@ -171,11 +170,14 @@ namespace LitMotion.Extensions
                 charInfoArray[i].scale = Vector3.one;
                 charInfoArray[i].position = Vector3.zero;
             }
+
+            updateAction = UpdateCore;
         }
 
         TMP_Text target;
+        internal readonly Action updateAction;
         internal CharInfo[] charInfoArray;
-        internal FastListCore<MotionHandle> motionHandleList;
+        bool isDirty;
 
         TextMeshProMotionAnimator nextNode;
 
@@ -207,27 +209,9 @@ namespace LitMotion.Extensions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetCharColor(int charIndex, Color color)
+        public void SetDirty()
         {
-            charInfoArray[charIndex].color = color;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetCharPosition(int charIndex, Vector3 position)
-        {
-            charInfoArray[charIndex].position = position;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetCharRotation(int charIndex, Quaternion rotation)
-        {
-            charInfoArray[charIndex].rotation = rotation;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetCharScale(int charIndex, Vector3 scale)
-        {
-            charInfoArray[charIndex].scale = scale;
+            isDirty = true;
         }
 
         public void Reset()
@@ -239,28 +223,26 @@ namespace LitMotion.Extensions
                 charInfoArray[i].scale = Vector3.one;
                 charInfoArray[i].position = Vector3.zero;
             }
+
+            isDirty = false;
         }
 
-        void RemoveCompletedMotions()
-        {
-            for (int i = 0; i < motionHandleList.Length; i++)
-            {
-                if (!motionHandleList[i].IsActive())
-                {
-                    motionHandleList.RemoveAtSwapback(i);
-                    i--;
-                }
-            }
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool TryUpdate()
         {
             if (target == null) return false;
 
-            RemoveCompletedMotions();
-            if (motionHandleList.Length == 0) return false;
+            if (isDirty)
+            {
+                UpdateCore();
+            }
 
+            return true;
+        }
+
+        void UpdateCore()
+        {
             target.ForceMeshUpdate();
 
             var textInfo = target.textInfo;
@@ -306,8 +288,6 @@ namespace LitMotion.Extensions
                 textInfo.meshInfo[i].mesh.vertices = textInfo.meshInfo[i].vertices;
                 target.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
             }
-
-            return true;
         }
     }
 }

@@ -1,6 +1,6 @@
 # Binding
 
-LitMotion requires that a value be bound to the target field/property when the motion is created. The motion values are updated in the Update(LateUpdate, FixedUpdate) function of the MotionDispatcher to reflect the latest values in the bound fields/properties.
+In LitMotion, it is required to bind the values to the target fields or properties when creating a motion. The values of the motion are updated within the PlayerLoop specified by the Scheduler, and the latest values are reflected in the bound fields/properties.
 
 ```cs
 var value = 0f;
@@ -12,7 +12,8 @@ LMotion.Create(0f, 10f, 2f)
 
 Lambda expressions passed to `Bind()` cause allocations due to capturing external variables (known as closures).
 
-For class instances, you can avoid allocations caused by closures by using `BindWithState()` instead of `Bind()`.
+
+Additionally, by passing the state as an argument to `Bind()`, you can avoid allocations caused by closures.
 
 ```cs
 class FooClass
@@ -23,7 +24,7 @@ class FooClass
 var target = new FooClass();
 
 LMotion.Create(0f, 10f, 2f)
-    .BindWithState(target, (x, target) => target.Value = x); // Pass the target object as the first argument
+    .Bind(target, (x, target) => target.Value = x); // Pass the target object as the first argument
 ```
 
 ### Extension Methods

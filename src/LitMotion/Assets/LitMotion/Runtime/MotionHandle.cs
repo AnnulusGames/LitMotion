@@ -8,6 +8,11 @@ namespace LitMotion
     public struct MotionHandle : IEquatable<MotionHandle>
     {
         /// <summary>
+        /// Represents an empty MotionHandle. This is the same as default(MotionHandle).
+        /// </summary>
+        public static readonly MotionHandle None = default;
+
+        /// <summary>
         /// The ID of motion storage.
         /// </summary>
         public int StorageId;
@@ -23,19 +28,93 @@ namespace LitMotion
         public int Version;
 
         /// <summary>
+        /// Motion time
+        /// </summary>
+        public readonly double Time
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).State.Time;
+            }
+            set
+            {
+                MotionManager.SetTime(this, value);
+            }
+        }
+
+        /// <summary>
+        /// The delay of the motion
+        /// </summary>
+        public readonly float Delay
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Delay;
+            }
+        }
+
+        /// <summary>
+        /// The duration of the motion
+        /// </summary>
+        public readonly float Duration
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Duration;
+            }
+        }
+
+        /// <summary>
+        /// The total duration of the motion
+        /// </summary>
+        public readonly double TotalDuration
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.TotalDuration;
+            }
+        }
+
+        /// <summary>
+        /// The number of loops
+        /// </summary>
+        public readonly int Loops
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this, false).Parameters.Loops;
+            }
+        }
+
+        /// <summary>
+        /// The number of loops completed
+        /// </summary>
+        public readonly int ComplatedLoops
+        {
+            get
+            {
+                return MotionManager.GetDataRef(this).State.CompletedLoops;
+            }
+        }
+
+        /// <summary>
         /// Motion playback speed.
         /// </summary>
         public readonly float PlaybackSpeed
         {
             get
             {
-                return MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed;
+                return MotionManager.GetDataRef(this).State.PlaybackSpeed;
             }
             set
             {
-                if (value < 0f) Error.PlaybackSpeedMustBeZeroOrGreater();
-                MotionStorageManager.GetMotionDataRef(this).PlaybackSpeed = value;
+                MotionManager.GetDataRef(this).State.PlaybackSpeed = value;
             }
+        }
+
+        public override readonly string ToString()
+        {
+            return $"MotionHandle`{StorageId} ({Index}:{Version})";
         }
 
         public readonly bool Equals(MotionHandle other)

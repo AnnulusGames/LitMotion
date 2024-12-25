@@ -20,9 +20,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, name, static (x, m, n) =>
+            return builder.Bind(material, name, static (x, material, name) =>
             {
-                m.SetFloat(n, x);
+                material.SetFloat(name, x);
             });
         }
 
@@ -39,9 +39,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, Box.Create(nameID), static (x, material, nameID) =>
             {
-                m.SetFloat(nameID, x);
+                material.SetFloat(nameID.Value, x);
             });
         }
 
@@ -58,9 +58,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, name, static (x, m, n) =>
+            return builder.Bind(material, name, static (x, material, name) =>
             {
-                m.SetInteger(n, x);
+                material.SetInteger(name, x);
             });
         }
 
@@ -77,9 +77,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, Box.Create(nameID), static (x, material, nameID) =>
             {
-                m.SetInteger(nameID, x);
+                material.SetInteger(nameID.Value, x);
             });
         }
 
@@ -96,9 +96,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, name, static (x, m, n) =>
+            return builder.Bind(material, name, static (x, material, name) =>
             {
-                m.SetColor(n, x);
+                material.SetColor(name, x);
             });
         }
 
@@ -115,9 +115,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(material);
-            return builder.BindWithState(material, (x, m) =>
+            return builder.Bind(material, Box.Create(nameID), static (x, material, nameID) =>
             {
-                m.SetColor(nameID, x);
+                material.SetColor(nameID.Value, x);
             });
         }
     }

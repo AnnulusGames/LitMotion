@@ -1,6 +1,5 @@
 using System;
 using Unity.Collections;
-using UnityEngine;
 
 namespace LitMotion
 {
@@ -10,54 +9,19 @@ namespace LitMotion
     public static class MotionBuilderExtensions
     {
         /// <summary>
-        /// Create a motion data and bind it to IProgress
+        /// Create motion and bind it to a specific object. Unlike the regular Bind method, it avoids allocation by closure by passing an object.
         /// </summary>
-        /// <typeparam name="TValue">The type of value to animate</typeparam>
-        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
-        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
-        /// <param name="builder">This builder</param>
-        /// <param name="progress">Target object that implements IProgress</param>
+        /// <typeparam name="TState">Type of state</typeparam>
+        /// <param name="state">Motion state</param>
+        /// <param name="action">Action that handles binding</param>
         /// <returns>Handle of the created motion data.</returns>
-        public static MotionHandle BindToProgress<TValue, TOptions, TAdapter>(this MotionBuilder<TValue, TOptions, TAdapter> builder, IProgress<TValue> progress)
+        public unsafe static MotionHandle Bind<TValue, TOptions, TAdapter, TState>(this MotionBuilder<TValue, TOptions, TAdapter> builder, TState state, Action<TValue, TState> action)
             where TValue : unmanaged
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+            where TState : struct
         {
-            Error.IsNull(progress);
-            return builder.BindWithState(progress, static (x, progress) => progress.Report(x));
-        }
-
-        /// <summary>
-        /// Create a motion data and bind it to Debug.unityLogger
-        /// </summary>
-        /// <typeparam name="TValue">The type of value to animate</typeparam>
-        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
-        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
-        /// <param name="builder">This builder</param>
-        /// <returns>Handle of the created motion data.</returns>
-        public static MotionHandle BindToUnityLogger<TValue, TOptions, TAdapter>(this MotionBuilder<TValue, TOptions, TAdapter> builder)
-            where TValue : unmanaged
-            where TOptions : unmanaged, IMotionOptions
-            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
-        {
-            return builder.Bind(static x => Debug.unityLogger.Log(x));
-        }
-
-        /// <summary>
-        /// Create a motion data and bind it to UnityEngine.ILogger
-        /// </summary>
-        /// <typeparam name="TValue">The type of value to animate</typeparam>
-        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
-        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
-        /// <param name="builder">This builder</param>
-        /// <returns>Handle of the created motion data.</returns>
-        public static MotionHandle BindToUnityLogger<TValue, TOptions, TAdapter>(this MotionBuilder<TValue, TOptions, TAdapter> builder, ILogger logger)
-            where TValue : unmanaged
-            where TOptions : unmanaged, IMotionOptions
-            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
-        {
-            Error.IsNull(logger);
-            return builder.BindWithState(logger, static (x, logger) => logger.Log(x));
+            return builder.Bind(Box.Create(state), action, (value, state, action) => action(value, state.Value));
         }
 
         /// <summary>
@@ -72,7 +36,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, IntegerOptions>
         {
-            builder.buffer.Data.Options.RoundingMode = roundingMode;
+            var options = builder.buffer.Options;
+            options.RoundingMode = roundingMode;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -88,7 +54,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, PunchOptions>
         {
-            builder.buffer.Data.Options.Frequency = frequency;
+            var options = builder.buffer.Options;
+            options.Frequency = frequency;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -104,7 +72,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, PunchOptions>
         {
-            builder.buffer.Data.Options.DampingRatio = dampingRatio;
+            var options = builder.buffer.Options;
+            options.DampingRatio = dampingRatio;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -120,7 +90,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Data.Options.Frequency = frequency;
+            var options = builder.buffer.Options;
+            options.Frequency = frequency;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -136,7 +108,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Data.Options.DampingRatio = dampingRatio;
+            var options = builder.buffer.Options;
+            options.DampingRatio = dampingRatio;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -152,7 +126,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, ShakeOptions>
         {
-            builder.buffer.Data.Options.RandomState = new Unity.Mathematics.Random(seed);
+            var options = builder.buffer.Options;
+            options.RandomSeed = seed;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -168,7 +144,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Data.Options.RichTextEnabled = richTextEnabled;
+            var options = builder.buffer.Options;
+            options.RichTextEnabled = richTextEnabled;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -184,7 +162,9 @@ namespace LitMotion
            where TValue : unmanaged
            where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Data.Options.RandomState = new Unity.Mathematics.Random(seed);
+            var options = builder.buffer.Options;
+            options.RandomSeed = seed;
+            builder.buffer.Options = options;
             return builder;
         }
 
@@ -201,7 +181,11 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
             if (scrambleMode == ScrambleMode.Custom) throw new ArgumentException("ScrambleMode.Custom cannot be specified explicitly. Use WithScrambleMode(FixedString64Bytes) instead.");
-            builder.buffer.Data.Options.ScrambleMode = scrambleMode;
+
+            var options = builder.buffer.Options;
+            options.ScrambleMode = scrambleMode;
+            builder.buffer.Options = options;
+
             return builder;
         }
 
@@ -217,8 +201,9 @@ namespace LitMotion
             where TValue : unmanaged
             where TAdapter : unmanaged, IMotionAdapter<TValue, StringOptions>
         {
-            builder.buffer.Data.Options.ScrambleMode = ScrambleMode.Custom;
-            builder.buffer.Data.Options.CustomScrambleChars = customScrambleChars;
+            var options = builder.buffer.Options;
+            options.CustomScrambleChars = customScrambleChars;
+            builder.buffer.Options = options;
             return builder;
         }
     }

@@ -26,7 +26,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Color, TOptions>
         {
             Error.IsNull(graphic);
-            return builder.BindWithState(graphic, static (x, target) =>
+            return builder.Bind(graphic, static (x, target) =>
             {
                 target.color = x;
             });
@@ -45,7 +45,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(graphic);
-            return builder.BindWithState(graphic, static (x, target) =>
+            return builder.Bind(graphic, static (x, target) =>
             {
                 var c = target.color;
                 c.r = x;
@@ -66,7 +66,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(graphic);
-            return builder.BindWithState(graphic, static (x, target) =>
+            return builder.Bind(graphic, static (x, target) =>
             {
                 var c = target.color;
                 c.g = x;
@@ -87,7 +87,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(graphic);
-            return builder.BindWithState(graphic, static (x, target) =>
+            return builder.Bind(graphic, static (x, target) =>
             {
                 var c = target.color;
                 c.b = x;
@@ -108,7 +108,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(graphic);
-            return builder.BindWithState(graphic, static (x, target) =>
+            return builder.Bind(graphic, static (x, target) =>
             {
                 var c = target.color;
                 c.a = x;
@@ -129,7 +129,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(image);
-            return builder.BindWithState(image, static (x, target) =>
+            return builder.Bind(image, static (x, target) =>
             {
                 target.fillAmount = x;
             });
@@ -143,12 +143,12 @@ namespace LitMotion.Extensions
         /// <param name="builder">This builder</param>
         /// <param name="transform"></param>
         /// <returns>Handle of the created motion data.</returns>
-        public static MotionHandle BindToCanvasGroupAlpha<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, CanvasGroup canvasGroup)
+        public static MotionHandle BindToAlpha<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, CanvasGroup canvasGroup)
             where TOptions : unmanaged, IMotionOptions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(canvasGroup);
-            return builder.BindWithState(canvasGroup, static (x, target) =>
+            return builder.Bind(canvasGroup, static (x, target) =>
             {
                 target.alpha = x;
             });
@@ -167,7 +167,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.fontSize = x;
             });
@@ -186,7 +186,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString32Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ConvertToString();
             });
@@ -205,7 +205,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString64Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ConvertToString();
             });
@@ -224,7 +224,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString128Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ConvertToString();
             });
@@ -243,7 +243,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString512Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ConvertToString();
             });
@@ -262,7 +262,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<FixedString4096Bytes, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ConvertToString();
             });
@@ -281,7 +281,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ToString();
             });
@@ -301,12 +301,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.text = ZString.Format(format, x);
+                text.text = ZString.Format(format, x);
 #else
-                target.text = string.Format(format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }
@@ -324,7 +324,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ToString();
             });
@@ -344,12 +344,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<long, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.text = ZString.Format(format, x);
+                text.text = ZString.Format(format, x);
 #else
-                target.text = string.Format(format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }
@@ -367,7 +367,7 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, static (x, target) =>
+            return builder.Bind(text, static (x, target) =>
             {
                 target.text = x.ToString();
             });
@@ -387,12 +387,12 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(text);
-            return builder.BindWithState(text, format, static (x, target, format) =>
+            return builder.Bind(text, format, static (x, text, format) =>
             {
 #if LITMOTION_SUPPORT_ZSTRING
-                target.text = ZString.Format(format, x);
+                text.text = ZString.Format(format, x);
 #else
-                target.text = string.Format(format, x);
+                text.text = string.Format(format, x);
 #endif
             });
         }

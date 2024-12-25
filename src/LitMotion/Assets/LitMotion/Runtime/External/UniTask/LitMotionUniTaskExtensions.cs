@@ -18,20 +18,34 @@ namespace LitMotion
         public static UniTask ToUniTask(this MotionHandle handle, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, CancelBehaviour.CancelAndCancelAwait, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionTaskSource.Create(handle, CancelBehavior.Cancel, true, cancellationToken, out var token), token);
         }
 
         /// <summary>
         /// Convert motion handle to UniTask.
         /// </summary>
         /// <param name="handle">This motion handle</param>
-        /// <param name="cancelBehaviour">Behavior when canceling</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public static UniTask ToUniTask(this MotionHandle handle, CancelBehaviour cancelBehaviour, CancellationToken cancellationToken = default)
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehavior cancelBehavior, CancellationToken cancellationToken = default)
         {
             if (!handle.IsActive()) return UniTask.CompletedTask;
-            return new UniTask(UniTaskMotionConfiguredSource.Create(handle, cancelBehaviour, cancellationToken, out var token), token);
+            return new UniTask(UniTaskMotionTaskSource.Create(handle, cancelBehavior, true, cancellationToken, out var token), token);
+        }
+
+        /// <summary>
+        /// Convert motion handle to UniTask.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="cancelBehavior">Behavior when canceling</param>
+        /// <param name="cancelAwaitOnMotionCanceled">Whether to link MotionHandle.Cancel() to task cancellation</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns></returns>
+        public static UniTask ToUniTask(this MotionHandle handle, CancelBehavior cancelBehavior, bool cancelAwaitOnMotionCanceled, CancellationToken cancellationToken = default)
+        {
+            if (!handle.IsActive()) return UniTask.CompletedTask;
+            return new UniTask(UniTaskMotionTaskSource.Create(handle, cancelBehavior, cancelAwaitOnMotionCanceled, cancellationToken, out var token), token);
         }
 
         /// <summary>
@@ -49,7 +63,7 @@ namespace LitMotion
             where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
         {
             Error.IsNull(reactiveProperty);
-            return builder.BindWithState(reactiveProperty, static (x, target) =>
+            return builder.Bind(reactiveProperty, static (x, target) =>
             {
                 target.Value = x;
             });

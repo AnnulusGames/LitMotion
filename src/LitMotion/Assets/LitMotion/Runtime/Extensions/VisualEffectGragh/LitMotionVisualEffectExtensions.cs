@@ -22,9 +22,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
+            return builder.Bind(visualEffect, name, static (x, visualEffect, name) =>
             {
-                target.SetFloat(n, x);
+                visualEffect.SetFloat(name, x);
             });
         }
 
@@ -41,9 +41,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.Bind(visualEffect, Box.Create(nameID), static (x, visualEffect, nameID) =>
             {
-                target.SetFloat(nameID, x);
+                visualEffect.SetFloat(nameID.Value, x);
             });
         }
 
@@ -60,9 +60,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
+            return builder.Bind(visualEffect, name, static (x, visualEffect, name) =>
             {
-                target.SetInt(n, x);
+                visualEffect.SetInt(name, x);
             });
         }
 
@@ -79,9 +79,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<int, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.Bind(visualEffect, Box.Create(nameID), static (x, visualEffect, nameID) =>
             {
-                target.SetFloat(nameID, x);
+                visualEffect.SetFloat(nameID.Value, x);
             });
         }
 
@@ -98,9 +98,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
+            return builder.Bind(visualEffect, name, static (x, visualEffect, name) =>
             {
-                target.SetVector2(n, x);
+                visualEffect.SetVector2(name, x);
             });
         }
 
@@ -117,9 +117,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector2, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.Bind(visualEffect, Box.Create(nameID), static (x, visualEffect, nameID) =>
             {
-                target.SetVector2(nameID, x);
+                visualEffect.SetVector2(nameID.Value, x);
             });
         }
 
@@ -136,9 +136,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
+            return builder.Bind(visualEffect, name, static (x, visualEffect, name) =>
             {
-                target.SetVector3(n, x);
+                visualEffect.SetVector3(name, x);
             });
         }
 
@@ -155,9 +155,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.Bind(visualEffect, Box.Create(nameID), static (x, visualEffect, nameID) =>
             {
-                target.SetVector3(nameID, x);
+                visualEffect.SetVector3(nameID.Value, x);
             });
         }
 
@@ -174,9 +174,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector4, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, name, static (x, target, n) =>
+            return builder.Bind(visualEffect, name, static (x, visualEffect, name) =>
             {
-                target.SetVector4(n, x);
+                visualEffect.SetVector4(name, x);
             });
         }
 
@@ -193,9 +193,9 @@ namespace LitMotion.Extensions
             where TAdapter : unmanaged, IMotionAdapter<Vector4, TOptions>
         {
             Error.IsNull(visualEffect);
-            return builder.BindWithState(visualEffect, (x, target) =>
+            return builder.Bind(visualEffect, Box.Create(nameID), static (x, visualEffect, nameID) =>
             {
-                target.SetVector4(nameID, x);
+                visualEffect.SetVector4(nameID.Value, x);
             });
         }
     }

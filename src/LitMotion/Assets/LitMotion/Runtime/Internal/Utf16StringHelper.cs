@@ -19,7 +19,7 @@ namespace LitMotion
             {
                 if (value == long.MinValue) // -9223372036854775808
                 {
-                    ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 20);
+                    ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 20);
                     buffer[bufferOffset++] = '-';
                     buffer[bufferOffset++] = '9';
                     buffer[bufferOffset++] = '2';
@@ -42,7 +42,7 @@ namespace LitMotion
                     buffer[bufferOffset++] = '8';
                 }
 
-                ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 1);
+                ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 1);
                 buffer[bufferOffset++] = '-';
                 num1 = unchecked(-value);
             }
@@ -51,10 +51,10 @@ namespace LitMotion
 
             if (num1 < 10000)
             {
-                if (num1 < 10) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 1); goto L1; }
-                if (num1 < 100) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 2); goto L2; }
-                if (num1 < 1000) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 3); goto L3; }
-                ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 4); goto L4;
+                if (num1 < 10) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 1); goto L1; }
+                if (num1 < 100) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 2); goto L2; }
+                if (num1 < 1000) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 3); goto L3; }
+                ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 4); goto L4;
             }
             else
             {
@@ -62,10 +62,10 @@ namespace LitMotion
                 num1 -= num2 * 10000;
                 if (num2 < 10000)
                 {
-                    if (num2 < 10) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 5); goto L5; }
-                    if (num2 < 100) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 6); goto L6; }
-                    if (num2 < 1000) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 7); goto L7; }
-                    ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 8); goto L8;
+                    if (num2 < 10) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 5); goto L5; }
+                    if (num2 < 100) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 6); goto L6; }
+                    if (num2 < 1000) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 7); goto L7; }
+                    ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 8); goto L8;
                 }
                 else
                 {
@@ -73,10 +73,10 @@ namespace LitMotion
                     num2 -= num3 * 10000;
                     if (num3 < 10000)
                     {
-                        if (num3 < 10) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 9); goto L9; }
-                        if (num3 < 100) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 10); goto L10; }
-                        if (num3 < 1000) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 11); goto L11; }
-                        ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 12); goto L12;
+                        if (num3 < 10) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 9); goto L9; }
+                        if (num3 < 100) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 10); goto L10; }
+                        if (num3 < 1000) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 11); goto L11; }
+                        ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 12); goto L12;
                     }
                     else
                     {
@@ -84,10 +84,10 @@ namespace LitMotion
                         num3 -= num4 * 10000;
                         if (num4 < 10000)
                         {
-                            if (num4 < 10) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 13); goto L13; }
-                            if (num4 < 100) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 14); goto L14; }
-                            if (num4 < 1000) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 15); goto L15; }
-                            ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 16); goto L16;
+                            if (num4 < 10) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 13); goto L13; }
+                            if (num4 < 100) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 14); goto L14; }
+                            if (num4 < 1000) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 15); goto L15; }
+                            ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 16); goto L16;
                         }
                         else
                         {
@@ -95,10 +95,10 @@ namespace LitMotion
                             num4 -= num5 * 10000;
                             if (num5 < 10000)
                             {
-                                if (num5 < 10) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 17); goto L17; }
-                                if (num5 < 100) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 18); goto L18; }
-                                if (num5 < 1000) { ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 19); goto L19; }
-                                ArrayHelper.EnsureCapacity(ref buffer, bufferOffset + 20); goto L20;
+                                if (num5 < 10) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 17); goto L17; }
+                                if (num5 < 100) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 18); goto L18; }
+                                if (num5 < 1000) { ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 19); goto L19; }
+                                ArrayHelper.EnsureBufferCapacity(ref buffer, bufferOffset + 20); goto L20;
                             }
                         L20:
                             buffer[bufferOffset++] = (char)('0' + (div = (num5 * 8389L) >> 23));

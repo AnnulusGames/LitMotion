@@ -2,12 +2,12 @@ using System;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
-using UnityEngine;
 
 namespace LitMotion
 {
     internal interface IUpdateRunner
     {
+        IMotionStorage Storage { get; }
         public void Update(double time, double unscaledTime, double realtime);
         public void Reset();
     }
@@ -31,6 +31,9 @@ namespace LitMotion
         double prevUnscaledTime;
         double prevRealtime;
 
+        public MotionStorage<TValue, TOptions, TAdapter> Storage => storage;
+        IMotionStorage IUpdateRunner.Storage => storage;
+
         public unsafe void Update(double time, double unscaledTime, double realtime)
         {
             var count = storage.Count;
@@ -44,7 +47,7 @@ namespace LitMotion
             prevUnscaledTime = unscaledTime;
             prevRealtime = realtime;
 
-            fixed (MotionData<TValue, TOptions>* dataPtr = storage.dataArray)
+            fixed (MotionData<TValue, TOptions>* dataPtr = storage.GetDataSpan())
             {
                 // update data
                 var job = new MotionUpdateJob<TValue, TOptions, TAdapter>()
@@ -59,52 +62,41 @@ namespace LitMotion
                 job.Schedule(count, 16).Complete();
 
                 // invoke delegates
-                var callbackSpan = storage.GetCallbacksSpan();
+                var managedDataSpan = storage.GetManagedDataSpan();
                 var outputPtr = (TValue*)output.GetUnsafePtr();
-                for (int i = 0; i < callbackSpan.Length; i++)
+                for (int i = 0; i < managedDataSpan.Length; i++)
                 {
-                    var status = (dataPtr + i)->Core.Status;
-                    ref var callbackData = ref callbackSpan[i];
-                    if (status == MotionStatus.Playing || (status == MotionStatus.Delayed && !callbackData.SkipValuesDuringDelay))
+                    var currentDataPtr = dataPtr + i;
+                    ref var state = ref currentDataPtr->Core.State;
+
+                    if (state.IsInSequence) continue;
+
+                    var status = state.Status;
+                    ref var managedData = ref managedDataSpan[i];
+                    if (status is MotionStatus.Playing or MotionStatus.Completed || (status == MotionStatus.Delayed && !managedData.SkipValuesDuringDelay))
                     {
                         try
                         {
-                            callbackData.InvokeUnsafe(outputPtr[i]);
+                            managedData.UpdateUnsafe(outputPtr[i]);
                         }
                         catch (Exception ex)
                         {
                             MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbackData.CancelOnError)
+                            if (managedData.CancelOnError)
                             {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
-                                callbackData.OnCancelAction?.Invoke();
-                            }
-                        }
-                    }
-                    else if (status == MotionStatus.Completed)
-                    {
-                        try
-                        {
-                            callbackData.InvokeUnsafe(outputPtr[i]);
-                        }
-                        catch (Exception ex)
-                        {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
-                            if (callbackData.CancelOnError)
-                            {
-                                (dataPtr + i)->Core.Status = MotionStatus.Canceled;
-                                callbackData.OnCancelAction?.Invoke();
-                                continue;
+                                state.Status = MotionStatus.Canceled;
+                                managedData.OnCancelAction?.Invoke();
                             }
                         }
 
-                        try
+                        if (state.WasLoopCompleted)
                         {
-                            callbackData.OnCompleteAction?.Invoke();
+                            managedData.InvokeOnLoopComplete(state.CompletedLoops);
                         }
-                        catch (Exception ex)
+
+                        if (status is MotionStatus.Completed && state.WasStatusChanged)
                         {
-                            MotionDispatcher.GetUnhandledExceptionHandler()?.Invoke(ex);
+                            managedData.InvokeOnComplete();
                         }
                     }
                 }
@@ -115,6 +107,9 @@ namespace LitMotion
 
         public void Reset()
         {
+            prevTime = 0;
+            prevUnscaledTime = 0;
+            prevRealtime = 0;
             storage.Reset();
         }
     }

@@ -6,7 +6,7 @@ R3をPackage Managerから導入した場合は自動で以下の機能が追加
 
 ### モーションをObservableとして作成
 
-`ToObservable()`を使用することで、モーションを`IObservable<T>`として作成できます。
+`ToObservable()`を使用することで、モーションを`Observable<T>`として作成できます。
 
 ```cs
 var observable = LMotion.Create(0f, 5f, 2f).ToObservable();

@@ -32,6 +32,22 @@ namespace LitMotion.Tests.Runtime
         }
 
         [UnityTest]
+        public IEnumerator Test_OnLoopComplete()
+        {
+            var loopCount = 0;
+            LMotion.Create(0f, 10f, 1f)
+                .WithLoops(3)
+                .WithOnLoopComplete(x => loopCount = x)
+                .RunWithoutBinding();
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(1));
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(2));
+            yield return new WaitForSeconds(1f);
+            Assert.That(loopCount, Is.EqualTo(3));
+        }
+
+        [UnityTest]
         public IEnumerator Test_CreateOnCallback()
         {
             var created = false;
@@ -55,19 +71,20 @@ namespace LitMotion.Tests.Runtime
         [Test]
         public void Test_CompleteOnCallback_Self()
         {
-            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Motion has already been canceled or completed.");
 
             MotionHandle handle = default;
             handle = LMotion.Create(0f, 10f, 1f)
                 .WithOnComplete(() => handle.Complete())
                 .RunWithoutBinding();
+
             handle.Complete();
         }
 
         [Test]
         public void Test_CompleteOnCallback_CircularReference()
         {
-            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Recursion of Complete call was detected.");
+            LogAssert.Expect(LogType.Exception, "InvalidOperationException: Motion has already been canceled or completed.");
 
             MotionHandle handle1 = default;
             MotionHandle handle2 = default;
@@ -88,7 +105,7 @@ namespace LitMotion.Tests.Runtime
             LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => otherHandle.Complete())
                 .RunWithoutBinding();
-            yield return otherHandle.ToYieldInteraction();
+            yield return otherHandle.ToYieldInstruction();
         }
 
         [UnityTest]
@@ -98,7 +115,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => throw new Exception("Test"))
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
         }
 
         [Test]
@@ -134,7 +151,7 @@ namespace LitMotion.Tests.Runtime
             yield return LMotion.Create(0f, 10f, 0.5f)
                 .WithOnComplete(() => throw new Exception("Test"))
                 .RunWithoutBinding()
-                .ToYieldInteraction();
+                .ToYieldInstruction();
             MotionDispatcher.RegisterUnhandledExceptionHandler(defaultHandler);
         }
     }
