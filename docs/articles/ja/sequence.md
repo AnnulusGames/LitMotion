@@ -2,17 +2,17 @@
 
 Sequenceを用いることで、複数のモーションを合成できます。これは複雑なモーションを制御する際に便利です。
 
-Sequenceを作成するには`LSequence.Create()`でBuilderを作成し、モーションの追加後に`Schedule()`を呼び出します。
+Sequenceを作成するには`LSequence.Create()`でBuilderを作成し、モーションの追加後に`Run()`を呼び出します。
 
 ```cs
 LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Insert(0f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
-`Schedule()`の戻り値は`MotionHandle`であるため、通常のモーションと同じように扱うことが可能です。
+`Run()`の戻り値は`MotionHandle`であるため、通常のモーションと同じように扱うことが可能です。
 
 > [!WARNING]
 > Sequenceに再生中のモーションや無限ループするモーションを追加することはできません。(例外が発生します)
@@ -27,7 +27,7 @@ LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 `AppendInterval()`で待機時間を追加することも可能です。
@@ -39,7 +39,7 @@ LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .AppendInterval(0.5f)
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 ## Join
@@ -52,7 +52,7 @@ LSequence.Create()
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 ## Insert
@@ -65,5 +65,5 @@ LSequence.Create()
     .Insert(0.1f, LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Insert(0.2f, LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Insert(0.3f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```

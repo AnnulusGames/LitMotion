@@ -93,7 +93,7 @@ LSequence.Create()
     .Append(...)
     .Join(...)
     .Insert(...)
-    .Schedule();
+    .Run();
 ```
 
 Sequenceに対するコールバックの追加はLitMotionではサポートされていません。これは意図的なもので、LitMotionではコールバックを多用する複雑なアニメーションはasyncメソッドを利用すべきだと考えているためです。詳細は[設計思想](./design-philosophy.md)を参照してください。
