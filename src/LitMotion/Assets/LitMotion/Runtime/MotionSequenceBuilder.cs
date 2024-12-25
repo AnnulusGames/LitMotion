@@ -1,6 +1,7 @@
 using System;
 using System.Buffers;
 using System.Runtime.CompilerServices;
+using LitMotion.Adapters;
 using LitMotion.Collections;
 
 namespace LitMotion
@@ -69,7 +70,7 @@ namespace LitMotion
             Insert(lastTail, handle);
         }
 
-        public MotionHandle Schedule(Action<MotionBuilder<double, NoOptions, Adapters.DoubleMotionAdapter>> configuration)
+        public MotionHandle Schedule(Action<MotionBuilder<double, NoOptions, DoubleMotionAdapter>> configuration)
         {
             var source = MotionSequenceSource.Rent();
             var builder = LMotion.Create(0.0, duration, (float)duration)
@@ -148,13 +149,13 @@ namespace LitMotion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public MotionHandle Schedule()
+        public MotionHandle Run()
         {
-            return Schedule(null);
+            return Run(null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public MotionHandle Schedule(Action<MotionBuilder<double, NoOptions, Adapters.DoubleMotionAdapter>> configuration)
+        public MotionHandle Run(Action<MotionBuilder<double, NoOptions, DoubleMotionAdapter>> configuration)
         {
             CheckIsDisposed();
             var handle = source.Schedule(configuration);

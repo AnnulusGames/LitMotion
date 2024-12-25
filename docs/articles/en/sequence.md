@@ -2,17 +2,17 @@
 
 Using a `Sequence`, you can combine multiple motions. This is useful when controlling complex animations.
 
-To create a `Sequence`, you build it with `LSequence.Create()`, add motions, and then call `Schedule()`.
+To create a `Sequence`, you build it with `LSequence.Create()`, add motions, and then call `Run()`.
 
 ```cs
 LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Insert(0f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
-The return value of `Schedule()` is a `MotionHandle`, so it can be treated the same as any other motion.
+The return value of `Run()` is a `MotionHandle`, so it can be treated the same as any other motion.
 
 > [!WARNING]  
 > You cannot add motions that are already playing or those with infinite loops to a sequence. (An exception will occur.)
@@ -27,7 +27,7 @@ LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 You can also add a delay between motions using `AppendInterval()`.
@@ -39,7 +39,7 @@ LSequence.Create()
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .AppendInterval(0.5f)
     .Append(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 ## Join
@@ -52,7 +52,7 @@ LSequence.Create()
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Join(LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```
 
 ## Insert
@@ -65,5 +65,5 @@ LSequence.Create()
     .Insert(0.1f, LMotion.Create(0f, 1f, 1f).BindToPositionX(transform))
     .Insert(0.2f, LMotion.Create(0f, 1f, 1f).BindToPositionY(transform))
     .Insert(0.3f, LMotion.Create(0f, 1f, 1f).BindToPositionZ(transform))
-    .Schedule();
+    .Run();
 ```

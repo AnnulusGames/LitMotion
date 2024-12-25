@@ -83,7 +83,7 @@ LSequence.Create()
     .Append(...)
     .Join(...)
     .Insert(...)
-    .Schedule();
+    .Run();
 ```
 
 Adding callbacks to sequences is not supported in LitMotion. This is intentional, as LitMotion encourages the use of async methods for complex animations that require multiple callbacks. For more details, refer to the [Design Philosophy](./design-philosophy.md).
