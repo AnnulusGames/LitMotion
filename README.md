@@ -190,7 +190,7 @@ LSequence.Create()
     .Run();
 ```
 
-For more details, refer to the [Sequence](https://annulusgames.github.io/LitMotion/ja/sequence.html) section in the documentation.
+For more details, refer to the [Sequence](https://annulusgames.github.io/LitMotion/articles/en/sequence.html) section in the documentation.
 
 ## LitMotion.Animation
 
@@ -230,7 +230,7 @@ Alternatively, you can open the `Packages/manifest.json` file and add the follow
 
 ### How to Use
 
-For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://annulusgames.github.io/LitMotion/ja/litmotion-animation-overview.html).
+For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/en/litmotion-animation-overview.html).
 
 ## Performance
 
