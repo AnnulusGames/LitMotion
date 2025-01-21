@@ -191,7 +191,7 @@ LSequence.Create()
     .Run();
 ```
 
-詳細はドキュメントの[Sequence](https://annulusgames.github.io/LitMotion/ja/sequence.html)を参照してください。
+詳細はドキュメントの[Sequence](https://annulusgames.github.io/LitMotion/articles/ja/sequence.html)を参照してください。
 
 ## LitMotion.Animation
 
@@ -226,7 +226,7 @@ https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotio
 
 ### 使い方
 
-LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://annulusgames.github.io/LitMotion/ja/litmotion-animation-overview.html)を参照してください。
+LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/ja/litmotion-animation-overview.html)を参照してください。
 
 ## パフォーマンス
 
