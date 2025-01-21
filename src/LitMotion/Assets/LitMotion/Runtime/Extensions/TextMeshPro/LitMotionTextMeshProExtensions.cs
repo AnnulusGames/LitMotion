@@ -73,6 +73,82 @@ namespace LitMotion.Extensions
         }
 
         /// <summary>
+        /// Create a motion data and bind it to TMP_Text.characterSpacing
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToCharacterSpacing<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.Bind(text, static (x, target) =>
+            {
+                target.characterSpacing = x;
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.wordSpacing
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToWordSpacing<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.Bind(text, static (x, target) =>
+            {
+                target.wordSpacing = x;
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.paragraphSpacing
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToParagraphSpacing<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.Bind(text, static (x, target) =>
+            {
+                target.paragraphSpacing = x;
+            });
+        }
+
+        /// <summary>
+        /// Create a motion data and bind it to TMP_Text.lineSpacing
+        /// </summary>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="builder">This builder</param>
+        /// <param name="text">Target TMP_Text</param>
+        /// <returns>Handle of the created motion data.</returns>
+        public static MotionHandle BindToLineSpacing<TOptions, TAdapter>(this MotionBuilder<float, TOptions, TAdapter> builder, TMP_Text text)
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<float, TOptions>
+        {
+            Error.IsNull(text);
+            return builder.Bind(text, static (x, target) =>
+            {
+                target.lineSpacing = x;
+            });
+        }
+
+        /// <summary>
         /// Create a motion data and bind it to TMP_Text.maxVisibleWords
         /// </summary>
         /// <typeparam name="TOptions">The type of special parameters given to the motion data</typeparam>
