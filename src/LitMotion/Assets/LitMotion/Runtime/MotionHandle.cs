@@ -89,7 +89,7 @@ namespace LitMotion
         /// <summary>
         /// The number of loops completed
         /// </summary>
-        public readonly int ComplatedLoops
+        public readonly int CompletedLoops
         {
             get
             {
