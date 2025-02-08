@@ -16,7 +16,7 @@ Package Managerを利用してLitMotion.Animationをインストールできま�
 3. 以下のURLを入力
 
 ```text
-https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
+https://github.com/yn01dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
 ```
 
 ![img1](../../images/img-setup-1.png)
@@ -26,7 +26,7 @@ https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotio
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
+        "com.annulusgames.lit-motion.animation": "https://github.com/yn01dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
     }
 }
 ```

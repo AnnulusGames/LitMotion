@@ -1,7 +1,7 @@
 {
   "metadata": [
     {
-       "src": [
+      "src": [
         {
           "files": [
             "LitMotion/Assets/LitMotion/Runtime/**/*.cs",
@@ -58,7 +58,7 @@
       "_appLogoPath": "images/icon.svg",
       "_appFaviconPath": "images/favicon.svg",
       "_gitContribute": {
-        "repo": "https://github.com/AnnulusGames/LitMotion"
+        "repo": "https://github.com/yn01dev/LitMotion"
       },
       "_gitUrlPattern": "github"
     },

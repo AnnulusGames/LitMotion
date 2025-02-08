@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.annulusgames.lit-motion": {
-      "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
+      "version": "https://github.com/yn01dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -15,14 +15,14 @@
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
+      "dependencies": { },
       "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
     },
     "com.neuecc.unirx": {
       "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
+      "dependencies": { },
       "hash": "284d5c50d3f1ddd9fa7df3d382ea904732a9c2ff"
     },
     "com.unity.2d.animation": {
@@ -67,7 +67,7 @@
       "version": "5.0.3",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
@@ -85,7 +85,7 @@
       "version": "1.0.0",
       "depth": 1,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.2d.spriteshape": {
       "version": "9.0.2",
@@ -132,7 +132,7 @@
       "version": "2.2.0",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
@@ -150,7 +150,7 @@
       "version": "1.0.6",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.feature.2d": {
@@ -190,21 +190,21 @@
       "version": "1.2.6",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.4",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.sysroot": {
       "version": "2.0.7",
       "depth": 1,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": { },
       "url": "https://packages.unity.com"
     },
     "com.unity.sysroot.linux-x86_64": {
@@ -281,31 +281,31 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.androidjni": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.assetbundle": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.audio": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.cloth": {
       "version": "1.0.0",
@@ -328,37 +328,37 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.imgui": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.jsonserialize": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.particlesystem": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.physics": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.physics2d": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.screencapture": {
       "version": "1.0.0",
@@ -380,7 +380,7 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.terrainphysics": {
       "version": "1.0.0",
@@ -403,7 +403,7 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.uielements": {
       "version": "1.0.0",
@@ -419,7 +419,7 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.unityanalytics": {
       "version": "1.0.0",
@@ -434,7 +434,7 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.unitywebrequestassetbundle": {
       "version": "1.0.0",
@@ -508,7 +508,7 @@
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
-      "dependencies": {}
+      "dependencies": { }
     },
     "com.unity.modules.xr": {
       "version": "1.0.0",

@@ -51,5 +51,5 @@ LitMotionはモーションの作成/実行の両方において、あらゆるU
 
 ![benchmark_5](../../images/benchmark_gc_position.png)
 
-ベンチマークに使用したプロジェクト及びソースコードは[こちらのリポジトリ](https://github.com/AnnulusGames/TweenPerformance)にて確認できます。
+ベンチマークに使用したプロジェクト及びソースコードは[こちらのリポジトリ](https://github.com/yn01dev/TweenPerformance)にて確認できます。
 
