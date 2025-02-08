@@ -52,7 +52,7 @@
     "globalMetadata": {
       "_appName": "LitMotion",
       "_appTitle": "LitMotion",
-      "_appFooter": "<span>Copyright © 2024 Annulus Games. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
+      "_appFooter": "<span>Copyright © 2025 yn01. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
       "_enableSearch": true,
       "pdf": false,
       "_appLogoPath": "images/icon.svg",
@@ -72,7 +72,7 @@
       "https://xref.docs.microsoft.com/query?uid={uid}"
     ],
     "sitemap": {
-      "baseUrl": "https://AnnulusGames.github.io/LitMotion"
+      "baseUrl": "https://docs.yn01.dev/LitMotion"
     }
   }
 }
