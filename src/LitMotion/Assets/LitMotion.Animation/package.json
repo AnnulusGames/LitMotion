@@ -1,6 +1,6 @@
 {
     "name": "com.annulusgames.lit-motion.animation",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "displayName": "LitMotion.Animation",
     "description": "Animation component (visual editor) for LitMotion",
     "keywords": [
@@ -12,6 +12,6 @@
         "com.annulusgames.lit-motion": "2.0.0"
     },
     "author": {
-        "name": "Annulus Games"
+        "name": "yn01"
     }
 }
