@@ -159,13 +159,13 @@ namespace LitMotion.Tests.Runtime
                 .RunWithoutBinding()
                 .Preserve();
 
-            Assert.That(handle.ComplatedLoops, Is.EqualTo(0));
+            Assert.That(handle.CompletedLoops, Is.EqualTo(0));
             yield return new WaitForSeconds(1f);
-            Assert.That(handle.ComplatedLoops, Is.EqualTo(1));
+            Assert.That(handle.CompletedLoops, Is.EqualTo(1));
             yield return new WaitForSeconds(1f);
-            Assert.That(handle.ComplatedLoops, Is.EqualTo(2));
+            Assert.That(handle.CompletedLoops, Is.EqualTo(2));
             yield return new WaitForSeconds(1f);
-            Assert.That(handle.ComplatedLoops, Is.EqualTo(3));
+            Assert.That(handle.CompletedLoops, Is.EqualTo(3));
         }
     }
 }
