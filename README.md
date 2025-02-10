@@ -20,7 +20,7 @@ Additionally, v2 introduces Sequence for combining multiple motions and the LitM
 
 ## Documentation
 
-The full version of documentation can be found [here](https://annulusgames.github.io/LitMotion/).
+The full version of documentation can be found [here](https://docs.yn01.dev/LitMotion/).
 
 ## Features
 
@@ -190,7 +190,7 @@ LSequence.Create()
     .Run();
 ```
 
-For more details, refer to the [Sequence](https://annulusgames.github.io/LitMotion/articles/en/sequence.html) section in the documentation.
+For more details, refer to the [Sequence](https://docs.yn01.dev/LitMotion/articles/en/sequence.html) section in the documentation.
 
 ## LitMotion.Animation
 
@@ -230,7 +230,7 @@ Alternatively, you can open the `Packages/manifest.json` file and add the follow
 
 ### How to Use
 
-For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/en/litmotion-animation-overview.html).
+For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://docs.yn01.dev/LitMotion/articles/en/litmotion-animation-overview.html).
 
 ## Performance
 
