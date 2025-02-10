@@ -50,7 +50,7 @@ LitMotion operates faster than any Unity tweening library in both motion creatio
 
 ![benchmark_5](images/benchmark_gc_position.png)
 
-The project and source code used for the benchmarks can be reviewed in [this repository](https://github.com/yn01dev/TweenPerformance).
+The project and source code used for the benchmarks can be reviewed in [this repository](https://github.com/yn01-dev/TweenPerformance).
 
 ### Comparison with DOTween/Magic Tween
 

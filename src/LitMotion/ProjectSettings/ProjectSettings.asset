@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: yn01dev
+  companyName: yn01-dev
   productName: LitMotion
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -163,7 +163,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Standalone: com.yn01dev.LitMotion
+    Standalone: com.yn01-dev.LitMotion
   buildNumber:
     Standalone: 0
     VisionOS: 0

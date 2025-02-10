@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.annulusgames.lit-motion": {
-      "version": "https://github.com/yn01dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
+      "version": "https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
       "depth": 0,
       "source": "git",
       "dependencies": {
