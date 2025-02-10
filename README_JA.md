@@ -20,7 +20,7 @@ LitMotionは[Magic Tween](https://github.com/yn01dev/MagicTween)に続いて私�
 
 ## ドキュメント
 
-ドキュメントのフルバージョンは[こちら](https://annulusgames.github.io/LitMotion/)から確認できます。
+ドキュメントのフルバージョンは[こちら](https://docs.yn01.dev/LitMotion/)から確認できます。
 
 ## 特徴
 
@@ -191,7 +191,7 @@ LSequence.Create()
     .Run();
 ```
 
-詳細はドキュメントの[Sequence](https://annulusgames.github.io/LitMotion/articles/ja/sequence.html)を参照してください。
+詳細はドキュメントの[Sequence](https://docs.yn01.dev/LitMotion/articles/ja/sequence.html)を参照してください。
 
 ## LitMotion.Animation
 
@@ -226,7 +226,7 @@ https://github.com/yn01dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Ani
 
 ### 使い方
 
-LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/ja/litmotion-animation-overview.html)を参照してください。
+LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://docs.yn01.dev/LitMotion/articles/ja/litmotion-animation-overview.html)を参照してください。
 
 ## パフォーマンス
 
