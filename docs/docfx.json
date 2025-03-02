@@ -52,13 +52,13 @@
     "globalMetadata": {
       "_appName": "LitMotion",
       "_appTitle": "LitMotion",
-      "_appFooter": "<span>Copyright © 2025 yn01. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
+      "_appFooter": "<span>Copyright © 2025 Yusuke Nakada. Generated with <a href=\"https://dotnet.github.io/docfx\">DocFX</a></span>",
       "_enableSearch": true,
       "pdf": false,
       "_appLogoPath": "images/icon.svg",
       "_appFaviconPath": "images/favicon.svg",
       "_gitContribute": {
-        "repo": "https://github.com/yn01-dev/LitMotion"
+        "repo": "https://github.com/annulusgames/LitMotion"
       },
       "_gitUrlPattern": "github"
     },
@@ -72,7 +72,7 @@
       "https://xref.docs.microsoft.com/query?uid={uid}"
     ],
     "sitemap": {
-      "baseUrl": "https://docs.yn01.dev/LitMotion"
+      "baseUrl": "https://annulusgames.github.io/LitMotion"
     }
   }
 }

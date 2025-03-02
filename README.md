@@ -2,7 +2,7 @@
 
 Lightning-fast and Zero Allocation Tween Library for Unity.
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/header.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/header.png" width="800">
 
 [![license](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ Lightning-fast and Zero Allocation Tween Library for Unity.
 
 LitMotion is a high-performance tween library for Unity. LitMotion includes a rich set of features for animating components such as Transform, Material, TextMeshPro, and any field/property, making it easy to create animations.
 
-LitMotion is my second tween library I created after [Magic Tween](https://github.com/yn01-dev/MagicTween). LitMotion was designed based on experience implementing Magic Tween to achieve rich functionality and extremely high performance. In all situations such as creating and updating tweens, it exhibits overwhelming performance that is 2 to 20 times faster than other tween libraries. Of course, there is no allocation at all when creating a tween.
+LitMotion is my second tween library I created after [Magic Tween](https://github.com/annulusgames/MagicTween). LitMotion was designed based on experience implementing Magic Tween to achieve rich functionality and extremely high performance. In all situations such as creating and updating tweens, it exhibits overwhelming performance that is 2 to 20 times faster than other tween libraries. Of course, there is no allocation at all when creating a tween.
 
 ![img](./docs/images/img-v2-available.png)
 
@@ -20,7 +20,7 @@ Additionally, v2 introduces Sequence for combining multiple motions and the LitM
 
 ## Documentation
 
-The full version of documentation can be found [here](https://docs.yn01.dev/LitMotion/).
+The full version of documentation can be found [here](https://annulusgames.github.io/LitMotion/).
 
 ## Features
 
@@ -56,7 +56,7 @@ The full version of documentation can be found [here](https://docs.yn01.dev/LitM
 3. Enter the following URL:
 
 ```
-https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion
+https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```
 
 Alternatively, open Packages/manifest.json and add the following to the dependencies block:
@@ -64,7 +64,7 @@ Alternatively, open Packages/manifest.json and add the following to the dependen
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion": "https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
+        "com.annulusgames.lit-motion": "https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
     }
 }
 ```
@@ -190,7 +190,7 @@ LSequence.Create()
     .Run();
 ```
 
-For more details, refer to the [Sequence](https://docs.yn01.dev/LitMotion/articles/en/sequence.html) section in the documentation.
+For more details, refer to the [Sequence](https://annulusgames.github.io/LitMotion/articles/en/sequence.html) section in the documentation.
 
 ## LitMotion.Animation
 
@@ -215,7 +215,7 @@ You can install LitMotion using the Package Manager.
 3. Enter the following URL:
 
 ```text
-https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
+https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
 ```
 
 Alternatively, you can open the `Packages/manifest.json` file and add the following line within the `dependencies` block:
@@ -223,42 +223,42 @@ Alternatively, you can open the `Packages/manifest.json` file and add the follow
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion.animation": "https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
+        "com.annulusgames.lit-motion.animation": "https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
     }
 }
 ```
 
 ### How to Use
 
-For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://docs.yn01.dev/LitMotion/articles/en/litmotion-animation-overview.html).
+For how to use LitMotion.Animation, please refer to the documentation on [LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/en/litmotion-animation-overview.html).
 
 ## Performance
 
-Here are the benchmark results. The benchmark source code can be found in [this repository](https://github.com/yn01-dev/TweenPerformance).
+Here are the benchmark results. The benchmark source code can be found in [this repository](https://github.com/annulusgames/TweenPerformance).
 
 ### Tween 64,000 float properties
 
 #### Startup
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_startup_64000_float.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_startup_64000_float.png" width="800">
 
 #### Update
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_update_64000_float.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_update_64000_float.png" width="800">
 
 ### Tween 50,000 transform.position
 
 #### Startup
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_startup_50000_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_startup_50000_position.png" width="800">
 
 #### Update
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_update_50000_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_update_50000_position.png" width="800">
 
 ### GC Allocation (per position tween creation)
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
 
 ## Support
 

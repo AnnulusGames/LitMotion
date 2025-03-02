@@ -2,7 +2,7 @@
 
 Lightning-fast and Zero Allocation Tween Library for Unity.
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/header.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/header.png" width="800">
 
 [![license](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ Lightning-fast and Zero Allocation Tween Library for Unity.
 
 LitMotionはUnity向けのハイパフォーマンスなトゥイーンライブラリです。LitMotionにはTransform、Material、TextMeshProなどのコンポーネントや独自のフィールド・プロパティをアニメーションさせるための豊富な機能が含まれており、簡単にアニメーションを作成できます。
 
-LitMotionは[Magic Tween](https://github.com/yn01-dev/MagicTween)に続いて私が作成した2つ目のトゥイーンライブラリです。LitMotionはMagic Tweenの実装で得た経験をもとに、必要十分な機能を厳選しつつ、最速で動作させることを念頭に置いて設計されました。トゥイーンの作成や駆動などあらゆるシチュエーションにおいて、他のトゥイーンライブラリと比較して2倍から20倍以上の圧倒的なパフォーマンスを発揮します。当然、トゥイーン作成時のアロケーションも一切ありません。
+LitMotionは[Magic Tween](https://github.com/annulusgames/MagicTween)に続いて私が作成した2つ目のトゥイーンライブラリです。LitMotionはMagic Tweenの実装で得た経験をもとに、必要十分な機能を厳選しつつ、最速で動作させることを念頭に置いて設計されました。トゥイーンの作成や駆動などあらゆるシチュエーションにおいて、他のトゥイーンライブラリと比較して2倍から20倍以上の圧倒的なパフォーマンスを発揮します。当然、トゥイーン作成時のアロケーションも一切ありません。
 
 ![img](./docs/images/img-v2-available.png)
 
@@ -20,7 +20,7 @@ LitMotionは[Magic Tween](https://github.com/yn01-dev/MagicTween)に続いて私
 
 ## ドキュメント
 
-ドキュメントのフルバージョンは[こちら](https://docs.yn01.dev/LitMotion/)から確認できます。
+ドキュメントのフルバージョンは[こちら](https://annulusgames.github.io/LitMotion/)から確認できます。
 
 ## 特徴
 
@@ -57,7 +57,7 @@ LitMotionは[Magic Tween](https://github.com/yn01-dev/MagicTween)に続いて私
 3. 以下のURLを入力する
 
 ```
-https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion
+https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```
 
 あるいはPackages/manifest.jsonを開き、dependenciesブロックに以下を追記
@@ -65,7 +65,7 @@ https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion": "https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
+        "com.annulusgames.lit-motion": "https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion"
     }
 }
 ```
@@ -191,7 +191,7 @@ LSequence.Create()
     .Run();
 ```
 
-詳細はドキュメントの[Sequence](https://docs.yn01.dev/LitMotion/articles/ja/sequence.html)を参照してください。
+詳細はドキュメントの[Sequence](https://annulusgames.github.io/LitMotion/articles/ja/sequence.html)を参照してください。
 
 ## LitMotion.Animation
 
@@ -211,7 +211,7 @@ LitMotion.AnimationはLitMotionで構築されたアニメーションの機能�
 3. 以下のURLを入力
 
 ```text
-https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
+https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation
 ```
 
 あるいはPackages/manifest.jsonを開き、dependenciesブロックに以下を追記します。
@@ -219,42 +219,42 @@ https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.An
 ```json
 {
     "dependencies": {
-        "com.annulusgames.lit-motion.animation": "https://github.com/yn01-dev/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
+        "com.annulusgames.lit-motion.animation": "https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation"
     }
 }
 ```
 
 ### 使い方
 
-LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://docs.yn01.dev/LitMotion/articles/ja/litmotion-animation-overview.html)を参照してください。
+LitMotion.Animationの使い方はドキュメントの[LitMotion.Animation](https://annulusgames.github.io/LitMotion/articles/ja/litmotion-animation-overview.html)を参照してください。
 
 ## パフォーマンス
 
-ベンチマークの結果を以下に示します。ベンチマークのソースコードは[こちらのリポジトリ](https://github.com/yn01-dev/TweenPerformance)から確認可能です。
+ベンチマークの結果を以下に示します。ベンチマークのソースコードは[こちらのリポジトリ](https://github.com/annulusgames/TweenPerformance)から確認可能です。
 
 ### Tween 64,000 float properties
 
 #### Startup
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_startup_64000_float.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_startup_64000_float.png" width="800">
 
 #### Update
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_update_64000_float.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_update_64000_float.png" width="800">
 
 ### Tween 50,000 transform.position
 
 #### Startup
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_startup_50000_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_startup_50000_position.png" width="800">
 
 #### Update
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_update_50000_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_update_50000_position.png" width="800">
 
 ### GC Allocation (per position tween creation)
 
-<img src="https://github.com/yn01-dev/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
+<img src="https://github.com/annulusgames/LitMotion/blob/main/docs/images/benchmark_gc_position.png" width="800">
 
 ## サポート
 
